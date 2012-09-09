@@ -1,0 +1,61 @@
+
+
+Requirements
+
+  1
+
+    Scalable vector graphics paradigm resizes the window frame and content
+
+    Scripting of static and dynamic window content 
+
+  2
+
+    Drag and drop window content among multiple windows on screen
+
+    Teleview window content via XMPP
+
+  3
+
+    Tabbed window for multiple content panes
+
+  4
+
+    Plot static and dynamic data via original import/export data sets
+
+  5
+
+    Media (e.g. JSON) define and update window content as a tree of named components
+
+    Update deltas modify subtree components by specifying ancestors by name, not content
+
+    Component names are array indeces from zero inclusive.
+
+
+Imports
+
+  A number of concepts are imported from previous work 
+
+  * Input coordinate space differs from the output coordinate space
+
+    * A menu bar or display containers will be included in the input space but excluded from the output space
+
+  * The drawing of a component should not clip to the component
+
+    * A component should be free to not define its boundaries
+
+    * A component should be free to draw beyond its boundaries
+
+      * For example borders decoration or content rotation
+
+  * A coordinate local transform should be independent of the component parent transform
+
+    * A component should be free to choose its internal transform/input/output strategy
+
+  * Feature implementation should be defined via subclasses rather than enums
+
+    * Feature definition via enum proposes an unmanageable and impractical application space 
+
+  * Input events should be passed to a component as translated to its local coordinate space
+
+    * Natural pattern
+
