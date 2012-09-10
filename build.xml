@@ -4,6 +4,7 @@
   <property name="main" value="llg.Main"/>
 
   <property name="src" value="src"/>
+  <property name="ant" value="ant"/>
   <property name="bin" value="bin"/>
   <property name="lib" value="lib"/>
   <property name="dst" value="."/>
@@ -28,10 +29,18 @@
 
 
   <target name="jar" depends="compile" description="Package bin to target jar, clean bin.">
+
+    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest">
+      <arg value="${toString:lib.path}"/>
+    </java>
+    <echo message="Main-Class: vector.Frame"/>
+    <echo message="Class-Path: ${lib.path.manifest}"/>
+
     <delete file="${target.jar}"/>
     <jar jarfile="${target.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="vector.Frame"/>
+        <attribute name="Class-Path" value="${lib.path.manifest}"/>
       </manifest>
     </jar>
     <delete dir="${bin}"/>
