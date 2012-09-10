@@ -1,9 +1,19 @@
 package vector;
 
+import json.Json;
+import json.Reader;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.geom.Dimension2D;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * 
@@ -11,6 +21,8 @@ import java.awt.geom.Dimension2D;
 public class Frame
     extends javax.swing.JFrame
 {
+
+    protected final Logger log = Logger.getLogger(this.getClass().getName());
 
     protected Display display;
 
@@ -43,6 +55,7 @@ public class Frame
 
 
     protected Display createDisplay(){
+
         return new Display();
     }
     public void destroy(){
@@ -54,9 +67,50 @@ public class Frame
         }
         this.dispose();
     }
+    public final Frame warn(Throwable t, String fmt, Object... args){
+
+        this.log.log(Level.WARNING,String.format(fmt,args),t);
+
+        return this;
+    }
+    public final Frame open(File file)
+        throws IOException
+    {
+        FileInputStream fin = new FileInputStream(file);
+        try {
+            Reader reader = new Reader();
+            Json json = reader.read(fin);
+            this.display.fromJson(json);
+            return this;
+        }
+        finally {
+            fin.close();
+        }
+    }
 
     public static void main(String[] argv){
 
-        new Frame();
+        Frame frame = new Frame();
+        if (0 < argv.length){
+
+            boolean error = false;
+
+            for (String file: argv){
+                try {
+                    frame.open(new File(file));
+                }
+                catch (IOException exc){
+
+                    frame.warn(exc,"Error reading file '%s'",file);
+
+                    error = true;
+                }
+            }
+
+            if (error){
+
+                System.exit(1);
+            }
+        }
     }
 }

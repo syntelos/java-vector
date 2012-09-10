@@ -1,4 +1,10 @@
 
+Documentation
+
+  Employing RFC 2119 style.
+
+  http://tools.ietf.org/html/rfc2119
+
 
 Requirements
 
@@ -59,3 +65,6 @@ Imports
 
     * Natural pattern
 
+Design
+
+  See src/vector/Component

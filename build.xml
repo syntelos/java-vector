@@ -19,6 +19,14 @@
 
   <property name="target.jar" value="${dst}/${ant.project.name}-${this.version}.jar"/>
 
+  <path id="lib.path">
+
+    <fileset dir="${lib}">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
+
+
   <target name="jar" depends="compile" description="Package bin to target jar, clean bin.">
     <delete file="${target.jar}"/>
     <jar jarfile="${target.jar}" basedir="${bin}" >
@@ -37,7 +45,7 @@
       <fileset dir="${src}" includes="**/*.xml"/>
     </copy>
     <javac srcdir="${src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
-           source="${compiler.source}" target="${compiler.target}">
+           classpathref="lib.path" source="${compiler.source}" target="${compiler.target}">
     </javac>
   </target>
 
