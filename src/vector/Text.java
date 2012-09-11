@@ -16,7 +16,7 @@ import java.awt.geom.Rectangle2D;
  * Common text visualization feature set
  */
 public class Text
-    extends Abstract
+    extends AbstractComponent
     implements CharSequence
 {
 
@@ -53,6 +53,27 @@ public class Text
         this.shape = null;
         this.localPositions = null;
     }
+    /**
+     * Calls {@link #layout()}
+     */
+    @Override
+    public void resized(){
+        super.resized();
+
+        this.layout();
+    }
+    /**
+     * Clears the visual state derived from properties, and calls
+     * {@link #layout()}
+     */
+    @Override
+    public void modified(){
+        super.modified();
+        this.vector = null;
+        this.shape = null;
+        this.localPositions = null;
+        this.layout();
+    }
     public final Font getFont(){
 
         return this.font;
@@ -73,7 +94,10 @@ public class Text
             return this.setFont(new Font(font));
     }
     public final Text setFont(String code){
-        return this.setFont(Font.decode(code));
+        if (null != code)
+            return this.setFont(Font.decode(code));
+        else
+            return this;
     }
     public final Color getColor(){
 
@@ -82,13 +106,14 @@ public class Text
     public final Text setColor(Color color){
         if (null != color){
             this.color = color;
-            return this;
         }
-        else
-            throw new IllegalArgumentException();
+        return this;
     }
     public final Text setColor(String code){
-        return this.setColor(Color.decode(code));
+        if (null != code)
+            return this.setColor(Color.decode(code));
+        else
+            return this;
     }
     public final boolean isOutline(){
         return this.outline;
@@ -303,21 +328,7 @@ public class Text
         else
             return null;
     }
-    @Override
-    public void resized(){
-        super.resized();
-
-        this.layout();
-    }
-    @Override
-    public void modified(){
-        super.modified();
-        this.vector = null;
-        this.shape = null;
-        this.localPositions = null;
-        this.layout();
-    }
-    public void outputScene(Graphics2D g){
+    public Text outputScene(Graphics2D g){
         Shape shape = this.shape();
         if (null != shape){
             g.transform(this.getTransformParent());
@@ -327,8 +338,11 @@ public class Text
             else
                 g.fill(shape);
         }
+        return this;
     }
-    public void outputOverlay(Graphics2D g){
+    public Text outputOverlay(Graphics2D g){
+
+        return this;
     }
     public ObjectJson toJson(){
         ObjectJson thisModel = (ObjectJson)super.toJson();

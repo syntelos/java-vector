@@ -200,7 +200,7 @@ public class Display
             this.outputOverlay(g);
         }
     }
-    public final void outputScene(Graphics2D g){
+    public final Display outputScene(Graphics2D g){
 
         this.output.completedScene();
 
@@ -214,8 +214,9 @@ public class Display
                 cg.dispose();
             }
         }
+        return this;
     }
-    public final void outputOverlay(Graphics2D g){
+    public final Display outputOverlay(Graphics2D g){
 
         this.output.completedOverlay();
 
@@ -229,6 +230,7 @@ public class Display
                 cg.dispose();
             }
         }
+        return this;
     }
     public final Component.Container outputScene(){
         this.output.requestScene();

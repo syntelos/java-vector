@@ -10,7 +10,7 @@ import java.awt.geom.Rectangle2D;
 /**
  * Common implementation of {@link Component} for convenience
  */
-public abstract class Abstract 
+public abstract class AbstractComponent
     extends Object
     implements Component
 {
@@ -24,7 +24,7 @@ public abstract class Abstract
     protected final Rectangle2D.Float bounds = new Rectangle2D.Float(0,0,0,0);
 
 
-    public Abstract(){
+    public AbstractComponent(){
         super();
     }
 
@@ -62,6 +62,24 @@ public abstract class Abstract
 
         this.visible = true;
         this.parent = null;
+    }
+    /**
+     * Overriding this method should call this method via
+     * <code>super.resized()</code>
+     */
+    public void resized(){
+    }
+    /**
+     * Overriding this method should call this method via
+     * <code>super.modified()</code>
+     */
+    public void modified(){
+    }
+    /**
+     * Overriding this method should call this method via
+     * <code>super.relocated()</code>
+     */
+    public void relocated(){
     }
     public final Component.Container getParentVector(){
         return this.parent;
@@ -137,16 +155,16 @@ public abstract class Abstract
         transform.translate(location.x,location.y);
         return transform;
     }
-    protected Abstract setTransformLocal(AffineTransform transform){
+    protected AbstractComponent setTransformLocal(AffineTransform transform){
         if (null != transform)
             this.transform.setTransform(transform);
         return this;
     }
-    protected Abstract setTransformLocal(float sx, float sy){
+    protected AbstractComponent setTransformLocal(float sx, float sy){
 
         return this.setTransformLocal(AffineTransform.getScaleInstance(sx,sy));
     }
-    public Abstract scaleTransformLocalRelative(Rectangle2D bounds){
+    public AbstractComponent scaleTransformLocalRelative(Rectangle2D bounds){
         if (null != bounds){
             Rectangle2D thisBounds = this.getBoundsVector();
             float sw = (float)(thisBounds.getWidth()/(bounds.getX()+bounds.getWidth()));
@@ -156,7 +174,7 @@ public abstract class Abstract
         }
         return this;
     }
-    public Abstract scaleTransformLocalAbsolute(Rectangle2D bounds){
+    public AbstractComponent scaleTransformLocalAbsolute(Rectangle2D bounds){
         if (null != bounds){
             Rectangle2D thisBounds = this.getBoundsVector();
             float sw = (float)(thisBounds.getWidth()/(bounds.getX()+bounds.getWidth()));
@@ -166,33 +184,14 @@ public abstract class Abstract
         }
         return this;
     }
-    protected final Display getDisplay(){
+    protected final Component.Container getRootContainer(){
         Component.Container p = this.getParentVector();
-        while (null != p){
-            if (p instanceof Display)
-                return (Display)p;
-            else
-                p = p.getParentVector();
+        Component.Container pp = p;
+        while (null != pp){
+            p = pp;
+            pp = p.getParentVector();
         }
-        throw new IllegalStateException();
-    }
-    /**
-     * Overriding this method should call this method via
-     * <code>super.resized()</code>
-     */
-    public void resized(){
-    }
-    /**
-     * Overriding this method should call this method via
-     * <code>super.modified()</code>
-     */
-    public void modified(){
-    }
-    /**
-     * Overriding this method should call this method via
-     * <code>super.relocated()</code>
-     */
-    public void relocated(){
+        return p;
     }
     public boolean input(Event e){
 

@@ -16,9 +16,11 @@ Requirements
 
   2
 
-    Media (e.g. JSON) define and update window content as a tree of named components
+    Media (e.g. JSON) define and update window content as a tree of
+    named components
 
-    Update deltas modify subtree components by specifying ancestors by name, not content
+    Update deltas modify subtree components by specifying ancestors by
+    name, not content
 
     Component names are array indeces from zero inclusive.
 
@@ -57,7 +59,8 @@ Imports
 
   * Input coordinate space differs from the output coordinate space
 
-    * A menu bar or display container will be inside the input space but outside the output space
+    * A menu bar or display container will be inside the input space
+      but outside the output space
 
   * The drawing of a component should not clip to the component
 
@@ -65,15 +68,20 @@ Imports
 
       * For example borders decoration or content rotation
 
-  * A coordinate local transform should be independent of the component parent transform
+  * A coordinate local transform should be independent of the
+    component parent transform
 
-    * A component should be free to choose its internal transform/input/output strategy
+    * A component should be free to choose its internal
+      transform/input/output strategy
 
-  * Feature implementation should be defined via subclasses rather than enums
+  * Feature implementation should be defined via subclasses rather
+    than enums
 
-    * Feature definition via enum proposes an unmanageable and impractical application space 
+    * Feature definition via enum proposes an unmanageable and
+      impractical application space
 
-  * Input events should be passed to a component as translated to its local coordinate space
+  * Input events should be passed to a component as translated to its
+    local coordinate space
 
     * Natural pattern
 
@@ -82,6 +90,60 @@ Design
   See src/vector/Component.java
   See src/vector/Event.java
 
+  The intent is to define the package in the Component interfaces.
+  Any implementor of the Component interface is a first class member
+  of this package.  However it is also true that gaps in the
+  documentation should be filled by looking at the sources in this
+  package.
+
+  Operators
+
+    The component interface defines an extended set of life cycle
+    operators with void return types.  These are 'init', 'destroy',
+    'resized', 'modified' and 'relocated', and are documented in the
+    Component interface.  These operators are indempotent: any number
+    of calls must produce identical state.
+
+    The initializer and destructor must return with an instance state
+    that is consistent with each other and the whole instance object
+    life cycle.
+
+    The destructor (named 'destroy') is called by the initializer
+    (named 'init'), and is responsible for releasing cyclic references
+    and clearing implied state: internal, typically private, state
+    that is implied by properties that define output.
+
+    The initializer is called after construction and after setting the
+    parent component.  Also, it may be called in a reinitialization
+    process defined in a JSON scene description.  It is responsible
+    for clearing and redefining the state of an object as first
+    constructed and added to the component hierarchy.
+
 Implementation
 
   See src/vector/Abstract.java, etc..
+
+  Patterns common to this package
+
+  * Required instance properties have default values, where possible
+
+    * Setters and Destructors should never clear fields having default
+      values
+
+    * Setters should ignore null arguments, where possible
+
+  * Instance property setters and getters should ignore null values
+    called by fromJson
+
+    * This allows the fromJson method to be defined as a simple,
+      unconditional execution list -- which is a convenient and
+      reliable pattern that is easily reproduced and maintained
+
+  * The init/destroy paradigm can be subtle in the choice of fields to
+    clear in the destructor, and define in the initializer
+
+    * In the 'vector/Text' example, the destructor clears the same
+      fields as the modifier ('modified' method), and the initializer 
+
+    * Any state implied (indirectly) by user properties for output is
+      cleared by the modifier

@@ -152,6 +152,26 @@ public interface Component
      */
     public void destroy();
 
+    /**
+     * Display has changed size
+     */
+    public void resized();
+    /**
+     * Content or properties of content visualization have changed,
+     * called from content visualization property methods
+     */
+    public void modified();
+    /**
+     * Component has changed, called from {@link #setBoundsVector} and {@link #setLocationVector}
+     */
+    public void relocated();
+    /**
+     * This method is named for compatibility with the AWT for the
+     * {@link Display} case.  The benefit of this choice has been that
+     * {@link Display} is no more than the root container.
+     * 
+     * @return Parent container
+     */
     public Component.Container getParentVector();
     /**
      * In the {@link Display}, this is an {@link
@@ -215,19 +235,6 @@ public interface Component
      */
     public AffineTransform getTransformParent();
     /**
-     * Display has changed size
-     */
-    public void resized();
-    /**
-     * Content or properties of content visualization have changed,
-     * called from content visualization property methods
-     */
-    public void modified();
-    /**
-     * Component has changed, called from {@link #setBoundsVector} and {@link #setLocationVector}
-     */
-    public void relocated();
-    /**
      * @param e Event in local coordinate space
      * 
      * @return Consumed (halt further propagation)
@@ -242,13 +249,13 @@ public interface Component
      * 
      * @param g A copy of the parent's graphics context.
      */
-    public void outputScene(Graphics2D g);
+    public Component outputScene(Graphics2D g);
     /**
      * Overlay
      * 
      * @param g A copy of the parent's graphics context.
      */
-    public void outputOverlay(Graphics2D g);
+    public Component outputOverlay(Graphics2D g);
 
     /**
      * Ordered list of component children.
