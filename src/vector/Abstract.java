@@ -66,11 +66,7 @@ public abstract class Abstract
     public final Component.Container getParentVector(){
         return this.parent;
     }
-    /**
-     * For symmetry with the init process, this method, defined here,
-     * sets the bounds of this component to those of the parent.
-     */
-    public Component setParentVector(Component.Container parent){
+    public final Component setParentVector(Component.Container parent){
         if (null != parent){
             if (null != this.parent)
                 throw new IllegalStateException();
@@ -97,6 +93,7 @@ public abstract class Abstract
     public final Component setBoundsVector(Rectangle2D.Float bounds){
 
         this.bounds.setFrame(bounds);
+
         return this;
     }
     protected Component setBoundsVectorInit(Component.Container parent){
@@ -127,6 +124,8 @@ public abstract class Abstract
         this.bounds.x = (float)point.getX();
         this.bounds.y = (float)point.getY();
 
+        this.relocated();
+
         return this;
     }
     public final AffineTransform getTransformLocal(){
@@ -147,12 +146,24 @@ public abstract class Abstract
 
         return this.setTransformLocal(AffineTransform.getScaleInstance(sx,sy));
     }
-    protected Abstract scaleTransformLocal(Rectangle2D.Float bounds){
-        Rectangle2D.Float thisBounds = this.getBoundsVector();
-        float sw = (thisBounds.width/bounds.width);
-        float sh = (thisBounds.height/bounds.height);
+    public Abstract scaleTransformLocalRelative(Rectangle2D bounds){
+        if (null != bounds){
+            Rectangle2D thisBounds = this.getBoundsVector();
+            float sw = (float)(thisBounds.getWidth()/(bounds.getX()+bounds.getWidth()));
+            float sh = (float)(thisBounds.getHeight()/(bounds.getY()+bounds.getHeight()));
 
-        this.transform.scale(sw,sh);
+            this.transform.scale(sw,sh);
+        }
+        return this;
+    }
+    public Abstract scaleTransformLocalAbsolute(Rectangle2D bounds){
+        if (null != bounds){
+            Rectangle2D thisBounds = this.getBoundsVector();
+            float sw = (float)(thisBounds.getWidth()/(bounds.getX()+bounds.getWidth()));
+            float sh = (float)(thisBounds.getHeight()/(bounds.getY()+bounds.getHeight()));
+
+            this.transform.setToScale(sw,sh);
+        }
         return this;
     }
     protected final Display getDisplay(){
@@ -166,12 +177,22 @@ public abstract class Abstract
         throw new IllegalStateException();
     }
     /**
-     * This method, defined here, defines the bounding box to the
-     * parent dimensions and origin coordinates.
+     * Overriding this method should call this method via
+     * <code>super.resized()</code>
      */
     public void resized(){
-
-        this.setBoundsVectorInit(this.getParentVector());
+    }
+    /**
+     * Overriding this method should call this method via
+     * <code>super.modified()</code>
+     */
+    public void modified(){
+    }
+    /**
+     * Overriding this method should call this method via
+     * <code>super.relocated()</code>
+     */
+    public void relocated(){
     }
     public boolean input(Event e){
 
@@ -182,8 +203,8 @@ public abstract class Abstract
         return false;
     }
 
-    public Json toJson(){
-        Json thisModel = new ObjectJson();
+    public ObjectJson toJson(){
+        ObjectJson thisModel = new ObjectJson();
         thisModel.setValue("class",this.getClass().getName());
         thisModel.setValue("init",Boolean.TRUE);
         thisModel.setValue("transform",this.transform);
@@ -197,7 +218,7 @@ public abstract class Abstract
 
         this.setTransformLocal( Component.Tools.DecodeTransform(thisModel.getValue("transform")));
 
-        this.scaleTransformLocal( Component.Tools.DecodeBounds(thisModel));
+        this.scaleTransformLocalRelative( Component.Tools.DecodeBounds(thisModel.getValue("bounds")));
 
         return true;
     }

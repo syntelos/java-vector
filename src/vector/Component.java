@@ -4,6 +4,7 @@ import json.Json;
 
 import lxl.List;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -120,6 +121,10 @@ import java.util.StringTokenizer;
  * (typical), and the latter is applicable to non-interactive
  * components. </p>
  * 
+ * <p> See also {@link
+ * #setBoundsVector(java.awt.geom.Rectangle2D$Float)
+ * setBoundsVector}. </p>
+ * 
  * <h4><code>components</code></h4>
  * 
  * <p> Each container must produce JSON output which includes a field
@@ -170,7 +175,11 @@ public interface Component
      * @return A clone or copy of the bounding box
      */
     public Rectangle2D.Float getBoundsVector();
-
+    /**
+     * Define the objective size of the component.  Content is scaled
+     * to this size.  See "Scaling <code>transform</code> &amp;
+     * <code>bounds</code>", above.
+     */
     public Component setBoundsVector(Rectangle2D.Float bounds);
 
     public boolean contains(int x, int y);
@@ -191,6 +200,14 @@ public interface Component
      */
     public AffineTransform getTransformLocal();
     /**
+     * Concatenate dimensional scale with current matrix
+     */
+    public Component scaleTransformLocalRelative(Rectangle2D bounds);
+    /**
+     * Define dimensional scale on current matrix
+     */
+    public Component scaleTransformLocalAbsolute(Rectangle2D bounds);
+    /**
      * Converts input events
      * 
      * @return (Clone) The local transform translated from the
@@ -198,9 +215,18 @@ public interface Component
      */
     public AffineTransform getTransformParent();
     /**
-     * Parent has changed size
+     * Display has changed size
      */
     public void resized();
+    /**
+     * Content or properties of content visualization have changed,
+     * called from content visualization property methods
+     */
+    public void modified();
+    /**
+     * Component has changed, called from {@link #setBoundsVector} and {@link #setLocationVector}
+     */
+    public void relocated();
     /**
      * @param e Event in local coordinate space
      * 
@@ -412,9 +438,21 @@ public interface Component
             }
             return new Component.Iterator(list);
         }
+        /**
+         * While the argument JSON components list matches the
+         * instance classes found in an existing components list, this
+         * function will update.  Otherwise this function will add new
+         * components.  To overwrite an existing components list, the
+         * "init" feature is employed.
+         * 
+         * This approach is intended to permit updating and adding
+         * with the greatest flexibility.
+         */
         public static void DecodeComponents(Component.Container container, Json containerModel){
             List<Json> components = containerModel.getValue("components");
             if (null != components){
+                boolean updating = true;
+
                 final int count = components.size();
                 for (int cc = 0; cc < count; cc++){
 
@@ -425,29 +463,38 @@ public interface Component
                         if (null != componentClassName && 0 < componentClassName.length()){
                             try {
                                 Class<Component> componentClass = (Class<Component>)Class.forName(componentClassName);
-
-                                if (container.has(cc)){
+                                /*
+                                 * 
+                                 */
+                                if (updating && container.has(cc)){
 
                                     Component component = container.get(cc);
 
-                                    component.fromJson(componentModel);
-                                }
-                                else {
-                                    try {
-                                        Component component = componentClass.newInstance();
-
-                                        container.add(component);
+                                    if (component.getClass().equals(componentClass)){
 
                                         component.fromJson(componentModel);
-                                    }
-                                    catch (InstantiationException exc){
 
-                                        container.warn(exc,"Decoding component [%d] in class '%s'",cc,componentClassName);
+                                        continue;
                                     }
-                                    catch (IllegalAccessException exc){
+                                    else {
+                                        updating = false;
+                                    }
+                                }
 
-                                        container.warn(exc,"Decoding component [%d] in class '%s'",cc,componentClassName);
-                                    }
+                                try {
+                                    Component component = componentClass.newInstance();
+
+                                    container.add(component);
+
+                                    component.fromJson(componentModel);
+                                }
+                                catch (InstantiationException exc){
+
+                                    container.warn(exc,"Decoding component [%d] in class '%s'",cc,componentClassName);
+                                }
+                                catch (IllegalAccessException exc){
+
+                                    container.warn(exc,"Decoding component [%d] in class '%s'",cc,componentClassName);
                                 }
                             }
                             catch (ClassNotFoundException exc){
@@ -545,6 +592,29 @@ public interface Component
                 }
                 else
                     throw new IllegalArgumentException(string);
+            }
+        }
+        public static Color DecodeColor(String color){
+            if (null == color)
+                return null;
+            else
+                return Color.decode(color);
+        }
+        public static String EncodeColor(Color color){
+            if (null == color)
+                return null;
+            else {
+                StringBuilder string = new StringBuilder();
+                string.append('#');
+
+                String rgb = Integer.toHexString((color.getRGB() & 0xFFFFFF));
+
+                for (int cc = rgb.length(); cc <= 6; cc++){
+                    string.append('0');
+                }
+                string.append(rgb);
+
+                return string.toString();
             }
         }
     }

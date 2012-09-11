@@ -36,7 +36,7 @@ public class Display
 
     protected Component[] components;
 
-    private final AffineTransform local = new AffineTransform();
+    private final AffineTransform transform = new AffineTransform();
 
     private final Output output = new Output();
 
@@ -56,7 +56,7 @@ public class Display
 
         this.destroy();
 
-        this.local.setTransform(new AffineTransform());
+        this.transform.setTransform(new AffineTransform());
     }
     protected void init(Boolean init){
         if (null != init && init.booleanValue()){
@@ -115,23 +115,35 @@ public class Display
     }
     public final AffineTransform getTransformLocal(){
 
-        return (AffineTransform)this.local.clone();
+        return (AffineTransform)this.transform.clone();
     }
     protected Display setTransformLocal(AffineTransform transform){
         if (null != transform)
-            this.local.setTransform(transform);
+            this.transform.setTransform(transform);
         return this;
     }
     protected Display setTransformLocal(float sx, float sy){
 
         return this.setTransformLocal(AffineTransform.getScaleInstance(sx,sy));
     }
-    protected Display scaleTransformLocal(Rectangle2D.Float bounds){
-        Rectangle2D.Float thisBounds = this.getBoundsVector();
-        float sw = (thisBounds.width/bounds.width);
-        float sh = (thisBounds.height/bounds.height);
+    public Display scaleTransformLocalRelative(Rectangle2D bounds){
+        if (null != bounds){
+            Rectangle2D thisBounds = this.getBoundsVector();
+            float sw = (float)(thisBounds.getWidth()/(bounds.getX()+bounds.getWidth()));
+            float sh = (float)(thisBounds.getHeight()/(bounds.getY()+bounds.getHeight()));
 
-        this.local.scale(sw,sh);
+            this.transform.scale(sw,sh);
+        }
+        return this;
+    }
+    public Display scaleTransformLocalAbsolute(Rectangle2D bounds){
+        if (null != bounds){
+            Rectangle2D thisBounds = this.getBoundsVector();
+            float sw = (float)(thisBounds.getWidth()/(bounds.getX()+bounds.getWidth()));
+            float sh = (float)(thisBounds.getHeight()/(bounds.getY()+bounds.getHeight()));
+
+            this.transform.setToScale(sw,sh);
+        }
         return this;
     }
     public final AffineTransform getTransformParent(){
@@ -150,6 +162,10 @@ public class Display
 
             c.resized();
         }
+    }
+    public void modified(){
+    }
+    public void relocated(){
     }
     public boolean input(Event e){
         return true;
@@ -330,7 +346,7 @@ public class Display
         Json thisModel = new ObjectJson();
         thisModel.setValue("class",this.getClass().getName());
         thisModel.setValue("init",Boolean.TRUE);
-        thisModel.setValue("transform",this.local);
+        thisModel.setValue("transform",this.transform);
         thisModel.setValue("bounds",this.getBounds());
         thisModel.setValue("components",new ArrayJson(this));
         return thisModel;
@@ -341,9 +357,11 @@ public class Display
 
         this.setTransformLocal( Component.Tools.DecodeTransform(thisModel.getValue("transform")));
 
-        this.scaleTransformLocal( Component.Tools.DecodeBounds(thisModel));
+        this.scaleTransformLocalRelative( Component.Tools.DecodeBounds(thisModel.getValue("bounds")));
 
         Component.Tools.DecodeComponents(this,thisModel);
+
+        this.outputScene();
 
         return true;
     }
