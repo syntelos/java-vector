@@ -15,6 +15,7 @@ import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -29,6 +30,7 @@ public class Display
                java.awt.event.KeyListener,
                java.awt.event.MouseListener,
                java.awt.event.MouseMotionListener,
+               java.awt.event.MouseWheelListener,
                java.awt.event.ComponentListener
 {
 
@@ -48,6 +50,7 @@ public class Display
         super.addKeyListener(this);
         super.addMouseListener(this);
         super.addMouseMotionListener(this);
+        super.addMouseWheelListener(this);
         super.addComponentListener(this);
     }
 
@@ -305,24 +308,129 @@ public class Display
 
         return this;
     }
+    protected Point2D.Float transformFromParent(Point2D point){
+        /*
+         * The transform arithmetic is double, and the point class
+         * will store to float
+         */
+        return (Point2D.Float)this.getTransformParent().transform(point,new Point2D.Float(0,0));
+    }
 
     public void mouseClicked(MouseEvent evt){
     }
     public void mousePressed(MouseEvent evt){
+
+        final Event.Mouse.Action action = Event.Mouse.Action.PointButton(evt);
+
+        if (null != action){
+            final Point2D.Float point = this.transformFromParent(evt.getPoint());
+
+            final Event e = new AbstractEvent.AbstractMouse.AbstractMousePoint.Down(action,point);
+
+            for (Component c: this){
+
+                if (c.input(e))
+                    break;
+            }
+        }
     }
     public void mouseReleased(MouseEvent evt){
+
+        final Event.Mouse.Action action = Event.Mouse.Action.PointButton(evt);
+
+        if (null != action){
+            final Point2D.Float point = this.transformFromParent(evt.getPoint());
+
+            final Event e = new AbstractEvent.AbstractMouse.AbstractMousePoint.Up(action,point);
+
+            for (Component c: this){
+
+                if (c.input(e))
+                    break;
+            }
+        }
     }
     public void mouseEntered(MouseEvent evt){
         this.mouseIn = true;
 
+        final Point2D.Float point = this.transformFromParent(evt.getPoint());
+
+        final Event entered = new AbstractEvent.AbstractMouse.AbstractMouseMotion.Entered(point);
+
+        final Event exited = new AbstractEvent.AbstractMouse.AbstractMouseMotion.Exited(point);
+
+        for (Component c: this){
+
+            if (c.contains(point)){
+
+                c.input(entered);
+            }
+        }
     }
     public void mouseExited(MouseEvent evt){
         this.mouseIn = false;
 
+        final Point2D.Float point = this.transformFromParent(evt.getPoint());
+
+        final Event exited = new AbstractEvent.AbstractMouse.AbstractMouseMotion.Exited(point);
+
+        for (Component c: this.listMouseIn()){
+
+            c.input(exited);
+        }
     }
     public void mouseDragged(MouseEvent evt){
+
+        final Event.Mouse.Action action = Event.Mouse.Action.PointButton(evt);
+
+        if (null != action){
+            final Point2D.Float point = this.transformFromParent(evt.getPoint());
+
+            final Event dragged = new AbstractEvent.AbstractMouse.AbstractMousePoint.Drag(action,point);
+
+            for (Component c: this){
+
+                if (c.input(dragged))
+                    break;
+            }
+        }
     }
     public void mouseMoved(MouseEvent evt){
+
+        final Point2D.Float point = this.transformFromParent(evt.getPoint());
+
+        final Event moved = new AbstractEvent.AbstractMouse.AbstractMouseMotion.Moved(point);
+
+        final Event entered = new AbstractEvent.AbstractMouse.AbstractMouseMotion.Entered(point);
+
+        final Event exited = new AbstractEvent.AbstractMouse.AbstractMouseMotion.Exited(point);
+
+        for (Component c: this){
+
+            if (c.isMouseIn()){
+
+                if (c.contains(point)){
+
+                    c.input(moved);
+                }
+                else {
+                    c.input(exited);
+                }
+            }
+            else if (c.contains(point)){
+                c.input(entered);
+            }
+        }
+    }
+    public void mouseWheelMoved(MouseWheelEvent evt){
+
+        Event e = new AbstractEvent.AbstractMouse.AbstractMouseWheel(evt.getWheelRotation());
+
+        for (Component c: this){
+
+            if (c.input(e))
+                break;
+        }
     }
     public void keyTyped(KeyEvent e){
     }

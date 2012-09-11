@@ -2,7 +2,7 @@
   "components": [
     {
       "class": "vector.Text",
-      "font": "monospace-12",
+      "font": "monospaced-12",
       "color": "#AF1020",
       "text": "Hello, World."
     }
