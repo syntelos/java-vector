@@ -1,0 +1,30 @@
+package vector.event;
+
+import vector.Event;
+
+import java.awt.geom.Point2D;
+
+/**
+ * 
+ */
+public class AbstractMouseMotion
+    extends AbstractMouse
+    implements Event.Mouse.Motion
+{
+
+    public final Point2D point;
+
+
+    public AbstractMouseMotion(Type type, Action action, Point2D point){
+        super(type,action);
+        if (null != point)
+            this.point = point;
+        else
+            throw new IllegalArgumentException();
+    }
+
+
+    public final Point2D getPoint(){
+        return this.point;
+    }
+}

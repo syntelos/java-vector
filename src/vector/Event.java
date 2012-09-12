@@ -14,7 +14,7 @@ public interface Event {
      * Mouse moved includes enter and exit
      */
     public enum Type {
-        MouseMoved, MouseDown, MouseUp, MouseDrag, MouseWheel, KeyDown, KeyUp;
+        MouseMoved, MouseDown, MouseUp, MouseDrag, MouseWheel, KeyDown, KeyUp, Action;
 
         public boolean isMouse(){
             switch(this){
@@ -32,6 +32,14 @@ public interface Event {
             switch(this){
             case KeyDown:
             case KeyUp:
+                return true;
+            default:
+                return false;
+            }
+        }
+        public boolean isAction(){
+            switch(this){
+            case Action:
                 return true;
             default:
                 return false;
@@ -136,5 +144,7 @@ public interface Event {
     public boolean isMouse();
 
     public boolean isKey();
+
+    public boolean isAction();
 
 }

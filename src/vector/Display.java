@@ -332,7 +332,7 @@ public class Display
         if (null != action){
             final Point2D.Float point = this.transformFromParent(evt.getPoint());
 
-            final Event e = new AbstractEvent.AbstractMouse.AbstractMousePoint.Down(action,point);
+            final Event e = new vector.event.MouseDown(action,point);
 
             for (Component c: this){
 
@@ -348,7 +348,7 @@ public class Display
         if (null != action){
             final Point2D.Float point = this.transformFromParent(evt.getPoint());
 
-            final Event e = new AbstractEvent.AbstractMouse.AbstractMousePoint.Up(action,point);
+            final Event e = new vector.event.MouseUp(action,point);
 
             for (Component c: this){
 
@@ -362,9 +362,9 @@ public class Display
 
         final Point2D.Float point = this.transformFromParent(evt.getPoint());
 
-        final Event entered = new AbstractEvent.AbstractMouse.AbstractMouseMotion.Entered(point);
+        final Event entered = new vector.event.MouseEntered(point);
 
-        final Event exited = new AbstractEvent.AbstractMouse.AbstractMouseMotion.Exited(point);
+        final Event exited = new vector.event.MouseExited(point);
 
         for (Component c: this){
 
@@ -379,7 +379,7 @@ public class Display
 
         final Point2D.Float point = this.transformFromParent(evt.getPoint());
 
-        final Event exited = new AbstractEvent.AbstractMouse.AbstractMouseMotion.Exited(point);
+        final Event exited = new vector.event.MouseExited(point);
 
         for (Component c: this.listMouseIn()){
 
@@ -393,7 +393,7 @@ public class Display
         if (null != action){
             final Point2D.Float point = this.transformFromParent(evt.getPoint());
 
-            final Event dragged = new AbstractEvent.AbstractMouse.AbstractMousePoint.Drag(action,point);
+            final Event dragged = new vector.event.MouseDrag(action,point);
 
             for (Component c: this){
 
@@ -406,11 +406,11 @@ public class Display
 
         final Point2D.Float point = this.transformFromParent(evt.getPoint());
 
-        final Event moved = new AbstractEvent.AbstractMouse.AbstractMouseMotion.Moved(point);
+        final Event moved = new vector.event.MouseMoved(point);
 
-        final Event entered = new AbstractEvent.AbstractMouse.AbstractMouseMotion.Entered(point);
+        final Event entered = new vector.event.MouseEntered(point);
 
-        final Event exited = new AbstractEvent.AbstractMouse.AbstractMouseMotion.Exited(point);
+        final Event exited = new vector.event.MouseExited(point);
 
         for (Component c: this){
 
@@ -431,7 +431,7 @@ public class Display
     }
     public void mouseWheelMoved(MouseWheelEvent evt){
 
-        Event e = new AbstractEvent.AbstractMouse.AbstractMouseWheel(evt.getWheelRotation());
+        Event e = new vector.event.MouseWheel(evt.getWheelRotation());
 
         for (Component c: this){
 
