@@ -158,6 +158,9 @@ public class Text
         this.modified();
         return this;
     }
+    public final boolean isEmpty(){
+        return (null == this.string || 0 == this.string.length);
+    }
     public final int length(){
         if (null == this.string)
             return 0;

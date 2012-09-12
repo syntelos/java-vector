@@ -57,9 +57,15 @@ Imports
 
   Lessons learned from previous work 
 
-  * A scalable layout process requires a well founded definition to
-    promote consistency and avoid cyclic dependencies or reduced
-    degrees of freedom
+  * A scalable layout process requires a definition that promotes
+    method definition and process consistency, and avoids cyclic
+    process dependencies and reduced application degrees of freedom
+
+    * Scaling depends on window frame boundaries, and propagates via
+      component boundaries
+
+    * Scaling the component requires processes (algorithms) which take
+      its boundaries as input, not output (and not both!)
 
   * Input coordinate space differs from the output coordinate space
 
