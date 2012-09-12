@@ -1,6 +1,5 @@
 package vector;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import static java.awt.RenderingHints.*;
 import java.awt.geom.Rectangle2D;
@@ -24,7 +23,7 @@ public final class Offscreen
     }
 
 
-    public Graphics2D blit(ImageObserver p, Graphics g){
+    public Graphics2D blit(ImageObserver p, Graphics2D g){
 
         g.drawImage(this,0,0,p);
 
@@ -32,11 +31,9 @@ public final class Offscreen
     }
     public Graphics2D create(){
 
-        return this.hint(this.getGraphics());
+        return this.hint((Graphics2D)this.getGraphics());
     }
-    public Graphics2D hint(Graphics eg){
-
-        final Graphics2D g = (Graphics2D)eg;
+    public Graphics2D hint(Graphics2D g){
 
         g.setRenderingHint(KEY_RENDERING,VALUE_RENDER_QUALITY);
         g.setRenderingHint(KEY_ANTIALIASING,VALUE_ANTIALIAS_ON);
@@ -44,5 +41,4 @@ public final class Offscreen
 
         return g;
     }
-
 }

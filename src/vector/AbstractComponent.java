@@ -114,8 +114,8 @@ public abstract class AbstractComponent
 
         return this;
     }
-    protected Component setBoundsVectorInit(Component.Container parent){
-        Rectangle2D.Float bounds = parent.getBoundsVector();
+    protected Component setBoundsVectorInit(Component component){
+        Rectangle2D.Float bounds = component.getBoundsVector();
         bounds.x = 0f;
         bounds.y = 0f;
 
@@ -200,6 +200,20 @@ public abstract class AbstractComponent
     public boolean isMouseIn(){
 
         return false;
+    }
+    public Component outputScene(){
+        Component.Container root = this.getRootContainer();
+        if (null != root){
+            root.outputOverlay();
+        }
+        return this;
+    }
+    public Component outputOverlay(){
+        Component.Container root = this.getRootContainer();
+        if (null != root){
+            root.outputOverlay();
+        }
+        return this;
     }
 
     public ObjectJson toJson(){

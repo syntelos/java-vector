@@ -49,6 +49,7 @@ public class Text
     @Override
     public void destroy(){
         super.destroy();
+
         this.vector = null;
         this.shape = null;
         this.localPositions = null;
@@ -69,9 +70,11 @@ public class Text
     @Override
     public void modified(){
         super.modified();
+
         this.vector = null;
         this.shape = null;
         this.localPositions = null;
+
         this.layout();
     }
     public final Font getFont(){

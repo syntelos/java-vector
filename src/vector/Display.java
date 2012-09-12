@@ -193,8 +193,13 @@ public class Display
         else {
             Offscreen offscreen = this.output.offscreen(this);
 
-            this.outputScene(offscreen.create());
-
+            Graphics2D og = offscreen.create();
+            try {
+                this.outputScene(og);
+            }
+            finally {
+                og.dispose();
+            }
             offscreen.blit(this,g);
 
             this.outputOverlay(g);

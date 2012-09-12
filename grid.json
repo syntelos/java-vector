@@ -1,0 +1,8 @@
+{
+  "components": [
+    {
+      "class": "vector.Grid",
+      "mouse": true
+    }
+  ]
+}

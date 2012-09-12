@@ -57,6 +57,10 @@ Imports
 
   Lessons learned from previous work 
 
+  * A scalable layout process requires a well founded definition to
+    promote consistency and avoid cyclic dependencies or reduced
+    degrees of freedom
+
   * Input coordinate space differs from the output coordinate space
 
     * A menu bar or display container will be inside the input space
@@ -119,6 +123,66 @@ Design
     for clearing and redefining the state of an object as first
     constructed and added to the component hierarchy.
 
+  Description
+
+    The primary definition of the JSON description language requires
+    the outer - most or top level JSON syntax be the JSON Object
+    syntax for the Root Container (Display).  Likewise all Components
+    are described by JSON Object syntax.  Containers define their
+    children (immediate descendants) in an array named "components".
+
+    Currently, Component property names and values are largely defined
+    in the non - abstract members of the Component class, in addition
+    to the documentation found in the Component class.  Nonetheless, a
+    consistent language is imperative.  New members of the Component
+    class must employ the JSON syntax and semantics of the pre -
+    existing members of the class wherever possible.
+
+    Each Component is required to produce JSON output that includes a
+    property named "class" with the string value of
+    "this.getClass().getName()".  This is implemented in
+    AbstractComponent and employed by its subclasses by calling
+    "super.toJson()".
+
+  Coordinate spaces
+
+    A component's local transform is a matrix that does not include
+    the translation (dx,dy) from the parent coordinate space.  
+
+    The translation from the parent is the location coordinates of the
+    component relative to its parent container.  Of course, the local
+    transform may also scale or scew.
+
+    A component's parent transform includes the local transform and
+    the translation coordinates from its parent container.
+
+    A component's "shape coordinate space" is contained under the
+    local transform.  It is the coordinate space of a shape displayed
+    in this package.  The origin of the shape coordinate space is the
+    component's own (0,0) point.
+
+    A component's "local coordinate space" is related to its parent
+    coordinate space via the parent transform.  The origin of the
+    local coordinate space is the (0,0) point of its parent.  
+
+    Because both the local and parent transforms are closely related
+    to the "local coordinate space", the term "local coordinate space"
+    may be employed in a number of contexts for a variety of meanings.
+    For example, it has been employed to refer to the translation from
+    parent to component independent of scaling.  Or, it could be
+    employed as a synonym for the (abstract) shape coordinate space.
+    Hopefully, in the use of these terms, there's not enough ambiguity
+    to obscure an intended meaning.
+
+  Dimensions
+
+    Component bounds are in the parent's coordinate space.  Shape
+    bounds are in the shape coordinate space.
+
+    It can be useful to simplify this relationship by thinking of the
+    parent's coordinate space as if the nominal "screen" coordinate
+    space.
+
 Implementation
 
   See src/vector/Abstract.java, etc..
@@ -142,8 +206,23 @@ Implementation
   * The init/destroy paradigm can be subtle in the choice of fields to
     clear in the destructor, and define in the initializer
 
-    * In the 'vector/Text' example, the destructor clears the same
-      fields as the modifier ('modified' method), and the initializer 
+    * Typically, the destructor clears the same fields as the modifier
+      ('modified' method), and the initializer
 
     * Any state implied (indirectly) by user properties for output is
       cleared by the modifier
+
+  * The derivation of implied state (for example shape from data)
+    depends on the explicit state of visualization data and properties
+
+    * Producing default property values into fields will obscure the
+      user's intended state of these properties from the life cycle
+      operators, and will propagate incorrect state via JSON
+
+    * Methods producing implied state should not produce default
+      values into their respective fields, as illustrated in the case
+      of the shape method (see Grid and Text)
+
+    * Methods producing implied state must return null when
+      dependencies are not available, preserving the logic of state
+      production processes and life cycle operators
