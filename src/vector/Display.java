@@ -332,11 +332,11 @@ public class Display
         if (null != action){
             final Point2D.Float point = this.transformFromParent(evt.getPoint());
 
-            final Event e = new vector.event.MouseDown(action,point);
+            final Event down = new vector.event.MouseDown(action,point);
 
             for (Component c: this){
 
-                if (c.input(e))
+                if (c.input(down))
                     break;
             }
         }
@@ -348,11 +348,11 @@ public class Display
         if (null != action){
             final Point2D.Float point = this.transformFromParent(evt.getPoint());
 
-            final Event e = new vector.event.MouseUp(action,point);
+            final Event up = new vector.event.MouseUp(action,point);
 
             for (Component c: this){
 
-                if (c.input(e))
+                if (c.input(up))
                     break;
             }
         }
@@ -371,6 +371,10 @@ public class Display
             if (c.contains(point)){
 
                 c.input(entered);
+            }
+            else if (c.isMouseIn()){
+
+                c.input(exited);
             }
         }
     }
@@ -395,10 +399,25 @@ public class Display
 
             final Event dragged = new vector.event.MouseDrag(action,point);
 
+            final Event entered = new vector.event.MouseEntered(point);
+
+            final Event exited = new vector.event.MouseExited(point);
+
             for (Component c: this){
 
-                if (c.input(dragged))
-                    break;
+                if (c.isMouseIn()){
+
+                    if (c.contains(point)){
+
+                        c.input(dragged);
+                    }
+                    else {
+                        c.input(exited);
+                    }
+                }
+                else if (c.contains(point)){
+                    c.input(entered);
+                }
             }
         }
     }
@@ -431,7 +450,7 @@ public class Display
     }
     public void mouseWheelMoved(MouseWheelEvent evt){
 
-        Event e = new vector.event.MouseWheel(evt.getWheelRotation());
+        final Event e = new vector.event.MouseWheel(evt.getWheelRotation());
 
         for (Component c: this){
 
@@ -441,9 +460,25 @@ public class Display
     }
     public void keyTyped(KeyEvent e){
     }
-    public void keyPressed(KeyEvent e){
+    public void keyPressed(KeyEvent evt){
+
+        final Event e = new vector.event.KeyDown(evt);
+
+        for (Component c: this){
+
+            if (c.input(e))
+                break;
+        }
     }
-    public void keyReleased(KeyEvent e){
+    public void keyReleased(KeyEvent evt){
+
+        final Event e = new vector.event.KeyUp(evt);
+
+        for (Component c: this){
+
+            if (c.input(e))
+                break;
+        }
     }
     public final void componentResized(ComponentEvent evt){
         this.flush();

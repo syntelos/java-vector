@@ -5,7 +5,7 @@ import static java.awt.event.MouseEvent.*;
 import java.awt.geom.Point2D;
 
 /**
- * 
+ * Immutable universal event for a single input method
  */
 public interface Event {
     /**
@@ -137,6 +137,44 @@ public interface Event {
         extends Event
     {
 
+        public boolean isUp();
+
+        public boolean isDown();
+        /**
+         * @return Code input
+         * @see #isCode()
+         */
+        public int getKeyCode();
+        /**
+         * @return Character input
+         * @see #isChar()
+         */
+        public char getKeyChar();
+        /**
+         * @return With CONTROL modifier
+         */
+        public boolean isControl();
+        /**
+         * @return With ALT modifier
+         */
+        public boolean isAlt();
+        /**
+         * Use key code
+         */
+        public boolean isCode();
+        /**
+         * Use key char
+         */
+        public boolean isChar();
+    }
+    /**
+     * 
+     */
+    public interface NamedAction
+        extends Event
+    {
+
+        public String getName();
     }
 
     public Type getType();
