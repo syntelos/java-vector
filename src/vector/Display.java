@@ -6,7 +6,6 @@ import json.ObjectJson;
 
 import lxl.List;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -35,6 +34,8 @@ public class Display
 {
 
     protected final Logger log = Logger.getLogger(this.getClass().getName());
+
+    protected Color background;
 
     protected Component[] components;
 
@@ -81,6 +82,22 @@ public class Display
     protected void flush(){
 
         this.output.flush();
+    }
+    public final Color getBackground(){
+
+        return this.background;
+    }
+    public final Display setBackground(Color background){
+        if (null != background){
+            this.background = background;
+        }
+        return this;
+    }
+    public final Display setBackground(String code){
+        if (null != code)
+            return this.setBackground(new Color(code));
+        else
+            return this;
     }
     public Component.Container getParentVector(){
 
@@ -208,6 +225,12 @@ public class Display
     public final Display outputScene(Graphics2D g){
 
         this.output.completedScene();
+
+        if (null != this.background){
+            g.setColor(this.background);
+            Rectangle2D.Float bounds = this.getBoundsVector();
+            g.fillRect(0,0,(int)Math.ceil(bounds.width),(int)Math.ceil(bounds.height));
+        }
 
         for (Component c: this){
 
@@ -358,6 +381,8 @@ public class Display
         }
     }
     public void mouseEntered(MouseEvent evt){
+        this.requestFocus();
+
         this.mouseIn = true;
 
         final Point2D.Float point = this.transformFromParent(evt.getPoint());
@@ -488,6 +513,7 @@ public class Display
     public final void componentMoved(ComponentEvent evt){
     }
     public final void componentShown(ComponentEvent evt){
+        this.requestFocus();
         this.shown();
     }
     public final void componentHidden(ComponentEvent evt){
@@ -504,6 +530,7 @@ public class Display
         thisModel.setValue("init",Boolean.TRUE);
         thisModel.setValue("transform",this.transform);
         thisModel.setValue("bounds",this.getBounds());
+        thisModel.setValue("background",this.getBackground());
         thisModel.setValue("components",new ArrayJson(this));
         return thisModel;
     }
@@ -514,6 +541,8 @@ public class Display
         this.setTransformLocal( Component.Tools.DecodeTransform(thisModel.getValue("transform")));
 
         this.scaleTransformLocalRelative( Component.Tools.DecodeBounds(thisModel.getValue("bounds")));
+
+        this.setBackground( thisModel.getValue("background",Color.class));
 
         Component.Tools.DecodeComponents(this,thisModel);
 

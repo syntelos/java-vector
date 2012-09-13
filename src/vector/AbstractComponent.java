@@ -204,16 +204,20 @@ public abstract class AbstractComponent
     public Component outputScene(){
         Component.Container root = this.getRootContainer();
         if (null != root){
-            root.outputOverlay();
+            root.outputScene();
+            return this;
         }
-        return this;
+        else
+            throw new IllegalStateException();
     }
     public Component outputOverlay(){
         Component.Container root = this.getRootContainer();
         if (null != root){
             root.outputOverlay();
+            return this;
         }
-        return this;
+        else
+            throw new IllegalStateException();
     }
 
     public ObjectJson toJson(){

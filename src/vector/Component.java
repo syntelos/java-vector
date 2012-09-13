@@ -4,7 +4,6 @@ import json.Json;
 
 import lxl.List;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -599,29 +598,6 @@ public interface Component
                 }
                 else
                     throw new IllegalArgumentException(string);
-            }
-        }
-        public static Color DecodeColor(String color){
-            if (null == color)
-                return null;
-            else
-                return Color.decode(color);
-        }
-        public static String EncodeColor(Color color){
-            if (null == color)
-                return null;
-            else {
-                StringBuilder string = new StringBuilder();
-                string.append('#');
-
-                String rgb = Integer.toHexString((color.getRGB() & 0xFFFFFF));
-
-                for (int cc = rgb.length(); cc <= 6; cc++){
-                    string.append('0');
-                }
-                string.append(rgb);
-
-                return string.toString();
             }
         }
     }

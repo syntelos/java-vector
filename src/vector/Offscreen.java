@@ -7,6 +7,8 @@ import java.awt.image.ImageObserver;
 
 /**
  * {@link Output} buffer
+ * 
+ * @see Display
  */
 public final class Offscreen
     extends java.awt.image.BufferedImage

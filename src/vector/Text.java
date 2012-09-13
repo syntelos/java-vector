@@ -3,7 +3,6 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.font.GlyphVector;
@@ -13,7 +12,7 @@ import java.awt.geom.Rectangle2D;
 
 
 /**
- * Common text visualization feature set
+ * Text line
  */
 public class Text
     extends AbstractComponent
@@ -26,7 +25,7 @@ public class Text
 
     protected boolean outline = false;
 
-    protected char[] string;
+    protected CharSequence string;
 
     protected GlyphVector vector;
 
@@ -114,7 +113,7 @@ public class Text
     }
     public final Text setColor(String code){
         if (null != code)
-            return this.setColor(Color.decode(code));
+            return this.setColor(new Color(code));
         else
             return this;
     }
@@ -136,22 +135,11 @@ public class Text
     public final String getText(){
         return this.toString();
     }
-    public final Text setText(String text){
+    public Text setText(String text){
 
         if (null != text && 0 < text.length())
 
-            this.string = text.toCharArray();
-        else
-            this.string = null;
-
-        this.modified();
-        return this;
-    }
-    public final Text setText(char[] text){
-
-        if (null != text && 0 < text.length)
-
-            this.string = text.clone();
+            this.string = text;
         else
             this.string = null;
 
@@ -159,32 +147,32 @@ public class Text
         return this;
     }
     public final boolean isEmpty(){
-        return (null == this.string || 0 == this.string.length);
+        return (null == this.string || 0 == this.string.length());
     }
     public final int length(){
         if (null == this.string)
             return 0;
         else
-            return this.string.length;
+            return this.string.length();
     }
     public final char charAt(int idx){
-        char[] string = this.string;
-        if (null != string && -1 < idx && idx < string.length)
-            return string[idx];
+        CharSequence string = this.string;
+        if (null != string)
+            return string.charAt(idx);
         else
             throw new IndexOutOfBoundsException(String.format("[%d]",idx));
     }
     public final CharSequence subSequence(int start, int end){
-        char[] string = this.string;
-        if (null != string && -1 < start && start < string.length && start < end)
-            return new String(string,start,end);
+        CharSequence string = this.string;
+        if (null != string)
+            return string.subSequence(start,end);
         else
             throw new IndexOutOfBoundsException(String.format("[%d,%d)",start,end));
     }
     public final String toString(){
-        char[] string = this.string;
-        if (null != string)
-            return new String(string,0,string.length);
+
+        if (null != this.string)
+            return this.string.toString();
         else
             return new String();
     }
@@ -320,19 +308,23 @@ public class Text
      */
     public final Rectangle2D.Float shapeArea(){
 
+        return this.font.boundingBox(this.rows(),this.shapeAreaWidth());
+    }
+    protected float shapeAreaWidth(){
         Shape shape = this.shape();
         if (null != shape){
             Rectangle2D bounds = shape.getBounds2D();
-
-            final float x1 = this.font.padding.left;
-            final float y1 = this.font.padding.top;
-            final float x2 = (float)(bounds.getX()+bounds.getWidth());
-            final float y2 = (y1+this.font.height);
-            
-            return new Rectangle2D.Float(x1,y1,(x2-x1),(y2-y1));
+            return (float)(bounds.getX()+bounds.getWidth());
         }
-        else
-            return null;
+        else {
+            return this.font.em*this.cols();
+        }
+    }
+    protected int rows(){
+        return 1;
+    }
+    protected int cols(){
+        return 25;
     }
     public Text outputScene(Graphics2D g){
         Shape shape = this.shape();
@@ -355,7 +347,7 @@ public class Text
 
         thisModel.setValue("font", this.getFont().toString());
 
-        thisModel.setValue("color", Component.Tools.EncodeColor(this.getColor()));
+        thisModel.setValue("color", this.getColor());
 
         thisModel.setValue("outline",this.getOutline());
 
@@ -373,7 +365,7 @@ public class Text
 
         this.setText( (String)thisModel.getValue("text"));
 
-        this.setColor( Component.Tools.DecodeColor( (String)thisModel.getValue("color")));
+        this.setColor( (Color)thisModel.getValue("color",Color.class));
 
         this.setOutline( (Boolean)thisModel.getValue("outline"));
         /*
@@ -441,5 +433,4 @@ public class Text
                 return null;
         }
     }
-
 }

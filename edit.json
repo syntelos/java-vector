@@ -2,9 +2,8 @@
   "background": "#FFFFFF",
   "components": [
     {
-      "class": "vector.Grid",
+      "class": "vector.TextEdit",
       "color": "#000000",
-      "mouse": true
     }
   ]
 }

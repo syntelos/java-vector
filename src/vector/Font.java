@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 
 /**
  * A universal font primitive.
@@ -56,6 +57,22 @@ public class Font
     }
 
 
+    public final Rectangle2D.Float boundingBox(int rows, int cols){
+        final float x1 = this.padding.left;
+        final float y1 = this.padding.top;
+        final float x2 = (this.padding.getWidth()+(this.em * cols));
+        final float y2 = (y1+(this.height*rows));
+            
+        return new Rectangle2D.Float(x1,y1,(x2-x1),(y2-y1));
+    }
+    public final Rectangle2D.Float boundingBox(int rows, float width){
+        final float x1 = this.padding.left;
+        final float y1 = this.padding.top;
+        final float x2 = (this.padding.getWidth()+width);
+        final float y2 = (y1+(this.height*rows));
+            
+        return new Rectangle2D.Float(x1,y1,(x2-x1),(y2-y1));
+    }
     public final Padding getPadding(){
         Padding padding = this.padding;
         if (null != padding)
@@ -84,9 +101,9 @@ public class Font
 
         return new Font(this.deriveFont(size));
     }
-    public final GlyphVector createGlyphVector(char[] cary){
+    public final GlyphVector createGlyphVector(CharSequence string){
 
-        return this.createGlyphVector(this.frc,cary);
+        return this.createGlyphVector(this.frc,string.toString());
     }
     public final float em(float n){
 

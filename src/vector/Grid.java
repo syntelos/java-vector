@@ -3,7 +3,6 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.font.GlyphVector;
@@ -117,7 +116,7 @@ public class Grid
     }
     public final Grid setColor(String code){
         if (null != code)
-            return this.setColor(Color.decode(code));
+            return this.setColor(new Color(code));
         else
             return this;
     }
@@ -294,7 +293,7 @@ public class Grid
     public ObjectJson toJson(){
         ObjectJson thisModel = (ObjectJson)super.toJson();
 
-        thisModel.setValue("color", Component.Tools.EncodeColor(this.getColor()));
+        thisModel.setValue("color", this.getColor());
 
         thisModel.setValue("mouse",this.getMouse());
 
@@ -310,7 +309,7 @@ public class Grid
     public boolean fromJson(Json thisModel){
         super.fromJson(thisModel);
 
-        this.setColor( Component.Tools.DecodeColor( (String)thisModel.getValue("color")));
+        this.setColor( (Color)thisModel.getValue("color",Color.class));
 
         this.setMouse( (Boolean)thisModel.getValue("mouse"));
 

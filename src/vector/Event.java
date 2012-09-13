@@ -339,19 +339,28 @@ public interface Event {
 
             public boolean isCode(){
                 switch (this) {
-                case HOME:
-                case END:
+                case ENTER:
+                case BACK_SPACE:
+                case CANCEL:
+                case CLEAR:
+                case SHIFT:
+                case CONTROL:
+                case ALT:
+                case PAUSE:
+                case CAPS_LOCK:
+                case ESCAPE:
                 case PAGE_UP:
                 case PAGE_DOWN:
-                case UP:
-                case DOWN:
+                case END:
+                case HOME:
                 case LEFT:
+                case UP:
                 case RIGHT:
+                case DOWN:
                 case BEGIN:
-                case KP_LEFT: 
-                case KP_UP: 
-                case KP_RIGHT: 
-                case KP_DOWN: 
+                case DELETE:
+                case NUM_LOCK:
+                case SCROLL_LOCK:
                 case F1:
                 case F2:
                 case F3:
@@ -377,11 +386,14 @@ public interface Event {
                 case F23:
                 case F24:
                 case PRINTSCREEN:
-                case SCROLL_LOCK:
-                case CAPS_LOCK:
-                case NUM_LOCK:
-                case PAUSE:
                 case INSERT:
+                case HELP:
+                case META:
+                case KP_UP: 
+                case KP_DOWN: 
+                case KP_LEFT: 
+                case KP_RIGHT: 
+
                 case FINAL:
                 case CONVERT:
                 case NONCONVERT:
@@ -411,7 +423,6 @@ public interface Event {
                 case FIND:
                 case PROPS:
                 case STOP:
-                case HELP:
                 case WINDOWS:
                 case CONTEXT_MENU:
                     return true;

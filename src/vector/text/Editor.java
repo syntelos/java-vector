@@ -27,9 +27,6 @@ public class Editor
     public Editor(){
         this(Home.Nil);
     }
-    public Editor(char[] text){
-        this(Home.Nil,text);
-    }
     public Editor(CharSequence text){
         this(Home.Nil,text);
     }
@@ -37,12 +34,6 @@ public class Editor
         super();
         this.cursor = new Cursor(home);
         this.home = this.cursor.home;
-    }
-    public Editor(Home home, char[] text){
-        super();
-        this.cursor = new Cursor(home);
-        this.home = this.cursor.home;
-        this.set(text);
     }
     public Editor(Home home, CharSequence text){
         super();
@@ -55,22 +46,41 @@ public class Editor
     public String trim(){
         return this.home.trim(this.string);
     }
-    public Shape cursorDrawable(Text text){
+    public Shape cursor(Text text){
 
         return this.cursor.getIBeam(text);
     }
-    public boolean cursorHome(){
+    /**
+     * @return Cursor modified
+     */
+    public boolean home(){
 
         return this.cursor.home();
     }
-    public boolean cursorEnd(){
+    /**
+     * @return Cursor modified
+     */
+    public boolean end(){
 
         return this.cursor.end(this.length());
     }
-    public boolean cursor(int dx){
+    /**
+     * @return Cursor modified
+     */
+    public boolean left(){
 
-        return this.cursor.move(dx,this.length());
+        return this.cursor.move(-1,this.length());
     }
+    /**
+     * @return Cursor modified
+     */
+    public boolean right(){
+
+        return this.cursor.move(+1,this.length());
+    }
+    /**
+     * @return Text modified
+     */
     public boolean backspace(){
 
         char[] update = this.cursor.backspace(this.string);
@@ -82,6 +92,9 @@ public class Editor
         else
             return false;
     }
+    /**
+     * @return Text modified
+     */
     public boolean delete(){
 
         char[] update = this.cursor.delete(this.string);
@@ -93,6 +106,9 @@ public class Editor
         else
             return false;
     }
+    /**
+     * @return Text modified
+     */
     public boolean add(char key, int bound){
 
         char[] update = this.cursor.add(this.string, key, bound);
@@ -105,7 +121,7 @@ public class Editor
             return false;
     }
     /**
-     * @return Modified
+     * @return Text modified
      */
     public boolean set(CharSequence string){
         if (this.equals(string))
@@ -118,7 +134,7 @@ public class Editor
         }
     }
     /**
-     * @return Modified
+     * @return Text modified
      */
     public boolean set(char[] cary){
         if (this.equals(cary))
