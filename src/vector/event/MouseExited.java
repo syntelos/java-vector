@@ -11,6 +11,6 @@ public class MouseExited
     extends AbstractMouseMotion
 {
     public MouseExited(Point2D point){
-        super(Event.Type.MouseMoved,Event.Mouse.Action.Exited,point);
+        super(Event.Type.MouseExited,Event.Mouse.Action.Exited,point);
     }
 }

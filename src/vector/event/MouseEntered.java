@@ -11,6 +11,6 @@ public class MouseEntered
     extends AbstractMouseMotion
 {
     public MouseEntered(Point2D point){
-        super(Event.Type.MouseMoved,Event.Mouse.Action.Entered,point);
+        super(Event.Type.MouseEntered,Event.Mouse.Action.Entered,point);
     }
 }

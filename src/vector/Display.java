@@ -488,8 +488,14 @@ public class Display
     public final void componentMoved(ComponentEvent evt){
     }
     public final void componentShown(ComponentEvent evt){
+        this.shown();
     }
     public final void componentHidden(ComponentEvent evt){
+        this.hidden();
+    }
+    protected void shown(){
+    }
+    protected void hidden(){
     }
 
     public Json toJson(){
