@@ -331,12 +331,18 @@ public interface Event {
             BEGIN(0xFF58),
             UNDEFINED(0x0);
 
+
             public final int code;
+
 
             private Code(int code){
                 this.code = code;
             }
 
+
+            /**
+             * Non-printing action keys
+             */
             public boolean isCode(){
                 switch (this) {
                 case ENTER:
