@@ -300,9 +300,6 @@ public class Grid
         thisModel.setValue("domain", this.getDomain());
 
         thisModel.setValue("range", this.getRange());
-        /*
-         * TODO "opacity" [0.0-1.0]
-         */
 
         return thisModel;
     }
@@ -316,9 +313,6 @@ public class Grid
         this.setDomain( (float[])thisModel.getValue("domain",float[].class));
 
         this.setRange( (float[])thisModel.getValue("range",float[].class));
-        /*
-         * TODO "opacity" [0.0-1.0]
-         */
 
         return true;
     }

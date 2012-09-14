@@ -13,4 +13,7 @@ public class MouseDrag
     public MouseDrag(Action action, Point2D point){
         super(Event.Type.MouseDrag,action,point);
     }
+    public MouseDrag(Mouse e, Point2D point){
+        super(e.getType(),e.getAction(),point);
+    }
 }

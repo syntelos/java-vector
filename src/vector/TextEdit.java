@@ -100,7 +100,7 @@ public class TextEdit
                     }
                 }
                 else {
-                    if (((Editor)this.string).add(k.getKeyChar(),this.cols())){
+                    if (((Editor)this.string).add(k.getKeyChar(),this.getCols())){
 
                         this.modified();
                         this.outputScene();
@@ -116,10 +116,13 @@ public class TextEdit
     }
     public Text outputOverlay(Graphics2D g){
 
+        g.setColor(this.getColor());
+        Shape border = this.getBoundsVector();
+        g.draw(border);
+
         Shape cursor = ((Editor)this.string).cursor(this);
 
         g.transform(this.getTransformParent());
-        g.setColor(this.getColor());
         g.draw(cursor);
 
         return this;

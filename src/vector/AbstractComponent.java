@@ -114,10 +114,28 @@ public abstract class AbstractComponent
 
         return this;
     }
+    /**
+     * Dimensions of component for resizing to the parent with
+     * component natural origin (0,0).  The component location is
+     * changed to (0,0).
+     */
     protected Component setBoundsVectorInit(Component component){
         Rectangle2D.Float bounds = component.getBoundsVector();
         bounds.x = 0f;
         bounds.y = 0f;
+
+        return this.setBoundsVector(bounds);
+    }
+    /**
+     * Union of origin and bounds for resizing to these extents of
+     * within a component.  The component location is unchanged.
+     */
+    protected Component setBoundsVectorInit(Rectangle2D.Float bounds){
+
+        bounds.width += bounds.x;
+        bounds.height += bounds.y;
+        bounds.x = this.bounds.x;
+        bounds.y = this.bounds.y;
 
         return this.setBoundsVector(bounds);
     }

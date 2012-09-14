@@ -1,0 +1,49 @@
+{
+    "background": "#000000",
+    "components": [
+        {
+            "class": "vector.Table",
+            "cellspacing": 2.0,
+            "components": [
+                {
+                    "class": "vector.Container",
+                    "background": "#FF0000"
+                },
+                {
+                    "class": "vector.Container",
+                    "background": "#00FF00"
+                },
+                {
+                    "class": "vector.Container",
+                    "background": "#0000FF"
+                },
+
+                {
+                    "class": "vector.Container",
+                    "background": "#0000FF"
+                },
+                {
+                    "class": "vector.Container",
+                    "background": "#FF0000"
+                },
+                {
+                    "class": "vector.Container",
+                    "background": "#00FF00"
+                },
+
+                {
+                    "class": "vector.Container",
+                    "background": "#00FF00"
+                },
+                {
+                    "class": "vector.Container",
+                    "background": "#0000FF"
+                },
+                {
+                    "class": "vector.Container",
+                    "background": "#FF0000"
+                }
+            ]
+        }
+    ]
+}

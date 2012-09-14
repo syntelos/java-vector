@@ -70,14 +70,26 @@ public class Display
     }
     public void destroy(){
         try {
-            for (Component c: this)
+            for (Component c: this){
                 c.destroy();
-
-            this.components = null;
+            }
         }
         finally {
+            this.components = null;
+
             this.flush();
         }
+    }
+    public void resized(){
+
+        for (Component c: this){
+
+            c.resized();
+        }
+    }
+    public void modified(){
+    }
+    public void relocated(){
     }
     protected void flush(){
 
@@ -176,17 +188,6 @@ public class Display
 
         return transform;
     }
-    public void resized(){
-
-        for (Component c: this){
-
-            c.resized();
-        }
-    }
-    public void modified(){
-    }
-    public void relocated(){
-    }
     public boolean input(Event e){
         return true;
     }
@@ -229,7 +230,9 @@ public class Display
         if (null != this.background){
             g.setColor(this.background);
             Rectangle2D.Float bounds = this.getBoundsVector();
-            g.fillRect(0,0,(int)Math.ceil(bounds.width),(int)Math.ceil(bounds.height));
+            bounds.x = 0;
+            bounds.y = 0;
+            g.fill(bounds);
         }
 
         for (Component c: this){

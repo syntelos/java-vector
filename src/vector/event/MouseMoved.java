@@ -13,4 +13,7 @@ public class MouseMoved
     public MouseMoved(Point2D point){
         super(Event.Type.MouseMoved,Event.Mouse.Action.Moved,point);
     }
+    public MouseMoved(Mouse e, Point2D point){
+        super(e.getType(),e.getAction(),point);
+    }
 }

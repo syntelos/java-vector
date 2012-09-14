@@ -2,6 +2,7 @@ package vector;
 
 import java.awt.event.MouseEvent;
 import static java.awt.event.MouseEvent.*;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 /**
@@ -114,22 +115,21 @@ public interface Event {
 
         public boolean isWheel();
 
+        public Event apply(AffineTransform parent);
+
         public interface Motion
             extends Mouse
         {
-
             public Point2D getPoint();
         }
         public interface Point
             extends Mouse
         {
-
             public Point2D getPoint();
         }
         public interface Wheel
             extends Mouse
         {
-
             public int getCount();
         }
     }

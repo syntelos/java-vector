@@ -23,7 +23,9 @@ public class Text
 
     protected Color color = Color.black;
 
-    protected boolean outline = false;
+    protected boolean outline = false, fixed = false;
+
+    protected int cols = 25;
 
     protected CharSequence string;
 
@@ -132,6 +134,24 @@ public class Text
             this.outline = outline;
         return this;
     }
+    public final boolean isFixed(){
+        return this.fixed;
+    }
+    public final Boolean getFixed(){
+        return this.fixed;
+    }
+    public final Text setFixed(boolean fixed){
+        this.fixed = fixed;
+        return this;
+    }
+    public final Text setFixed(Boolean fixed){
+        if (null != fixed){
+            this.fixed = fixed;
+
+            this.modified();
+        }
+        return this;
+    }
     public final String getText(){
         return this.toString();
     }
@@ -145,6 +165,23 @@ public class Text
 
         this.modified();
         return this;
+    }
+    public int getCols(){
+        return this.cols;
+    }
+    public Text setCols(int cols){
+        if (0 < cols){
+            this.cols = cols;
+
+            this.modified();
+        }
+        return this;
+    }
+    public Text setCols(Integer cols){
+        if (null != cols)
+            return this.setCols(cols.intValue());
+        else
+            return this;
     }
     public final boolean isEmpty(){
         return (null == this.string || 0 == this.string.length());
@@ -308,23 +345,21 @@ public class Text
      */
     public final Rectangle2D.Float shapeArea(){
 
-        return this.font.boundingBox(this.rows(),this.shapeAreaWidth());
+        return this.font.boundingBox(1,this.shapeAreaWidth());
     }
     protected float shapeAreaWidth(){
-        Shape shape = this.shape();
-        if (null != shape){
-            Rectangle2D bounds = shape.getBounds2D();
-            return (float)(bounds.getX()+bounds.getWidth());
-        }
+        if (this.fixed)
+            return this.font.em*this.getCols();
         else {
-            return this.font.em*this.cols();
+            Shape shape = this.shape();
+            if (null != shape){
+                Rectangle2D bounds = shape.getBounds2D();
+                return (float)(bounds.getX()+bounds.getWidth());
+            }
+            else {
+                return this.font.em*this.getCols();
+            }
         }
-    }
-    protected int rows(){
-        return 1;
-    }
-    protected int cols(){
-        return 25;
     }
     public Text outputScene(Graphics2D g){
         Shape shape = this.shape();
@@ -351,10 +386,11 @@ public class Text
 
         thisModel.setValue("outline",this.getOutline());
 
+        thisModel.setValue("fixed",this.getFixed());
+
+        thisModel.setValue("cols",this.getCols());
+
         thisModel.setValue("text", this.toString());
-        /*
-         * TODO "opacity" [0.0-1.0]
-         */
 
         return thisModel;
     }
@@ -368,19 +404,31 @@ public class Text
         this.setColor( (Color)thisModel.getValue("color",Color.class));
 
         this.setOutline( (Boolean)thisModel.getValue("outline"));
-        /*
-         * TODO "opacity" [0.0-1.0]
-         */
+
+        this.setFixed( (Boolean)thisModel.getValue("fixed"));
+
+        this.setCols( (Integer)thisModel.getValue("cols",Integer.class));
 
         return true;
     }
     /**
-     * Called from {@link #modified()} and {@link #resized()}.  This
-     * method, defined here, calls {@link #resizeToParent()} and  {@link #layoutScaleToDimensions()}.
+     * Called from {@link #modified()} and {@link #resized()}.  
+     * 
+     * When not fixed this method, defined here, calls {@link
+     * #resizeToParent()} and {@link #layoutScaleToDimensions()}.
+     * 
+     * When fixed this method calls {@link #resizeToShapeArea()} and
+     * {@link #layoutScaleToShapeArea()}.
      */
     protected void layout(){
-        this.resizeToParent();
-        this.layoutScaleToDimensions();
+        if (this.fixed){
+            this.resizeToShapeArea();
+            this.layoutScaleToShapeArea();
+        }
+        else {
+            this.resizeToParent();
+            this.layoutScaleToDimensions();
+        }
     }
     /**
      * May be called from {@link #layout()} to scale the local
@@ -399,6 +447,19 @@ public class Text
      */
     protected void resizeToParent(){
         this.setBoundsVectorInit(this.getParentVector());
+    }
+    /**
+     * May be called from {@link #layout()} to set dimensions from
+     * {@link #shapeArea()}.
+     */
+    protected void resizeToShapeArea(){
+        this.setBoundsVectorInit(this.shapeArea());
+    }
+    /**
+     * Define transform local as 1:1 scale.
+     */
+    protected void layoutScaleToShapeArea(){
+        this.setTransformLocal(1f,1f);
     }
 
     /**

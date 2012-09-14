@@ -13,4 +13,7 @@ public class MouseExited
     public MouseExited(Point2D point){
         super(Event.Type.MouseExited,Event.Mouse.Action.Exited,point);
     }
+    public MouseExited(Mouse e, Point2D point){
+        super(e.getType(),e.getAction(),point);
+    }
 }

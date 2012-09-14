@@ -635,7 +635,7 @@ public interface Component
                 return this.list.clone();
         }
         public java.util.Iterator<Component> iterator(){
-            this.index = 0;
+
             return this;
         }
         public boolean hasNext(){

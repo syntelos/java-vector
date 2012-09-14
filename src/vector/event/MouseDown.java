@@ -13,4 +13,7 @@ public class MouseDown
     public MouseDown(Action action, Point2D point){
         super(Event.Type.MouseDown,action,point);
     }
+    public MouseDown(Mouse e, Point2D point){
+        super(e.getType(),e.getAction(),point);
+    }
 }
