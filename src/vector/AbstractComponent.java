@@ -237,6 +237,15 @@ public abstract class AbstractComponent
         else
             throw new IllegalStateException();
     }
+    public Component outputOverlayAnimate(long period){
+        Component.Container root = this.getRootContainer();
+        if (null != root){
+            root.outputOverlayAnimate(period);
+            return this;
+        }
+        else
+            throw new IllegalStateException();
+    }
 
     public ObjectJson toJson(){
         ObjectJson thisModel = new ObjectJson();

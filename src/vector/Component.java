@@ -255,6 +255,20 @@ public interface Component
      * @param g A copy of the parent's graphics context.
      */
     public Component outputOverlay(Graphics2D g);
+    /**
+     * Request global overlay animation from the root container.
+     * 
+     * @param period Consumer's animation cycle period
+     */
+    public Component outputOverlayAnimate(long period);
+    /**
+     * Request scene output from the root container
+     */
+    public Component outputScene();
+    /**
+     * Request overlay output from the root container
+     */
+    public Component outputOverlay();
 
     /**
      * Ordered list of component children.
@@ -296,14 +310,6 @@ public interface Component
         public Component remove(int idx);
 
         public Component.Iterator listMouseIn();
-        /**
-         * Request scene output
-         */
-        public Component.Container outputScene();
-        /**
-         * Request overlay output
-         */
-        public Component.Container outputOverlay();
         /**
          * Log warning
          */

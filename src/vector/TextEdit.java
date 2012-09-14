@@ -11,7 +11,10 @@ import java.awt.Shape;
 public class TextEdit
     extends Text
 {
+
     protected boolean mouseIn;
+
+    protected Blink blink;
 
 
     public TextEdit(){
@@ -22,6 +25,8 @@ public class TextEdit
     @Override
     public void init(){
         super.init();
+
+        this.blink = new Blink(this,500);
 
         if (this.string instanceof Editor)
             ((Editor)this.string).end();
@@ -116,15 +121,23 @@ public class TextEdit
     }
     public Text outputOverlay(Graphics2D g){
 
-        g.setColor(this.getColor());
-        Shape border = this.getBoundsVector();
-        g.draw(border);
+        if (this.mouseIn){
 
-        Shape cursor = ((Editor)this.string).cursor(this);
+            g.setColor(this.getColor());
 
-        g.transform(this.getTransformParent());
-        g.draw(cursor);
+            Shape border = this.getBoundsVector();
 
+            g.draw(border);
+
+
+            if (this.blink.high()){
+
+                Shape cursor = ((Editor)this.string).cursor(this);
+
+                g.transform(this.getTransformParent());
+                g.draw(cursor);
+            }
+        }
         return this;
     }
 }

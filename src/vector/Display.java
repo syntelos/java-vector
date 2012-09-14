@@ -1,5 +1,7 @@
 package vector;
 
+import vector.event.Repainter;
+
 import json.ArrayJson;
 import json.Json;
 import json.ObjectJson;
@@ -43,6 +45,8 @@ public class Display
 
     private final Output output = new Output();
 
+    private Repainter outputOverlayAnimate;
+
     private boolean mouseIn;
 
 
@@ -69,6 +73,7 @@ public class Display
         }
     }
     public void destroy(){
+        this.outputOverlayAnimateCancel();
         try {
             for (Component c: this){
                 c.destroy();
@@ -263,14 +268,48 @@ public class Display
         }
         return this;
     }
-    public final Component.Container outputScene(){
+    public final Display outputScene(){
         this.output.requestScene();
         this.repaint();
         return this;
     }
-    public final Component.Container outputOverlay(){
+    public final Display outputOverlay(){
         this.output.requestOverlay();
         this.repaint();
+        return this;
+    }
+    public final Display outputOverlayAnimateSuspend(){
+        Repainter outputOverlayAnimate = this.outputOverlayAnimate;
+        if (null != outputOverlayAnimate){
+
+            outputOverlayAnimate.suspend();
+        }
+        return this;
+    }
+    public final Display outputOverlayAnimateResume(){
+        Repainter outputOverlayAnimate = this.outputOverlayAnimate;
+        if (null != outputOverlayAnimate){
+
+            outputOverlayAnimate.resume();
+        }
+        return this;
+    }
+    public final Display outputOverlayAnimateCancel(){
+        Repainter outputOverlayAnimate = this.outputOverlayAnimate;
+        if (null != outputOverlayAnimate){
+            this.outputOverlayAnimate = null;
+            outputOverlayAnimate.cancel();
+        }
+        return this;
+    }
+    public final Display outputOverlayAnimate(long period){
+        Repainter outputOverlayAnimate = this.outputOverlayAnimate;
+        if (null == outputOverlayAnimate){
+            outputOverlayAnimate = new Repainter.Overlay(this);
+            this.outputOverlayAnimate = outputOverlayAnimate;
+            outputOverlayAnimate.start();
+        }
+        outputOverlayAnimate.period(period);
         return this;
     }
 
@@ -523,8 +562,12 @@ public class Display
         this.hidden();
     }
     protected void shown(){
+
+        this.outputOverlayAnimateResume();
     }
     protected void hidden(){
+
+        this.outputOverlayAnimateSuspend();
     }
 
     public Json toJson(){

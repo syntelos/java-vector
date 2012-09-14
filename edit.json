@@ -4,6 +4,7 @@
     {
       "class": "vector.TextEdit",
       "color": "#000000",
+      "font": "monospaced-28",
       "fixed": true
     }
   ]
