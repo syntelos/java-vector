@@ -116,8 +116,8 @@ public abstract class AbstractComponent
     }
     /**
      * Dimensions of component for resizing to the parent with
-     * component natural origin (0,0).  The component location is
-     * changed to (0,0).
+     * component origin (0,0).  The component location is changed to
+     * (0,0).
      */
     protected Component setBoundsVectorInit(Component component){
         Rectangle2D.Float bounds = component.getBoundsVector();

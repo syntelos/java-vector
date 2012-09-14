@@ -166,10 +166,10 @@ public class Text
         this.modified();
         return this;
     }
-    public int getCols(){
+    public final int getCols(){
         return this.cols;
     }
-    public Text setCols(int cols){
+    public final Text setCols(int cols){
         if (0 < cols){
             this.cols = cols;
 
@@ -177,7 +177,7 @@ public class Text
         }
         return this;
     }
-    public Text setCols(Integer cols){
+    public final Text setCols(Integer cols){
         if (null != cols)
             return this.setCols(cols.intValue());
         else
