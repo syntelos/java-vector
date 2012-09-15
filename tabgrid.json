@@ -1,0 +1,112 @@
+{
+    "background": "#FFFFFF",
+    "components": [
+        {
+            "class": "vector.TableBig",
+            "cellspacing": 2.0,
+            "components": [
+                {
+                    "class": "vector.Container",
+                    "background": "#40AFAFEF",
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                            "mouse": true
+                        }
+                    ]
+                },
+                {
+                    "class": "vector.Container",
+                    "background": "#40AFAFEF",
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                            "mouse": true
+                        }
+                    ]
+                },
+                {
+                    "class": "vector.Container",
+                    "background": "#40AFAFEF",
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                            "mouse": true
+                        }
+                    ]
+                },
+
+                {
+                    "class": "vector.Container",
+                    "background": "#40AFAFEF",
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                            "mouse": true
+                        }
+                    ]
+                },
+                {
+                    "class": "vector.Container",
+                    "background": "#40AFAFEF",
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                            "mouse": true
+                        }
+                    ]
+                },
+                {
+                    "class": "vector.Container",
+                    "background": "#40AFAFEF",
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                            "mouse": true
+                        }
+                    ]
+                },
+
+                {
+                    "class": "vector.Container",
+                    "background": "#40AFAFEF",
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                            "mouse": true
+                        }
+                    ]
+                },
+                {
+                    "class": "vector.Container",
+                    "background": "#40AFAFEF",
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                            "mouse": true
+                        }
+                    ]
+                },
+                {
+                    "class": "vector.Container",
+                    "background": "#40AFAFEF",
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                            "mouse": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

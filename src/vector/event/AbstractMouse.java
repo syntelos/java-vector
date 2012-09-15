@@ -71,4 +71,11 @@ public class AbstractMouse
         else
             return this;
     }
+    protected StringBuilder toStringBuilder(){
+        StringBuilder string = super.toStringBuilder();
+
+        string.append(", action: ");
+        string.append(this.action.name());
+        return string;
+    }
 }

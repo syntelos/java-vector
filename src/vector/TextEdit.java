@@ -12,8 +12,6 @@ public class TextEdit
     extends Text
 {
 
-    protected boolean mouseIn;
-
     protected Blink blink;
 
 
@@ -44,10 +42,6 @@ public class TextEdit
 
         this.modified();
         return this;
-    }
-    @Override
-    public boolean isMouseIn(){
-        return this.mouseIn;
     }
     public boolean input(Event e){
         switch(e.getType()){

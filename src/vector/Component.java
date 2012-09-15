@@ -150,9 +150,9 @@ public interface Component
      * including the parent (container).
      */
     public void destroy();
-
     /**
-     * Display has changed size
+     * Display has changed size.  The definition of this method often
+     * calls setBoundsVector, so setBoundsVector cannot call resized.
      */
     public void resized();
     /**
@@ -279,6 +279,7 @@ public interface Component
         extends Component,
                 Iterable<Component>
     {
+
         public int count();
 
         public boolean has(int idx);

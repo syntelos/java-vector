@@ -27,4 +27,11 @@ public class AbstractMousePoint
     public final Point2D getPoint(){
         return this.point;
     }
+    protected StringBuilder toStringBuilder(){
+        StringBuilder string = super.toStringBuilder();
+
+        string.append(", point: ");
+        string.append(this.point.toString());
+        return string;
+    }
 }

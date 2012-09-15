@@ -31,7 +31,7 @@ public class Container
 
     protected Color background;
 
-    protected Component[] components;
+    protected Component[] components, tailinit;
 
 
     public Container(){
@@ -49,6 +49,16 @@ public class Container
         }
         finally {
             this.components = null;
+            this.tailinit = null;
+        }
+    }
+    public void tailinit(){
+        Component[] tailinit = this.tailinit;
+        if (null != tailinit){
+            for (Component tc : tailinit){
+
+                tc.modified();
+            }
         }
     }
     public void resized(){
@@ -77,7 +87,9 @@ public class Container
     public boolean input(Event e){
 
         switch(e.getType()){
+
         case MouseEntered:{
+            this.mouseIn = true;
 
             final Point2D.Float point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
             final Event entered = new vector.event.MouseEntered(point);
@@ -94,16 +106,18 @@ public class Container
                     c.input(exited);
                 }
             }
-            return false;
+            return true;
         }
         case MouseExited:{
+            this.mouseIn = false;
+
             final Event m = ((Event.Mouse)e).apply(this.getTransformParent());
 
             for (Component c: this.listMouseIn()){
 
                 c.input(m);
             }
-            return false;
+            return true;
         }
         case MouseMoved:{
             final Point2D.Float point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
@@ -251,6 +265,11 @@ public class Container
             comp.setParentVector(this);
             comp.init();
 
+            if (comp instanceof TailInit){
+
+                this.tailinit = Component.Tools.Add(this.tailinit,comp);
+            }
+
             this.modified();
         }
         return comp;
@@ -292,13 +311,6 @@ public class Container
 
         return this;
     }
-    protected Point2D.Float transformFromParent(Point2D point){
-        /*
-         * The transform arithmetic is double, and the point class
-         * will store to float
-         */
-        return (Point2D.Float)this.getTransformParent().transform(point,new Point2D.Float(0,0));
-    }
 
     public ObjectJson toJson(){
         ObjectJson thisModel =  super.toJson();
@@ -313,6 +325,8 @@ public class Container
         this.setBackground( thisModel.getValue("background",Color.class));
 
         Component.Tools.DecodeComponents(this,thisModel);
+
+        this.tailinit();
 
         return true;
     }

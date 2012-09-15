@@ -39,6 +39,7 @@ import java.awt.geom.Rectangle2D;
  */
 public class Grid
     extends AbstractComponent
+    implements TailInit
 {
 
     protected Color color = Color.black;
@@ -48,8 +49,6 @@ public class Grid
     protected float[] domain, range;
 
     protected Path2D.Float shape, pointer;
-
-    protected Component successor;
 
 
     public Grid(){
@@ -64,17 +63,13 @@ public class Grid
         super.init();
 
         this.shape = null;
-        this.successor = null;
         this.pointer = null;
-
-        this.layout();
     }
     @Override
     public void destroy(){
         super.destroy();
 
         this.shape = null;
-        this.successor = null;
         this.pointer = null;
     }
     /**
@@ -85,7 +80,6 @@ public class Grid
         super.resized();
 
         this.shape = null;
-        this.successor = null;
         this.pointer = null;
 
         this.layout();
@@ -99,7 +93,15 @@ public class Grid
         super.modified();
 
         this.shape = null;
-        this.successor = null;
+        this.pointer = null;
+
+        this.layout();
+    }
+    @Override
+    public void relocated(){
+        super.relocated();
+
+        this.shape = null;
         this.pointer = null;
 
         this.layout();
@@ -210,23 +212,6 @@ public class Grid
         }
         return this.shape;
     }
-    public Component getSuccessor(){
-        Component successor = this.successor;
-        if (null == successor){
-            Component.Container parent = this.getParentVector();
-            if (null != parent){
-                int idx = parent.indexOf(this);
-                if (-1 < idx){
-                    idx += 1;
-                    if (parent.has(idx))
-                        return (this.successor = parent.get(idx));
-                    else
-                        return (this.successor = parent);
-                }
-            }
-        }
-        return successor;
-    }
     public Grid outputScene(Graphics2D g){
         Shape shape = this.shape();
         if (null != shape){
@@ -247,46 +232,73 @@ public class Grid
     @Override
     public boolean input(Event e){
 
-        if (this.mouse && Event.Type.MouseMoved == e.getType()){
+        switch(e.getType()){
 
-            final float radius = Radius(this.getBoundsVector());
-
-            final Point2D mouse = ((Event.Mouse.Motion)e).getPoint();
-            {
-                final float x = (float)mouse.getX();
-                final float y = (float)mouse.getY();
-                final float x0 = (x-radius);
-                final float x1 = (x+radius);
-                final float y0 = (y-radius);
-                final float y1 = (y+radius);
-
-                final Path2D.Float pointer = new Path2D.Float();
-                {
-                    pointer.moveTo(x0,y);
-                    pointer.lineTo(x1,y);
-                    pointer.moveTo(x,y0);
-                    pointer.lineTo(x,y1);
-                }
-                this.pointer = pointer;
+        case MouseEntered:
+            this.mouseIn = true;
+            return true;
+        case MouseExited:
+            this.mouseIn = false;
+            if (this.mouse){
+                this.pointer = null;
+                this.outputOverlay();
             }
-            this.outputOverlay();
-        }
-        return false;
-    }
-    @Override
-    public boolean isMouseIn(){
+            return true;
+        case MouseMoved:
+            if (this.mouse){
 
-        return false;
+                final float radius = Radius(this.getBoundsVector());
+
+                final Point2D mouse = ((Event.Mouse.Motion)e).getPoint();
+                {
+                    final float x = (float)mouse.getX();
+                    final float y = (float)mouse.getY();
+                    final float x0 = (x-radius);
+                    final float x1 = (x+radius);
+                    final float y0 = (y-radius);
+                    final float y1 = (y+radius);
+
+                    final Path2D.Float pointer = new Path2D.Float();
+                    {
+                        pointer.moveTo(x0,y);
+                        pointer.lineTo(x1,y);
+                        pointer.moveTo(x,y0);
+                        pointer.lineTo(x,y1);
+                    }
+                    this.pointer = pointer;
+                }
+                this.outputOverlay();
+            }
+            return false;
+        default:
+            return false;
+        }
     }
     /**
-     * Called from {@link #modified()} and {@link #resized()}.  This
-     * method, defined here, calls {@link #resizeToParent()} and  {@link #layoutScaleToDimensions()}.
+     * Called from {@link #modified()}, {@link #resized()}, and {@link
+     * #relocated()}.  Employ a successor, or if not found, the
+     * parent.
      */
     protected void layout(){
-        Component successor = this.getSuccessor();
-        if (null != successor){
-            this.setBoundsVector(successor.getBoundsVector());
-            this.setTransformLocal(successor.getTransformLocal());
+        /*
+         *
+         */
+        Component.Container parent = this.getParentVector();
+        if (null != parent){
+            int idx = parent.indexOf(this);
+            if (-1 < idx){
+                idx += 1;
+                if (parent.has(idx)){
+                    final Component successor = parent.get(idx);
+
+                    this.setBoundsVector(successor.getBoundsVector());
+                    this.setTransformLocal(successor.getTransformLocal());
+                }
+                else {
+                    this.setBoundsVectorInit(parent);
+                    this.setTransformLocal(parent.getTransformLocal());
+                }
+            }
         }
     }
 

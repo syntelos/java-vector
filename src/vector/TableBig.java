@@ -41,7 +41,7 @@ public class TableBig
         }
         this.layout();
     }
-    public void layout(){
+    protected void layout(){
 
         final int count = this.count();
         if (0 < count){
@@ -82,6 +82,7 @@ public class TableBig
                             Component c = this.get(cx);
 
                             c.setBoundsVector(new TableCell(rr,cc,xx,yy,this.cellWidth,this.cellHeight));
+                            c.resized();
 
                             xx += dx;
                         }

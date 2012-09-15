@@ -25,4 +25,12 @@ public class NamedAction
     public final String getName(){
         return this.name;
     }
+    protected StringBuilder toStringBuilder(){
+        StringBuilder string = super.toStringBuilder();
+
+        string.append(", name: \"");
+        string.append(this.name);
+        string.append('\"');
+        return string;
+    }
 }

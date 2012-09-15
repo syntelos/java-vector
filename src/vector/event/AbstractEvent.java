@@ -36,4 +36,15 @@ public class AbstractEvent
     public final boolean isAction(){
         return this.type.isAction();
     }
+    protected StringBuilder toStringBuilder(){
+        StringBuilder string = new StringBuilder();
+
+        string.append(this.getClass().getName());
+        string.append(", type: ");
+        string.append(this.type.name());
+        return string;
+    }
+    public final String toString(){
+        return this.toStringBuilder().toString();
+    }
 }

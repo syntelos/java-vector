@@ -61,7 +61,17 @@ public class Text
     @Override
     public void resized(){
         super.resized();
-
+        /*
+         * Changes to transforms including location
+         */
+        this.layout();
+    }
+    @Override
+    public void relocated(){
+        super.relocated();
+        /*
+         * Changes to transforms including location
+         */
         this.layout();
     }
     /**

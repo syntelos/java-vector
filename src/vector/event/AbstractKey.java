@@ -59,5 +59,23 @@ public class AbstractKey
     public boolean isChar(){
         return (!this.code.isCode());
     }
+    protected StringBuilder toStringBuilder(){
+        StringBuilder string = super.toStringBuilder();
 
+        string.append(", code: ");
+        string.append(this.code.name());
+
+        if (this.isControl())
+            string.append(", ctl");
+
+        if (this.isAlt())
+            string.append(", alt");
+
+        if (this.isChar()){
+            string.append(", char: '");
+            string.append(this.keyChar);
+            string.append('\'');
+        }
+        return string;
+    }
 }

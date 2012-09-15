@@ -18,6 +18,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -39,7 +40,7 @@ public class Display
 
     protected Color background;
 
-    protected Component[] components;
+    protected Component[] components, tailinit;
 
     private final AffineTransform transform = new AffineTransform();
 
@@ -72,6 +73,15 @@ public class Display
             this.init();
         }
     }
+    public void tailinit(){
+        Component[] tailinit = this.tailinit;
+        if (null != tailinit){
+            for (Component tc : tailinit){
+
+                tc.modified();
+            }
+        }
+    }
     public void destroy(){
         this.outputOverlayAnimateCancel();
         try {
@@ -81,6 +91,7 @@ public class Display
         }
         finally {
             this.components = null;
+            this.tailinit = null;
 
             this.flush();
         }
@@ -193,8 +204,18 @@ public class Display
 
         return transform;
     }
+    /**
+     * Dispatch event to first consumer
+     * 
+     * @return Consumed
+     */
     public boolean input(Event e){
-        return true;
+        for (Component c: this){
+
+            if (c.input(e))
+                return true;
+        }
+        return false;
     }
     public final boolean isMouseIn(){
         return this.mouseIn;
@@ -342,6 +363,13 @@ public class Display
 
             comp.setParentVector(this);
             comp.init();
+
+            if (comp instanceof TailInit){
+
+                this.tailinit = Component.Tools.Add(this.tailinit,comp);
+            }
+
+            this.modified();
         }
         return comp;
     }
@@ -380,12 +408,17 @@ public class Display
 
         return this;
     }
-    protected Point2D.Float transformFromParent(Point2D point){
-        /*
-         * The transform arithmetic is double, and the point class
-         * will store to float
-         */
-        return (Point2D.Float)this.getTransformParent().transform(point,new Point2D.Float(0,0));
+    protected final Point2D.Float transformFromParent(Point2D point){
+        try {
+            /*
+             * The transform arithmetic is double, and the point class
+             * will store to float
+             */
+            return (Point2D.Float)this.getTransformParent().inverseTransform(point,new Point2D.Float(0,0));
+        }
+        catch (NoninvertibleTransformException exc){
+            throw new IllegalStateException(this.getTransformParent().toString(),exc);
+        }
     }
 
     public void mouseClicked(MouseEvent evt){
@@ -591,6 +624,8 @@ public class Display
         this.setBackground( thisModel.getValue("background",Color.class));
 
         Component.Tools.DecodeComponents(this,thisModel);
+
+        this.tailinit();
 
         this.outputScene();
 

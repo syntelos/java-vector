@@ -4,6 +4,7 @@ import json.Json;
 import json.ObjectJson;
 
 import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -15,7 +16,7 @@ public abstract class AbstractComponent
     implements Component
 {
 
-    protected boolean visible = true;
+    protected boolean visible = true, mouseIn;
 
     protected Component.Container parent;
 
@@ -149,7 +150,7 @@ public abstract class AbstractComponent
     }
     public final boolean contains(Point2D.Float p){
 
-        return this.bounds.contains(p);
+        return this.bounds.contains(p.x,p.y);
     }
     public final Point2D.Float getLocationVector(){
 
@@ -213,11 +214,20 @@ public abstract class AbstractComponent
     }
     public boolean input(Event e){
 
-        return false;
+        switch(e.getType()){
+        case MouseEntered:
+            this.mouseIn = true;
+            return true;
+        case MouseExited:
+            this.mouseIn = false;
+            return true;
+        default:
+            return false;
+        }
     }
-    public boolean isMouseIn(){
+    public final boolean isMouseIn(){
 
-        return false;
+        return this.mouseIn;
     }
     public Component outputScene(){
         Component.Container root = this.getRootContainer();
@@ -246,6 +256,18 @@ public abstract class AbstractComponent
         else
             throw new IllegalStateException();
     }
+    protected final Point2D.Float transformFromParent(Point2D point){
+        try {
+            /*
+             * The transform arithmetic is double, and the point class
+             * will store to float
+             */
+            return (Point2D.Float)this.getTransformParent().inverseTransform(point,new Point2D.Float(0,0));
+        }
+        catch (NoninvertibleTransformException exc){
+            throw new IllegalStateException(this.getTransformParent().toString(),exc);
+        }
+    }
 
     public ObjectJson toJson(){
         ObjectJson thisModel = new ObjectJson();
@@ -265,5 +287,27 @@ public abstract class AbstractComponent
         this.scaleTransformLocalRelative( Component.Tools.DecodeBounds(thisModel.getValue("bounds")));
 
         return true;
+    }
+    /**
+     * Information for debugging
+     */
+    protected StringBuilder toStringBuilder(){
+        StringBuilder string = new StringBuilder();
+        string.append(this.getClass().getName());
+        string.append(", x: ");
+        string.append(this.bounds.x);
+        string.append(", y: ");
+        string.append(this.bounds.y);
+        string.append(", w: ");
+        string.append(this.bounds.width);
+        string.append(", h: ");
+        string.append(this.bounds.height);
+        return string;
+    }
+    /**
+     * Overriden in {@link Text} for CharSequence API
+     */
+    public String toString(){
+        return this.toStringBuilder().toString();
     }
 }

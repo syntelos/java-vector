@@ -2,7 +2,7 @@
     "background": "#000000",
     "components": [
         {
-            "class": "vector.Table",
+            "class": "vector.TableBig",
             "cellspacing": 2.0,
             "components": [
                 {

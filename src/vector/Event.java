@@ -680,4 +680,6 @@ public interface Event {
 
     public boolean isAction();
 
+    public String toString();
+
 }

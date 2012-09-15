@@ -42,7 +42,7 @@ public class TableSmall
 
         this.layout();
     }
-    public void layout(){
+    protected void layout(){
 
         final int count = this.count();
         if (0 < count){
@@ -100,6 +100,7 @@ public class TableSmall
                             Component c = this.get(cx);
                             Rectangle2D.Float cb = c.getBoundsVector();
                             c.setBoundsVector(new TableCell(rr,cc,xx,yy,cb.width,cb.height));
+                            c.relocated();
 
                             xx += dx;
                         }
