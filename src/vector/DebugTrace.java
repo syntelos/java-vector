@@ -8,15 +8,15 @@ import java.util.StringTokenizer;
  * 
  * <h3>Usage</h3>
  * <pre>
- * (new Debug("string").print());
- * (new Debug(o.toString()).print());
- * (new Debug("param: %d",param).print());
+ * (new DebugTrace("string").print());
+ * (new DebugTrace(o.toString()).print());
+ * (new DebugTrace("param: %d",param).print());
  * </pre>
  */
-public class Debug 
+public class DebugTrace 
     extends Throwable
 {
-    public final static PrintStream trace = System.err;
+    public final static PrintStream out = System.err;
 
 
     /**
@@ -270,10 +270,10 @@ public class Debug
     private Buffer buffer;
 
 
-    public Debug(String fmt, Object... args){
+    public DebugTrace(String fmt, Object... args){
         this(String.format(fmt,args));
     }
-    public Debug(String m){
+    public DebugTrace(String m){
         super(m);
         this.message = m;
     }
@@ -294,11 +294,11 @@ public class Debug
         return buffer;
     }
     public void print(){
-        Debug.trace.println(this.message);
-        Debug.trace.println(this.caller());
+        DebugTrace.out.println(this.message);
+        DebugTrace.out.println(this.caller());
     }
     public void printStackTrace(){
-        Debug.trace.println(this.message);
-        Debug.trace.println(this.caller());
+        DebugTrace.out.println(this.message);
+        DebugTrace.out.println(this.caller());
     }
 }
