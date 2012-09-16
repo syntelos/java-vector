@@ -109,9 +109,20 @@ public abstract class AbstractComponent
         return this.bounds.clone();
     }
     public final Component setBoundsVector(Bounds bounds){
+        if (null != bounds){
 
-        this.bounds.setFrame(bounds);
+            this.bounds.setFrame(bounds);
+        }
+        return this;
+    }
+    /**
+     * Called by {@link #fromJson}
+     */
+    public Component setBoundsVectorForScale(Bounds bounds){
+        if (null != bounds){
 
+            this.setBoundsVector(bounds);
+        }
         return this;
     }
     /**
@@ -131,13 +142,17 @@ public abstract class AbstractComponent
      * within a component.  The component location is unchanged.
      */
     protected Component setBoundsVectorInit(Bounds bounds){
+        if (null != bounds){
 
-        bounds.width += bounds.x;
-        bounds.height += bounds.y;
-        bounds.x = this.bounds.x;
-        bounds.y = this.bounds.y;
+            bounds.width += bounds.x;
+            bounds.height += bounds.y;
+            bounds.x = this.bounds.x;
+            bounds.y = this.bounds.y;
 
-        return this.setBoundsVector(bounds);
+            return this.setBoundsVector(bounds);
+        }
+        else
+            return this;
     }
     public final boolean contains(int x, int y){
 
@@ -183,6 +198,9 @@ public abstract class AbstractComponent
 
         return this.setTransformLocal(Transform.getScaleInstance(sx,sy));
     }
+    /**
+     * Scale the local transform for the ratio of this to the argument bounds 
+     */
     public AbstractComponent scaleTransformLocalRelative(Rectangle2D bounds){
         if (null != bounds){
             Bounds thisBounds = this.getBoundsVector();
@@ -193,6 +211,9 @@ public abstract class AbstractComponent
         }
         return this;
     }
+    /**
+     * Define the local transform for the scale ratio of this to the argument bounds 
+     */
     public AbstractComponent scaleTransformLocalAbsolute(Rectangle2D bounds){
         if (null != bounds){
             Bounds thisBounds = this.getBoundsVector();
@@ -211,6 +232,13 @@ public abstract class AbstractComponent
             pp = p.getParentVector();
         }
         return p;
+    }
+    protected final Transform getRootTransformLocal(){
+        Component.Container root = this.getRootContainer();
+        if (null != root)
+            return root.getTransformLocal();
+        else
+            throw new IllegalStateException();
     }
     public boolean input(Event e){
 
@@ -284,8 +312,16 @@ public abstract class AbstractComponent
 
         this.setTransformLocal( thisModel.getValue("transform",Transform.class));
 
-        this.scaleTransformLocalRelative( thisModel.getValue("bounds",Bounds.class));
-
+        this.setBoundsVectorForScale( thisModel.getValue("bounds",Bounds.class));
+        /*
+         * If we assert that the abstract class does not have a
+         * coherent state, subclasses may employ the transform and
+         * bounds defined here with additional information.  Which
+         * makes a lot of sense, given the requirement that components
+         * are free to choose scaling and layout strategies.
+         * 
+         *  this.modified()
+         */
         return true;
     }
     /**

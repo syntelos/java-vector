@@ -95,7 +95,7 @@ public class Text
     public final Text setFont(Font font){
         if (null != font){
             this.font = font;
-            this.modified();
+
             return this;
         }
         else
@@ -157,8 +157,6 @@ public class Text
     public final Text setFixed(Boolean fixed){
         if (null != fixed){
             this.fixed = fixed;
-
-            this.modified();
         }
         return this;
     }
@@ -176,7 +174,6 @@ public class Text
         else
             this.string = null;
 
-        this.modified();
         return this;
     }
     public final int getCols(){
@@ -185,8 +182,6 @@ public class Text
     public final Text setCols(int cols){
         if (0 < cols){
             this.cols = cols;
-
-            this.modified();
         }
         return this;
     }
@@ -422,6 +417,8 @@ public class Text
 
         this.setCols( (Integer)thisModel.getValue("cols",Integer.class));
 
+        this.modified();
+
         return true;
     }
     /**
@@ -434,6 +431,7 @@ public class Text
      * {@link #layoutScaleToShapeArea()}.
      */
     protected void layout(){
+
         if (this.fixed){
             this.resizeToShapeArea();
             this.layoutScaleToShapeArea();

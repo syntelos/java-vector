@@ -56,8 +56,26 @@ public class Bounds
     }
 
 
+    /**
+     * @return Objective scale to this from that
+     */
+    public Transform scaleFrom(Bounds that){
+        final double sx = ((double)this.width/(double)that.width);
+        final double sy = ((double)this.height/(double)that.height);
+
+        return Transform.getScaleInstance(sx,sy);
+    }
+    /**
+     * @return Objective scale to that from this
+     */
+    public Transform scaleTo(Bounds that){
+        final double sx = ((double)that.width/(double)this.width);
+        final double sy = ((double)that.height/(double)this.height);
+
+        return Transform.getScaleInstance(sx,sy);
+    }
     public Bounds clone(){
-        return (Bounds)clone();
+        return (Bounds)super.clone();
     }
     public String toString(){
         StringBuilder string = new StringBuilder();

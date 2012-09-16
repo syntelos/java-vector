@@ -75,8 +75,27 @@ public class Transform
             }
         }
     }
+    public Transform(java.awt.geom.AffineTransform t){
+        super(t);
+    }
 
 
+    public Bounds transform(Bounds in){
+        double[] src = new double[]{
+            in.x, in.y,
+            (in.x+in.width), (in.y+in.height)
+        };
+        double[] tgt = new double[4];
+
+        super.transform(src,0,tgt,0,2);
+
+        in.x = (float)tgt[0];
+        in.y = (float)tgt[1];
+        in.width = (float)(tgt[2]-tgt[0]);
+        in.height = (float)(tgt[3]-tgt[1]);
+
+        return in;
+    }
     public Transform clone(){
         return (Transform)super.clone();
     }

@@ -152,7 +152,6 @@ public class Grid
         else
             this.domain = null;
 
-        this.modified();
         return this;
     }
     public final float[] getRange(){
@@ -170,7 +169,6 @@ public class Grid
         else
             this.range = null;
 
-        this.modified();
         return this;
     }
     protected Path2D.Float shape(){
@@ -325,6 +323,8 @@ public class Grid
         this.setDomain( (float[])thisModel.getValue("domain",float[].class));
 
         this.setRange( (float[])thisModel.getValue("range",float[].class));
+
+        this.modified();
 
         return true;
     }

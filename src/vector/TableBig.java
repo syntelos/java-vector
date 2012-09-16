@@ -109,8 +109,6 @@ public class TableBig
     public final TableBig setFixed(Boolean fixed){
         if (null != fixed){
             this.fixed = fixed;
-
-            this.modified();
         }
         return this;
     }
@@ -120,8 +118,6 @@ public class TableBig
     public TableBig setCellSpacing(float cellSpacing){
         if (0.0 <= cellSpacing){
             this.cellSpacing = cellSpacing;
-
-            this.modified();
         }
         return this;
     }
@@ -148,6 +144,8 @@ public class TableBig
         this.setFixed( (Boolean)thisModel.getValue("fixed"));
 
         Component.Tools.DecodeComponents(this,thisModel);
+
+        this.modified();
 
         return true;
     }

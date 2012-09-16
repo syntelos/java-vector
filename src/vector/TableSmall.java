@@ -83,7 +83,7 @@ public class TableSmall
                 double tableWidth = (2.0*cs), tableHeight = tableWidth;
 
                 definition:
-                for (rr = 0; ; rr++){
+                for (rr = 0; rr < rows; rr++){
 
                     dy = rowheights[rr];
                     tableHeight += dy;
@@ -124,8 +124,6 @@ public class TableSmall
     public final TableSmall setCols(int cols){
         if (0 < cols){
             this.cols = cols;
-
-            this.modified();
         }
         return this;
     }
@@ -141,8 +139,6 @@ public class TableSmall
     public TableSmall setCellSpacing(float cellSpacing){
         if (0.0 <= cellSpacing){
             this.cellSpacing = cellSpacing;
-
-            this.modified();
         }
         return this;
     }
@@ -169,6 +165,8 @@ public class TableSmall
         this.setCellSpacing( thisModel.getValue("cellspacing",Float.class));
 
         Component.Tools.DecodeComponents(this,thisModel);
+
+        this.modified();
 
         return true;
     }

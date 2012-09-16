@@ -39,7 +39,7 @@ public class Display
 
     protected Color background;
 
-    protected Component[] components, tailinit;
+    protected Component[] components;
 
     private final Transform transform = new Transform();
 
@@ -72,15 +72,6 @@ public class Display
             this.init();
         }
     }
-    public void tailinit(){
-        Component[] tailinit = this.tailinit;
-        if (null != tailinit){
-            for (Component tc : tailinit){
-
-                tc.modified();
-            }
-        }
-    }
     public void destroy(){
         this.outputOverlayAnimateCancel();
         try {
@@ -90,7 +81,6 @@ public class Display
         }
         finally {
             this.components = null;
-            this.tailinit = null;
 
             this.flush();
         }
@@ -103,6 +93,11 @@ public class Display
         }
     }
     public void modified(){
+
+        for (Component c: this){
+
+            c.modified();
+        }
     }
     public void relocated(){
     }
@@ -143,7 +138,16 @@ public class Display
         return new Bounds(bounds.x,bounds.y,bounds.width,bounds.height);
     }
     public final Component setBoundsVector(Bounds bounds){
-        super.setBounds(new Rectangle((int)Math.floor(bounds.x),(int)Math.floor(bounds.y),(int)Math.ceil(bounds.width),(int)Math.ceil(bounds.height)));
+        if (null != bounds){
+            super.setBounds(new Rectangle((int)Math.floor(bounds.x),(int)Math.floor(bounds.y),(int)Math.ceil(bounds.width),(int)Math.ceil(bounds.height)));
+        }
+        return this;
+    }
+    public Component setBoundsVectorForScale(Bounds bounds){
+        if (null != bounds){
+
+            this.setBoundsVector(bounds);
+        }
         return this;
     }
     public final boolean contains(float x, float y){
@@ -362,13 +366,6 @@ public class Display
 
             comp.setParentVector(this);
             comp.init();
-
-            if (comp instanceof TailInit){
-
-                this.tailinit = Component.Tools.Add(this.tailinit,comp);
-            }
-
-            this.modified();
         }
         return comp;
     }
@@ -618,13 +615,13 @@ public class Display
 
         this.setTransformLocal( thisModel.getValue("transform",Transform.class));
 
-        this.scaleTransformLocalRelative( thisModel.getValue("bounds",Bounds.class));
+        this.setBoundsVectorForScale( thisModel.getValue("bounds",Bounds.class));
 
         this.setBackground( thisModel.getValue("background",Color.class));
 
         Component.Tools.DecodeComponents(this,thisModel);
 
-        this.tailinit();
+        this.modified();
 
         this.outputScene();
 

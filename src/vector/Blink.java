@@ -45,4 +45,9 @@ public class Blink
         }
         return this.state;
     }
+    public Blink set(){
+        this.state = true;
+        this.time = System.currentTimeMillis();
+        return this;
+    }
 }

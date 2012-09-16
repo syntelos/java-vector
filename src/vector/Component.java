@@ -31,6 +31,38 @@ import java.util.StringTokenizer;
  * - local coordinate space, while others are relative to the parent
  * coordinate space.
  * 
+ * <h3>State Operators</h3>
+ * 
+ * <p> Operators are defined in the {@link Component} interface with
+ * the <code>"void"</code> return type.  These are {@link #init()},
+ * {@link #destroy()}, {@link #resized()}, {@link #modified()} and
+ * {@link #relocated()}. </p>
+ * 
+ * <p> Operators must be indempotent.  Multiple calls to an instance
+ * object with a particular state must produce an identical state.
+ * This requirement preserves the application of operators, which is
+ * partially coherent. </p>
+ * 
+ * <p> Operators are applied with coherence.  An operator is called
+ * following a coherent step in the state of an instance object.
+ * Multiple properties may be involved in a coherent state. </p>
+ * 
+ * <p> For example the in {@link Text} class, both "fixed" and
+ * "bounds" are required in order to avoid loosing bounding box
+ * information from a call to {@link #modified()}. </p>
+ *
+ * <p> A class hierarchy implies partial (or class-local) coherence.
+ * The coherence of the super class will be a part of the coherence of
+ * a sub class.  As each class is responsible for its own operations,
+ * the subclass will tolerate the effective partial coherence
+ * inherited from the super class with the application of these
+ * principles. </p>
+ * 
+ * <p> Operators are never called from property setters.  Calling an
+ * operator from a property setter would probably violate coherence
+ * requirements in the class, and would definitely violate the
+ * general coherence requirements of subclasses. </p>
+ * 
  * <h3>Construction and initialization</h3>
  * 
  * <p> The {@link Component$Container Container} {@link
@@ -39,10 +71,31 @@ import java.util.StringTokenizer;
  * (no arguments).  Within "add", the component is added to the
  * container list of components and then the {@link
  * Component#setParentVector(vector.Component$Container)
- * setParentVector} method is called on the component. </p>
+ * setParentVector} and {@link #init()} methods are called (in this
+ * order) on the component. </p>
  * 
  * <p> Following "add", the "fromJson" method may be called on the
  * component. </p>
+ * 
+ * <p> The modification operator, {@link #modified()}, should be
+ * called from the tail of any definition of the "fromJson" method.
+ * The {@link Display} and {@link Container} will propagate {@link
+ * #modified()}.</p>
+ * 
+ * <h3>Initialization and destruction</h3>
+ * 
+ * <p> The operator indempotence requirement has an interesting case
+ * for {@link #init()} and {@link #destroy()}. </p>
+ * 
+ * <p> The intializer is responsible for leaving the instance object
+ * in a consistent state.  For this reason it calls {@link
+ * #destroy()}, while preserving the parent container reference across
+ * this call. </p>
+ * 
+ * <p> The destructor is responsible for releasing cyclic references
+ * and clearing implied state (any internal state not exposed by
+ * public getters and setters (and JSON I/O) but is implied by the
+ * state of explicit properties). </p>
  * 
  * <h3>Bounding box</h3>
  * 
@@ -100,29 +153,16 @@ import java.util.StringTokenizer;
  * <code>bounds</code> with the width and height of the component as
  * intended for <code>transform</code>. </p>
  * 
- * <h3>Scaling <code>transform</code> &amp; <code>bounds</code></h3>
+ * <h5>Scaling <code>transform</code> &amp; <code>bounds</code></h5>
  * 
- * <p> The {@link Display} bounds are defined externally by the {@link
- * Frame}. </p>
+ * <p> The {@link Display} bounds are
+ * defined externally by the {@link Frame} (and its features or
+ * containers). </p>
  * 
- * <p> The interpretation of <code>bounds</code> and
- * <code>transform</code> shall be the following.  </p>
+ * <p> The {@link #fromJson(json.Json) fromJson} method defines the
+ * order of the application of properties. </p>
  * 
- * <p> The transform is applied to the instance as its new matrix
- * value, while the component bounds are scaled via the scale
- * components of the {@link Display} local matrix.  </p>
- * 
- * <p> Each component class is free to choose a strategy for scaling
- * its bounds.  It may scale its local transform with the {@link
- * Display} local transform (typical), or it may apply the scale
- * components of the display local transform to its contents.  The
- * former is applicable to component classes that employ mouse input
- * (typical), and the latter is applicable to non-interactive
- * components. </p>
- * 
- * <p> See also {@link
- * #setBoundsVector(vector.Bounds)
- * setBoundsVector}. </p>
+ * <p> The {@link Display} class scales the scene to the frame.  </p>
  * 
  * <h4><code>components</code></h4>
  * 
@@ -152,16 +192,23 @@ public interface Component
     public void destroy();
     /**
      * Display has changed size.  The definition of this method often
-     * calls setBoundsVector, so setBoundsVector cannot call resized.
+     * calls {@link #setBoundsVector}.
      */
     public void resized();
     /**
-     * Content or properties of content visualization have changed,
-     * called from content visualization property methods
+     * Content or properties of content visualization have changed.
+     * 
+     * This cannot be called from property setter methods, as multiple
+     * properties may need to be defined before a coherent information
+     * set can be correctly applied.
+     * 
+     * This method is called from the tail of "fromJson" methods, and
+     * at similar points after a coherent set of properties have been
+     * defined.
      */
     public void modified();
     /**
-     * Component has changed, called from {@link #setBoundsVector} and {@link #setLocationVector}
+     * Component has changed location (bounds x,y)
      */
     public void relocated();
     /**
@@ -200,6 +247,10 @@ public interface Component
      * <code>bounds</code>", above.
      */
     public Component setBoundsVector(Bounds bounds);
+    /**
+     * Called by 'fromJson' to set bounds vector
+     */
+    public Component setBoundsVectorForScale(Bounds in);
 
     public boolean contains(int x, int y);
 

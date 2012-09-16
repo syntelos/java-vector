@@ -30,7 +30,7 @@ public class Container
 
     protected Color background;
 
-    protected Component[] components, tailinit;
+    protected Component[] components;
 
 
     public Container(){
@@ -48,16 +48,6 @@ public class Container
         }
         finally {
             this.components = null;
-            this.tailinit = null;
-        }
-    }
-    public void tailinit(){
-        Component[] tailinit = this.tailinit;
-        if (null != tailinit){
-            for (Component tc : tailinit){
-
-                tc.modified();
-            }
         }
     }
     public void resized(){
@@ -65,6 +55,13 @@ public class Container
         for (Component c: this){
 
             c.resized();
+        }
+    }
+    public void modified(){
+
+        for (Component c: this){
+
+            c.modified();
         }
     }
     public final Color getBackground(){
@@ -263,13 +260,6 @@ public class Container
 
             comp.setParentVector(this);
             comp.init();
-
-            if (comp instanceof TailInit){
-
-                this.tailinit = Component.Tools.Add(this.tailinit,comp);
-            }
-
-            this.modified();
         }
         return comp;
     }
@@ -289,8 +279,6 @@ public class Container
             comp = this.components[idx];
 
             this.components = Component.Tools.Remove(this.components,idx);
-
-            this.modified();
         }
         return comp;
     }
@@ -324,9 +312,11 @@ public class Container
         this.setBackground( thisModel.getValue("background",Color.class));
 
         Component.Tools.DecodeComponents(this,thisModel);
-
-        this.tailinit();
-
+        /*
+         * Rely on Display rather than call multiply
+         *
+         *  this.modified() 
+         */
         return true;
     }
 }
