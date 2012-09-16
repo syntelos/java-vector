@@ -48,7 +48,7 @@ public class TableSmall
         if (0 < count){
             final int cols = this.cols;
             if (0 < cols){
-                final int rows = (count/cols);
+                final int rows = (int)Math.ceil((float)count/(float)cols);
 
                 final double cs = this.cellSpacing;
 
@@ -67,7 +67,7 @@ public class TableSmall
                         if (this.has(cx)){
 
                             Component c = this.get(cx);
-                            Rectangle2D.Float cb = c.getBoundsVector();
+                            Bounds cb = c.getBoundsVector();
 
                             colwidths[cc] = Math.max(colwidths[cc],(cs+cb.width));
                             rowheights[rr] = Math.max(rowheights[rr],(cs+cb.height));
@@ -98,7 +98,7 @@ public class TableSmall
                         if (this.has(cx)){
 
                             Component c = this.get(cx);
-                            Rectangle2D.Float cb = c.getBoundsVector();
+                            Bounds cb = c.getBoundsVector();
                             c.setBoundsVector(new TableCell(rr,cc,xx,yy,cb.width,cb.height));
                             c.relocated();
 
@@ -111,7 +111,7 @@ public class TableSmall
                     yy += dy;
                 }
 
-                final Rectangle2D.Float bounds = this.getBoundsVector();
+                final Bounds bounds = this.getBoundsVector();
                 bounds.width = (float)tableWidth;
                 bounds.height = (float)tableHeight;
                 this.setBoundsVector(bounds);

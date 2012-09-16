@@ -167,9 +167,12 @@ public class Text
     }
     public Text setText(String text){
 
-        if (null != text && 0 < text.length())
+        if (null != text && 0 < text.length()){
 
             this.string = text;
+
+            this.cols = text.length();
+        }
         else
             this.string = null;
 
@@ -338,7 +341,7 @@ public class Text
      * @return Font bounding box for indexed glyphs in shape
      * coordinate space
      */
-    public final Rectangle2D.Float subArea(int start, int end){
+    public final Bounds subArea(int start, int end){
 
         final float[] positions = this.positions();
 
@@ -347,13 +350,13 @@ public class Text
         final float x2 = positions[(end-1)<<1];
         final float y2 = (y1+this.font.height);
 
-        return new Rectangle2D.Float(x1,y1,(x2-x1),(y2-y1));
+        return new Bounds(x1,y1,(x2-x1),(y2-y1));
     }
     /**
      * @return Font bounding box for all glyphs in shape coordinate
      * space
      */
-    public final Rectangle2D.Float shapeArea(){
+    public final Bounds shapeArea(){
 
         return this.font.boundingBox(1,this.shapeAreaWidth());
     }
@@ -445,7 +448,7 @@ public class Text
      * transform to fit the padded font-text to the dimensions.
      */
     protected void layoutScaleToDimensions(){
-        Rectangle2D.Float shape = this.shapeArea();
+        Bounds shape = this.shapeArea();
         if (null != shape)
             this.scaleTransformLocalAbsolute(shape);
         else

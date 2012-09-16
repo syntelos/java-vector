@@ -1,0 +1,24 @@
+{
+    "background": "#FFFFFF",
+    "components": [
+        {
+            "class": "vector.TableSmall",
+            "cellspacing": 4.0,
+            "bounds": "100,100,100,100",
+            "background": "#1A000000",
+            "components": [
+                {
+                    "class": "vector.Text",
+                    "font": "monospaced-24",
+                    "fixed": true,
+                    "text": "Server"
+                },
+                {
+                    "class": "vector.TextEdit",
+                    "font": "monospaced-24",
+                    "fixed": true
+                }
+            ]
+        }
+    ]
+}

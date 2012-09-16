@@ -3,7 +3,6 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -20,9 +19,9 @@ public abstract class AbstractComponent
 
     protected Component.Container parent;
 
-    protected final AffineTransform transform = new AffineTransform();
+    protected final Transform transform = new Transform();
 
-    protected final Rectangle2D.Float bounds = new Rectangle2D.Float(0,0,0,0);
+    protected final Bounds bounds = new Bounds(0,0,0,0);
 
 
     public AbstractComponent(){
@@ -42,7 +41,7 @@ public abstract class AbstractComponent
 
         this.destroy();
 
-        this.setTransformLocal(new AffineTransform());
+        this.setTransformLocal(new Transform());
 
         this.setBoundsVectorInit(parent);
 
@@ -105,11 +104,11 @@ public abstract class AbstractComponent
         this.visible = visible;
         return this;
     }
-    public final Rectangle2D.Float getBoundsVector(){
+    public final Bounds getBoundsVector(){
 
-        return (Rectangle2D.Float)this.bounds.clone();
+        return this.bounds.clone();
     }
-    public final Component setBoundsVector(Rectangle2D.Float bounds){
+    public final Component setBoundsVector(Bounds bounds){
 
         this.bounds.setFrame(bounds);
 
@@ -121,7 +120,7 @@ public abstract class AbstractComponent
      * (0,0).
      */
     protected Component setBoundsVectorInit(Component component){
-        Rectangle2D.Float bounds = component.getBoundsVector();
+        Bounds bounds = component.getBoundsVector();
         bounds.x = 0f;
         bounds.y = 0f;
 
@@ -131,7 +130,7 @@ public abstract class AbstractComponent
      * Union of origin and bounds for resizing to these extents of
      * within a component.  The component location is unchanged.
      */
-    protected Component setBoundsVectorInit(Rectangle2D.Float bounds){
+    protected Component setBoundsVectorInit(Bounds bounds){
 
         bounds.width += bounds.x;
         bounds.height += bounds.y;
@@ -165,27 +164,28 @@ public abstract class AbstractComponent
 
         return this;
     }
-    public final AffineTransform getTransformLocal(){
-        return (AffineTransform)this.transform.clone();
+    public final Transform getTransformLocal(){
+
+        return this.transform.clone();
     }
-    public final AffineTransform getTransformParent(){
-        AffineTransform transform = this.getTransformLocal();
+    public final Transform getTransformParent(){
+        Transform transform = this.getTransformLocal();
         Point2D.Float location = this.getLocationVector();
         transform.translate(location.x,location.y);
         return transform;
     }
-    protected AbstractComponent setTransformLocal(AffineTransform transform){
+    protected AbstractComponent setTransformLocal(Transform transform){
         if (null != transform)
             this.transform.setTransform(transform);
         return this;
     }
     protected AbstractComponent setTransformLocal(float sx, float sy){
 
-        return this.setTransformLocal(AffineTransform.getScaleInstance(sx,sy));
+        return this.setTransformLocal(Transform.getScaleInstance(sx,sy));
     }
     public AbstractComponent scaleTransformLocalRelative(Rectangle2D bounds){
         if (null != bounds){
-            Rectangle2D thisBounds = this.getBoundsVector();
+            Bounds thisBounds = this.getBoundsVector();
             float sw = (float)(thisBounds.getWidth()/(bounds.getX()+bounds.getWidth()));
             float sh = (float)(thisBounds.getHeight()/(bounds.getY()+bounds.getHeight()));
 
@@ -195,7 +195,7 @@ public abstract class AbstractComponent
     }
     public AbstractComponent scaleTransformLocalAbsolute(Rectangle2D bounds){
         if (null != bounds){
-            Rectangle2D thisBounds = this.getBoundsVector();
+            Bounds thisBounds = this.getBoundsVector();
             float sw = (float)(thisBounds.getWidth()/(bounds.getX()+bounds.getWidth()));
             float sh = (float)(thisBounds.getHeight()/(bounds.getY()+bounds.getHeight()));
 
@@ -282,9 +282,9 @@ public abstract class AbstractComponent
 
         this.init( (Boolean)thisModel.getValue("init"));
 
-        this.setTransformLocal( Component.Tools.DecodeTransform(thisModel.getValue("transform")));
+        this.setTransformLocal( thisModel.getValue("transform",Transform.class));
 
-        this.scaleTransformLocalRelative( Component.Tools.DecodeBounds(thisModel.getValue("bounds")));
+        this.scaleTransformLocalRelative( thisModel.getValue("bounds",Bounds.class));
 
         return true;
     }

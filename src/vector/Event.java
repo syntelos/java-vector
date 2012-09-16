@@ -2,7 +2,6 @@ package vector;
 
 import java.awt.event.MouseEvent;
 import static java.awt.event.MouseEvent.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 /**
@@ -115,7 +114,7 @@ public interface Event {
 
         public boolean isWheel();
 
-        public Event apply(AffineTransform parent);
+        public Event apply(Transform parent);
 
         public interface Motion
             extends Mouse
@@ -664,10 +663,15 @@ public interface Event {
     /**
      * Propagation of button and menu events.  Dispatch global
      * application actions via root container input.
+     * 
+     * The enum type permits application global consumers to validate
+     * an action by type.
      */
-    public interface NamedAction
+    public interface NamedAction<T extends Enum<T>>
         extends Event
     {
+
+        public T getValue();
 
         public String getName();
     }

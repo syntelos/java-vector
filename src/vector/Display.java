@@ -17,7 +17,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -42,7 +41,7 @@ public class Display
 
     protected Component[] components, tailinit;
 
-    private final AffineTransform transform = new AffineTransform();
+    private final Transform transform = new Transform();
 
     private final Output output = new Output();
 
@@ -65,7 +64,7 @@ public class Display
 
         this.destroy();
 
-        this.transform.setTransform(new AffineTransform());
+        this.transform.setTransform(new Transform());
     }
     protected void init(Boolean init){
         if (null != init && init.booleanValue()){
@@ -139,11 +138,11 @@ public class Display
         super.setVisible(visible);
         return this;
     }
-    public final Rectangle2D.Float getBoundsVector(){
+    public final Bounds getBoundsVector(){
         Rectangle bounds = super.getBounds();
-        return new Rectangle2D.Float(bounds.x,bounds.y,bounds.width,bounds.height);
+        return new Bounds(bounds.x,bounds.y,bounds.width,bounds.height);
     }
-    public final Component setBoundsVector(Rectangle2D.Float bounds){
+    public final Component setBoundsVector(Bounds bounds){
         super.setBounds(new Rectangle((int)Math.floor(bounds.x),(int)Math.floor(bounds.y),(int)Math.ceil(bounds.width),(int)Math.ceil(bounds.height)));
         return this;
     }
@@ -161,18 +160,18 @@ public class Display
         super.setLocation( (int)p.getX(), (int)p.getY());
         return this;
     }
-    public final AffineTransform getTransformLocal(){
+    public final Transform getTransformLocal(){
 
-        return (AffineTransform)this.transform.clone();
+        return this.transform.clone();
     }
-    protected Display setTransformLocal(AffineTransform transform){
+    protected Display setTransformLocal(Transform transform){
         if (null != transform)
             this.transform.setTransform(transform);
         return this;
     }
     protected Display setTransformLocal(float sx, float sy){
 
-        return this.setTransformLocal(AffineTransform.getScaleInstance(sx,sy));
+        return this.setTransformLocal(Transform.getScaleInstance(sx,sy));
     }
     public Display scaleTransformLocalRelative(Rectangle2D bounds){
         if (null != bounds){
@@ -194,9 +193,9 @@ public class Display
         }
         return this;
     }
-    public final AffineTransform getTransformParent(){
+    public final Transform getTransformParent(){
 
-        final AffineTransform transform = this.getTransformLocal();
+        final Transform transform = this.getTransformLocal();
 
         final Point2D.Float location = this.getLocationVector();
 
@@ -255,7 +254,7 @@ public class Display
 
         if (null != this.background){
             g.setColor(this.background);
-            Rectangle2D.Float bounds = this.getBoundsVector();
+            Bounds bounds = this.getBoundsVector();
             bounds.x = 0;
             bounds.y = 0;
             g.fill(bounds);
@@ -617,9 +616,9 @@ public class Display
 
         this.init( (Boolean)thisModel.getValue("init"));
 
-        this.setTransformLocal( Component.Tools.DecodeTransform(thisModel.getValue("transform")));
+        this.setTransformLocal( thisModel.getValue("transform",Transform.class));
 
-        this.scaleTransformLocalRelative( Component.Tools.DecodeBounds(thisModel.getValue("bounds")));
+        this.scaleTransformLocalRelative( thisModel.getValue("bounds",Bounds.class));
 
         this.setBackground( thisModel.getValue("background",Color.class));
 

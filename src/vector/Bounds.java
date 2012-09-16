@@ -1,0 +1,76 @@
+package vector;
+
+import java.util.StringTokenizer;
+
+/**
+ * Storage class, not intermediate value, employs 32 bit floating point.
+ */
+public class Bounds
+    extends java.awt.geom.Rectangle2D.Float
+{
+    public Bounds(){
+        super(0,0,0,0);
+    }
+    public Bounds(String string){
+        super(0,0,0,0);
+        if (null != string){
+            StringTokenizer strtok = new StringTokenizer(string,"][)(,");
+            switch (strtok.countTokens()){
+            case 0:
+                break;
+            case 4:
+                try {
+                    final float x = java.lang.Float.parseFloat(strtok.nextToken());
+
+                    final float y = java.lang.Float.parseFloat(strtok.nextToken());
+
+                    final float w = java.lang.Float.parseFloat(strtok.nextToken());
+
+                    final float h = java.lang.Float.parseFloat(strtok.nextToken());
+
+                    this.setFrame(x,y,w,h);
+                }
+                catch (RuntimeException exc){
+                    throw new IllegalArgumentException(string,exc);
+                }
+                break;
+            default:
+                throw new IllegalArgumentException(string);
+            }
+        }
+    }
+    public Bounds(float x, float y, float w, float h){
+        super(x,y,w,h);
+    }
+    public Bounds(double x, double y, double w, double h){
+        super((float)x,(float)y,(float)w,(float)h);
+    }
+    public Bounds(java.awt.geom.RectangularShape rect){
+        this(rect.getX(),rect.getY(),rect.getWidth(),rect.getHeight());
+    }
+    public Bounds(java.awt.Shape shape){
+        this(shape.getBounds2D());
+    }
+    public Bounds(Component c){
+        this(c.getBoundsVector());
+    }
+
+
+    public Bounds clone(){
+        return (Bounds)clone();
+    }
+    public String toString(){
+        StringBuilder string = new StringBuilder();
+        string.append('(');
+        string.append(this.x);
+        string.append(',');
+        string.append(this.y);
+        string.append(',');
+        string.append(this.width);
+        string.append(',');
+        string.append(this.height);
+        string.append(')');
+        return string.toString();
+    }
+
+}

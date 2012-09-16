@@ -45,7 +45,7 @@ public class TableBig
 
         final int count = this.count();
         if (0 < count){
-            final Rectangle2D.Float bounds = this.getBoundsVector();
+            final Bounds bounds = this.getBoundsVector();
             if (!bounds.isEmpty()){
                 if (2 > count){
                     this.cols = 1;

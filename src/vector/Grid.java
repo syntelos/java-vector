@@ -181,7 +181,7 @@ public class Grid
              * and domain) from the life cycle operators -- and then
              * propagate incorrect state via JSON
              */
-            final Rectangle2D.Float bounds = this.getBoundsVector();
+            final Bounds bounds = this.getBoundsVector();
             if (!bounds.isEmpty()){
                 float[] range = this.range;
                 if (null == range){
@@ -339,7 +339,7 @@ public class Grid
         }
         return list;
     }
-    public final static float Radius(Rectangle2D.Float dim){
+    public final static float Radius(Bounds dim){
         float gross = Math.max(dim.width,dim.height);
         if (100f < gross)
             return (0.01f * gross);

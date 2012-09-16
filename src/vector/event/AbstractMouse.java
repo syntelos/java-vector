@@ -1,8 +1,8 @@
 package vector.event;
 
 import vector.Event;
+import vector.Transform;
 
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 /**
@@ -37,7 +37,7 @@ public class AbstractMouse
     public final boolean isWheel(){
         return this.action.isWheel();
     }
-    public final Event apply(AffineTransform parent){
+    public final Event apply(Transform parent){
         if (this instanceof Motion){
             final Point2D src = ((Motion)this).getPoint();
             final Point2D dst = parent.transform(src,(new Point2D.Float(0,0)));

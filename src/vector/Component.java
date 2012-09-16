@@ -8,7 +8,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
+
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -121,7 +121,7 @@ import java.util.StringTokenizer;
  * components. </p>
  * 
  * <p> See also {@link
- * #setBoundsVector(java.awt.geom.Rectangle2D$Float)
+ * #setBoundsVector(vector.Bounds)
  * setBoundsVector}. </p>
  * 
  * <h4><code>components</code></h4>
@@ -193,13 +193,13 @@ public interface Component
     /**
      * @return A clone or copy of the bounding box
      */
-    public Rectangle2D.Float getBoundsVector();
+    public Bounds getBoundsVector();
     /**
      * Define the objective size of the component.  Content is scaled
      * to this size.  See "Scaling <code>transform</code> &amp;
      * <code>bounds</code>", above.
      */
-    public Component setBoundsVector(Rectangle2D.Float bounds);
+    public Component setBoundsVector(Bounds bounds);
 
     public boolean contains(int x, int y);
 
@@ -217,7 +217,7 @@ public interface Component
      * 
      * @return (Clone) Transform within the local coordinate space
      */
-    public AffineTransform getTransformLocal();
+    public Transform getTransformLocal();
     /**
      * Concatenate dimensional scale with current matrix
      */
@@ -232,7 +232,7 @@ public interface Component
      * @return (Clone) The local transform translated from the
      * parent's coordinate space
      */
-    public AffineTransform getTransformParent();
+    public Transform getTransformParent();
     /**
      * @param e Event in local coordinate space
      * 
@@ -517,94 +517,6 @@ public interface Component
                         }
                     }
                 }
-            }
-        }
-        public static Rectangle2D.Float DecodeBounds(Object string){
-            if (null == string)
-                return null;
-            else if (string instanceof String)
-                return DecodeBounds((String)string);
-            else if (string instanceof Rectangle2D.Float)
-                return (Rectangle2D.Float)string;
-            else 
-                throw new IllegalArgumentException(string.getClass().getName());
-        }
-        public static Rectangle2D.Float DecodeBounds(String string){
-            if (null == string)
-                return null;
-            else {
-                StringTokenizer strtok = new StringTokenizer(string,"][,=");
-                if (9 == strtok.countTokens()){
-                    strtok.nextToken(); // drop class name
-                    strtok.nextToken(); // drop identifier
-                    try {
-                        final float x = Float.parseFloat(strtok.nextToken());
-                        strtok.nextToken(); // drop identifier
-                        final float y = Float.parseFloat(strtok.nextToken());
-                        strtok.nextToken(); // drop identifier
-                        final float w = Float.parseFloat(strtok.nextToken());
-                        strtok.nextToken(); // drop identifier
-                        final float h = Float.parseFloat(strtok.nextToken());
-
-                        return new Rectangle2D.Float(x,y,w,h);
-                    }
-                    catch (RuntimeException exc){
-                        throw new IllegalArgumentException(string,exc);
-                    }
-                }
-                else
-                    throw new IllegalArgumentException(string);
-            }
-        }
-        public static AffineTransform DecodeTransform(Object string){
-            if (null == string)
-                return null;
-            else if (string instanceof String)
-                return DecodeTransform((String)string);
-            else if (string instanceof AffineTransform)
-                return (AffineTransform)string;
-            else 
-                throw new IllegalArgumentException(string.getClass().getName());
-        }
-        public static AffineTransform DecodeTransform(String string){
-            if (null == string)
-                return null;
-            else {
-                StringTokenizer strtok = new StringTokenizer(string,"][");
-                if (4 == strtok.countTokens()){
-                    strtok.nextToken(); // drop class name
-                    String row0 = strtok.nextToken();
-                    strtok.nextToken(); // drop comma
-                    String row1 = strtok.nextToken();
-
-                    strtok = new StringTokenizer(row0,", ");
-                    if (3 == strtok.countTokens()){
-                        try {
-                            float m00 = Float.parseFloat(strtok.nextToken());
-                            float m01 = Float.parseFloat(strtok.nextToken());
-                            float m02 = Float.parseFloat(strtok.nextToken());
-
-                            strtok = new StringTokenizer(row1,", ");
-                            if (3 == strtok.countTokens()){
-
-                                float m10 = Float.parseFloat(strtok.nextToken());
-                                float m11 = Float.parseFloat(strtok.nextToken());
-                                float m12 = Float.parseFloat(strtok.nextToken());
-
-                                return new AffineTransform(m00,m01,m02,m10,m11,m12);
-                            }
-                            else
-                                throw new IllegalArgumentException(string);
-                        }
-                        catch (RuntimeException exc){
-                            throw new IllegalArgumentException(string,exc);
-                        }
-                    }
-                    else
-                        throw new IllegalArgumentException(string);
-                }
-                else
-                    throw new IllegalArgumentException(string);
             }
         }
     }

@@ -7,7 +7,7 @@ package vector;
  * @see TableSmall
  */
 public final class TableCell
-    extends java.awt.geom.Rectangle2D.Float
+    extends Bounds
 {
     /**
      * Counting from zero, inclusive
@@ -16,7 +16,7 @@ public final class TableCell
 
 
     public TableCell(int row, int col, double x, double y, double w, double h){
-        super((float)x,(float)y,(float)w,(float)h);
+        super(x,y,w,h);
         this.row = row;
         this.col = col;
     }

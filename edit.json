@@ -3,6 +3,7 @@
   "components": [
     {
       "class": "vector.TextEdit",
+      "bounds": "[100,100,100,100]",
       "color": "#000000",
       "font": "monospaced-28",
       "fixed": true

@@ -4,8 +4,6 @@ import java.awt.FontMetrics;
 import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Rectangle2D;
 
 /**
  * A universal font primitive.
@@ -57,21 +55,21 @@ public class Font
     }
 
 
-    public final Rectangle2D.Float boundingBox(int rows, int cols){
+    public final Bounds boundingBox(int rows, int cols){
         final float x1 = this.padding.left;
         final float y1 = this.padding.top;
         final float x2 = (this.padding.getWidth()+(this.em * cols));
         final float y2 = (y1+(this.height*rows));
             
-        return new Rectangle2D.Float(x1,y1,(x2-x1),(y2-y1));
+        return new Bounds(x1,y1,(x2-x1),(y2-y1));
     }
-    public final Rectangle2D.Float boundingBox(int rows, float width){
+    public final Bounds boundingBox(int rows, float width){
         final float x1 = this.padding.left;
         final float y1 = this.padding.top;
         final float x2 = (this.padding.getWidth()+width);
         final float y2 = (y1+(this.height*rows));
             
-        return new Rectangle2D.Float(x1,y1,(x2-x1),(y2-y1));
+        return new Bounds(x1,y1,(x2-x1),(y2-y1));
     }
     public final Padding getPadding(){
         Padding padding = this.padding;
@@ -128,8 +126,10 @@ public class Font
         StringBuilder string = new StringBuilder();
         string.append(this.getName());
         string.append('-');
-        string.append(this.getStyleString());
-        string.append('-');
+        if (!this.isPlain()){
+            string.append(this.getStyleString());
+            string.append('-');
+        }
         string.append(this.getSize());
         return string.toString();
     }

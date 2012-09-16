@@ -2,7 +2,6 @@ package vector;
 
 import java.awt.Graphics2D;
 import static java.awt.RenderingHints.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.ImageObserver;
 
 /**
@@ -17,7 +16,7 @@ public final class Offscreen
     public Offscreen(Component component){
         this(component.getBoundsVector());
     }
-    public Offscreen(Rectangle2D.Float bounds){
+    public Offscreen(Bounds bounds){
         this(bounds.width,bounds.height);
     }
     public Offscreen(float width, float height){
