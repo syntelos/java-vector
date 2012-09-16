@@ -32,6 +32,8 @@ public class Container
 
     protected Component[] components;
 
+    protected boolean fit;
+
 
     public Container(){
         super();
@@ -56,12 +58,22 @@ public class Container
 
             c.resized();
         }
+
+        if (this.fit){
+
+            this.fit();
+        }
     }
     public void modified(){
 
         for (Component c: this){
 
             c.modified();
+        }
+
+        if (this.fit){
+
+            this.fit();
         }
     }
     public final Color getBackground(){
@@ -77,6 +89,27 @@ public class Container
     public final Container setBackground(String code){
         if (null != code)
             return this.setBackground(new Color(code));
+        else
+            return this;
+    }
+    /**
+     * Resize to size of children
+     */
+    public final boolean isFit(){
+        return this.fit;
+    }
+    public final boolean getFit(){
+        return this.fit;
+    }
+    public final Container setFit(boolean fit){
+
+        this.fit = fit;
+
+        return this;
+    }
+    public final Container setFit(Boolean fit){
+        if (null != fit)
+            return this.setFit(fit.booleanValue());
         else
             return this;
     }
@@ -303,20 +336,65 @@ public class Container
         ObjectJson thisModel =  super.toJson();
 
         thisModel.setValue("background",this.getBackground());
+
+        thisModel.setValue("fit",this.getFit());
+
         thisModel.setValue("components",new ArrayJson(this));
 
         return thisModel;
     }
     public boolean fromJson(Json thisModel){
 
+        super.fromJson(thisModel);
+
         this.setBackground( thisModel.getValue("background",Color.class));
+
+        this.setFit( (Boolean)thisModel.getValue("fit"));
 
         Component.Tools.DecodeComponents(this,thisModel);
         /*
          * Rely on Display rather than call multiply
          *
          *  this.modified() 
+         * 
+         * Because this modified calls its children, and the Display
+         * will do the same, we can preserve the requirement, avoid
+         * redundancy, and serve the subclass by not calling this
+         * here.
          */
         return true;
+    }
+
+    protected Container fit(){
+
+        if (0 < this.count()){
+
+            final Bounds bounds = this.getBoundsVector();
+
+            float x0 = Float.MAX_VALUE, y0 = Float.MAX_VALUE;
+            float x1 = Float.MIN_VALUE, y1 = Float.MIN_VALUE;
+
+            for (Component c : this){
+                Bounds cb = c.getBoundsVector();
+
+                x0 = Math.min(x0,cb.x);
+                y0 = Math.min(y0,cb.y);
+
+                x1 = Math.max(x1,(cb.x+cb.width));
+                y1 = Math.max(y1,(cb.y+cb.height));
+            }
+
+            /*
+             * Reflect padding offsets
+             */
+            final float width = (x1+x0);
+            final float height = (y1+y0);
+
+            bounds.width = width;
+            bounds.height = height;
+
+            this.setBoundsVector(bounds);
+        }
+        return this;
     }
 }

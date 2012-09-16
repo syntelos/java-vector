@@ -21,25 +21,9 @@ import java.awt.geom.Rectangle2D;
  * <p> The domain and range lists are coordinates in the successor's
  * shape coordinate space, under the successor's local transform. </p>
  * 
- * <h3>Grid Future</h3>
- * 
- * <p> Instances of this class are intended as visual display
- * predecessors to their successors: they paint first so the successor
- * paints over them.  </p>
- * 
- * <p> This requirement imposes a temporal conflict: the grid will
- * initialize before the objective successor from which it derives
- * critical state. </p>
- * 
- * <p> Therefore application of this class requires that the Grid
- * {@link #init()} method be called (again) after the scene graph has
- * loaded and initialized (all components added).  A repaint may be
- * required to display the effects of this reinitialization. </p>
- * 
  */
 public class Grid
     extends AbstractComponent
-    implements TailInit
 {
 
     protected Color color = Color.black;
@@ -314,6 +298,7 @@ public class Grid
         return thisModel;
     }
     public boolean fromJson(Json thisModel){
+
         super.fromJson(thisModel);
 
         this.setColor( (Color)thisModel.getValue("color",Color.class));

@@ -139,6 +139,8 @@ public class TableBig
     }
     public boolean fromJson(Json thisModel){
 
+        super.fromJson(thisModel);
+
         this.setCellSpacing( thisModel.getValue("cellspacing",Float.class));
 
         this.setFixed( (Boolean)thisModel.getValue("fixed"));

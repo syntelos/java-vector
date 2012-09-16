@@ -4,6 +4,7 @@ import json.Json;
 import json.ObjectJson;
 
 import java.awt.geom.Rectangle2D;
+import java.util.Arrays;
 
 /**
  * {@link TableSmall} orders staticly dimensioned children to fit a
@@ -55,6 +56,9 @@ public class TableSmall
                 final double[] colwidths = new double[cols];
                 final double[] rowheights = new double[rows];
 
+                Arrays.fill(colwidths,0.0);
+                Arrays.fill(rowheights,0.0);
+
                 int  rr, cc, cx;
 
                 measurement:
@@ -91,8 +95,11 @@ public class TableSmall
                     for (cc = 0; cc < cols; cc++){
 
                         dx = colwidths[cc];
-                        tableWidth += dx;
 
+                        if (0 == rr){
+
+                            tableWidth += dx;
+                        }
                         cx = ((rr*cols)+cc);
 
                         if (this.has(cx)){
@@ -114,6 +121,7 @@ public class TableSmall
                 final Bounds bounds = this.getBoundsVector();
                 bounds.width = (float)tableWidth;
                 bounds.height = (float)tableHeight;
+
                 this.setBoundsVector(bounds);
             }
         }
@@ -159,6 +167,8 @@ public class TableSmall
         return thisModel;
     }
     public boolean fromJson(Json thisModel){
+
+        super.fromJson(thisModel);
 
         this.setCols( (Integer)thisModel.getValue("cols",Integer.class));
 

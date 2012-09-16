@@ -403,6 +403,7 @@ public class Text
         return thisModel;
     }
     public boolean fromJson(Json thisModel){
+
         super.fromJson(thisModel);
 
         this.setFont( (String)thisModel.getValue("font"));
