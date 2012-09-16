@@ -4,14 +4,19 @@ import java.io.PrintStream;
 import java.util.StringTokenizer;
 
 /**
- * Call stack trace tool
+ * Call stack trace print tool.  Print an information string and the
+ * source stack trace (including the print).
  * 
- * <h3>Usage</h3>
  * <pre>
- * (new DebugTrace("string").print());
- * (new DebugTrace(o.toString()).print());
- * (new DebugTrace("param: %d",param).print());
+ * new DebugTrace(string).print();
+ * new DebugTrace(object).print();
+ * new DebugTrace("format: %d",int).print();
  * </pre>
+ * 
+ * Consecutive trace prints are indented for the call stack relation
+ * to the previous debug trace print, as an aid to the intensive
+ * application of this tool.
+ * 
  */
 public class DebugTrace 
     extends Throwable
@@ -272,6 +277,9 @@ public class DebugTrace
 
     public DebugTrace(String fmt, Object... args){
         this(String.format(fmt,args));
+    }
+    public DebugTrace(Object o){
+        this(o.toString());
     }
     public DebugTrace(String m){
         super(m);
