@@ -45,12 +45,21 @@ public class TextEdit
     public boolean input(Event e){
         switch(e.getType()){
         case MouseEntered:
-            this.mouseIn = true;
+
+            if (null != this.colorOver || null != this.strokeOver){
+
+                this.outputScene();
+            }
             this.blink.set();
-            return true;
+
+            return super.input(e);
+
         case MouseExited:
-            this.mouseIn = false;
-            return true;
+
+            this.blink.set();
+
+            return super.input(e);
+
         case KeyUp:
             if (this.mouseIn){
                 final Event.Key k = (Event.Key)e;
@@ -110,27 +119,21 @@ public class TextEdit
             else
                 return false;
         default:
-            return false;
+            return super.input(e);
         }
     }
     public Text outputOverlay(Graphics2D g){
 
-        if (this.mouseIn){
+        super.outputOverlay(g);
+
+        if (this.mouseIn && this.blink.high()){
 
             g.setColor(this.getColor());
 
-            Shape border = this.getBoundsVector();
+            Shape cursor = ((Editor)this.string).cursor(this);
 
-            g.draw(border);
-
-
-            if (this.blink.high()){
-
-                Shape cursor = ((Editor)this.string).cursor(this);
-
-                g.transform(this.getTransformParent());
-                g.draw(cursor);
-            }
+            g.transform(this.getTransformParent());
+            g.draw(cursor);
         }
         return this;
     }

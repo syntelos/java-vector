@@ -125,7 +125,9 @@ import java.util.StringTokenizer;
  * methods defined in {@link json.Builder}.  Each component must
  * produce JSON output which includes a field named
  * <code>"class"</code> with the string value returned by <code>{@link
- * java.lang.Class#getName() this.getClass().getName()}</code>. </p>
+ * java.lang.Class#getName() this.getClass().getName()}</code> (input
+ * to {@link java.lang.Class#forName(java.lang.String)
+ * Class.forName}). </p>
  * 
  * <p> In reading the JSON input, a component should not check or
  * validate the class field.  This liberal acceptance will permit
@@ -212,13 +214,20 @@ public interface Component
      */
     public void relocated();
     /**
+     * A parent is not necessarily a Container.  It's possible for a
+     * Component define a single child relationship.
+     * 
      * This method is named for compatibility with the AWT for the
      * {@link Display} case.  The benefit of this choice has been that
      * {@link Display} is no more than the root container.
      * 
-     * @return Parent container
+     * @return Parent component
      */
-    public Component.Container getParentVector();
+    public <T extends Component> T getParentVector();
+    /**
+     * 
+     */
+    public <T extends Component> T getRootContainer();
     /**
      * In the {@link Display}, this is an {@link
      * java.lang.UnsupportedOperationException unsupported operation}.
@@ -232,7 +241,7 @@ public interface Component
      * 
      * @return this
      */
-    public Component setParentVector(Component.Container parent);
+    public Component setParentVector(Component parent);
 
     public boolean isVisible();
 
@@ -320,6 +329,12 @@ public interface Component
      * Request overlay output from the root container
      */
     public Component outputOverlay();
+    /**
+     * Recurse up the scene graph to remove the argument from its
+     * parent, and delete.
+     * @return Requested removal performed successfully
+     */
+    public boolean drop(Component c);
 
     /**
      * Ordered list of component children.

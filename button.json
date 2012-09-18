@@ -2,11 +2,16 @@
     "background": "#FFFFFF",
     "components": [
         {
-            "class": "vector.TextEdit",
+            "class": "vector.Button",
             "bounds": "[100,100,100,100]",
             "color": "#000000",
+            "color-over": "#AF0000",
+            "text": "Click me!",
             "font": "monospaced-36",
             "fixed": true,
+            "stroke-over":{
+                "line-width": 1.0
+            },
             "border": {
                 "color": "#000000",
                 "color-over": "#AF0000",
@@ -18,7 +23,9 @@
                 "stroke-over":{
                     "line-width": 8.0
                 }
-            }
+            },
+            "enum-class": "vector.Stroke$Join",
+            "enum-value": "BEVEL"
         }
     ]
 }

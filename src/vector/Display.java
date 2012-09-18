@@ -5,6 +5,7 @@ import vector.event.Repainter;
 import json.ArrayJson;
 import json.Json;
 import json.ObjectJson;
+import json.Reader;
 
 import lxl.List;
 
@@ -20,6 +21,10 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -121,11 +126,15 @@ public class Display
         else
             return this;
     }
-    public Component.Container getParentVector(){
+    public final <T extends Component> T getParentVector(){
 
         return null;
     }
-    public Component setParentVector(Component.Container parent){
+    public final <T extends Component> T getRootContainer(){
+
+        return (T)this;
+    }
+    public Component setParentVector(Component parent){
 
         throw new UnsupportedOperationException();
     }
@@ -208,17 +217,20 @@ public class Display
         return transform;
     }
     /**
-     * Dispatch event to first consumer
+     * Broadcast event to all consumers
      * 
-     * @return Consumed
+     * @return Consumed (at least once)
      */
     public boolean input(Event e){
-        for (Component c: this){
+        boolean re = false;
 
-            if (c.input(e))
-                return true;
+        for (Component c: this){
+            /*
+             * Broadcast
+             */
+            re = (c.input(e) || re);
         }
-        return false;
+        return re;
     }
     public final boolean isMouseIn(){
         return this.mouseIn;
@@ -415,6 +427,20 @@ public class Display
         catch (NoninvertibleTransformException exc){
             throw new IllegalStateException(this.getTransformParent().toString(),exc);
         }
+    }
+    public boolean drop(Component c){
+
+        int idx = this.indexOf(c);
+        if (-1 < idx){
+
+            this.remove(idx).destroy();
+
+            this.outputScene();
+
+            return true;
+        }
+        else
+            return false;
     }
 
     public void mouseClicked(MouseEvent evt){
@@ -626,5 +652,28 @@ public class Display
         this.outputScene();
 
         return true;
+    }
+    public boolean open(File file){
+        try {
+            FileInputStream fin = new FileInputStream(file);
+            try {
+                Reader reader = new Reader();
+                Json json = reader.read(fin);
+                if (null != json)
+
+                    return this.fromJson(json);
+                else 
+                    return false;
+            }
+            finally {
+                fin.close();
+            }
+        }
+        catch (IOException exc){
+
+            this.warn(exc,"Error reading file '%s'",file);
+
+            return false;
+        }
     }
 }

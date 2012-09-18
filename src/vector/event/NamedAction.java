@@ -26,10 +26,16 @@ public class NamedAction<T extends Enum<T>>
     }
 
 
+    public final Class<T> getValueClass(){
+
+        return (Class<T>)this.value.getClass();
+    }
     public final T getValue(){
+
         return (T)this.value;
     }
     public final String getName(){
+
         return this.value.name();
     }
     protected StringBuilder toStringBuilder(){

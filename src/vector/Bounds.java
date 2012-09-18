@@ -1,6 +1,7 @@
 package vector;
 
 import java.util.StringTokenizer;
+import java.awt.geom.RoundRectangle2D;
 
 /**
  * Storage class, not intermediate value, employs 32 bit floating point.
@@ -73,6 +74,10 @@ public class Bounds
         final double sy = ((double)that.height/(double)this.height);
 
         return Transform.getScaleInstance(sx,sy);
+    }
+    public RoundRectangle2D.Float round(float arc){
+
+        return new RoundRectangle2D.Float(this.x,this.y,this.width,this.height,arc,arc);
     }
     public Bounds clone(){
         return (Bounds)super.clone();

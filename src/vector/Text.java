@@ -15,17 +15,19 @@ import java.awt.geom.Rectangle2D;
  * Text line
  */
 public class Text
-    extends AbstractComponent
+    extends BorderComponent
     implements CharSequence
 {
 
-    protected Font font = Font.Default;
+    protected Font font;
 
-    protected Color color = Color.black;
+    protected Color color, colorOver;
 
-    protected boolean outline = false, fixed = false;
+    protected Stroke stroke, strokeOver;
 
-    protected int cols = 25;
+    protected boolean fill, fixed;
+
+    protected int cols;
 
     protected CharSequence string;
 
@@ -41,6 +43,16 @@ public class Text
     }
 
 
+    @Override
+    public void init(){
+        super.init();
+
+        this.font = Font.Default;
+        this.color = Color.black;
+        this.fill = true;
+        this.fixed = false;
+        this.cols = 25;
+    }
     /**
      * This method will not remove the text string, itself, in order
      * that a subclass may be defined for a static text string.
@@ -54,6 +66,9 @@ public class Text
         this.vector = null;
         this.shape = null;
         this.localPositions = null;
+        this.colorOver = null;
+        this.stroke = null;
+        this.strokeOver = null;
     }
     /**
      * Calls {@link #layout()}
@@ -129,19 +144,35 @@ public class Text
         else
             return this;
     }
-    public final boolean isOutline(){
-        return this.outline;
+    public final Color getColorOver(){
+
+        return this.colorOver;
     }
-    public final Boolean getOutline(){
-        return this.outline;
-    }
-    public final Text setOutline(boolean outline){
-        this.outline = outline;
+    public final Text setColorOver(Color colorOver){
+        if (null != colorOver){
+            this.colorOver = colorOver;
+        }
         return this;
     }
-    public final Text setOutline(Boolean outline){
-        if (null != outline)
-            this.outline = outline;
+    public final Text setColorOver(String code){
+        if (null != code)
+            return this.setColorOver(new Color(code));
+        else
+            return this;
+    }
+    public final boolean isFill(){
+        return this.fill;
+    }
+    public final Boolean getFill(){
+        return this.fill;
+    }
+    public final Text setFill(boolean fill){
+        this.fill = fill;
+        return this;
+    }
+    public final Text setFill(Boolean fill){
+        if (null != fill)
+            this.fill = fill;
         return this;
     }
     public final boolean isFixed(){
@@ -190,6 +221,26 @@ public class Text
             return this.setCols(cols.intValue());
         else
             return this;
+    }
+    public final Stroke getStroke(){
+
+        return this.stroke;
+    }
+    public final Text setStroke(Stroke stroke){
+
+        this.stroke = stroke;
+
+        return this;
+    }
+    public final Stroke getStrokeOver(){
+
+        return this.strokeOver;
+    }
+    public final Text setStrokeOver(Stroke strokeOver){
+
+        this.strokeOver = strokeOver;
+
+        return this;
     }
     public final boolean isEmpty(){
         return (null == this.string || 0 == this.string.length());
@@ -370,35 +421,58 @@ public class Text
         }
     }
     public Text outputScene(Graphics2D g){
-        Shape shape = this.shape();
+
+        super.outputScene(g);
+
+        final Shape shape = this.shape();
         if (null != shape){
+            final boolean mouseIn = this.mouseIn;
+
             g.transform(this.getTransformParent());
-            g.setColor(this.getColor());
-            if (this.outline)
-                g.draw(shape);
+
+            if (mouseIn && null != this.colorOver)
+                g.setColor(this.colorOver);
             else
+                g.setColor(this.color);
+
+            if (this.fill){
                 g.fill(shape);
+            }
+
+            if (mouseIn && null != this.strokeOver){
+
+                if (null != this.strokeOver.color)
+                    g.setColor(this.strokeOver.color);
+
+                g.setStroke(this.strokeOver);
+
+                g.draw(shape);
+            }
+            else if (null != this.stroke){
+
+                if (null != this.stroke.color)
+                    g.setColor(this.stroke.color);
+
+                g.setStroke(this.stroke);
+
+                g.draw(shape);
+            }
         }
         return this;
     }
-    public Text outputOverlay(Graphics2D g){
-
-        return this;
-    }
     public ObjectJson toJson(){
-        ObjectJson thisModel = (ObjectJson)super.toJson();
 
-        thisModel.setValue("font", this.getFont().toString());
-
-        thisModel.setValue("color", this.getColor());
-
-        thisModel.setValue("outline",this.getOutline());
-
-        thisModel.setValue("fixed",this.getFixed());
-
-        thisModel.setValue("cols",this.getCols());
+        ObjectJson thisModel = super.toJson();
 
         thisModel.setValue("text", this.toString());
+        thisModel.setValue("font", this.getFont().toString());
+        thisModel.setValue("color", this.getColor());
+        thisModel.setValue("color-over", this.getColorOver());
+        thisModel.setValue("fill",this.getFill());
+        thisModel.setValue("fixed",this.getFixed());
+        thisModel.setValue("cols",this.getCols());
+        thisModel.setValue("stroke",this.getStroke());
+        thisModel.setValue("stroke-over",this.getStrokeOver());
 
         return thisModel;
     }
@@ -406,17 +480,15 @@ public class Text
 
         super.fromJson(thisModel);
 
-        this.setFont( (String)thisModel.getValue("font"));
-
         this.setText( (String)thisModel.getValue("text"));
-
+        this.setFont( (String)thisModel.getValue("font"));
         this.setColor( (Color)thisModel.getValue("color",Color.class));
-
-        this.setOutline( (Boolean)thisModel.getValue("outline"));
-
+        this.setColorOver( (Color)thisModel.getValue("color-over",Color.class));
+        this.setFill( (Boolean)thisModel.getValue("fill"));
         this.setFixed( (Boolean)thisModel.getValue("fixed"));
-
         this.setCols( (Integer)thisModel.getValue("cols",Integer.class));
+        this.setStroke( (Stroke)thisModel.getValue("stroke",Stroke.class));
+        this.setStrokeOver( (Stroke)thisModel.getValue("stroke-over",Stroke.class));
 
         this.modified();
 

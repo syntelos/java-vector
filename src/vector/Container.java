@@ -28,8 +28,6 @@ public class Container
 
     protected final Logger log = Logger.getLogger(this.getClass().getName());
 
-    protected Color background;
-
     protected Component[] components;
 
     protected boolean fit;
@@ -50,9 +48,12 @@ public class Container
         }
         finally {
             this.components = null;
+            this.fit = false;
         }
     }
+    @Override
     public void resized(){
+        super.resized();
 
         for (Component c: this){
 
@@ -64,7 +65,9 @@ public class Container
             this.fit();
         }
     }
+    @Override
     public void modified(){
+        super.modified();
 
         for (Component c: this){
 
@@ -75,22 +78,6 @@ public class Container
 
             this.fit();
         }
-    }
-    public final Color getBackground(){
-
-        return this.background;
-    }
-    public final Container setBackground(Color background){
-        if (null != background){
-            this.background = background;
-        }
-        return this;
-    }
-    public final Container setBackground(String code){
-        if (null != code)
-            return this.setBackground(new Color(code));
-        else
-            return this;
     }
     /**
      * Resize to size of children
@@ -210,22 +197,32 @@ public class Container
         case MouseWheel:
         case KeyDown:
         case KeyUp:
-        case Action:
+            /*
+             * Narrow-cast
+             */
             for (Component c: this){
-                if (c.input(e))
+                if (c.input(e)){
                     return true;
+                }
             }
             return false;
+        case Action:{
+            boolean re = false;
+            /*
+             * Broadcast
+             */
+            for (Component c: this){
+
+                re = (c.input(e) || re);
+            }
+            return re;
+        }
         default:
             throw new IllegalStateException(e.getType().name());
         }
     }
     public final Container outputScene(Graphics2D g){
 
-        if (null != this.background){
-            g.setColor(this.background);
-            g.fill(this.getBoundsVector());
-        }
         g.transform(this.getTransformParent());
 
         for (Component c: this){
@@ -331,11 +328,31 @@ public class Container
 
         return this;
     }
+    @Override
+    public boolean drop(Component c){
+
+        int idx = this.indexOf(c);
+        if (-1 < idx){
+
+            this.remove(idx).destroy();
+
+            this.outputScene();
+
+            return true;
+        }
+        else
+            return super.drop(c);
+    }
+    protected final Border getBorder(){
+        int idx = this.indexOf(Border.class);
+        if (-1 < idx)
+            return (Border)this.get(idx);
+        else
+            return null;
+    }
 
     public ObjectJson toJson(){
         ObjectJson thisModel =  super.toJson();
-
-        thisModel.setValue("background",this.getBackground());
 
         thisModel.setValue("fit",this.getFit());
 
@@ -346,8 +363,6 @@ public class Container
     public boolean fromJson(Json thisModel){
 
         super.fromJson(thisModel);
-
-        this.setBackground( thisModel.getValue("background",Color.class));
 
         this.setFit( (Boolean)thisModel.getValue("fit"));
 
@@ -394,6 +409,15 @@ public class Container
             bounds.height = height;
 
             this.setBoundsVector(bounds);
+
+            /*
+             *
+             */
+            Border border = this.getBorder();
+            if (null != border){
+
+                border.resized();
+            }
         }
         return this;
     }

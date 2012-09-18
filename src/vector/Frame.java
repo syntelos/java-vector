@@ -73,20 +73,19 @@ public class Frame
 
         return this;
     }
-    public final Frame open(File file)
-        throws IOException
-    {
-        FileInputStream fin = new FileInputStream(file);
-        try {
-            Reader reader = new Reader();
-            Json json = reader.read(fin);
-            this.display.fromJson(json);
-            return this;
-        }
-        finally {
-            fin.close();
-        }
+    public final Frame warn(String fmt, Object... args){
+
+        this.log.log(Level.WARNING,String.format(fmt,args));
+
+        return this;
     }
+    public final Frame open(File file){
+
+        this.display.open(file);
+
+        return this;
+    }
+
 
     public static void main(String[] argv){
 
@@ -95,20 +94,14 @@ public class Frame
 
             boolean error = false;
 
-            for (String file: argv){
-                try {
-                    frame.open(new File(file));
-                }
-                catch (IOException exc){
+            File file = new File(argv[0]);
+            if (file.isFile()){
 
-                    frame.warn(exc,"Error reading file '%s'",file);
-
-                    error = true;
-                }
+                frame.open(file);
             }
+            else {
 
-            if (error){
-
+                frame.warn("Error, unrecognized file '%s'",file);
                 System.exit(1);
             }
         }

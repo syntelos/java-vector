@@ -2,18 +2,19 @@
     "background": "#FFFFFF",
     "components": [
         {
-            "class": "vector.TextEdit",
-            "bounds": "[100,100,100,100]",
+            "class": "vector.Text",
             "color": "#000000",
-            "font": "monospaced-36",
+            "bounds": "(100,100,100,100)",
             "fixed": true,
+            "text": "Hello, World.",
+            "font": "monospaced-36",
             "border": {
                 "color": "#000000",
                 "color-over": "#AF0000",
                 "style": "round",
                 "arc":  16.0,
                 "stroke":{
-                    "line-width": 2.0
+                    "line-width": 4.0
                 },
                 "stroke-over":{
                     "line-width": 8.0

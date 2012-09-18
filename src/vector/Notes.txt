@@ -24,8 +24,9 @@ Requirements
 
     Component names are array indeces from zero inclusive.
 
-    Save JSON, Control-S, save to file
-    Open JSON, Control-O, load from file
+    Save JSON, Control-S, save to selected file
+    Open JSON, Control-O, load from selected file
+    Reload JSON, Control-R, load from previous file
 
   3
 
@@ -51,6 +52,8 @@ Requirements
   5
 
     Tabbed window for multiple content panes
+
+    Menu bar from display, set to current by Frame
 
 
 Imports

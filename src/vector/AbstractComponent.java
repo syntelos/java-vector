@@ -17,7 +17,7 @@ public abstract class AbstractComponent
 
     protected boolean visible = true, mouseIn;
 
-    protected Component.Container parent;
+    protected Component parent;
 
     protected final Transform transform = new Transform();
 
@@ -37,7 +37,7 @@ public abstract class AbstractComponent
      */
     public void init(){
 
-        Component.Container parent = this.getParentVector();
+        Component parent = this.getParentVector();
 
         this.destroy();
 
@@ -81,10 +81,11 @@ public abstract class AbstractComponent
      */
     public void relocated(){
     }
-    public final Component.Container getParentVector(){
-        return this.parent;
+    public final <T extends Component> T getParentVector(){
+
+        return (T)this.parent;
     }
-    public final Component setParentVector(Component.Container parent){
+    public final Component setParentVector(Component parent){
         if (null != parent){
             if (null != this.parent)
                 throw new IllegalStateException();
@@ -96,6 +97,22 @@ public abstract class AbstractComponent
         }
         else
             throw new IllegalArgumentException();
+    }
+    public final <T extends Component> T getRootContainer(){
+        Component p = this.getParentVector();
+        Component pp = p;
+        while (null != pp){
+            p = pp;
+            pp = p.getParentVector();
+        }
+        return (T)p;
+    }
+    protected final Transform getRootTransformLocal(){
+        Component root = this.getRootContainer();
+        if (null != root)
+            return root.getTransformLocal();
+        else
+            throw new IllegalStateException();
     }
     public final boolean isVisible(){
         return this.visible;
@@ -224,22 +241,6 @@ public abstract class AbstractComponent
         }
         return this;
     }
-    protected final Component.Container getRootContainer(){
-        Component.Container p = this.getParentVector();
-        Component.Container pp = p;
-        while (null != pp){
-            p = pp;
-            pp = p.getParentVector();
-        }
-        return p;
-    }
-    protected final Transform getRootTransformLocal(){
-        Component.Container root = this.getRootContainer();
-        if (null != root)
-            return root.getTransformLocal();
-        else
-            throw new IllegalStateException();
-    }
     public boolean input(Event e){
 
         switch(e.getType()){
@@ -258,7 +259,7 @@ public abstract class AbstractComponent
         return this.mouseIn;
     }
     public Component outputScene(){
-        Component.Container root = this.getRootContainer();
+        Component root = this.getRootContainer();
         if (null != root){
             root.outputScene();
             return this;
@@ -267,7 +268,7 @@ public abstract class AbstractComponent
             throw new IllegalStateException();
     }
     public Component outputOverlay(){
-        Component.Container root = this.getRootContainer();
+        Component root = this.getRootContainer();
         if (null != root){
             root.outputOverlay();
             return this;
@@ -276,7 +277,7 @@ public abstract class AbstractComponent
             throw new IllegalStateException();
     }
     public Component outputOverlayAnimate(long period){
-        Component.Container root = this.getRootContainer();
+        Component root = this.getRootContainer();
         if (null != root){
             root.outputOverlayAnimate(period);
             return this;
@@ -295,6 +296,17 @@ public abstract class AbstractComponent
         catch (NoninvertibleTransformException exc){
             throw new IllegalStateException(this.getTransformParent().toString(),exc);
         }
+    }
+    public boolean drop(Component c){
+
+        Component p = this.getParentVector();
+        while (null != p){
+            if (p.drop(c))
+                return true;
+            else
+                p = p.getParentVector();
+        }
+        return false;
     }
 
     public ObjectJson toJson(){

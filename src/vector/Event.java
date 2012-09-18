@@ -671,6 +671,8 @@ public interface Event {
         extends Event
     {
 
+        public Class<T> getValueClass();
+
         public T getValue();
 
         public String getName();
