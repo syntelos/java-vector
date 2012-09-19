@@ -428,7 +428,7 @@ public class Text
         if (null != shape){
             final boolean mouseIn = this.mouseIn;
 
-            g.transform(this.getTransformParent());
+            this.getTransformParent().transformFrom(g);
 
             if (mouseIn && null != this.colorOver)
                 g.setColor(this.colorOver);
@@ -521,7 +521,7 @@ public class Text
     protected void layoutScaleToDimensions(){
         Bounds shape = this.shapeArea();
         if (null != shape)
-            this.scaleTransformLocalAbsolute(shape);
+            this.transform.scaleFromAbsolute(this.getBoundsVector(),shape);
         else
             this.setTransformLocal(1f,1f);
     }

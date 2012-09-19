@@ -36,6 +36,7 @@ public class Border
 
 
     protected Color color = Color.black, colorOver;
+    protected Color background, backgroundOver;
     protected Style style = Style.SQUARE;
     protected boolean fill = false, fixed = false;
     protected float arc;
@@ -54,6 +55,8 @@ public class Border
 
         this.color = Color.black;
         this.colorOver = null;
+        this.background = null;
+        this.backgroundOver = null;
         this.style = Style.SQUARE;
         this.fill = false;
         this.fixed = false;
@@ -175,6 +178,38 @@ public class Border
         else
             return this;
     }
+    public final Color getBackground(){
+
+        return this.background;
+    }
+    public final Border setBackground(Color background){
+        if (null != background){
+            this.background = background;
+        }
+        return this;
+    }
+    public final Border setBackground(String code){
+        if (null != code)
+            return this.setBackground(new Color(code));
+        else
+            return this;
+    }
+    public final Color getBackgroundOver(){
+
+        return this.backgroundOver;
+    }
+    public final Border setBackgroundOver(Color backgroundOver){
+        if (null != backgroundOver){
+            this.backgroundOver = backgroundOver;
+        }
+        return this;
+    }
+    public final Border setBackgroundOver(String code){
+        if (null != code)
+            return this.setBackgroundOver(new Color(code));
+        else
+            return this;
+    }
     public final Style getStyle(){
 
         return this.style;
@@ -220,7 +255,22 @@ public class Border
         final Shape shape = this.shape;
         if (null != shape){
             final boolean mouseIn = this.mouseIn;
+	    /*
+	     *
+	     */
+            final Color background = this.background;
+	    if (null != background){
+		final Color backgroundOver = this.backgroundOver;
+		if (null != backgroundOver && mouseIn) 
+		    g.setColor(backgroundOver);
+		else 
+		    g.setColor(this.background);
 
+                g.fill(shape);
+	    }
+	    /*
+	     *
+	     */
             final Color colorOver = this.colorOver;
             if (null != colorOver && mouseIn) 
                 g.setColor(colorOver);
@@ -231,6 +281,7 @@ public class Border
 
                 g.fill(shape);
             }
+
 
             final Stroke strokeOver = this.strokeOver;
             if (null != strokeOver && mouseIn){
@@ -294,6 +345,8 @@ public class Border
 
         thisModel.setValue("color",this.getColor());
         thisModel.setValue("color-over",this.getColorOver());
+        thisModel.setValue("background",this.getBackground());
+        thisModel.setValue("background-over",this.getBackgroundOver());
         thisModel.setValue("style",this.getStyle());
         thisModel.setValue("fill",this.getFill());
         thisModel.setValue("fixed",this.getFixed());
@@ -309,6 +362,8 @@ public class Border
 
         this.setColor( thisModel.getValue("color",Color.class));
         this.setColorOver( thisModel.getValue("color-over",Color.class));
+        this.setBackground( thisModel.getValue("background",Color.class));
+        this.setBackgroundOver( thisModel.getValue("background-over",Color.class));
         this.setStyle( (String)thisModel.getValue("style"));
         this.setFill( (Boolean)thisModel.getValue("fill"));
         this.setFixed( (Boolean)thisModel.getValue("fixed"));

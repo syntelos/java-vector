@@ -7,7 +7,6 @@
             "components": [
                 {
                     "class": "vector.Container",
-                    "background": "#40AFAFEF",
                     "components": [
                         {
                             "class": "vector.Grid",
@@ -18,7 +17,6 @@
                 },
                 {
                     "class": "vector.Container",
-                    "background": "#40AFAFEF",
                     "components": [
                         {
                             "class": "vector.Grid",
@@ -29,41 +27,6 @@
                 },
                 {
                     "class": "vector.Container",
-                    "background": "#40AFAFEF",
-                    "components": [
-                        {
-                            "class": "vector.Grid",
-                            "color": "#808F8FAF",
-                            "mouse": true
-                        }
-                    ]
-                },
-
-                {
-                    "class": "vector.Container",
-                    "background": "#40AFAFEF",
-                    "components": [
-                        {
-                            "class": "vector.Grid",
-                            "color": "#808F8FAF",
-                            "mouse": true
-                        }
-                    ]
-                },
-                {
-                    "class": "vector.Container",
-                    "background": "#40AFAFEF",
-                    "components": [
-                        {
-                            "class": "vector.Grid",
-                            "color": "#808F8FAF",
-                            "mouse": true
-                        }
-                    ]
-                },
-                {
-                    "class": "vector.Container",
-                    "background": "#40AFAFEF",
                     "components": [
                         {
                             "class": "vector.Grid",
@@ -86,7 +49,6 @@
                 },
                 {
                     "class": "vector.Container",
-                    "background": "#40AFAFEF",
                     "components": [
                         {
                             "class": "vector.Grid",
@@ -97,7 +59,37 @@
                 },
                 {
                     "class": "vector.Container",
-                    "background": "#40AFAFEF",
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                            "mouse": true
+                        }
+                    ]
+                },
+
+                {
+                    "class": "vector.Container",
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                            "mouse": true
+                        }
+                    ]
+                },
+                {
+                    "class": "vector.Container",
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                            "mouse": true
+                        }
+                    ]
+                },
+                {
+                    "class": "vector.Container",
                     "components": [
                         {
                             "class": "vector.Grid",

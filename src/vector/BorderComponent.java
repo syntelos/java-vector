@@ -169,7 +169,7 @@ public class BorderComponent
         try {
             if (null != this.border){
 
-                g.transform(this.getTransformParent());
+                this.getTransformParent().transformFrom(g);
 
                 if (this.mouseIn && null != this.backgroundOver){
                     g.setColor(this.backgroundOver);
@@ -218,7 +218,7 @@ public class BorderComponent
         try {
             if (null != this.border){
 
-                g.transform(this.getTransformParent());
+                this.getTransformParent().transformFrom(g);
 
                 Graphics2D cg = (Graphics2D)g.create();
                 try {

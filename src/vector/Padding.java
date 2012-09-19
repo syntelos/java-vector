@@ -1,5 +1,7 @@
 package vector;
 
+import java.util.StringTokenizer;
+
 /**
  * Internal padding (as opposed to external margin) is contained
  * within the boundaries of a {@link Component}.
@@ -39,6 +41,28 @@ public class Padding
     public Padding(double left, double right, double top, double bottom){
         super();
         this.set(left, right, top, bottom);
+    }
+    public Padding(String code){
+        super();
+        StringTokenizer strtok = new StringTokenizer(code,")(,");
+        switch(strtok.countTokens()){
+        case 2:{
+            final float w = Float.parseFloat(strtok.nextToken());
+            final float h = Float.parseFloat(strtok.nextToken());
+            this.set(w,h);
+            break;
+        }
+        case 4:{
+            final float l = Float.parseFloat(strtok.nextToken());
+            final float r = Float.parseFloat(strtok.nextToken());
+            final float t = Float.parseFloat(strtok.nextToken());
+            final float b = Float.parseFloat(strtok.nextToken());
+            this.set(l,r,t,b);
+            break;
+        }
+        default:
+            throw new IllegalArgumentException(code);
+        }
     }
 
 
@@ -83,5 +107,21 @@ public class Padding
 
             throw new InternalError();
         }
+    }
+    protected StringBuilder toStringBuilder(){
+        StringBuilder string = new StringBuilder();
+        string.append('(');
+        string.append(this.left);
+        string.append(',');
+        string.append(this.right);
+        string.append(',');
+        string.append(this.top);
+        string.append(',');
+        string.append(this.bottom);
+        string.append(')');
+        return string;
+    }
+    public final String toString(){
+        return this.toStringBuilder().toString();
     }
 }

@@ -1,9 +1,14 @@
 package vector;
 
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.RectangularShape;
+import java.awt.geom.NoninvertibleTransformException;
 import java.util.StringTokenizer;
 
 /**
- * 
+ * Modifications to an existing matrix need to employ methods defined
+ * here, or need to add (overriding) method definitions here.
  */
 public class Transform
     extends java.awt.geom.AffineTransform
@@ -45,6 +50,9 @@ public class Transform
     }
 
 
+    private Transform inverse;
+
+
     public Transform(){
         super();
     }
@@ -80,6 +88,12 @@ public class Transform
     }
 
 
+    public void init(){
+
+        this.inverse = null;
+
+        this.setToIdentity();
+    }
     public Bounds transform(Bounds in){
         double[] src = new double[]{
             in.x, in.y,
@@ -95,6 +109,102 @@ public class Transform
         in.height = (float)(tgt[3]-tgt[1]);
 
         return in;
+    }
+    /**
+     * Define scale as internal scale from external
+     */
+    public Transform scaleFromAbsolute(Bounds internal, RectangularShape external){
+
+        this.inverse = null;
+
+        this.setTransform(internal.scaleFrom(external));
+
+        return this;
+    }
+    /**
+     * Concatenate scale with internal scale from external
+     */
+    public Transform scaleFromRelative(Bounds internal, RectangularShape external){
+
+        this.inverse = null;
+
+        this.concatenate(internal.scaleFrom(external));
+
+        return this;
+    }
+    /**
+     * Define scale as internal scale to external
+     */
+    public Transform scaleToAbsolute(Bounds internal, RectangularShape external){
+
+        this.inverse = null;
+
+        this.setTransform(internal.scaleTo(external));
+
+        return this;
+    }
+    /**
+     * Concatenate scale with internal scale to external
+     */
+    public Transform scaleToRelative(Bounds internal, RectangularShape external){
+
+        this.inverse = null;
+
+        this.concatenate(internal.scaleTo(external));
+
+        return this;
+    }
+    public Transform translateLocation(Point2D.Float location){
+
+        this.inverse = null;
+
+        this.translate(location.x,location.y);
+
+        return this;
+    }
+    /**
+     * Common input transformation from parent to child -- this is the
+     * parent transform.
+     */
+    public Point2D.Float transformFrom(Point2D source){
+        try {
+            Point2D.Float target = new Point2D.Float(0,0);
+            /*
+             * The transform arithmetic is double, and the point class
+             * will store to float
+             */
+            this.inverseTransform(source,target);
+
+            return target;
+        }
+        catch (NoninvertibleTransformException exc){
+            throw new IllegalStateException(this.toString(),exc);
+        }
+    }
+    /**
+     * Common graphics transformation from parent to child -- this is
+     * the parent transform.
+     */
+    public Transform transformFrom(Graphics2D g){
+
+        g.transform(this);
+
+        return this;
+    }
+    @Override
+    public Transform createInverse(){
+        Transform inverse = this.inverse;
+        if (null == inverse){
+            try {
+
+                return (this.inverse = new Transform( super.createInverse()));
+            }
+            catch (NoninvertibleTransformException exc){
+                throw new IllegalStateException(this.toString(),exc);
+            }
+        }
+        else
+            return inverse;
     }
     public Transform clone(){
         return (Transform)super.clone();

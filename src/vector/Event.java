@@ -114,7 +114,17 @@ public interface Event {
 
         public boolean isWheel();
 
-        public Event apply(Transform parent);
+        /**
+         * Copy this event in class and parameters, transforming a
+         * point from the parent coordinate space into the local
+         * coordinate space using the argument (parent) transform.
+         * 
+         * @param parent Parent transform
+         * 
+         * @return This with no point to transform, or a copy
+         * containing a transformed point
+         */
+        public Event transformFrom(Transform parent);
 
         public interface Motion
             extends Mouse

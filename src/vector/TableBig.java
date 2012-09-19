@@ -6,7 +6,9 @@ import json.ObjectJson;
 import java.awt.geom.Rectangle2D;
 
 /**
- * {@link TableBig} defines set of equally sized children.
+ * {@link TableBig} defines set of equally sized children, changing
+ * both size and location and then calling {@link
+ * Component#resized()}.
  */
 public class TableBig
     extends Container
@@ -18,7 +20,7 @@ public class TableBig
 
     protected int rows, cols;
 
-    protected boolean fixed = false;
+    protected boolean fixed;
 
 
     public TableBig(){
@@ -26,6 +28,12 @@ public class TableBig
     }
 
 
+    @Override
+    public void init(){
+        super.init();
+
+        this.fixed = false;
+    }
     @Override
     public void modified(){
         super.modified();
@@ -36,13 +44,13 @@ public class TableBig
     public void resized(){
         super.resized();
 
-        if (!this.fixed){
-            this.setBoundsVectorInit(this.getParentVector());
-        }
         this.layout();
     }
     protected void layout(){
 
+        if (!this.fixed){
+            this.setBoundsVectorInit(this.getParentVector());
+        }
         final int count = this.count();
         if (0 < count){
             final Bounds bounds = this.getBoundsVector();

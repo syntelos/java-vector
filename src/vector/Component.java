@@ -26,9 +26,9 @@ import java.util.StringTokenizer;
  * <h3>Coordinate spaces</h3>
  * 
  * Each component is translated from its parent, possibly null (0,0),
- * and may apply additional transforms within this local coordate
- * space.  Some operations or properties are relative to the component
- * - local coordinate space, while others are relative to the parent
+ * and may apply a scaling transform within this local coordate space.
+ * Some operations or properties are relative to the component - local
+ * coordinate space, while others are relative to the parent
  * coordinate space.
  * 
  * <h3>State Operators</h3>
@@ -147,7 +147,11 @@ import java.util.StringTokenizer;
  * 
  * <p> A JSON component description should include a field named
  * <code>transform</code> with the value of the local transform to
- * string. </p>
+ * string.  </p>
+ * 
+ * <p> The local transform should be employed for scaling transforms
+ * exclusively, otherwise an independent scaling transform will be
+ * needed to maintain a dynamic - layout scaling transform. </p>
  * 
  * <h4><code>bounds</code></h4>
  * 
@@ -273,21 +277,17 @@ public interface Component
 
     public Component setLocationVector(Point2D point);
     /**
-     * Scales content
+     * Scaling transform.  In many classes, or their possible
+     * subclasses, the scaling transform is determined dynamically to
+     * define the local transform.  Maintaining additional transforms
+     * in the local transform would conflict with these cases, and
+     * would be lost in these cases.
      * 
      * @return (Clone) Transform within the local coordinate space
      */
     public Transform getTransformLocal();
     /**
-     * Concatenate dimensional scale with current matrix
-     */
-    public Component scaleTransformLocalRelative(Rectangle2D bounds);
-    /**
-     * Define dimensional scale on current matrix
-     */
-    public Component scaleTransformLocalAbsolute(Rectangle2D bounds);
-    /**
-     * Converts input events
+     * Scaling and translation transform
      * 
      * @return (Clone) The local transform translated from the
      * parent's coordinate space

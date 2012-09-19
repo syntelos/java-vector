@@ -132,7 +132,8 @@ public class TextEdit
 
             Shape cursor = ((Editor)this.string).cursor(this);
 
-            g.transform(this.getTransformParent());
+            this.getTransformParent().transformFrom(g);
+
             g.draw(cursor);
         }
         return this;

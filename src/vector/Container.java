@@ -39,6 +39,12 @@ public class Container
 
 
     @Override
+    public void init(){
+	super.init();
+
+	this.fit = false;
+    }
+    @Override
     public void destroy(){
         super.destroy();
         try {
@@ -72,6 +78,20 @@ public class Container
         for (Component c: this){
 
             c.modified();
+        }
+
+        if (this.fit){
+
+            this.fit();
+        }
+    }
+    @Override
+    public void relocated(){
+        super.relocated();
+
+        for (Component c: this){
+
+            c.relocated();
         }
 
         if (this.fit){
@@ -127,7 +147,7 @@ public class Container
         case MouseExited:{
             this.mouseIn = false;
 
-            final Event m = ((Event.Mouse)e).apply(this.getTransformParent());
+            final Event m = ((Event.Mouse)e).transformFrom(this.getTransformParent());
 
             for (Component c: this.listMouseIn()){
 
@@ -162,7 +182,7 @@ public class Container
         }
         case MouseDown:
         case MouseUp:{
-            final Event m = ((Event.Mouse)e).apply(this.getTransformParent());
+            final Event m = ((Event.Mouse)e).transformFrom(this.getTransformParent());
             for (Component c: this){
                 if (c.input(m))
                     return true;
@@ -223,7 +243,7 @@ public class Container
     }
     public final Container outputScene(Graphics2D g){
 
-        g.transform(this.getTransformParent());
+        this.getTransformParent().transformFrom(g);
 
         for (Component c: this){
 
@@ -239,7 +259,7 @@ public class Container
     }
     public final Container outputOverlay(Graphics2D g){
 
-        g.transform(this.getTransformParent());
+        this.getTransformParent().transformFrom(g);
 
         for (Component c: this){
 

@@ -37,10 +37,10 @@ public class AbstractMouse
     public final boolean isWheel(){
         return this.action.isWheel();
     }
-    public final Event apply(Transform parent){
+    public final Event transformFrom(Transform parent){
         if (this instanceof Motion){
             final Point2D src = ((Motion)this).getPoint();
-            final Point2D dst = parent.transform(src,(new Point2D.Float(0,0)));
+            final Point2D dst = parent.transformFrom(src);
 
             switch(this.getType()){
             case MouseEntered:
@@ -55,7 +55,7 @@ public class AbstractMouse
         }
         else if (this instanceof Point){
             final Point2D src = ((Point)this).getPoint();
-            final Point2D dst = parent.transform(src,(new Point2D.Float(0,0)));
+            final Point2D dst = parent.transformFrom(src);
 
             switch(this.getType()){
             case MouseDown:

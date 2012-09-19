@@ -3,7 +3,6 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -41,7 +40,7 @@ public abstract class AbstractComponent
 
         this.destroy();
 
-        this.setTransformLocal(new Transform());
+        this.transform.init();
 
         this.setBoundsVectorInit(parent);
 
@@ -201,10 +200,8 @@ public abstract class AbstractComponent
         return this.transform.clone();
     }
     public final Transform getTransformParent(){
-        Transform transform = this.getTransformLocal();
-        Point2D.Float location = this.getLocationVector();
-        transform.translate(location.x,location.y);
-        return transform;
+
+        return this.getTransformLocal().translateLocation(this.getLocationVector());
     }
     protected AbstractComponent setTransformLocal(Transform transform){
         if (null != transform)
@@ -214,32 +211,6 @@ public abstract class AbstractComponent
     protected AbstractComponent setTransformLocal(float sx, float sy){
 
         return this.setTransformLocal(Transform.getScaleInstance(sx,sy));
-    }
-    /**
-     * Scale the local transform for the ratio of this to the argument bounds 
-     */
-    public AbstractComponent scaleTransformLocalRelative(Rectangle2D bounds){
-        if (null != bounds){
-            Bounds thisBounds = this.getBoundsVector();
-            float sw = (float)(thisBounds.getWidth()/(bounds.getX()+bounds.getWidth()));
-            float sh = (float)(thisBounds.getHeight()/(bounds.getY()+bounds.getHeight()));
-
-            this.transform.scale(sw,sh);
-        }
-        return this;
-    }
-    /**
-     * Define the local transform for the scale ratio of this to the argument bounds 
-     */
-    public AbstractComponent scaleTransformLocalAbsolute(Rectangle2D bounds){
-        if (null != bounds){
-            Bounds thisBounds = this.getBoundsVector();
-            float sw = (float)(thisBounds.getWidth()/(bounds.getX()+bounds.getWidth()));
-            float sh = (float)(thisBounds.getHeight()/(bounds.getY()+bounds.getHeight()));
-
-            this.transform.setToScale(sw,sh);
-        }
-        return this;
     }
     public boolean input(Event e){
 
@@ -286,16 +257,8 @@ public abstract class AbstractComponent
             throw new IllegalStateException();
     }
     protected final Point2D.Float transformFromParent(Point2D point){
-        try {
-            /*
-             * The transform arithmetic is double, and the point class
-             * will store to float
-             */
-            return (Point2D.Float)this.getTransformParent().inverseTransform(point,new Point2D.Float(0,0));
-        }
-        catch (NoninvertibleTransformException exc){
-            throw new IllegalStateException(this.getTransformParent().toString(),exc);
-        }
+
+        return this.getTransformParent().transformFrom(point);
     }
     public boolean drop(Component c){
 

@@ -60,18 +60,18 @@ public class Bounds
     /**
      * @return Objective scale to this from that
      */
-    public Transform scaleFrom(Bounds that){
-        final double sx = ((double)this.width/(double)that.width);
-        final double sy = ((double)this.height/(double)that.height);
+    public Transform scaleFrom(java.awt.geom.RectangularShape that){
+        final double sx = (this.width/that.getWidth());
+        final double sy = (this.height/that.getHeight());
 
         return Transform.getScaleInstance(sx,sy);
     }
     /**
      * @return Objective scale to that from this
      */
-    public Transform scaleTo(Bounds that){
-        final double sx = ((double)that.width/(double)this.width);
-        final double sy = ((double)that.height/(double)this.height);
+    public Transform scaleTo(java.awt.geom.RectangularShape that){
+        final double sx = (that.getWidth()/this.width);
+        final double sy = (that.getHeight()/this.height);
 
         return Transform.getScaleInstance(sx,sy);
     }

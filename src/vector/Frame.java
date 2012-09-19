@@ -50,6 +50,8 @@ public class Frame
 
         this.pack();
         this.show();
+
+        this.display.init();
     }
 
 

@@ -18,7 +18,6 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -46,13 +45,17 @@ public class Display
 
     protected Component[] components;
 
-    private final Transform transform = new Transform();
+    protected final Transform transform = new Transform();
 
-    private final Output output = new Output();
+    protected final Output output = new Output();
 
-    private Repainter outputOverlayAnimate;
+    protected Repainter outputOverlayAnimate;
 
-    private boolean mouseIn;
+    protected boolean mouseIn;
+
+    protected Rectangle2D boundsNative;
+
+    protected Bounds boundsUser;
 
 
     public Display(){
@@ -69,7 +72,9 @@ public class Display
 
         this.destroy();
 
-        this.transform.setTransform(new Transform());
+        this.transform.init();
+
+        this.layout();
     }
     protected void init(Boolean init){
         if (null != init && init.booleanValue()){
@@ -92,12 +97,16 @@ public class Display
     }
     public void resized(){
 
+        this.layout();
+
         for (Component c: this){
 
             c.resized();
         }
     }
     public void modified(){
+
+        this.layout();
 
         for (Component c: this){
 
@@ -143,20 +152,29 @@ public class Display
         return this;
     }
     public final Bounds getBoundsVector(){
-        Rectangle bounds = super.getBounds();
-        return new Bounds(bounds.x,bounds.y,bounds.width,bounds.height);
+
+        if (null == this.boundsUser)
+
+            return new Bounds(super.getBounds());
+        else
+            return this.boundsUser.clone();
     }
     public final Component setBoundsVector(Bounds bounds){
+        if (null != bounds){
+            this.boundsUser = bounds;
+        }
+        return this;
+    }
+    public final Display setBounds(Bounds bounds){
         if (null != bounds){
             super.setBounds(new Rectangle((int)Math.floor(bounds.x),(int)Math.floor(bounds.y),(int)Math.ceil(bounds.width),(int)Math.ceil(bounds.height)));
         }
         return this;
     }
     public Component setBoundsVectorForScale(Bounds bounds){
-        if (null != bounds){
 
-            this.setBoundsVector(bounds);
-        }
+        this.setBoundsVector(bounds);
+
         return this;
     }
     public final boolean contains(float x, float y){
@@ -186,35 +204,9 @@ public class Display
 
         return this.setTransformLocal(Transform.getScaleInstance(sx,sy));
     }
-    public Display scaleTransformLocalRelative(Rectangle2D bounds){
-        if (null != bounds){
-            Rectangle2D thisBounds = this.getBoundsVector();
-            float sw = (float)(thisBounds.getWidth()/(bounds.getX()+bounds.getWidth()));
-            float sh = (float)(thisBounds.getHeight()/(bounds.getY()+bounds.getHeight()));
-
-            this.transform.scale(sw,sh);
-        }
-        return this;
-    }
-    public Display scaleTransformLocalAbsolute(Rectangle2D bounds){
-        if (null != bounds){
-            Rectangle2D thisBounds = this.getBoundsVector();
-            float sw = (float)(thisBounds.getWidth()/(bounds.getX()+bounds.getWidth()));
-            float sh = (float)(thisBounds.getHeight()/(bounds.getY()+bounds.getHeight()));
-
-            this.transform.setToScale(sw,sh);
-        }
-        return this;
-    }
     public final Transform getTransformParent(){
 
-        final Transform transform = this.getTransformLocal();
-
-        final Point2D.Float location = this.getLocationVector();
-
-        transform.translate(location.x,location.y);
-
-        return transform;
+        return this.getTransformLocal().translateLocation(this.getLocationVector());
     }
     /**
      * Broadcast event to all consumers
@@ -268,6 +260,8 @@ public class Display
 
         this.output.completedScene();
 
+        this.getTransformLocal().transformFrom(g);
+
         if (null != this.background){
             g.setColor(this.background);
             Bounds bounds = this.getBoundsVector();
@@ -291,6 +285,8 @@ public class Display
     public final Display outputOverlay(Graphics2D g){
 
         this.output.completedOverlay();
+
+        this.getTransformLocal().transformFrom(g);
 
         for (Component c: this){
 
@@ -417,16 +413,8 @@ public class Display
         return this;
     }
     protected final Point2D.Float transformFromParent(Point2D point){
-        try {
-            /*
-             * The transform arithmetic is double, and the point class
-             * will store to float
-             */
-            return (Point2D.Float)this.getTransformParent().inverseTransform(point,new Point2D.Float(0,0));
-        }
-        catch (NoninvertibleTransformException exc){
-            throw new IllegalStateException(this.getTransformParent().toString(),exc);
-        }
+
+        return this.getTransformParent().transformFrom(point);
     }
     public boolean drop(Component c){
 
@@ -604,6 +592,7 @@ public class Display
     }
     public final void componentResized(ComponentEvent evt){
         this.flush();
+        this.boundsNative = this.getBounds();
         this.resized();
         this.repaint();
     }
@@ -624,13 +613,23 @@ public class Display
 
         this.outputOverlayAnimateSuspend();
     }
+    @Override
+    public void layout(){
+        if (null == this.boundsNative){
+            this.boundsNative = this.getBounds();
+        }
+        if (null == this.boundsUser){
+            this.boundsUser = new Bounds(this.boundsNative);
+        }
+        this.transform.scaleToAbsolute(this.boundsUser,this.boundsNative);
+    }
 
     public Json toJson(){
         Json thisModel = new ObjectJson();
         thisModel.setValue("class",this.getClass().getName());
         thisModel.setValue("init",Boolean.TRUE);
         thisModel.setValue("transform",this.transform);
-        thisModel.setValue("bounds",this.getBounds());
+        thisModel.setValue("bounds",this.getBoundsVector());
         thisModel.setValue("background",this.getBackground());
         thisModel.setValue("components",new ArrayJson(this));
         return thisModel;

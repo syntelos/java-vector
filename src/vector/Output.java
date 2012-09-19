@@ -51,7 +51,7 @@ public final class Output
 
         return (Require.Overlay == this.require);
     }
-    public Offscreen offscreen(Component component){
+    public Offscreen offscreen(java.awt.Component component){
 
         if (null == this.offscreen){
 

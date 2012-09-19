@@ -7,41 +7,95 @@
             "components": [
                 {
                     "class": "vector.Container",
-                    "background": "#FF0000"
+                    "components": [
+                        {
+                            "class": "vector.Border",
+			    "background": "#FF0000"
+                            "color": "#FFFFFF"
+                        }
+                    ]
                 },
                 {
                     "class": "vector.Container",
-                    "background": "#00FF00"
+                    "components": [
+                        {
+                            "class": "vector.Border",
+			    "background": "#00FF00"
+                            "color": "#FFFFFF"
+                        }
+                    ]
                 },
                 {
                     "class": "vector.Container",
-                    "background": "#0000FF"
+                    "components": [
+                        {
+                            "class": "vector.Border",
+			    "background": "#0000FF"
+                            "color": "#FFFFFF"
+                        }
+                    ]
                 },
 
                 {
                     "class": "vector.Container",
-                    "background": "#0000FF"
+                    "components": [
+                        {
+                            "class": "vector.Border",
+			    "background": "#0000FF"
+                            "color": "#FFFFFF"
+                        }
+                    ]
                 },
                 {
                     "class": "vector.Container",
-                    "background": "#FF0000"
+                    "components": [
+                        {
+                            "class": "vector.Border",
+			    "background": "#FF0000"
+                            "color": "#FFFFFF"
+                        }
+                    ]
                 },
                 {
                     "class": "vector.Container",
-                    "background": "#00FF00"
+                    "components": [
+                        {
+                            "class": "vector.Border",
+			    "background": "#00FF00"
+                            "color": "#FFFFFF"
+                        }
+                    ]
                 },
 
                 {
                     "class": "vector.Container",
-                    "background": "#00FF00"
+                    "components": [
+                        {
+                            "class": "vector.Border",
+			    "background": "#00FF00"
+                            "color": "#FFFFFF"
+                        }
+                    ]
                 },
                 {
                     "class": "vector.Container",
-                    "background": "#0000FF"
+                    "components": [
+                        {
+                            "class": "vector.Border",
+			    "background": "#0000FF"
+                            "color": "#FFFFFF"
+                        }
+                    ]
                 },
                 {
                     "class": "vector.Container",
-                    "background": "#FF0000"
+                    "components": [
+                        {
+                            "class": "vector.Border",
+			    "background": "#FF0000"
+                            "color": "#FFFFFF"
+                        }
+                    ]
                 }
             ]
         }

@@ -197,7 +197,8 @@ public class Grid
     public Grid outputScene(Graphics2D g){
         Shape shape = this.shape();
         if (null != shape){
-            g.transform(this.getTransformParent());
+            this.getTransformParent().transformFrom(g);
+
             g.setColor(this.getColor());
             g.draw(shape);
         }

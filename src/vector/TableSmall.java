@@ -8,7 +8,8 @@ import java.util.Arrays;
 
 /**
  * {@link TableSmall} orders staticly dimensioned children to fit a
- * defined number columns.
+ * defined number columns (default two), changing only their
+ * locations and then calling {@link Component#relocated()}.
  */
 public class TableSmall
     extends Container
