@@ -25,6 +25,7 @@ public class Button
             switch (e.getType()){
             case Action:
                 this.setLocationVector(this.randomLocation());
+                this.relocated();
                 this.outputScene();
                 return true;
             default:
