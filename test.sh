@@ -1,6 +1,6 @@
 #!/bin/bash
 
-jarf=$(ls vector-*.jar | tail -n 1 )
+jarf=$(ls vector-*.jar | egrep -v demo | tail -n 1 )
 if [ -n "${jarf}" ]&&[ -f "${jarf}" ]
 then
     for definition in *.json

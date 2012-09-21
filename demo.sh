@@ -13,7 +13,7 @@ libs=$(ls lib/*.jar )
 
 if [ -n "${libs}" ]
 then
-    jarf=$(ls vector-*.jar | tail -n 1 )
+    jarf=$(ls vector-demo-*.jar | tail -n 1 )
 
     if [ -n "${jarf}" ]&&[ -f "${jarf}" ]
     then
@@ -66,7 +66,7 @@ EOF
         #
     else
         cat<<EOF>&2
-Error, file not found: 'vector-X.Y.Z.jar'.  Run 'ant' to build.
+Error, file not found: 'vector-demo-X.Y.Z.jar'.  Run 'ant demo' to build.
 EOF
         exit 1
     fi

@@ -4,7 +4,7 @@ if [ -n "${1}" ]&&[ -f "${1}" ]
 then
     definition="${1}"
 
-    jarf=$(ls vector-*.jar | tail -n 1 )
+    jarf=$(ls vector-*.jar | egrep -v demo | tail -n 1 )
     if [ -n "${jarf}" ]&&[ -f "${jarf}" ]
     then
         cat<<EOF

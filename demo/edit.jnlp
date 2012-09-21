@@ -12,7 +12,7 @@
   <resources>
     <j2se version="1.6+"/>
 
-    <jar href="vector-1.0.1.jar" main="true"/>
+    <jar href="vector-demo-1.0.1.jar" main="true"/>
     <jar href="lib/joda-time-2.0.jar" />
     <jar href="lib/json-2.1.1.jar" />
     <jar href="lib/lxl-1.0.6.jar" />

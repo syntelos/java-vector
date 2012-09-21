@@ -9,6 +9,8 @@
   <property name="lib" value="lib"/>
   <property name="dst" value="."/>
 
+  <property name="demo.src" value="demo/src"/>
+
   <property name="compiler.source" value="1.5"/>
   <property name="compiler.target" value="1.5"/>
   <property name="compiler.debug" value="true"/>
@@ -24,6 +26,41 @@
       <include name="**/*.jar" />
     </fileset>
   </path>
+
+  <target name="demo" depends="demo-compile" description="Package demo jar, clean bin.  Depends on the target jar.">
+
+    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest">
+      <arg value="${toString:lib.path}"/>
+    </java>
+    <echo message="Main-Class: vector.Frame"/>
+    <echo message="Class-Path: ${lib.path.manifest}"/>
+
+    <delete file="${demo.jar}"/>
+    <jar jarfile="${demo.jar}" basedir="${bin}" >
+      <manifest>
+        <attribute name="Main-Class" value="vector.Frame"/>
+        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+      </manifest>
+      <zipfileset src="${target.jar}"/>
+    </jar>
+    <delete dir="${bin}"/>
+  </target>
+
+  <target name="demo-compile" depends="version" description="Compile src to bin">
+    <mkdir dir="${bin}"/>
+    <copy todir="${bin}">
+      <fileset dir="${demo.src}" includes="**/*.properties"/>
+      <fileset dir="${demo.src}" includes="**/*.txt"/>
+      <fileset dir="${demo.src}" includes="**/*.xml"/>
+    </copy>
+    <javac srcdir="${demo.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <pathelement path="${lib.path}"/>
+        <pathelement location="${target.jar}"/>
+      </classpath>
+    </javac>
+  </target>
 
   <target name="update" if="vector.update" depends="jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.update'.">
 
@@ -67,7 +104,7 @@
   <target name="version" description="Report current version.">
     <version/>
     <property name="target.jar" value="${dst}/${ant.project.name}-${this.version}.jar"/>
-    <property name="test.target.jar" value="${dst}/${ant.project.name}-test-${this.version}.jar"/>
+    <property name="demo.jar" value="${dst}/${ant.project.name}-demo-${this.version}.jar"/>
   </target>
 
   <target name="build" description="Increment version build number and report result.">
