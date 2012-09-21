@@ -1,25 +1,15 @@
 #!/bin/bash
 
-jarf=$(ls vector-*.jar | egrep -v demo | tail -n 1 )
-if [ -n "${jarf}" ]&&[ -f "${jarf}" ]
-then
-    for definition in *.json
-    do
-        cat<<EOF
-
-  Running '${definition}'...
-
+for definition in *.json
+do
+    if ./run.sh ${definition}
+    then
+        continue
+    else
+        cat<<EOF>&2
+Error running '${definition}'
 EOF
-        if java -jar ${jarf} ${definition}
-        then
-            continue
-        else
-            break
-        fi
-    done
-else
-    cat<<EOF>&2
-Error, vector.jar not found.  Need build.  Run 'ant'.
-EOF
-    exit 1
-fi
+        exit 1
+    fi
+done
+exit 0
