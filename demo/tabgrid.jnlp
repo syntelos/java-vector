@@ -2,7 +2,7 @@
 <jnlp
      spec="1.5+"
  codebase="http://java-vector.googlecode.com/git"
-     href="http://java-vector.googlecode.com/git/demo/tabgrid.jnlp">
+     href="demo/tabgrid.jnlp">
   <information>
     <title>Vector Demo 'tabgrid'</title>
     <vendor>The DigiVac Company</vendor>

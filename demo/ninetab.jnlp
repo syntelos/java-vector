@@ -2,7 +2,7 @@
 <jnlp
      spec="1.5+"
  codebase="http://java-vector.googlecode.com/git"
-     href="http://java-vector.googlecode.com/git/demo/ninetab.jnlp">
+     href="demo/ninetab.jnlp">
   <information>
     <title>Vector Demo 'ninetab'</title>
     <vendor>The DigiVac Company</vendor>

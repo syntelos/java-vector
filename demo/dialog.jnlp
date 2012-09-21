@@ -2,7 +2,7 @@
 <jnlp
      spec="1.5+"
  codebase="http://java-vector.googlecode.com/git"
-     href="http://java-vector.googlecode.com/git/demo/dialog.jnlp">
+     href="demo/dialog.jnlp">
   <information>
     <title>Vector Demo 'dialog'</title>
     <vendor>The DigiVac Company</vendor>
