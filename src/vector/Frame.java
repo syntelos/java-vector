@@ -27,8 +27,9 @@ import java.awt.Toolkit;
 import java.awt.geom.Dimension2D;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.net.MalformedURLException;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,11 +100,13 @@ public class Frame
 
         return this;
     }
-    public final Frame open(File file){
+    public final boolean open(File file){
 
-        this.display.open(file);
+        return this.display.open(file);
+    }
+    public final boolean open(URL url){
 
-        return this;
+        return this.display.open(url);
     }
 
 
@@ -112,17 +115,28 @@ public class Frame
         Frame frame = new Frame();
         if (0 < argv.length){
 
-            boolean error = false;
+            String string = argv[0];
 
-            File file = new File(argv[0]);
-            if (file.isFile()){
+            try {
+                URL url = new URL(string);
 
-                frame.open(file);
+                if (!frame.open(url))
+                    System.exit(1);
+
             }
-            else {
+            catch (MalformedURLException exc){
 
-                frame.warn("Error, unrecognized file '%s'",file);
-                System.exit(1);
+                File file = new File(string);
+                if (file.isFile()){
+
+                    if (!frame.open(file))
+                        System.exit(1);
+                }
+                else {
+
+                    frame.warn("Error, unrecognized file '%s'",file);
+                    System.exit(1);
+                }
             }
         }
     }

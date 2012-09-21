@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp
+     spec="1.5+"
+ codebase="http://java-vector.googlecode.com/git"
+     href="http://java-vector.googlecode.com/git/demo/ninetab.jnlp">
+  <information>
+    <title>Vector Demo 'ninetab'</title>
+    <vendor>The DigiVac Company</vendor>
+    <homepage href="http://www.digivac.com/"/>
+    <description>Vector scalable graphical user interfaces demo</description>
+  </information>
+  <resources>
+    <j2se version="1.6+"/>
+
+    <jar href="vector-1.0.1.jar" main="true"/>
+    <jar href="lib/joda-time-2.0.jar" />
+    <jar href="lib/json-2.1.1.jar" />
+    <jar href="lib/lxl-1.0.6.jar" />
+  </resources>
+
+  <application-desc main-class="vector.Frame">
+    <argument>http://java-vector.googlecode.com/git/ninetab.json</argument>
+  </application-desc>
+</jnlp>

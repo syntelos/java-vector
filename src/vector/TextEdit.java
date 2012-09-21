@@ -19,6 +19,7 @@
 package vector;
 
 import vector.text.Editor;
+import vector.text.Home;
 
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -29,6 +30,7 @@ import java.awt.Shape;
 public class TextEdit
     extends Text
 {
+    protected Home home = Home.Nil;
 
     protected Blink blink;
 
@@ -42,21 +44,23 @@ public class TextEdit
     public void init(){
         super.init();
 
+        this.home = Home.Nil;
+
         this.blink = new Blink(this,800);
 
         if (this.string instanceof Editor)
             ((Editor)this.string).end();
         else
-            this.string = new Editor();
+            this.string = new Editor(this.home);
     }
     @Override
     public Text setText(String text){
 
         if (null != text && 0 < text.length())
 
-            this.string = new Editor(text);
+            this.string = new Editor(this.home,text);
         else
-            this.string = new Editor();
+            this.string = new Editor(this.home);
 
         return this;
     }

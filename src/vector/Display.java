@@ -41,7 +41,9 @@ import java.awt.geom.Rectangle2D;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.io.IOException;
+import java.net.URL;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -689,6 +691,29 @@ public class Display
         catch (IOException exc){
 
             this.warn(exc,"Error reading file '%s'",file);
+
+            return false;
+        }
+    }
+    public boolean open(URL url){
+        try {
+            InputStream uin = url.openStream();
+            try {
+                Reader reader = new Reader();
+                Json json = reader.read(uin);
+                if (null != json)
+
+                    return this.fromJson(json);
+                else 
+                    return false;
+            }
+            finally {
+                uin.close();
+            }
+        }
+        catch (IOException exc){
+
+            this.warn(exc,"Error reading URL '%s'",url);
 
             return false;
         }
