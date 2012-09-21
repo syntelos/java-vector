@@ -36,13 +36,9 @@
     <echo message="Class-Path: ${lib.path.manifest}"/>
 
     <delete file="${demo.jar}"/>
-    <jar jarfile="${demo.jar}" basedir="${bin}" >
-      <manifest>
-        <attribute name="Main-Class" value="vector.Frame"/>
-        <attribute name="Class-Path" value="${lib.path.manifest}"/>
-      </manifest>
-      <zipfileset src="${target.jar}"/>
-    </jar>
+
+    <jar jarfile="${demo.jar}" basedir="${bin}" />
+
     <delete dir="${bin}"/>
   </target>
 

@@ -9,13 +9,25 @@ else
     use_git=false
 fi
 
+function download_style {
+    case "${1}" in
+        lib/lxl-*)
+            echo "eager";;
+        lib/json-*)
+            echo "eager";;
+        *)
+            echo "lazy";;
+    esac
+}
+
 libs=$(ls lib/*.jar )
 
 if [ -n "${libs}" ]
 then
-    jarf=$(ls vector-demo-*.jar | tail -n 1 )
+    jarfdemo=$(ls vector-demo-*.jar | tail -n 1 )
+    jarfcore=$(ls vector-*.jar | egrep -v demo | tail -n 1 )
 
-    if [ -n "${jarf}" ]&&[ -f "${jarf}" ]
+    if [ -n "${jarfdemo}" ]&&[ -f "${jarfdemo}" ]&&[ -n "${jarfcore}" ]&&[ -f "${jarfcore}" ]
     then
         for src in *.json
         do
@@ -36,12 +48,13 @@ then
   <resources>
     <j2se version="1.6+"/>
 
-    <jar href="${jarf}" main="true"/>
+    <jar href="${jarfcore}" main="true" download="eager"/>
+    <jar href="${jarfdemo}" download="eager"/>
 EOF
             for libf in ${libs}
             do
                 cat<<EOF>>${tgt}
-    <jar href="${libf}" />
+    <jar href="${libf}" download="$(download_style ${libf})" />
 EOF
             done
             cat<<EOF>>${tgt}
@@ -66,7 +79,7 @@ EOF
         #
     else
         cat<<EOF>&2
-Error, file not found: 'vector-demo-X.Y.Z.jar'.  Run 'ant demo' to build.
+Error, file not found: 'vector-X.Y.Z.jar' or 'vector-demo-X.Y.Z.jar'.  Run 'ant demo' to build.
 EOF
         exit 1
     fi
