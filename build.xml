@@ -47,6 +47,7 @@
   </target>
 
   <target name="demo-compile" depends="version" description="Compile src to bin">
+    <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
       <fileset dir="${demo.src}" includes="**/*.properties"/>
@@ -86,6 +87,7 @@
   </target>
 
   <target name="compile" depends="version" description="Compile src to bin">
+    <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
       <fileset dir="${src}" includes="**/*.properties"/>
