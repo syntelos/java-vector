@@ -194,7 +194,7 @@ Design
 
 Implementation
 
-  See src/vector/Abstract.java, etc..
+  See src/vector/AbstractComponent.java, etc..
 
   Patterns common to this package
 

@@ -273,22 +273,22 @@ public class Border
         final Shape shape = this.shape;
         if (null != shape){
             final boolean mouseIn = this.mouseIn;
-	    /*
-	     *
-	     */
+            /*
+             *
+             */
             final Color background = this.background;
-	    if (null != background){
-		final Color backgroundOver = this.backgroundOver;
-		if (null != backgroundOver && mouseIn) 
-		    g.setColor(backgroundOver);
-		else 
-		    g.setColor(this.background);
-
+            if (null != background){
+                final Color backgroundOver = this.backgroundOver;
+                if (null != backgroundOver && mouseIn) 
+                    g.setColor(backgroundOver);
+                else 
+                    g.setColor(this.background);
+                
                 g.fill(shape);
-	    }
-	    /*
-	     *
-	     */
+            }
+            /*
+             *
+             */
             final Color colorOver = this.colorOver;
             if (null != colorOver && mouseIn) 
                 g.setColor(colorOver);
