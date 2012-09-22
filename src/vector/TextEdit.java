@@ -30,7 +30,7 @@ import java.awt.Shape;
 public class TextEdit
     extends Text
 {
-    protected Home home = Home.Nil;
+    protected Home home;
 
     protected Blink blink;
 
@@ -52,6 +52,13 @@ public class TextEdit
             ((Editor)this.string).end();
         else
             this.string = new Editor(this.home);
+    }
+    @Override
+    public void destroy(){
+        super.destroy();
+
+        this.home = null;
+        this.blink = null;
     }
     @Override
     public Text setText(String text){

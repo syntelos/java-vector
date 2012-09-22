@@ -57,6 +57,7 @@ public class BorderComponent
             border.destroy();
         }
         this.background = null;
+        this.backgroundOver = null;
     }
     @Override
     public void resized(){

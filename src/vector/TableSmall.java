@@ -48,6 +48,7 @@ public class TableSmall
     public void init(){
         super.init();
 
+        this.cellSpacing = 0f;
         this.cols = 2;
     }
     @Override

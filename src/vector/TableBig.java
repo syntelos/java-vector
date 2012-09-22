@@ -50,7 +50,12 @@ public class TableBig
     public void init(){
         super.init();
 
+        this.cellSpacing = 0f;
+        this.cellWidth = 0f;
+        this.cellHeight = 0f;
         this.fixed = false;
+        this.rows = 0;
+        this.cols = 0;
     }
     @Override
     public void modified(){

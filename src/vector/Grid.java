@@ -44,7 +44,7 @@ public class Grid
     extends AbstractComponent
 {
 
-    protected Color color = Color.black;
+    protected Color color;
 
     protected boolean mouse;
 
@@ -64,12 +64,15 @@ public class Grid
     public void init(){
         super.init();
 
-        this.shape = null;
-        this.pointer = null;
+        this.color = Color.black;
+        this.mouse = false;
     }
     @Override
     public void destroy(){
         super.destroy();
+
+        this.domain = null;
+        this.range = null;
 
         this.shape = null;
         this.pointer = null;

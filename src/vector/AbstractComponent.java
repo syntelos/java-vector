@@ -32,13 +32,13 @@ public abstract class AbstractComponent
     implements Component
 {
 
-    protected boolean visible = true, mouseIn;
+    protected boolean visible, mouseIn;
 
     protected Component parent;
 
     protected final Transform transform = new Transform();
 
-    protected final Bounds bounds = new Bounds(0,0,0,0);
+    protected final Bounds bounds = new Bounds();
 
 
     public AbstractComponent(){
@@ -57,6 +57,9 @@ public abstract class AbstractComponent
         Component parent = this.getParentVector();
 
         this.destroy();
+
+        this.visible = true;
+        this.mouseIn = false;
 
         this.transform.init();
 
@@ -77,7 +80,6 @@ public abstract class AbstractComponent
      */
     public void destroy(){
 
-        this.visible = true;
         this.parent = null;
     }
     /**

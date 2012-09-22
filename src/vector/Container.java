@@ -72,7 +72,6 @@ public class Container<T extends Component>
         }
         finally {
             this.components = null;
-            this.fit = false;
         }
     }
     @Override

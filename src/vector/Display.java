@@ -92,6 +92,8 @@ public class Display<T extends Component>
 
         this.destroy();
 
+        this.mouseIn = false;
+
         this.transform.init();
 
         this.layout();
@@ -111,6 +113,8 @@ public class Display<T extends Component>
         }
         finally {
             this.components = null;
+            this.boundsNative = null;
+            this.boundsUser = null;
 
             this.flush();
         }

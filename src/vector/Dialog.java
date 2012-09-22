@@ -49,11 +49,6 @@ public class Dialog<E extends Enum<E>>
 
 
     @Override
-    public void init(){
-        super.init();
-
-    }
-    @Override
     public void destroy(){
         super.destroy();
 

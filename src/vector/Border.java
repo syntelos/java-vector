@@ -53,10 +53,10 @@ public class Border
     }
 
 
-    protected Color color = Color.black, colorOver;
+    protected Color color, colorOver;
     protected Color background, backgroundOver;
-    protected Style style = Style.SQUARE;
-    protected boolean fill = false, fixed = false;
+    protected Style style;
+    protected boolean fill, fixed;
     protected float arc;
     protected Stroke stroke, strokeOver;
     protected Shape shape;
@@ -72,21 +72,20 @@ public class Border
         super.init();
 
         this.color = Color.black;
-        this.colorOver = null;
-        this.background = null;
-        this.backgroundOver = null;
         this.style = Style.SQUARE;
         this.fill = false;
         this.fixed = false;
-        this.stroke = null;
-        this.strokeOver = null;
         this.arc = 0f;
-        this.shape = null;
     }
     @Override
     public void destroy(){
         super.destroy();
 
+        this.colorOver = null;
+        this.background = null;
+        this.backgroundOver = null;
+        this.stroke = null;
+        this.strokeOver = null;
         this.shape = null;
     }
     @Override
