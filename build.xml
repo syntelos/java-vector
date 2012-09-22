@@ -108,19 +108,16 @@
   <target name="build" description="Increment version build number and report result.">
     <version-build/>
     <version/>
-    <antcall target="gen"/>
   </target>
 
   <target name="major" description="Increment version major number and report result.">
     <version-major/>
     <version/>
-    <antcall target="gen"/>
   </target>
 
   <target name="minor" description="Increment version minor number and report result.">
     <version-minor/>
     <version/>
-    <antcall target="gen"/>
   </target>
 
 </project>

@@ -39,9 +39,9 @@ import java.awt.geom.Rectangle2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Container
+public class Container<T extends Component>
     extends AbstractComponent
-    implements Component.Container
+    implements Component.Container<T>
 {
 
     protected final Logger log = Logger.getLogger(this.getClass().getName());
@@ -299,7 +299,7 @@ public class Container
         return (Container)super.outputOverlay();
     }
 
-    public final java.util.Iterator<Component> iterator(){
+    public final java.util.Iterator<T> iterator(){
         return new Component.Iterator(this.components);
     }
     public final int count(){
@@ -310,9 +310,9 @@ public class Container
 
         return Component.Tools.Has(this.components,idx);
     }
-    public final Component get(int idx){
+    public final T get(int idx){
 
-        return Component.Tools.Get(this.components,idx);
+        return (T)Component.Tools.Get(this.components,idx);
     }
     public final int indexOf(Component comp){
 
@@ -322,7 +322,7 @@ public class Container
 
         return Component.Tools.IndexOf(this.components,compClass);
     }
-    public final Component add(Component comp){
+    public final T add(T comp){
         if (null != comp){
             this.components = Component.Tools.Add(this.components,comp);
 
@@ -331,26 +331,26 @@ public class Container
         }
         return comp;
     }
-    public final Component addUnique(Component comp){
+    public final T addUnique(T comp){
         int idx = Component.Tools.IndexOf(this.components,comp.getClass());
         if (-1 < idx)
-            return Component.Tools.Get(this.components,idx);
+            return (T)Component.Tools.Get(this.components,idx);
         else 
             return this.add(comp);
     }
-    public final Component remove(Component comp){
+    public final T remove(T comp){
         return this.remove(Component.Tools.IndexOf(this.components,comp));
     }
-    public final Component remove(int idx){
-        Component comp = null;
+    public final T remove(int idx){
+        T comp = null;
         if (-1 < idx){
-            comp = this.components[idx];
+            comp = (T)this.components[idx];
 
             this.components = Component.Tools.Remove(this.components,idx);
         }
         return comp;
     }
-    public Component.Iterator listMouseIn(){
+    public Component.Iterator<T> listMouseIn(){
 
         return Component.Tools.ListMouseIn(this.components);
     }
@@ -428,13 +428,18 @@ public class Container
             float x1 = Float.MIN_VALUE, y1 = Float.MIN_VALUE;
 
             for (Component c : this){
-                Bounds cb = c.getBoundsVector();
 
-                x0 = Math.min(x0,cb.x);
-                y0 = Math.min(y0,cb.y);
+                if (c instanceof Border)
+                    continue;
+                else {
+                    Bounds cb = c.getBoundsVector();
 
-                x1 = Math.max(x1,(cb.x+cb.width));
-                y1 = Math.max(y1,(cb.y+cb.height));
+                    x0 = Math.min(x0,cb.x);
+                    y0 = Math.min(y0,cb.y);
+
+                    x1 = Math.max(x1,(cb.x+cb.width));
+                    y1 = Math.max(y1,(cb.y+cb.height));
+                }
             }
 
             /*

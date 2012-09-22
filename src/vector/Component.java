@@ -359,16 +359,16 @@ public interface Component
      * 
      * @see Display
      */
-    public interface Container
+    public interface Container<T extends Component>
         extends Component,
-                Iterable<Component>
+                Iterable<T>
     {
 
         public int count();
 
         public boolean has(int idx);
 
-        public Component get(int idx);
+        public T get(int idx);
 
         public int indexOf(Component comp);
 
@@ -382,19 +382,19 @@ public interface Component
          * This process have been defined in the {@link
          * Component$Tools Tools}.
          */
-        public Component add(Component comp);
+        public T add(T comp);
         /**
          * If another component exists in the same class (including
          * subclass) of the argument, then return it.  Otherwise add
          * the argument.
          */
-        public Component addUnique(Component comp);
+        public T addUnique(T comp);
 
-        public Component remove(Component comp);
+        public T remove(T comp);
 
-        public Component remove(int idx);
+        public T remove(int idx);
 
-        public Component.Iterator listMouseIn();
+        public Component.Iterator<T> listMouseIn();
         /**
          * Log warning
          */
@@ -608,10 +608,10 @@ public interface Component
     /**
      * 
      */
-    public static class Iterator
+    public static class Iterator<T extends Component>
         extends Object
-        implements Iterable<Component>,
-                   java.util.Iterator<Component>
+        implements Iterable<T>,
+                   java.util.Iterator<T>
     {
 
         private final Component[] list;
@@ -637,16 +637,16 @@ public interface Component
             else
                 return this.list.clone();
         }
-        public java.util.Iterator<Component> iterator(){
+        public java.util.Iterator<T> iterator(){
 
             return this;
         }
         public boolean hasNext(){
             return (this.index < this.count);
         }
-        public Component next(){
+        public T next(){
             if (this.index < this.count)
-                return this.list[this.index++];
+                return (T)this.list[this.index++];
             else
                 throw new java.util.NoSuchElementException(String.valueOf(this.index));
         }

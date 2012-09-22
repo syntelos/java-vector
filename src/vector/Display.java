@@ -49,9 +49,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class Display
+public class Display<T extends Component>
     extends java.awt.Canvas
-    implements Component.Container,
+    implements Component.Container<T>,
                java.awt.event.KeyListener,
                java.awt.event.MouseListener,
                java.awt.event.MouseMotionListener,
@@ -365,7 +365,7 @@ public class Display
         return this;
     }
 
-    public final java.util.Iterator<Component> iterator(){
+    public final java.util.Iterator<T> iterator(){
         return new Component.Iterator(this.components);
     }
     public final int count(){
@@ -376,9 +376,9 @@ public class Display
 
         return Component.Tools.Has(this.components,idx);
     }
-    public final Component get(int idx){
+    public final T get(int idx){
 
-        return Component.Tools.Get(this.components,idx);
+        return (T)Component.Tools.Get(this.components,idx);
     }
     public final int indexOf(Component comp){
 
@@ -388,7 +388,7 @@ public class Display
 
         return Component.Tools.IndexOf(this.components,compClass);
     }
-    public final Component add(Component comp){
+    public final T add(T comp){
         if (null != comp){
             this.components = Component.Tools.Add(this.components,comp);
 
@@ -397,26 +397,26 @@ public class Display
         }
         return comp;
     }
-    public final Component addUnique(Component comp){
+    public final T addUnique(T comp){
         int idx = Component.Tools.IndexOf(this.components,comp.getClass());
         if (-1 < idx)
-            return Component.Tools.Get(this.components,idx);
+            return (T)Component.Tools.Get(this.components,idx);
         else 
             return this.add(comp);
     }
-    public final Component remove(Component comp){
+    public final T remove(T comp){
         return this.remove(Component.Tools.IndexOf(this.components,comp));
     }
-    public final Component remove(int idx){
-        Component comp = null;
+    public final T remove(int idx){
+        T comp = null;
         if (-1 < idx){
-            comp = this.components[idx];
+            comp = (T)this.components[idx];
 
             this.components = Component.Tools.Remove(this.components,idx);
         }
         return comp;
     }
-    public Component.Iterator listMouseIn(){
+    public Component.Iterator<T> listMouseIn(){
 
         return Component.Tools.ListMouseIn(this.components);
     }
