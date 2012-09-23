@@ -31,6 +31,18 @@ import java.util.StringTokenizer;
  * two layout strategies: wrapped or preformatted (not wrapped)
  * layout.
  * 
+ * <h3>Font &amp; Padding</h3>
+ * 
+ * This class employs "font" and "padding" for overall layout
+ * purposes, exclusively.  The font is employed for its default
+ * padding.  The default padding may be modified by the "padding"
+ * property.  The default font is defined in the {@link Font} class.
+ * 
+ * In the layout process, the individual text padding is cleared -- as
+ * necessarily true in the application of this class.
+ * 
+ * <h3>Layout</h3>
+ * 
  * This class requires that {@link Text} objects be grouped for style,
  * directionality, and white - space changes.
  * 
@@ -44,6 +56,10 @@ public class TextLayout
     extends Container<Text>
 {
 
+    protected Font font;
+
+    protected final Padding padding = new Padding();
+
     protected boolean wrap;
 
 
@@ -56,6 +72,8 @@ public class TextLayout
     public void init(){
         super.init();
 
+        this.font = Font.Default;
+        this.padding.set(this.font);
         this.wrap = false;
     }
     @Override
@@ -80,6 +98,46 @@ public class TextLayout
         super.relocated();
     }
 
+    public final Font getFont(){
+
+        return this.font;
+    }
+    /**
+     * Define font and padding 
+     */
+    public final TextLayout setFont(Font font){
+        if (null != font){
+
+            this.font = font;
+
+            this.padding.set(font);
+        }
+        return this;
+    }
+    public final TextLayout setFont(java.awt.Font font){
+        if (font instanceof Font)
+            return this.setFont((Font)font);
+        else
+            return this.setFont(new Font(font));
+    }
+    public final Padding getPadding(){
+
+        return this.padding.clone();
+    }
+    public final TextLayout setPadding(Padding padding){
+
+        if (null != padding){
+
+            this.padding.set(padding);
+        }
+        return this;
+    }
+    public final TextLayout clearPadding(){
+
+        this.padding.init();
+
+        return this;
+    }
     /**
      * Resize to size of children
      */
@@ -108,6 +166,8 @@ public class TextLayout
     public ObjectJson toJson(){
         ObjectJson thisModel =  super.toJson();
 
+        thisModel.setValue("font", this.getFont());
+        thisModel.setValue("padding", this.getPadding());
         thisModel.setValue("wrap",this.getWrap());
 
         return thisModel;
@@ -116,6 +176,8 @@ public class TextLayout
 
         super.fromJson(thisModel);
 
+        this.setFont( (Font)thisModel.getValue("font",Font.class));
+        this.setPadding( (Padding)thisModel.getValue("padding",Padding.class));
         this.setWrap( (Boolean)thisModel.getValue("wrap"));
 
         this.parse( (String)thisModel.getValue("text"));
@@ -143,12 +205,13 @@ public class TextLayout
     protected void layout(){
 
         Bounds shape;
-        float x = 0, y = 0, lineH = 0, x1, y1;
+        float x = this.padding.left, y = this.padding.top, lineH = 0, x1, y1;
 
         if (this.wrap){
             final Bounds bounds = this.getBoundsVector();
 
             for (Text text: this){
+                text.clearPadding();
                 shape = text.shapeArea();
                 x1 = (shape.x+shape.width);
                 y1 = (shape.y+shape.height);
@@ -174,7 +237,7 @@ public class TextLayout
                         x += x1;
                     }
                     else {
-                        x = 0;
+                        x = this.padding.left;
                         y += lineH;
 
                         shape.x = x;
@@ -189,7 +252,7 @@ public class TextLayout
             x1 = 0; y1 = 0;
 
             for (Text text: this){
-
+                text.clearPadding();
                 Visual.Type type = text.getType();
 
                 switch(type){
@@ -197,7 +260,7 @@ public class TextLayout
                 case ParagraphSeparator:
                 case Control:
 
-                    x = 0;
+                    x = this.padding.left;
                     y += lineH;
 
                     shape = text.shapeArea();

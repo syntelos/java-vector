@@ -74,7 +74,7 @@ public class IBeam {
         this.left = true;
 
         final Font font = text.getFont();
-        final Padding padding = font.getPadding();
+        final Padding padding = text.getPadding();
 
         final Path2D.Float cursor = new Path2D.Float();
 

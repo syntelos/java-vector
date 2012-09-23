@@ -47,7 +47,7 @@ public class Font
     public final static Font Default = new Font(new java.awt.Font(Font.MONOSPACED,Font.PLAIN,(int)Font.SZ));
 
 
-    protected final Padding padding;
+
     public final FontRenderContext frc;
     public final FontMetrics metrics;
     public final int ascent, descent, height, em;
@@ -58,8 +58,7 @@ public class Font
     }
     public Font(java.awt.Font font){
         super(font);
-        float prop = font.getSize2D()/SZ;
-        this.padding = new Padding( prop*PW, prop*PH);
+
         this.metrics = TK.getFontMetrics(this);
         this.ascent = this.metrics.getAscent();
         this.descent = this.metrics.getDescent();
@@ -73,28 +72,25 @@ public class Font
     }
 
 
-    public final Bounds boundingBox(int rows, int cols){
-        final float x1 = this.padding.left;
-        final float y1 = this.padding.top;
-        final float x2 = (this.padding.getWidth()+(this.em * cols));
+    public final Padding defaultPadding(){
+        final float prop = this.getSize2D()/SZ;
+        return new Padding( prop*PW, prop*PH);
+    }
+    public final Bounds boundingBox(Padding padding, int rows, int cols){
+        final float x1 = padding.left;
+        final float y1 = padding.top;
+        final float x2 = (padding.getWidth()+(this.em * cols));
         final float y2 = (y1+(this.height*rows));
             
         return new Bounds(x1,y1,(x2-x1),(y2-y1));
     }
-    public final Bounds boundingBox(int rows, float width){
-        final float x1 = this.padding.left;
-        final float y1 = this.padding.top;
-        final float x2 = (this.padding.getWidth()+width);
+    public final Bounds boundingBox(Padding padding, int rows, float width){
+        final float x1 = padding.left;
+        final float y1 = padding.top;
+        final float x2 = (padding.getWidth()+width);
         final float y2 = (y1+(this.height*rows));
             
         return new Bounds(x1,y1,(x2-x1),(y2-y1));
-    }
-    public final Padding getPadding(){
-        Padding padding = this.padding;
-        if (null != padding)
-            return padding.clone();
-        else
-            throw new IllegalStateException("Missing padding");
     }
     public final Font decrementSize(){
         return this.decrementSize(2);

@@ -84,6 +84,14 @@ public class Padding
     }
 
 
+    public Padding init(){
+
+        this.left = 0f;
+        this.right = 0f;
+        this.top = 0f;
+        this.bottom = 0f;
+        return this;
+    }
     public float getWidth(){
         return (this.left + this.right);
     }
@@ -93,6 +101,14 @@ public class Padding
     public Padding set(java.awt.geom.RectangularShape rect){
 
         return this.set(rect.getX(), 0.0, rect.getY(), 0.0);
+    }
+    public Padding set(Font font){
+
+        return this.set(font.defaultPadding());
+    }
+    public Padding set(Padding p){
+
+        return this.set(p.left, p.right, p.top, p.bottom);
     }
     public Padding set(float left, float right, float top, float bottom){
         this.left = left;
@@ -116,6 +132,22 @@ public class Padding
         this.top = h2;
         this.bottom = h2;
         return this;
+    }
+    public final Bounds boundingBox(Font font, int rows, int cols){
+        final float x1 = this.left;
+        final float y1 = this.top;
+        final float x2 = (this.getWidth()+(font.em * cols));
+        final float y2 = (y1+(font.height*rows));
+            
+        return new Bounds(x1,y1,(x2-x1),(y2-y1));
+    }
+    public final Bounds boundingBox(Font font, int rows, float width){
+        final float x1 = this.left;
+        final float y1 = this.top;
+        final float x2 = (this.getWidth()+width);
+        final float y2 = (y1+(font.height*rows));
+            
+        return new Bounds(x1,y1,(x2-x1),(y2-y1));
     }
     public Padding clone(){
         try {

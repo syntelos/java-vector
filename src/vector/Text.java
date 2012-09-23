@@ -45,6 +45,8 @@ public class Text
 
     protected Font font;
 
+    protected final Padding padding = new Padding();
+
     protected Color color, colorOver;
 
     protected Stroke stroke, strokeOver;
@@ -76,6 +78,7 @@ public class Text
         this.fill = true;
         this.fixed = false;
         this.cols = 25;
+        this.padding.set(this.font);
     }
     /**
      * This method will not remove the text string, itself, in order
@@ -131,14 +134,17 @@ public class Text
 
         return this.font;
     }
+    /**
+     * Define font and padding 
+     */
     public final Text setFont(Font font){
         if (null != font){
+
             this.font = font;
 
-            return this;
+            this.padding.set(font);
         }
-        else
-            throw new IllegalArgumentException();
+        return this;
     }
     public final Text setFont(java.awt.Font font){
         if (font instanceof Font)
@@ -146,11 +152,26 @@ public class Text
         else
             return this.setFont(new Font(font));
     }
-    public final Text setFont(String code){
-        if (null != code)
-            return this.setFont(Font.decode(code));
-        else
-            return this;
+    public final Padding getPadding(){
+
+        return this.padding.clone();
+    }
+    public final Text setPadding(Padding padding){
+
+        if (null != padding){
+
+            this.padding.set(padding);
+        }
+        return this;
+    }
+    /**
+     * For {@link TextLayout} children
+     */
+    public final Text clearPadding(){
+
+        this.padding.init();
+
+        return this;
     }
     public final Color getColor(){
 
@@ -162,12 +183,6 @@ public class Text
         }
         return this;
     }
-    public final Text setColor(String code){
-        if (null != code)
-            return this.setColor(new Color(code));
-        else
-            return this;
-    }
     public final Color getColorOver(){
 
         return this.colorOver;
@@ -177,12 +192,6 @@ public class Text
             this.colorOver = colorOver;
         }
         return this;
-    }
-    public final Text setColorOver(String code){
-        if (null != code)
-            return this.setColorOver(new Color(code));
-        else
-            return this;
     }
     public final boolean isFill(){
         return this.fill;
@@ -328,8 +337,8 @@ public class Text
      */
     public Point2D.Float getShapeBaseline(){
 
-        final float x = this.font.padding.left;
-        final float y = (this.font.ascent + this.font.padding.top);
+        final float x = this.padding.left;
+        final float y = (this.font.ascent + this.padding.top);
 
         return new Point2D.Float(x,y);
     }
@@ -409,7 +418,7 @@ public class Text
 
         final int ix = (idx<<1);
 
-        return new Point2D.Float(this.positions()[ix],this.font.padding.top);
+        return new Point2D.Float(this.positions()[ix],this.padding.top);
     }
     /**
      * Shape coordinate space
@@ -418,7 +427,7 @@ public class Text
 
         final int ix = (idx+1)<<1;
 
-        return new Point2D.Float(this.positions()[ix],this.font.padding.top);
+        return new Point2D.Float(this.positions()[ix],this.padding.top);
     }
     /**
      * Shape coordinate space
@@ -443,7 +452,7 @@ public class Text
         final float[] positions = this.positions();
 
         final float x1 = positions[start<<1];
-        final float y1 = this.font.padding.top;
+        final float y1 = this.padding.top;
         final float x2 = positions[(end-1)<<1];
         final float y2 = (y1+this.font.height);
 
@@ -455,7 +464,7 @@ public class Text
      */
     public final Bounds shapeArea(){
 
-        return this.font.boundingBox(1,this.shapeAreaWidth());
+        return this.font.boundingBox(this.getPadding(),1,this.shapeAreaWidth());
     }
     protected float shapeAreaWidth(){
         if (this.fixed)
@@ -516,7 +525,8 @@ public class Text
         ObjectJson thisModel = super.toJson();
 
         thisModel.setValue("text", this.toString());
-        thisModel.setValue("font", this.getFont().toString());
+        thisModel.setValue("font", this.getFont());
+        thisModel.setValue("padding", this.getPadding());
         thisModel.setValue("color", this.getColor());
         thisModel.setValue("color-over", this.getColorOver());
         thisModel.setValue("fill",this.getFill());
@@ -532,7 +542,8 @@ public class Text
         super.fromJson(thisModel);
 
         this.setText( (String)thisModel.getValue("text"));
-        this.setFont( (String)thisModel.getValue("font"));
+        this.setFont( (Font)thisModel.getValue("font",Font.class));
+        this.setPadding( (Padding)thisModel.getValue("padding",Padding.class));
         this.setColor( (Color)thisModel.getValue("color",Color.class));
         this.setColorOver( (Color)thisModel.getValue("color-over",Color.class));
         this.setFill( (Boolean)thisModel.getValue("fill"));
