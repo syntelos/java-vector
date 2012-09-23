@@ -424,6 +424,10 @@ public class Display<T extends Component>
 
         return Component.Tools.ListMouseIn(this.components);
     }
+    public Component.Iterator<T> list(Class<T> clas){
+
+        return Component.Tools.List(this.components,clas);
+    }
     public final Display warn(Throwable t, String fmt, Object... args){
 
         this.log.log(Level.WARNING,String.format(fmt,args),t);

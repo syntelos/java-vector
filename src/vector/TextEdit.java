@@ -61,7 +61,7 @@ public class TextEdit
         this.blink = null;
     }
     @Override
-    public Text setText(String text){
+    public TextEdit setText(String text){
 
         if (null != text && 0 < text.length())
 
@@ -151,7 +151,7 @@ public class TextEdit
             return super.input(e);
         }
     }
-    public Text outputOverlay(Graphics2D g){
+    public TextEdit outputOverlay(Graphics2D g){
 
         super.outputOverlay(g);
 

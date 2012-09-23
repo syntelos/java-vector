@@ -28,8 +28,7 @@ import java.util.StringTokenizer;
 
 /**
  * Any number of pieces of {@link Text} will be relocated for one of
- * two layout strategies: wrapped or preformatted (not wrapped)
- * layout.
+ * two layout strategies: wrapped or preformatted (not wrapped).
  * 
  * <h3>Font &amp; Padding</h3>
  * 
@@ -53,7 +52,7 @@ import java.util.StringTokenizer;
  * - space with wrapping, and vertical white - space without wrapping.
  */
 public class TextLayout
-    extends Container<Text>
+    extends Container<Component.Layout.Text>
 {
 
     protected Font font;
@@ -197,6 +196,8 @@ public class TextLayout
 
             Text child = new Text();
             this.add(child);
+            child.setFont(this.font);
+            child.clearPadding();
             child.setText(tok);
             child.setFixed(true);
             child.modified();
@@ -210,9 +211,12 @@ public class TextLayout
         if (this.wrap){
             final Bounds bounds = this.getBoundsVector();
 
-            for (Text text: this){
-                text.clearPadding();
-                shape = text.shapeArea();
+            for (Component.Layout.Text text: this){
+
+                text.layout(Component.Layout.Order.Content);
+
+                shape = text.getBoundsVector();
+
                 x1 = (shape.x+shape.width);
                 y1 = (shape.y+shape.height);
 
@@ -251,19 +255,20 @@ public class TextLayout
         else {
             x1 = 0; y1 = 0;
 
-            for (Text text: this){
-                text.clearPadding();
-                Visual.Type type = text.getType();
+            for (Component.Layout.Text text: this){
+
+                text.layout(Component.Layout.Order.Content);
+
+                shape = text.getBoundsVector();
+
+                Component.Layout.Text.Whitespace type = text.queryLayoutText();
 
                 switch(type){
-                case LineSeparator:
-                case ParagraphSeparator:
-                case Control:
+                case Vertical:
 
                     x = this.padding.left;
                     y += lineH;
 
-                    shape = text.shapeArea();
                     x1 = (shape.x+shape.width);
                     y1 = (shape.y+shape.height);
 
@@ -273,7 +278,6 @@ public class TextLayout
 
                     x += x1;
 
-                    shape = text.shapeArea();
                     x1 = (shape.x+shape.width);
                     y1 = (shape.y+shape.height);
 

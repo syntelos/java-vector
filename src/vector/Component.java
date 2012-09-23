@@ -355,6 +355,88 @@ public interface Component
     public boolean drop(Component c);
 
     /**
+     * Layout determination support for strong container dependence on
+     * its children.
+     * 
+     * @see Component$Layout$Text
+     * @see TextLayout
+     */
+    public interface Layout
+        extends Component
+    {
+        /**
+         * Layout strategy
+         */
+        public enum Order {
+            /**
+             * This component's layout strategy derives its bounding
+             * box from Component Parent
+             */
+            Parent, 
+            /**
+             * This component's layout strategy derives its bounding
+             * box from Component Content, including shapes and
+             * children
+             */
+            Content;
+        }
+
+        /**
+         * The implementor detects its layout strategy from its
+         * explicit state, and returns an Order value to reflect that
+         * state.
+         * 
+         * @return Current layout strategy
+         */
+        public Order queryLayout();
+        /**
+         * This is the {@link Component$Layout layout component}
+         * operator.  It may be called by a parent to notify its
+         * children of layout requirements.  
+         * 
+         * The definition of this method shall update explicit state
+         * as required and then call <code>this.modified()</code>.
+         * 
+         * It's operation is identical to other processes to update
+         * explicit state and call <code>modified</code>.
+         */
+        public void layout(Order order);
+
+        /**
+         * Text layout determination supports text formatting.
+         * 
+         * @see Component$Layout
+         * @see TextLayout
+         */
+        public interface Text
+            extends Layout
+        {
+            /**
+             * Text formatting characteristics
+             */
+            public enum Whitespace {
+                /**
+                 * Non - white - space text element
+                 */
+                Inline,
+                /**
+                 * Vertical whitespace text element
+                 */
+                Vertical, 
+                /**
+                 * Horizontal whitespace text element
+                 */
+                Horizontal;
+            }
+
+            /**
+             * @return Text formatting type of this object
+             */
+            public Whitespace queryLayoutText();
+        }
+    }
+
+    /**
      * Ordered list of component children.
      * 
      * @see Display
@@ -393,8 +475,15 @@ public interface Component
         public T remove(T comp);
 
         public T remove(int idx);
-
+        /**
+         * List all descendants with mouseIn true
+         */
         public Component.Iterator<T> listMouseIn();
+        /**
+         * List immediate descendants in (members of) the argument
+         * class
+         */
+        public Component.Iterator<T> list(Class<T> clas);
         /**
          * Log warning
          */
@@ -531,6 +620,17 @@ public interface Component
                 else if (component instanceof Container){
 
                     list = Cat(list,((Container)component).listMouseIn());
+                }
+            }
+            return new Component.Iterator(list);
+        }
+        public static Component.Iterator List(Component[] components, Class clas){
+            Component[] list = null;
+            final int count = Count(components);
+            for (int cc = 0; cc < count; cc++){
+                Component component = components[cc];
+                if (clas.isAssignableFrom(component.getClass())){
+                    list = Add(list,component);
                 }
             }
             return new Component.Iterator(list);

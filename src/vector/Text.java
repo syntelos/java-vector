@@ -40,7 +40,8 @@ import java.awt.geom.Rectangle2D;
  */
 public class Text
     extends BorderComponent
-    implements CharSequence
+    implements CharSequence,
+               Component.Layout.Text
 {
 
     protected Font font;
@@ -130,6 +131,37 @@ public class Text
 
         this.layout();
     }
+    public Order queryLayout(){
+        if (this.fixed)
+            return Order.Content;
+        else
+            return Order.Parent;
+    }
+    public void layout(Order order){
+        switch(order){
+        case Parent:
+            this.fixed = false;
+            break;
+        case Content:
+            this.fixed = true;
+            break;
+        default:
+            throw new IllegalStateException(order.name());
+        }
+        this.modified();
+    }
+    public Whitespace queryLayoutText(){
+        switch(this.getType()){
+        case LineSeparator:
+        case ParagraphSeparator:
+        case Control:
+            return Whitespace.Vertical;
+        case SpaceSeparator:
+            return Whitespace.Horizontal;
+        default:
+            return Whitespace.Inline;
+        }
+    }
     public final Font getFont(){
 
         return this.font;
@@ -137,7 +169,7 @@ public class Text
     /**
      * Define font and padding 
      */
-    public final Text setFont(Font font){
+    public final vector.Text setFont(Font font){
         if (null != font){
 
             this.font = font;
@@ -146,7 +178,7 @@ public class Text
         }
         return this;
     }
-    public final Text setFont(java.awt.Font font){
+    public final vector.Text setFont(java.awt.Font font){
         if (font instanceof Font)
             return this.setFont((Font)font);
         else
@@ -156,7 +188,7 @@ public class Text
 
         return this.padding.clone();
     }
-    public final Text setPadding(Padding padding){
+    public final vector.Text setPadding(Padding padding){
 
         if (null != padding){
 
@@ -167,7 +199,7 @@ public class Text
     /**
      * For {@link TextLayout} children
      */
-    public final Text clearPadding(){
+    public final vector.Text clearPadding(){
 
         this.padding.init();
 
@@ -177,7 +209,7 @@ public class Text
 
         return this.color;
     }
-    public final Text setColor(Color color){
+    public final vector.Text setColor(Color color){
         if (null != color){
             this.color = color;
         }
@@ -187,7 +219,7 @@ public class Text
 
         return this.colorOver;
     }
-    public final Text setColorOver(Color colorOver){
+    public final vector.Text setColorOver(Color colorOver){
         if (null != colorOver){
             this.colorOver = colorOver;
         }
@@ -199,11 +231,11 @@ public class Text
     public final Boolean getFill(){
         return this.fill;
     }
-    public final Text setFill(boolean fill){
+    public final vector.Text setFill(boolean fill){
         this.fill = fill;
         return this;
     }
-    public final Text setFill(Boolean fill){
+    public final vector.Text setFill(Boolean fill){
         if (null != fill)
             this.fill = fill;
         return this;
@@ -214,11 +246,11 @@ public class Text
     public final Boolean getFixed(){
         return this.fixed;
     }
-    public final Text setFixed(boolean fixed){
+    public final vector.Text setFixed(boolean fixed){
         this.fixed = fixed;
         return this;
     }
-    public final Text setFixed(Boolean fixed){
+    public final vector.Text setFixed(Boolean fixed){
         if (null != fixed){
             this.fixed = fixed;
         }
@@ -227,7 +259,7 @@ public class Text
     public final String getText(){
         return this.toString();
     }
-    public Text setText(String text){
+    public vector.Text setText(String text){
 
         if (null != text && 0 < text.length()){
 
@@ -243,13 +275,13 @@ public class Text
     public final int getCols(){
         return this.cols;
     }
-    public final Text setCols(int cols){
+    public final vector.Text setCols(int cols){
         if (0 < cols){
             this.cols = cols;
         }
         return this;
     }
-    public final Text setCols(Integer cols){
+    public final vector.Text setCols(Integer cols){
         if (null != cols)
             return this.setCols(cols.intValue());
         else
@@ -259,7 +291,7 @@ public class Text
 
         return this.stroke;
     }
-    public final Text setStroke(Stroke stroke){
+    public final vector.Text setStroke(Stroke stroke){
 
         this.stroke = stroke;
 
@@ -269,7 +301,7 @@ public class Text
 
         return this.strokeOver;
     }
-    public final Text setStrokeOver(Stroke strokeOver){
+    public final vector.Text setStrokeOver(Stroke strokeOver){
 
         this.strokeOver = strokeOver;
 
@@ -480,7 +512,7 @@ public class Text
             }
         }
     }
-    public Text outputScene(Graphics2D g){
+    public vector.Text outputScene(Graphics2D g){
 
         super.outputScene(g);
 
