@@ -1,0 +1,12 @@
+{
+  "background": "#FFFFFF",
+  "components": [
+    {
+      "class": "vector.TextLayout",
+      "color": "#000000",
+      "bounds": "(50,50,50,50)",
+      "fit": true,
+      "text": "    protected float shapeAreaWidth(){\n        if (this.fixed)\n            return this.font.em*this.getCols();\n        else {\n            Shape shape = this.shape();\n            if (null != shape){\n                Rectangle2D bounds = shape.getBounds2D();\n                return (float)(bounds.getX()+bounds.getWidth());\n            }\n            else {\n                return this.font.em*this.getCols();\n            }\n        }\n    }\n"
+    }
+  ]
+}

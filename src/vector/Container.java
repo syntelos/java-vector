@@ -39,6 +39,11 @@ import java.awt.geom.Rectangle2D;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * This class has a boolean property named "fit" which will cause it
+ * to set its bounds to the geometric union of all children (except
+ * members of class {@link Border}).
+ */
 public class Container<T extends Component>
     extends AbstractComponent
     implements Component.Container<T>
@@ -117,13 +122,17 @@ public class Container<T extends Component>
         }
     }
     /**
-     * Resize to size of children
+     * Resize to the geometric union of all children (except members
+     * of class {@link Border}).
      */
     public final boolean isFit(){
         return this.fit;
     }
-    public final boolean getFit(){
-        return this.fit;
+    public final Boolean getFit(){
+        if (this.fit)
+            return Boolean.TRUE;
+        else
+            return Boolean.FALSE;
     }
     public final Container setFit(boolean fit){
 

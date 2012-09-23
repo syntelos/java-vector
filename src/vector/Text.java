@@ -18,6 +18,8 @@
  */
 package vector;
 
+import vector.text.Visual;
+
 import json.Json;
 import json.ObjectJson;
 
@@ -30,7 +32,11 @@ import java.awt.geom.Rectangle2D;
 
 
 /**
- * Text line
+ * Attributed text includes unicode string, color and font.  
+ * 
+ * Note that {@link TextLayout} requires {@link Text} objects split
+ * into instances containing contiguous groups of characters for
+ * style, directionality, and white - space.
  */
 public class Text
     extends BorderComponent
@@ -47,7 +53,7 @@ public class Text
 
     protected int cols;
 
-    protected CharSequence string;
+    protected Visual string;
 
     protected GlyphVector vector;
 
@@ -216,7 +222,7 @@ public class Text
 
         if (null != text && 0 < text.length()){
 
-            this.string = text;
+            this.string = new Visual(text);
 
             this.cols = text.length();
         }
@@ -261,7 +267,34 @@ public class Text
         return this;
     }
     public final boolean isEmpty(){
-        return (null == this.string || 0 == this.string.length());
+        return (null == this.string || this.string.isEmpty());
+    }
+    public final boolean isNotEmpty(){
+        return (null != this.string && this.string.isNotEmpty());
+    }
+    public final Visual.Type getType(){
+        if (null != this.string)
+            return this.string.getType();
+        else
+            return Visual.Type.EmptyString;
+    }
+    public final Visual.Type getType(int idx){
+        if (null != this.string)
+            return this.string.getType(idx);
+        else
+            throw new ArrayIndexOutOfBoundsException(String.valueOf(idx));
+    }
+    public final Visual.Direction getDirection(){
+        if (null != this.string)
+            return this.string.getDirection();
+        else
+            return Visual.Direction.Neutral;
+    }
+    public final Visual.Direction getDirection(int idx){
+        if (null != this.string)
+            return this.string.getDirection(idx);
+        else
+            throw new ArrayIndexOutOfBoundsException(String.valueOf(idx));
     }
     public final int length(){
         if (null == this.string)
@@ -562,38 +595,5 @@ public class Text
      */
     protected void layoutScaleToShapeArea(){
         this.setTransformLocal(1f,1f);
-    }
-
-    /**
-     * @return Null or non empty 
-     */
-    public final static char[] ToCharArray(char[] cary){
-        if (null == cary || 1 > cary.length)
-            return null;
-        else
-            return cary;
-    }
-    /**
-     * @return Null or non empty 
-     */
-    public final static char[] ToCharArray(CharSequence string){
-
-        if (null == string || 1 > string.length())
-            return null;
-        else if (string instanceof String)
-            return ((String)string).toCharArray();
-        else {
-            final int count = string.length();
-            if (0 < count){
-                char[] cary = new char[count];
-                for (int cc = 0; cc < count; cc++){
-
-                    cary[cc] = string.charAt(cc);
-                }
-                return cary;
-            }
-            else
-                return null;
-        }
     }
 }

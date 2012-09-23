@@ -18,8 +18,6 @@
  */
 package vector.text;
 
-import vector.Text;
-
 /**
  * An uneditable line left hand side element of text is empty, or a
  * prompt, etc.
@@ -53,7 +51,7 @@ public final class Home
             if (length == string.length()){
                 this.length = length;
                 this.string = string;
-                this.cary = Text.ToCharArray(string);
+                this.cary = Visual.ToCharArray(string);
             }
             else {
                 throw new IllegalArgumentException(String.valueOf(length));
@@ -62,7 +60,7 @@ public final class Home
         else if (-1 < length){
             this.length = length;
             this.string = Home.Fill(length);
-            this.cary = Text.ToCharArray(string);
+            this.cary = Visual.ToCharArray(string);
         }
         else {
             throw new IllegalArgumentException(String.valueOf(length));
@@ -81,7 +79,7 @@ public final class Home
     }
     public char[] cat(CharSequence text){
 
-        return this.cat(Text.ToCharArray(text));
+        return this.cat(Visual.ToCharArray(text));
     }
     public char[] cat(char[] text){
         if (0 < this.length){
