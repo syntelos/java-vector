@@ -221,8 +221,40 @@ public class TextLayout
     protected void parse(String text){
         final StringTokenizer strtok = new StringTokenizer(text," \t\n",true);
 
+        final StringBuilder sp = new StringBuilder();
+
         while (strtok.hasMoreTokens()){
             String tok = strtok.nextToken();
+
+            if (" ".equals(tok)){
+
+                sp.append(' ');
+
+                continue;
+            }
+            else if (0 < sp.length()){
+
+                Text child = new Text();
+                this.add(child);
+
+                child.setFont(this.font);
+                child.clearPadding();
+                child.setText(sp.toString());
+                child.setFixed(true);
+
+                if (this.debug){
+                    Border debug = new Border();
+
+                    child.setBorder(debug);
+
+                    debug.setColor(Color.red);
+                    debug.setColorOver(Color.green);
+                }
+
+                child.modified();
+
+                sp.setLength(0);
+            }
 
             Text child = new Text();
             this.add(child);
