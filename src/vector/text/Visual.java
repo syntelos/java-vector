@@ -25,7 +25,6 @@ import static java.lang.Character.*;
  */
 public class Visual
     extends Object
-    implements CharSequence
 {
     /**
      * @see Visual$Directionality
@@ -328,7 +327,7 @@ public class Visual
      * @return Text modified
      */
     public boolean set(CharSequence string){
-        if (this.equals(string))
+        if (this.logicalEquals(string))
             return false;
         else if (null == string || 1 > string.length()){
             boolean re = (null == this.logical);
@@ -447,44 +446,70 @@ public class Visual
 
         return this;
     }
-    public final int length(){
+    public final int logicalLength(){
+        if (null == this.logical)
+            return 0;
+        else
+            return this.logical.length;
+    }
+    public final int visualLength(){
         if (null == this.visual)
             return 0;
         else
             return this.visual.length;
     }
     public final Type getType(){
-        if (0 < this.length())
+        if (0 < this.visualLength())
             return Type.For(this.visual[0]);
         else
             return Type.EmptyString;
     }
     public final Type getType(int idx){
-        if (-1 < idx && idx < this.length())
+        if (-1 < idx && idx < this.visualLength())
             return Type.For(this.visual[idx]);
         else
             throw new ArrayIndexOutOfBoundsException(String.valueOf(idx));
     }
     public final Direction getDirection(){
-        if (0 < this.length())
+        if (0 < this.visualLength())
             return Direction.For(this.visual[0]);
         else
             return Direction.Neutral;
     }
     public final Direction getDirection(int idx){
-        if (-1 < idx && idx < this.length())
+        if (-1 < idx && idx < this.visualLength())
             return Direction.For(this.visual[idx]);
         else
             throw new ArrayIndexOutOfBoundsException(String.valueOf(idx));
     }
-    public final char charAt(int idx){
-        if (-1 < idx && idx < this.length())
+    public final char logicalCharAt(int idx){
+        if (-1 < idx && idx < this.logicalLength())
+            return this.logical[idx];
+        else
+            throw new ArrayIndexOutOfBoundsException(String.valueOf(idx));
+    }
+    public final String logicalSubSequence(int start, int end){
+        if (-1 < start && start <= end && end < this.logicalLength()){
+            int count = (end-start);
+            if (0 < count){
+                char[] string = new char[count];
+                System.arraycopy(this.logical,start,string,0,count);
+                return new String(string);
+            }
+            else
+                return "";
+        }
+        else
+            throw new ArrayIndexOutOfBoundsException(String.format("(%d,%d)",start,end));
+    }
+    public final char visualCharAt(int idx){
+        if (-1 < idx && idx < this.visualLength())
             return this.visual[idx];
         else
             throw new ArrayIndexOutOfBoundsException(String.valueOf(idx));
     }
-    public final String subSequence(int start, int end){
-        if (-1 < start && start <= end && end < this.length()){
+    public final String visualSubSequence(int start, int end){
+        if (-1 < start && start <= end && end < this.visualLength()){
             int count = (end-start);
             if (0 < count){
                 char[] string = new char[count];
@@ -497,48 +522,73 @@ public class Visual
         else
             throw new ArrayIndexOutOfBoundsException(String.format("(%d,%d)",start,end));
     }
-    /**
-     * @return Visually ordered string (for Font create glyph vector)
-     */
-    public final String toString(){
+    public final String visualString(){
         if (null == this.visual)
             return "";
         else
             return new String(this.visual);
     }
+    public final String logicalString(){
+        if (null == this.logical)
+            return "";
+        else
+            return new String(this.logical);
+    }
     /**
      * @return Visually ordered string (for Font create glyph vector)
      */
-    public final char[] toCharArray(){
+    public final String toString(){
+
+        return this.visualString();
+    }
+    public final char[] logicalCharArray(){
+        if (null == this.logical)
+            return new char[0];
+        else
+            return this.logical.clone();
+    }
+    public final char[] visualCharArray(){
         if (null == this.visual)
             return new char[0];
         else
             return this.visual.clone();
     }
-    /**
-     * @return CharSequence identity (visual)
-     */
-    public final boolean equals(Object that){
+    public final boolean logicalEquals(Object that){
         if (that instanceof CharSequence)
-            return this.equals( (CharSequence)that);
+            return this.logicalEquals( (CharSequence)that);
         else
             return false;
     }
-    /**
-     * @return CharSequence identity (visual)
-     */
-    public final boolean equals(CharSequence that){
-        /*
-         * Null is not equal to anything so that set(o) always
-         * initializes
-         */
+    public final boolean logicalEquals(CharSequence that){
         if (null == that)
             return false;
         else {
-            final int count = this.length();
+            final int count = this.logicalLength();
             if (count == that.length()){
                 for (int cc = 0; cc < count; cc++){
-                    if (this.charAt(cc) != that.charAt(cc))
+                    if (this.logicalCharAt(cc) != that.charAt(cc))
+                        return false;
+                }
+                return true;
+            }
+            else
+                return false;
+        }
+    }
+    public final boolean visualEquals(Object that){
+        if (that instanceof CharSequence)
+            return this.visualEquals( (CharSequence)that);
+        else
+            return false;
+    }
+    public final boolean visualEquals(CharSequence that){
+        if (null == that)
+            return false;
+        else {
+            final int count = this.visualLength();
+            if (count == that.length()){
+                for (int cc = 0; cc < count; cc++){
+                    if (this.visualCharAt(cc) != that.charAt(cc))
                         return false;
                 }
                 return true;

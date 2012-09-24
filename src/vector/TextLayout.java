@@ -27,8 +27,14 @@ import java.awt.Graphics2D;
 import java.util.StringTokenizer;
 
 /**
- * Any number of pieces of {@link Text} will be relocated for one of
- * two layout strategies: wrapped or preformatted (not wrapped).
+ * Any number of {@link Component$Layout$Text} components will be
+ * relocated for one of two layout styles: wrapped or preformatted
+ * (not wrapped).  In the wrapped case, an instance of this class is a
+ * paragraph of text.
+ * 
+ * Both of these layout styles are bottom-up strategies.  The bounding
+ * box of instances of this class will be defined by explicit state or
+ * derived from the content (children) of this class.
  * 
  * <h3>Font &amp; Padding</h3>
  * 
@@ -40,16 +46,13 @@ import java.util.StringTokenizer;
  * In the layout process, the individual text padding is cleared -- as
  * necessarily true in the application of this class.
  * 
- * <h3>Layout</h3>
+ * <h3>Attributed Text</h3>
  * 
- * This class requires that {@link Text} objects be grouped for style,
- * directionality, and white - space changes.
- * 
- * White - space changes between vertical and horizontal kinds of
- * white - space are necessarily split into unique {@link Text}
- * objects.  The default (first char) {@link vector.text.Visual$Type
- * Visual Type} of a {@link Text} object must present horizontal white
- * - space with wrapping, and vertical white - space without wrapping.
+ * Group {@link Component$Layout$Text} objects for style,
+ * directionality, and character content.  {@link
+ * Component$Layout$Text} objects should be composed so that each
+ * object contains only one {@link Component$Layout$Text$Whitespace
+ * kind of character content}.
  */
 public class TextLayout
     extends Container<Component.Layout.Text>
@@ -59,7 +62,7 @@ public class TextLayout
 
     protected final Padding padding = new Padding();
 
-    protected boolean wrap;
+    protected boolean wrap, debug;
 
 
     public TextLayout(){
@@ -74,6 +77,7 @@ public class TextLayout
         this.font = Font.Default;
         this.padding.set(this.font);
         this.wrap = false;
+        this.debug = false;
     }
     @Override
     public void resized(){
@@ -161,6 +165,30 @@ public class TextLayout
         else
             return this;
     }
+    /**
+     * Resize to size of children
+     */
+    public final boolean isDebug(){
+        return this.debug;
+    }
+    public final Boolean getDebug(){
+        if (this.debug)
+            return Boolean.TRUE;
+        else
+            return Boolean.FALSE;
+    }
+    public final Container setDebug(boolean debug){
+
+        this.debug = debug;
+
+        return this;
+    }
+    public final Container setDebug(Boolean debug){
+        if (null != debug)
+            return this.setDebug(debug.booleanValue());
+        else
+            return this;
+    }
 
     public ObjectJson toJson(){
         ObjectJson thisModel =  super.toJson();
@@ -168,6 +196,7 @@ public class TextLayout
         thisModel.setValue("font", this.getFont());
         thisModel.setValue("padding", this.getPadding());
         thisModel.setValue("wrap",this.getWrap());
+        thisModel.setValue("debug",this.getDebug());
 
         return thisModel;
     }
@@ -178,6 +207,7 @@ public class TextLayout
         this.setFont( (Font)thisModel.getValue("font",Font.class));
         this.setPadding( (Padding)thisModel.getValue("padding",Padding.class));
         this.setWrap( (Boolean)thisModel.getValue("wrap"));
+        this.setDebug( (Boolean)thisModel.getValue("debug"));
 
         this.parse( (String)thisModel.getValue("text"));
 
@@ -196,10 +226,21 @@ public class TextLayout
 
             Text child = new Text();
             this.add(child);
+
             child.setFont(this.font);
             child.clearPadding();
             child.setText(tok);
             child.setFixed(true);
+
+            if (this.debug){
+                Border debug = new Border();
+
+                child.setBorder(debug);
+
+                debug.setColor(Color.red);
+                debug.setColorOver(Color.green);
+            }
+
             child.modified();
         }
     }
@@ -211,7 +252,7 @@ public class TextLayout
         if (this.wrap){
             final Bounds bounds = this.getBoundsVector();
 
-            for (Component.Layout.Text text: this){
+            for (Component.Layout.Text text: this.list(Component.Layout.Text.class)){
 
                 text.layout(Component.Layout.Order.Content);
 
@@ -255,7 +296,7 @@ public class TextLayout
         else {
             x1 = 0; y1 = 0;
 
-            for (Component.Layout.Text text: this){
+            for (Component.Layout.Text text: this.list(Component.Layout.Text.class)){
 
                 text.layout(Component.Layout.Order.Content);
 

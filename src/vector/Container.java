@@ -358,11 +358,11 @@ public class Container<T extends Component>
         }
         return comp;
     }
-    public Component.Iterator<T> listMouseIn(){
+    public <C extends Component> Component.Iterator<C> listMouseIn(){
 
         return Component.Tools.ListMouseIn(this.components);
     }
-    public Component.Iterator<T> list(Class<T> clas){
+    public <C extends Component> Component.Iterator<C> list(Class<C> clas){
 
         return Component.Tools.List(this.components,clas);
     }
@@ -441,7 +441,7 @@ public class Container<T extends Component>
 
             for (Component c : this){
 
-                if (c instanceof Border)
+                if (c instanceof Component.Layout && Component.Layout.Order.Parent == ((Component.Layout)c).queryLayout())
                     continue;
                 else {
                     Bounds cb = c.getBoundsVector();
@@ -465,13 +465,12 @@ public class Container<T extends Component>
 
             this.setBoundsVector(bounds);
 
-            /*
-             *
-             */
-            Border border = this.getBorder();
-            if (null != border){
+            for (Component.Layout c : this.list(Component.Layout.class)){
 
-                border.resized();
+                if (Layout.Order.Parent == c.queryLayout()){
+
+                    c.resized();
+                }
             }
         }
         return this;

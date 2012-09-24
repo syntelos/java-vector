@@ -420,11 +420,11 @@ public class Display<T extends Component>
         }
         return comp;
     }
-    public Component.Iterator<T> listMouseIn(){
+    public <C extends Component> Component.Iterator<C> listMouseIn(){
 
         return Component.Tools.ListMouseIn(this.components);
     }
-    public Component.Iterator<T> list(Class<T> clas){
+    public <C extends Component> Component.Iterator<C> list(Class<C> clas){
 
         return Component.Tools.List(this.components,clas);
     }

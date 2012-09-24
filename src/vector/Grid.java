@@ -29,24 +29,26 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 /**
- * <p> This class will assume the bounds and transform of the
- * immediate successor in the parent's list of children, and draw a
- * grid as defined by the domain and range.  It can optionally
- * track mouse motion. </p>
+ * <p> This class will draw a grid as defined by the domain and range
+ * shape coordinates.  It can optionally track mouse motion. </p>
+ * 
+ * <p> If not "fixed" ("bounds" defined explicitly), this class will
+ * assume the bounds and transform of its parent. </p>
  * 
  * <h3>Domain &amp; Range</h3>
  * 
- * <p> The domain and range lists are coordinates in the successor's
- * shape coordinate space, under the successor's local transform. </p>
+ * <p> The domain and range lists are coordinates in the shape
+ * coordinate space, under the local transform. </p>
  * 
  */
 public class Grid
     extends AbstractComponent
+    implements Component.Layout
 {
 
     protected Color color;
 
-    protected boolean mouse;
+    protected boolean mouse, fixed;
 
     protected float[] domain, range;
 
@@ -66,6 +68,7 @@ public class Grid
 
         this.color = Color.black;
         this.mouse = false;
+        this.fixed = false;
     }
     @Override
     public void destroy(){
@@ -84,7 +87,6 @@ public class Grid
     public void resized(){
         super.resized();
 
-        this.shape = null;
         this.pointer = null;
 
         this.layout();
@@ -97,7 +99,6 @@ public class Grid
     public void modified(){
         super.modified();
 
-        this.shape = null;
         this.pointer = null;
 
         this.layout();
@@ -106,10 +107,27 @@ public class Grid
     public void relocated(){
         super.relocated();
 
-        this.shape = null;
         this.pointer = null;
 
         this.layout();
+    }
+    public Component.Layout.Order queryLayout(){
+
+        if (this.fixed)
+            return Component.Layout.Order.Content;
+        else
+            return Component.Layout.Order.Parent;
+    }
+    public void layout(Component.Layout.Order order){
+        switch(order){
+        case Content:
+            break;
+        case Parent:
+            break;
+        default:
+            throw new IllegalStateException(order.name());
+        }
+        this.modified();
     }
     public final Color getColor(){
 
@@ -176,47 +194,31 @@ public class Grid
 
         return this;
     }
-    protected Path2D.Float shape(){
-        if (null == this.shape){
-            /*
-             * Producing property defaults into fields will obscure
-             * the user's intended state of these properties (range
-             * and domain) from the life cycle operators -- and then
-             * propagate incorrect state via JSON
-             */
-            final Bounds bounds = this.getBoundsVector();
-            if (!bounds.isEmpty()){
-                float[] range = this.range;
-                if (null == range){
-                    range = Default(bounds.height);
-                }
-                float[] domain = this.domain;
-                if (null == domain){
-                    domain = Default(bounds.width);
-                }
+    public final boolean isFixed(){
 
-                final float x0 = 0f;
-                final float x1 = bounds.width;
-                final float y0 = 0f;
-                final float y1 = bounds.height;
+        return this.fixed;
+    }
+    public final Boolean getFixed(){
 
-                final Path2D.Float shape = new Path2D.Float();
+        if (this.fixed)
+            return Boolean.TRUE;
+        else
+            return Boolean.FALSE;
+    }
+    public final Grid setFixed(boolean fixed){
 
-                for (float x: domain){
-                    shape.moveTo(x,y0);
-                    shape.lineTo(x,y1);
-                }
-                for (float y: range){
-                    shape.moveTo(x0,y);
-                    shape.lineTo(x1,y);
-                }
-                return (this.shape = shape);
-            }
-        }
-        return this.shape;
+        this.fixed = fixed;
+        return this;
+    }
+    public final Grid setFixed(Boolean fixed){
+
+        if (null != fixed)
+            return this.setFixed(fixed.booleanValue());
+        else
+            return this;
     }
     public Grid outputScene(Graphics2D g){
-        Shape shape = this.shape();
+        Shape shape = this.shape;
         if (null != shape){
             this.getTransformParent().transformFrom(g);
 
@@ -278,31 +280,43 @@ public class Grid
             return false;
         }
     }
-    /**
-     * Called from {@link #modified()}, {@link #resized()}, and {@link
-     * #relocated()}.  Employ a successor, or if not found, the
-     * parent.
-     */
     protected void layout(){
-        /*
-         *
-         */
-        Component.Container parent = this.getParentVector();
-        if (null != parent){
-            int idx = parent.indexOf(this);
-            if (-1 < idx){
-                idx += 1;
-                if (parent.has(idx)){
-                    final Component successor = parent.get(idx);
 
-                    this.setBoundsVector(successor.getBoundsVector());
-                    this.setTransformLocal(successor.getTransformLocal());
-                }
-                else {
-                    this.setBoundsVectorInit(parent);
-                    this.setTransformLocal(parent.getTransformLocal());
-                }
+        if (!this.fixed){
+
+            Component parent = this.getParentVector();
+
+            this.setBoundsVectorInit(parent);
+            this.setTransformLocal(parent.getTransformLocal());
+        }
+
+        final Bounds bounds = this.getBoundsVector();
+        if (!bounds.isEmpty()){
+            float[] range = this.range;
+            if (null == range){
+                range = Default(bounds.height);
             }
+            float[] domain = this.domain;
+            if (null == domain){
+                domain = Default(bounds.width);
+            }
+
+            final float x0 = 0f;
+            final float x1 = bounds.width;
+            final float y0 = 0f;
+            final float y1 = bounds.height;
+
+            final Path2D.Float shape = new Path2D.Float();
+
+            for (float x: domain){
+                shape.moveTo(x,y0);
+                shape.lineTo(x,y1);
+            }
+            for (float y: range){
+                shape.moveTo(x0,y);
+                shape.lineTo(x1,y);
+            }
+            this.shape = shape;
         }
     }
 
@@ -316,6 +330,8 @@ public class Grid
         thisModel.setValue("domain", this.getDomain());
 
         thisModel.setValue("range", this.getRange());
+
+        thisModel.setValue("fixed",this.getFixed());
 
         return thisModel;
     }
@@ -331,7 +347,7 @@ public class Grid
 
         this.setRange( (float[])thisModel.getValue("range",float[].class));
 
-        this.modified();
+        this.setFixed( (Boolean)thisModel.getValue("fixed"));
 
         return true;
     }

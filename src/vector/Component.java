@@ -354,6 +354,7 @@ public interface Component
      */
     public boolean drop(Component c);
 
+
     /**
      * Layout determination support for strong container dependence on
      * its children.
@@ -478,12 +479,12 @@ public interface Component
         /**
          * List all descendants with mouseIn true
          */
-        public Component.Iterator<T> listMouseIn();
+        public <C extends Component> Component.Iterator<C> listMouseIn();
         /**
          * List immediate descendants in (members of) the argument
          * class
          */
-        public Component.Iterator<T> list(Class<T> clas);
+        public <C extends Component> Component.Iterator<C> list(Class<C> clas);
         /**
          * Log warning
          */
@@ -708,10 +709,10 @@ public interface Component
     /**
      * 
      */
-    public static class Iterator<T extends Component>
+    public static class Iterator<C extends Component>
         extends Object
-        implements Iterable<T>,
-                   java.util.Iterator<T>
+        implements Iterable<C>,
+                   java.util.Iterator<C>
     {
 
         private final Component[] list;
@@ -737,16 +738,16 @@ public interface Component
             else
                 return this.list.clone();
         }
-        public java.util.Iterator<T> iterator(){
+        public java.util.Iterator<C> iterator(){
 
             return this;
         }
         public boolean hasNext(){
             return (this.index < this.count);
         }
-        public T next(){
+        public C next(){
             if (this.index < this.count)
-                return (T)this.list[this.index++];
+                return (C)this.list[this.index++];
             else
                 throw new java.util.NoSuchElementException(String.valueOf(this.index));
         }

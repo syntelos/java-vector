@@ -29,6 +29,8 @@ import java.awt.Shape;
  */
 public class Border
     extends AbstractComponent
+    implements Component.Layout, 
+               java.lang.Cloneable
 {
     public enum Style {
         SQUARE, ROUND;
@@ -99,6 +101,32 @@ public class Border
         super.modified();
 
         this.layout();
+    }
+    public Border clone(){
+        try {
+            return (Border)super.clone();
+        }
+        catch (CloneNotSupportedException exc){
+            throw new InternalError();
+        }
+    }
+    public Component.Layout.Order queryLayout(){
+
+        if (this.fixed)
+            return Component.Layout.Order.Content;
+        else
+            return Component.Layout.Order.Parent;
+    }
+    public void layout(Component.Layout.Order order){
+        switch(order){
+        case Content:
+            break;
+        case Parent:
+            break;
+        default:
+            throw new IllegalStateException(order.name());
+        }
+        this.modified();
     }
     public final boolean isFill(){
 
@@ -270,7 +298,7 @@ public class Border
     public final Border outputScene(Graphics2D g){
 
         final Shape shape = this.shape;
-        if (null != shape){
+        if (null != shape && this.visible){
             final boolean mouseIn = this.mouseIn;
             /*
              *
@@ -319,7 +347,10 @@ public class Border
 
                 g.draw(shape);
             }
+            else {
 
+                g.draw(shape);
+            }
         }
         return this;
     }
@@ -387,8 +418,6 @@ public class Border
         this.setArc( (Number)thisModel.getValue("arc"));
         this.setStroke( (Stroke)thisModel.getValue("stroke",Stroke.class));
         this.setStrokeOver( (Stroke)thisModel.getValue("stroke-over",Stroke.class));
-
-        this.modified();
 
         return true;
     }

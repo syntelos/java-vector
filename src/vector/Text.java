@@ -257,6 +257,7 @@ public class Text
         return this;
     }
     public final String getText(){
+
         return this.toString();
     }
     public vector.Text setText(String text){
@@ -341,26 +342,29 @@ public class Text
         if (null == this.string)
             return 0;
         else
-            return this.string.length();
+            return this.string.logicalLength();
     }
     public final char charAt(int idx){
-        CharSequence string = this.string;
+        Visual string = this.string;
         if (null != string)
-            return string.charAt(idx);
+            return string.logicalCharAt(idx);
         else
             throw new IndexOutOfBoundsException(String.format("[%d]",idx));
     }
     public final CharSequence subSequence(int start, int end){
-        CharSequence string = this.string;
+        Visual string = this.string;
         if (null != string)
-            return string.subSequence(start,end);
+            return string.logicalSubSequence(start,end);
         else
             throw new IndexOutOfBoundsException(String.format("[%d,%d)",start,end));
     }
+    /**
+     * @return Logical string as in getText
+     */
     public final String toString(){
 
         if (null != this.string)
-            return this.string.toString();
+            return this.string.logicalString();
         else
             return new String();
     }

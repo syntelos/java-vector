@@ -113,7 +113,7 @@ public class Font
 
         return new Font(this.deriveFont(size));
     }
-    public final GlyphVector createGlyphVector(CharSequence string){
+    public final GlyphVector createGlyphVector(Object string){
 
         return this.createGlyphVector(this.frc,string.toString());
     }

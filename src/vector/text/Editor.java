@@ -77,21 +77,21 @@ public class Editor
      */
     public boolean end(){
 
-        return this.cursor.end(this.length());
+        return this.cursor.end(this.visualLength());
     }
     /**
      * @return Cursor modified
      */
     public boolean left(){
 
-        return this.cursor.move(-1,this.length());
+        return this.cursor.move(-1,this.visualLength());
     }
     /**
      * @return Cursor modified
      */
     public boolean right(){
 
-        return this.cursor.move(+1,this.length());
+        return this.cursor.move(+1,this.visualLength());
     }
     /**
      * @return Text modified
@@ -135,7 +135,7 @@ public class Editor
     public boolean set(CharSequence string){
 
         this.set(this.home.cat(string));
-        this.cursor.end(this.length());
+        this.cursor.end(this.visualLength());
         return true;
     }
     public Editor add(CharSequence string){
@@ -153,7 +153,7 @@ public class Editor
                 System.arraycopy(source,0,copier,thisLength,sourceLength);
 
                 this.set(copier);
-                this.cursor.end(this.length());
+                this.cursor.end(thisLength);
             }
             return this;
         }
