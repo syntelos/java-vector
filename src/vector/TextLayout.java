@@ -339,7 +339,19 @@ public class TextLayout
 
                 shape = text.queryBoundsContent();
 
-                Component.Layout.Text.Whitespace type = text.queryLayoutText();
+                w = (shape.x+shape.width);
+                h = (shape.y+shape.height);
+
+                shape.x = x;
+                shape.y = y;
+
+                shape.width = w;
+                shape.height = h;
+
+                text.setBoundsVector(shape);
+                text.relocated();
+
+                final Component.Layout.Text.Whitespace type = text.queryLayoutText();
 
                 switch(type){
                 case Vertical:
@@ -347,30 +359,16 @@ public class TextLayout
                     x = cr;
                     y += lf;
 
-                    w = (shape.x+shape.width);
-                    h = (shape.y+shape.height);
-
                     lf = h;
                     break;
                 default:
 
                     x += w;
 
-                    w = (shape.x+shape.width);
-                    h = (shape.y+shape.height);
-
                     lf = Math.max(lf,h);
+
                     break;
                 }
-
-                shape.x = x;
-                shape.y = y;
-                
-                shape.width = w;
-                shape.height = h;
-
-                text.setBoundsVector(shape);
-                text.relocated();
             }
         }
     }
