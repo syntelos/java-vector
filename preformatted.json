@@ -14,7 +14,7 @@
                     "color": "#0000FF"
                 }
             ],
-            "text": "    protected float shapeAreaWidth(){\n        if (this.fixed)\n            return this.font.em*this.getCols();\n        else {\n            Shape shape = this.shape();\n            if (null != shape){\n                Rectangle2D bounds = shape.getBounds2D();\n                return (float)(bounds.getX()+bounds.getWidth());\n            }\n            else {\n                return this.font.em*this.getCols();\n            }\n        }\n    }\n"
+            "text": "   134      public Order queryLayout(){\n   135          if (this.fixed)\n   136              return Order.Content;\n   137          else\n   138              return Order.Parent;\n   139      }\n   140      public void layout(Order order){\n   141          switch(order){\n   142          case Parent:\n   143              this.fixed = false;\n   144              break;\n   145          case Content:\n   146              this.fixed = true;\n   147              break;\n   148          default:\n   149              throw new IllegalStateException(order.name());\n   150          }\n   151          this.modified();\n   152      }\n"
         }
     ]
 }
