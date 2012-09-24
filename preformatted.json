@@ -11,7 +11,7 @@
             "components": [
                 {
                     "class": "vector.Border",
-                    "color": "#FF0000"
+                    "color": "#0000FF"
                 }
             ],
             "text": "    protected float shapeAreaWidth(){\n        if (this.fixed)\n            return this.font.em*this.getCols();\n        else {\n            Shape shape = this.shape();\n            if (null != shape){\n                Rectangle2D bounds = shape.getBounds2D();\n                return (float)(bounds.getX()+bounds.getWidth());\n            }\n            else {\n                return this.font.em*this.getCols();\n            }\n        }\n    }\n"
