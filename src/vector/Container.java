@@ -430,7 +430,7 @@ public class Container<T extends Component>
         return true;
     }
 
-    protected Container fit(){
+    protected void fit(){
 
         if (0 < this.count()){
 
@@ -473,6 +473,5 @@ public class Container<T extends Component>
                 }
             }
         }
-        return this;
     }
 }

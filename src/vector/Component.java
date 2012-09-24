@@ -391,6 +391,13 @@ public interface Component
          */
         public Order queryLayout();
         /**
+         * Valid when queryLayout returns Order Content, otherwise
+         * likely to be stale.
+         * 
+         * @return Interior bounds of the content of this component
+         */
+        public Bounds queryBoundsContent();
+        /**
          * This is the {@link Component$Layout layout component}
          * operator.  It may be called by a parent to notify its
          * children of layout requirements.  

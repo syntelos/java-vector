@@ -117,6 +117,10 @@ public class Border
         else
             return Component.Layout.Order.Parent;
     }
+    public Bounds queryBoundsContent(){
+
+        return this.getBoundsVector();
+    }
     public void layout(Component.Layout.Order order){
         switch(order){
         case Content:

@@ -4,6 +4,7 @@
         {
             "class": "vector.TextLayout",
             "color": "#000000",
+            "font": "monospaced-18",
             "bounds": "(50,50,50,50)",
             "fit": true,
             "debug": true,

@@ -378,42 +378,21 @@ public class Text
 
         return new Point2D.Float(x,y);
     }
-    protected Shape shape(){
-        if (null == this.shape && 0 < this.length()){
-
-            final Point2D.Float baseline = this.getShapeBaseline();
-
-            this.vector = font.createGlyphVector(this.string);
-
-            this.shape = this.vector.getOutline(baseline.x,baseline.y);
-
-            this.localPositions = null;
-        }
-        return this.shape;
-    }
-    protected GlyphVector vector(){
-        if (null == this.vector){
-            if (null != this.shape())
-                return this.vector;
-            else
-                return null;
-        }
-        else
-            return this.vector;
-    }
     private float[] positions(){
         if (null == this.localPositions){
 
             final int c = this.length();
 
             if (0 < c){
-                final Point2D.Float baseline = this.getShapeBaseline();
 
-                final int count = (c+1);
-
-                final GlyphVector vector = this.vector();
+                final GlyphVector vector = this.vector;
 
                 if (null != vector){
+
+                    final Point2D.Float baseline = this.getShapeBaseline();
+
+                    final int count = (c+1);
+
                     this.localPositions = vector.getGlyphPositions(0,count,new float[count<<1]);
 
                     for (int cc = 0; cc < count; cc++){
@@ -495,24 +474,23 @@ public class Text
         return new Bounds(x1,y1,(x2-x1),(y2-y1));
     }
     /**
-     * @return Font bounding box for all glyphs in shape coordinate
-     * space
+     * @return Glyphs bounding box in shape coordinate space
      */
-    public final Bounds shapeArea(){
+    public final Bounds queryBoundsContent(){
 
         return this.font.boundingBox(this.getPadding(),1,this.shapeAreaWidth());
     }
     protected float shapeAreaWidth(){
         if (this.fixed)
-            return this.font.em*this.getCols();
+            return (this.font.em*this.cols);
         else {
-            Shape shape = this.shape();
+            Shape shape = this.shape;
             if (null != shape){
                 Rectangle2D bounds = shape.getBounds2D();
                 return (float)(bounds.getX()+bounds.getWidth());
             }
             else {
-                return this.font.em*this.getCols();
+                return (this.font.em*this.cols);
             }
         }
     }
@@ -520,7 +498,7 @@ public class Text
 
         super.outputScene(g);
 
-        final Shape shape = this.shape();
+        final Shape shape = this.shape;
         if (null != shape){
             final boolean mouseIn = this.mouseIn;
 
@@ -603,6 +581,17 @@ public class Text
      */
     protected void layout(){
 
+        if (null == this.shape && 0 < this.length()){
+
+            final Point2D.Float baseline = this.getShapeBaseline();
+
+            this.vector = this.font.createGlyphVector(this.string);
+
+            this.shape = this.vector.getOutline(baseline.x,baseline.y);
+
+            this.localPositions = null;
+        }
+
         if (this.fixed){
             this.resizeToShapeArea();
             this.layoutScaleToShapeArea();
@@ -617,7 +606,7 @@ public class Text
      * transform to fit the padded font-text to the dimensions.
      */
     protected void layoutScaleToDimensions(){
-        Bounds shape = this.shapeArea();
+        Bounds shape = this.queryBoundsContent();
         if (null != shape)
             this.transform.scaleFromAbsolute(this.getBoundsVector(),shape);
         else
@@ -632,10 +621,10 @@ public class Text
     }
     /**
      * May be called from {@link #layout()} to set dimensions from
-     * {@link #shapeArea()}.
+     * {@link #queryBoundsContent()}.
      */
     protected void resizeToShapeArea(){
-        this.setBoundsVectorInit(this.shapeArea());
+        this.setBoundsVectorInit(this.queryBoundsContent());
     }
     /**
      * Define transform local as 1:1 scale.

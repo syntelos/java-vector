@@ -245,9 +245,11 @@ public class TextLayout
         }
     }
     protected void layout(){
-
         Bounds shape;
-        float x = this.padding.left, y = this.padding.top, lineH = 0, x1, y1;
+        final float cr = this.padding.left;
+        float lf = 0;
+        float x = cr, y = this.padding.top, w, h;
+
 
         if (this.wrap){
             final Bounds bounds = this.getBoundsVector();
@@ -256,22 +258,25 @@ public class TextLayout
 
                 text.layout(Component.Layout.Order.Content);
 
-                shape = text.getBoundsVector();
+                shape = text.queryBoundsContent();
 
-                x1 = (shape.x+shape.width);
-                y1 = (shape.y+shape.height);
+                w = (shape.x+shape.width);
+                h = (shape.y+shape.height);
+                
+                shape.width = w;
+                shape.height = h;
 
-                if (0 == lineH){
-                    lineH = y1;
+                if (0 == lf){
+                    lf = h;
                     shape.x = x;
                     shape.y = y;
                     text.setBoundsVector(shape);
                     text.relocated();
 
-                    x += x1;
+                    x += w;
                 }
                 else {
-                    lineH = Math.max(lineH,y1);
+                    lf = Math.max(lf,h);
 
                     if ((x+shape.width) <= bounds.width){
                         shape.x = x;
@@ -279,11 +284,11 @@ public class TextLayout
                         text.setBoundsVector(shape);
                         text.relocated();
 
-                        x += x1;
+                        x += w;
                     }
                     else {
-                        x = this.padding.left;
-                        y += lineH;
+                        x = cr;
+                        y += lf;
 
                         shape.x = x;
                         shape.y = y;
@@ -294,40 +299,44 @@ public class TextLayout
             }
         }
         else {
-            x1 = 0; y1 = 0;
+            w = 0; h = 0;
 
             for (Component.Layout.Text text: this.list(Component.Layout.Text.class)){
 
                 text.layout(Component.Layout.Order.Content);
 
-                shape = text.getBoundsVector();
+                shape = text.queryBoundsContent();
 
                 Component.Layout.Text.Whitespace type = text.queryLayoutText();
 
                 switch(type){
                 case Vertical:
 
-                    x = this.padding.left;
-                    y += lineH;
+                    x = cr;
+                    y += lf;
 
-                    x1 = (shape.x+shape.width);
-                    y1 = (shape.y+shape.height);
+                    w = (shape.x+shape.width);
+                    h = (shape.y+shape.height);
 
-                    lineH = y1;
+                    lf = h;
                     break;
                 default:
 
-                    x += x1;
+                    x += w;
 
-                    x1 = (shape.x+shape.width);
-                    y1 = (shape.y+shape.height);
+                    w = (shape.x+shape.width);
+                    h = (shape.y+shape.height);
 
-                    lineH = Math.max(lineH,y1);
+                    lf = Math.max(lf,h);
                     break;
                 }
 
                 shape.x = x;
                 shape.y = y;
+                
+                shape.width = w;
+                shape.height = h;
+
                 text.setBoundsVector(shape);
                 text.relocated();
             }
