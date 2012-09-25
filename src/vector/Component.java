@@ -1,5 +1,5 @@
 /*
- * Java Vector
+ * Vector (http://code.google.com/p/java-vector/)
  * Copyright (C) 2012, The DigiVac Company
  * 
  * This program is free software: you can redistribute it and/or
@@ -354,7 +354,7 @@ public interface Component
      */
     public boolean drop(Component c);
 
-
+
     /**
      * Layout determination support for strong container dependence on
      * its children.
@@ -484,14 +484,74 @@ public interface Component
 
         public T remove(int idx);
         /**
+         * Iterable example
+         * <pre>
+         *  for (Component c : this.listMouseIn(Component.class)){
+         *      ...
+         *  }
+         * </pre>
+         * Array example
+         * <pre>
+         *  Component[] array = container.listMouseIn(Component.class)).list(Component.class);
+         * </pre>
+         * 
          * List all descendants with mouseIn true
          */
-        public <C extends Component> Component.Iterator<C> listMouseIn();
+        public <C extends Component> Component.Iterator<C> listMouseIn(Class<C> clas);
         /**
+         * Iterable example
+         * <pre>
+         *  for (Border b : container.list(Border.class)){
+         *      ...
+         *  }
+         * </pre>
+         * Array example
+         * <pre>
+         *  Border[] array = container.list(Border.class)).list(Border.class);
+         * </pre>
+         * 
          * List immediate descendants in (members of) the argument
          * class
+         * @param cclass Required array component class, for example
+         * {@link Component$Layout Component.Layout.class}
          */
         public <C extends Component> Component.Iterator<C> list(Class<C> clas);
+        /**
+         * Iterable example
+         * <pre>
+         *  for (Component c : container.listContent(Component.class)){
+         *      ...
+         *  }
+         * </pre>
+         * Array example
+         * <pre>
+         *  Component[] array = container.listContent(Component.class)).list(Component.class);
+         * </pre>
+         * 
+         * @param cclass Array component class.  Use {@link Component
+         * 'Component.class'} for a default.
+         * @return Components not having layout order Parent, or not
+         * implementing Layout.
+         */
+        public <C extends Component> Component.Iterator<C> listContent(Class<C> cclass);
+        /**
+         * Iterable example
+         * <pre>
+         *  for (Component.Layout c : container.listParent(Component.Layout.class)){
+         *      ...
+         *  }
+         * </pre>
+         * Array example
+         * <pre>
+         *  Component.Layout[] array = container.listParent(Component.Layout.class)).list(Component.Layout.class);
+         * </pre>
+         * 
+         * @param cclass Array component class.  Use {@link Component
+         * 'Component.class'} for a default.
+         * @return Components implementing Layout and having layout
+         * order Parent.
+         */
+        public <C extends Component> Component.Iterator<C> listParent(Class<C> cclass);
         /**
          * Log warning
          */
@@ -564,6 +624,24 @@ public interface Component
             }
             return components;
         }
+        public static <C extends Component> C[] Add(C[] components, Component comp, Class<C> clas){
+            if (null != comp){
+                if (null == components){
+                    C[] array = (C[])java.lang.reflect.Array.newInstance(clas,1);
+                    array[0] = (C)comp;
+                    return array;
+                }
+                else {
+                    int len = components.length;
+                    C[] copier = (C[])java.lang.reflect.Array.newInstance(clas,(len+1));
+                    System.arraycopy(components,0,copier,0,len);
+                    copier[len] = (C)comp;
+                    return copier;
+                }
+            }
+            else
+                return components;
+        }
         public static Component[] Cat(Component[] a, Component.Iterator b){
 
             return Cat(a,b.list());
@@ -578,6 +656,26 @@ public interface Component
                 final int blen = b.length;
 
                 Component[] copier = new Component[alen+blen];
+
+                System.arraycopy(a,0,copier,0,alen);
+                System.arraycopy(b,0,copier,alen,blen);
+                return copier;
+            }
+        }
+        public static <C extends Component> C[] Cat(C[] a, Component.Iterator<C> b, Class<C> clas){
+
+            return Cat(a,b.list(clas),clas);
+        }
+        public static <C extends Component> C[] Cat(C[] a, C[] b, Class<C> clas){
+            if (null == b)
+                return a;
+            else if (null == a)
+                return b;
+            else {
+                final int alen = a.length;
+                final int blen = b.length;
+
+                C[] copier = (C[])java.lang.reflect.Array.newInstance(clas,(alen+blen));
 
                 System.arraycopy(a,0,copier,0,alen);
                 System.arraycopy(b,0,copier,alen,blen);
@@ -617,31 +715,90 @@ public interface Component
             }
             return components;
         }
-        public static Component.Iterator ListMouseIn(Component[] components){
-            Component[] list = null;
+        public static <C extends Component> Component.Iterator<C> ListMouseIn(Component[] components, Class<C> clas){
+            C[] list = null;
             final int count = Count(components);
             for (int cc = 0; cc < count; cc++){
                 Component component = components[cc];
                 if (component.isMouseIn()){
-                    list = Add(list,component);
+                    try {
+                        list = Add(list,component,clas);
+                    }
+                    catch (ClassCastException filter){
+                    }
                 }
                 else if (component instanceof Container){
+                    /*
+                     * Require explicit type specification (by declaration syntax)
+                     */
+                    final Component.Iterator<C> it = ((Container)component).listMouseIn(clas);
 
-                    list = Cat(list,((Container)component).listMouseIn());
+                    list = Cat(list,it,clas);
                 }
             }
-            return new Component.Iterator(list);
+            return new Component.Iterator<C>(list,clas);
         }
-        public static Component.Iterator List(Component[] components, Class clas){
-            Component[] list = null;
+        public static <C extends Component> Component.Iterator<C> List(Component[] components, Class<C> clas){
+            C[] list = null;
             final int count = Count(components);
             for (int cc = 0; cc < count; cc++){
                 Component component = components[cc];
+
                 if (clas.isAssignableFrom(component.getClass())){
-                    list = Add(list,component);
+
+                    list = Add(list,component,clas);
                 }
             }
-            return new Component.Iterator(list);
+            return new Component.Iterator<C>(list,clas);
+        }
+        /**
+         * @return Components implementing Layout and having layout order Parent.
+         */
+        public static <C extends Component> Component.Iterator<C> ListLayoutParent(Component[] components, Class<C> clas){
+            C[] list = null;
+            final int count = Count(components);
+            for (int cc = 0; cc < count; cc++){
+                Component c = components[cc];
+                if (c instanceof Component.Layout && 
+                    Component.Layout.Order.Parent == ((Component.Layout)c).queryLayout())
+                {
+                    try {
+                        list = Add(list,c,clas);
+                    }
+                    catch (ClassCastException filter){
+                    }
+                }
+            }
+            return new Component.Iterator<C>(list,clas);
+        }
+        /**
+         * @return Components not having layout order Parent, or not
+         * implementing Layout.
+         */
+        public static <C extends Component> Component.Iterator<C> ListLayoutContent(Component[] components, Class<C> clas){
+            C[] list = null;
+            final int count = Count(components);
+            for (int cc = 0; cc < count; cc++){
+                Component c = components[cc];
+                if (c instanceof Component.Layout){
+
+                    if (Component.Layout.Order.Content == ((Component.Layout)c).queryLayout()){
+                        try {
+                            list = Add(list,c,clas);
+                        }
+                        catch (ClassCastException filter){
+                        }
+                    }
+                }
+                else {
+                    try {
+                        list = Add(list,c,clas);
+                    }
+                    catch (ClassCastException filter){
+                    }
+                }
+            }
+            return new Component.Iterator<C>(list,clas);
         }
         /**
          * While the argument JSON components list matches the
@@ -724,6 +881,7 @@ public interface Component
 
         private final Component[] list;
         private final int count;
+        private final Class<C> cclass;
         private int index;
 
         public Iterator(Component[] list){
@@ -731,10 +889,25 @@ public interface Component
             if (null == list){
                 this.list = null;
                 this.count = 0;
+                this.cclass = null;
             }
             else {
                 this.list = list;
                 this.count = list.length;
+                this.cclass = null;
+            }
+        }
+        public Iterator(C[] list, Class<C> cclass){
+            super();
+            if (null == list){
+                this.list = null;
+                this.count = 0;
+                this.cclass = cclass;
+            }
+            else {
+                this.list = list;
+                this.count = list.length;
+                this.cclass = cclass;
             }
         }
 
@@ -744,6 +917,19 @@ public interface Component
                 return null;
             else
                 return this.list.clone();
+        }
+        public <C extends Component> C[] list(Class<C> clas){
+            if (0 == this.count)
+                return null;
+            else if (clas.equals(this.cclass))
+                return (C[])this.list.clone();
+            else {
+                C[] array = (C[])java.lang.reflect.Array.newInstance(clas,this.count);
+
+                System.arraycopy(this.list,0,array,0,this.count);
+
+                return array;
+            }
         }
         public java.util.Iterator<C> iterator(){
 

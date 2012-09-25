@@ -1,5 +1,5 @@
 /*
- * Java Vector
+ * Vector (http://code.google.com/p/java-vector/)
  * Copyright (C) 2012, The DigiVac Company
  * 
  * This program is free software: you can redistribute it and/or
@@ -62,8 +62,6 @@ public abstract class AbstractComponent
         this.mouseIn = false;
 
         this.transform.init();
-
-        this.setBoundsVectorInit(parent);
 
         this.setParentVector(parent);
     }

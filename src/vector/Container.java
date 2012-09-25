@@ -1,5 +1,5 @@
 /*
- * Java Vector
+ * Vector (http://code.google.com/p/java-vector/)
  * Copyright (C) 2012, The DigiVac Company
  * 
  * This program is free software: you can redistribute it and/or
@@ -175,7 +175,7 @@ public class Container<T extends Component>
 
             final Event m = ((Event.Mouse)e).transformFrom(this.getTransformParent());
 
-            for (Component c: this.listMouseIn()){
+            for (Component c: this.listMouseIn(Component.class)){
 
                 c.input(m);
             }
@@ -299,12 +299,22 @@ public class Container<T extends Component>
         }
         return this;
     }
-    @Override
-    public Container outputScene(){
-        return (Container)super.outputScene();
-    }
-    public Container outputOverlay(){
-        return (Container)super.outputOverlay();
+    /**
+     * @return Geometric union of "content" children and (0,0) origin
+     */
+    public final Bounds queryBoundsContent(){
+
+        float w = Float.MIN_VALUE, h = Float.MIN_VALUE;
+
+        for (Component c : this.listContent(Component.class)){
+
+            Bounds cb = c.getBoundsVector();
+
+            w = Math.max(w,(cb.x+cb.width));
+
+            h = Math.max(h,(cb.y+cb.height));
+        }
+        return new Bounds(w,h);
     }
 
     public final java.util.Iterator<T> iterator(){
@@ -358,13 +368,21 @@ public class Container<T extends Component>
         }
         return comp;
     }
-    public <C extends Component> Component.Iterator<C> listMouseIn(){
+    public final <C extends Component> Component.Iterator<C> listMouseIn(Class<C> clas){
 
-        return Component.Tools.ListMouseIn(this.components);
+        return Component.Tools.ListMouseIn(this.components,clas);
     }
-    public <C extends Component> Component.Iterator<C> list(Class<C> clas){
+    public final <C extends Component> Component.Iterator<C> list(Class<C> clas){
 
         return Component.Tools.List(this.components,clas);
+    }
+    public final <C extends Component> Component.Iterator<C> listContent(Class<C> clas){
+
+        return Component.Tools.ListLayoutContent(this.components,clas);
+    }
+    public final <C extends Component> Component.Iterator<C> listParent(Class<C> clas){
+
+        return Component.Tools.ListLayoutParent(this.components,clas);
     }
     public final Container warn(Throwable t, String fmt, Object... args){
 
@@ -436,36 +454,14 @@ public class Container<T extends Component>
 
             final Bounds bounds = this.getBoundsVector();
 
-            float x0 = Float.MAX_VALUE, y0 = Float.MAX_VALUE;
-            float x1 = Float.MIN_VALUE, y1 = Float.MIN_VALUE;
+            final Bounds children = this.queryBoundsContent();
 
-            for (Component c : this){
-
-                if (c instanceof Component.Layout && Component.Layout.Order.Parent == ((Component.Layout)c).queryLayout())
-                    continue;
-                else {
-                    Bounds cb = c.getBoundsVector();
-
-                    x0 = Math.min(x0,cb.x);
-                    y0 = Math.min(y0,cb.y);
-
-                    x1 = Math.max(x1,(cb.x+cb.width));
-                    y1 = Math.max(y1,(cb.y+cb.height));
-                }
-            }
-
-            /*
-             * Reflect padding offsets
-             */
-            final float width = (x1+x0);
-            final float height = (y1+y0);
-
-            bounds.width = width;
-            bounds.height = height;
+            bounds.width = children.width;
+            bounds.height = children.height;
 
             this.setBoundsVector(bounds);
 
-            for (Component.Layout c : this.list(Component.Layout.class)){
+            for (Component.Layout c : this.listParent(Component.Layout.class)){
 
                 if (Layout.Order.Parent == c.queryLayout()){
 

@@ -1,5 +1,5 @@
 /*
- * Java Vector
+ * Vector (http://code.google.com/p/java-vector/)
  * Copyright (C) 2012, The DigiVac Company
  * 
  * This program is free software: you can redistribute it and/or
@@ -420,13 +420,21 @@ public class Display<T extends Component>
         }
         return comp;
     }
-    public <C extends Component> Component.Iterator<C> listMouseIn(){
+    public <C extends Component> Component.Iterator<C> listMouseIn(Class<C> clas){
 
-        return Component.Tools.ListMouseIn(this.components);
+        return Component.Tools.ListMouseIn(this.components,clas);
     }
     public <C extends Component> Component.Iterator<C> list(Class<C> clas){
 
         return Component.Tools.List(this.components,clas);
+    }
+    public <C extends Component> Component.Iterator<C> listContent(Class<C> clas){
+
+        return Component.Tools.ListLayoutContent(this.components,clas);
+    }
+    public <C extends Component> Component.Iterator<C> listParent(Class<C> clas){
+
+        return Component.Tools.ListLayoutContent(this.components,clas);
     }
     public final Display warn(Throwable t, String fmt, Object... args){
 
@@ -523,7 +531,7 @@ public class Display<T extends Component>
 
         final Event exited = new vector.event.MouseExited(point);
 
-        for (Component c: this.listMouseIn()){
+        for (Component c: this.listMouseIn(Component.class)){
 
             c.input(exited);
         }

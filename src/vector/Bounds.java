@@ -1,5 +1,5 @@
 /*
- * Java Vector
+ * Vector (http://code.google.com/p/java-vector/)
  * Copyright (C) 2012, The DigiVac Company
  * 
  * This program is free software: you can redistribute it and/or
@@ -61,8 +61,14 @@ public class Bounds
     public Bounds(float x, float y, float w, float h){
         super(x,y,w,h);
     }
+    public Bounds(float w, float h){
+        super(0f,0f,w,h);
+    }
     public Bounds(double x, double y, double w, double h){
         super((float)x,(float)y,(float)w,(float)h);
+    }
+    public Bounds(double w, double h){
+        super(0f,0f,(float)w,(float)h);
     }
     public Bounds(java.awt.geom.RectangularShape rect){
         this(rect.getX(),rect.getY(),rect.getWidth(),rect.getHeight());
