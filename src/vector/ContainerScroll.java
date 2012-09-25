@@ -27,6 +27,7 @@ import java.awt.geom.Rectangle2D;
  */
 public class ContainerScroll<T extends Component>
     extends Container<T>
+    implements Component.Layout
 {
 
 
@@ -60,6 +61,17 @@ public class ContainerScroll<T extends Component>
         super.relocated();
 
         this.layout();
+    }
+    public Component.Layout.Order queryLayout(){
+
+        return Component.Layout.Order.Parent;
+    }
+    public void layout(Component.Layout.Order order){
+
+        if (Component.Layout.Order.Parent != order)
+            throw new UnsupportedOperationException();
+        else
+            this.modified();
     }
     /**
      * Make the objective area visible.  The objective may be a
@@ -155,6 +167,8 @@ public class ContainerScroll<T extends Component>
         }
     }
     protected void layout(){
+
+        this.setBoundsVectorInit(this.getParentVector());
 
         ContainerScrollPosition hor = null, ver = null;
         {

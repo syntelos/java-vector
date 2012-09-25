@@ -1,6 +1,5 @@
 {
     "background": "#FFFFFF",
-    
     "components": [
         {
             "class": "vector.ContainerScroll",

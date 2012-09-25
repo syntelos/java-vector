@@ -18,6 +18,9 @@
  */
 package vector;
 
+import json.Json;
+import json.ObjectJson;
+
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -36,8 +39,29 @@ public abstract class ContainerScrollPosition
     extends AbstractComponent
     implements Component.Layout
 {
+    /**
+     * 
+     */
     public enum Axis {
         Horizontal, Vertical;
+
+        public final static Axis For(String string){
+            if (null == string)
+                return null;
+            else {
+                try {
+                    return Axis.valueOf(string);
+                }
+                catch (RuntimeException x1){
+                    try {
+                        return Axis.valueOf(Component.Tools.Camel(string));
+                    }
+                    catch (RuntimeException x2){
+                        return null;
+                    }
+                }
+            }
+        }
     }
 
 
@@ -95,6 +119,37 @@ public abstract class ContainerScrollPosition
 
         return new Bounds();
     }
+    public void layout(Order order){
+        switch(order){
+        case Parent:
+            this.modified();
+            return;
+        case Content:
+            throw new UnsupportedOperationException();
+        default:
+            throw new IllegalStateException(order.name());
+        }
+    }
+    public final Axis getAxis(){
+        return this.axis;
+    }
+    public final ContainerScrollPosition setAxis(Axis axis){
+        this.axis = axis;
+        return this;
+    }
+    public final String getAxisString(){
+        Axis axis = this.axis;
+        if (null != axis)
+            return axis.name();
+        else
+            return null;
+    }
+    public final ContainerScrollPosition setAxisString(String axis){
+        if (null != axis)
+            return this.setAxis(Axis.For(axis));
+        else
+            return this.setAxis(null);
+    }
     /**
      * @return Scroll indicator position as a point on the parent's
      * (viewport's) bounding box.
@@ -113,6 +168,34 @@ public abstract class ContainerScrollPosition
             case Vertical:
                 return new Point2D.Float(x,(this.position * y));
 
+            default:
+                throw new IllegalStateException(this.axis.name());
+            }
+        }
+        else
+            throw new IllegalStateException();
+    }
+    /**
+     * @return Scroll indicator position as a point inside radius from
+     * the parent's (viewport's) bounding box.
+     */
+    public Point2D.Float queryPosition(float radius){
+        if (null != this.axis){
+
+            switch(this.axis){
+
+            case Horizontal:{
+                final float x = this.boundsViewport.width-(4.0f*radius);
+                final float y = this.boundsViewport.height-(2.0f*radius);
+
+                return new Point2D.Float((this.position * x),y);
+            }
+            case Vertical:{
+                final float x = this.boundsViewport.width-(2.0f*radius);
+                final float y = this.boundsViewport.height-(4.0f*radius);
+
+                return new Point2D.Float(x,(this.position * y));
+            }
             default:
                 throw new IllegalStateException(this.axis.name());
             }
@@ -269,4 +352,22 @@ public abstract class ContainerScrollPosition
 
         this.boundsViewport = this.getParentVector().getBoundsVector();
     }
+
+    public ObjectJson toJson(){
+
+        ObjectJson thisModel = super.toJson();
+
+        thisModel.setValue("axis",this.getAxisString());
+
+        return thisModel;
+    }
+    public boolean fromJson(Json thisModel){
+
+        super.fromJson(thisModel);
+
+        this.setAxisString( (String)thisModel.getValue("axis"));
+
+        return true;
+    }
+
 }

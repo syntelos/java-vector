@@ -495,7 +495,7 @@ public interface Component
          *  Component[] array = container.listMouseIn(Component.class)).list(Component.class);
          * </pre>
          * 
-         * List all descendants with mouseIn true
+         * List immediate descendants with mouseIn true
          */
         public <C extends Component> Component.Iterator<C> listMouseIn(Class<C> clas);
         /**
@@ -727,14 +727,6 @@ public interface Component
                     catch (ClassCastException filter){
                     }
                 }
-                else if (component instanceof Container){
-                    /*
-                     * Require explicit type specification (by declaration syntax)
-                     */
-                    final Component.Iterator<C> it = ((Container)component).listMouseIn(clas);
-
-                    list = Cat(list,it,clas);
-                }
             }
             return new Component.Iterator<C>(list,clas);
         }
@@ -867,6 +859,24 @@ public interface Component
                     }
                 }
             }
+        }
+        public final static String Camel(String string){
+            java.util.StringTokenizer strtok = new java.util.StringTokenizer(string,"-");
+            StringBuilder camel = new StringBuilder();
+            while (strtok.hasMoreTokens()){
+                String tok = strtok.nextToken();
+                int len = tok.length();
+                if (0 < len){
+                    camel.append(Character.toUpperCase(tok.charAt(0)));
+                    if (1 < len){
+                        camel.append(tok.substring(1).toLowerCase());
+                    }
+                }
+            }
+            if (0 < camel.length())
+                return camel.toString();
+            else
+                return null;
         }
     }
 

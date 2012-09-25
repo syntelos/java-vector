@@ -76,7 +76,10 @@ public class TableSmall
     }
     public void layout(Component.Layout.Order order){
 
-        this.modified();
+        if (Component.Layout.Order.Content != order)
+            throw new UnsupportedOperationException();
+        else
+            this.modified();
     }
     protected void layout(){
 
