@@ -81,6 +81,10 @@ public class Bounds
     }
 
 
+    public void init(){
+
+        this.setFrame(0,0,0,0);
+    }
     /**
      * @return Objective scale to this from that
      */

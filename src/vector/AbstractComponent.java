@@ -63,6 +63,8 @@ public abstract class AbstractComponent
 
         this.transform.init();
 
+        this.bounds.init();
+
         this.setParentVector(parent);
     }
     protected void init(Boolean init){
