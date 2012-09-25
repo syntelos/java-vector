@@ -1,6 +1,7 @@
 package demo;
 
 import vector.Color;
+import vector.Event;
 
 import json.Json;
 import json.ObjectJson;
@@ -28,7 +29,30 @@ public class ScrollBar
         this.color = Color.black;
         this.radius = 5.0f;
     }
+    public boolean input(Event e){
+
+        if (super.input(e)){
+
+            this.outputOverlay();
+            return true;
+        }
+        else {
+            switch(e.getType()){
+            case MouseMoved:
+                this.outputOverlay();
+                return true;
+            case MouseDrag:
+                this.outputOverlay();
+                return true;
+            default:
+                return false;
+            }
+        }
+    }
     public ScrollBar outputScene(Graphics2D g){
+        return this;
+    }
+    public ScrollBar outputOverlay(Graphics2D g){
 
         if (null != this.axis){
 
@@ -45,10 +69,6 @@ public class ScrollBar
 
             g.fillOval(x,y,d,d);
         }
-        return this;
-    }
-    public ScrollBar outputOverlay(Graphics2D g){
-
         return this;
     }
     public final Color getColor(){
