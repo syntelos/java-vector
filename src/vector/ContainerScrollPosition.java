@@ -230,7 +230,7 @@ public abstract class ContainerScrollPosition
 
             this.boundsContent = content;
 
-            this.visible = true;
+            this.setVisibleVector(true);
 
             if (Axis.Vertical == this.axis){
 
@@ -258,7 +258,7 @@ public abstract class ContainerScrollPosition
 
             this.boundsContent = null;
 
-            this.visible = false;
+            this.setVisibleVector(false);
 
             return true;
         }
