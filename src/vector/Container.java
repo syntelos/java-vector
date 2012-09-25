@@ -355,6 +355,15 @@ public class Container<T extends Component>
         }
         return comp;
     }
+    public T insert(T comp, int idx){
+        if (null != comp){
+            this.components = Component.Tools.Insert(this.components,comp,idx);
+
+            comp.setParentVector(this);
+            comp.init();
+        }
+        return comp;
+    }
     public final T addUnique(T comp){
         int idx = Component.Tools.IndexOf(this.components,comp.getClass());
         if (-1 < idx)

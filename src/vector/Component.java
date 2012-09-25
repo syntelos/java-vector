@@ -474,6 +474,11 @@ public interface Component
          */
         public T add(T comp);
         /**
+         * @param comp New component to add to list
+         * @param index New component index in list
+         */
+        public T insert(T comp, int index);
+        /**
          * If another component exists in the same class (including
          * subclass) of the argument, then return it.  Otherwise add
          * the argument.
@@ -563,7 +568,7 @@ public interface Component
     }
 
     /**
-     * 
+     * Implementations of common utilities.
      */
     public static class Tools {
 
@@ -623,6 +628,31 @@ public interface Component
                 }
             }
             return components;
+        }
+        public static Component[] Insert(Component[] components, Component comp, int index){
+            if (null == comp)
+                return components;
+            else if (-1 < index){
+                int len = ((null != components)?(components.length):(0));
+                int nlen = Math.max((len+1),(index+1));
+                Component[] copier = new Component[nlen];
+                if (null != components){
+                    if (0 == index){
+                        System.arraycopy(components,0,copier,1,len);
+                    }
+                    else if (len == index){
+                        System.arraycopy(components,0,copier,0,len);
+                    }
+                    else {
+                        System.arraycopy(components,0,copier,0,index);
+                        System.arraycopy(components,index,copier,(index+1),(len-index));
+                    }
+                }
+                copier[index] = comp;
+                return copier;
+            }
+            else
+                throw new ArrayIndexOutOfBoundsException(String.valueOf(index));
         }
         public static <C extends Component> C[] Add(C[] components, Component comp, Class<C> clas){
             if (null != comp){
