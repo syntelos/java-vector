@@ -31,6 +31,7 @@ import java.util.Arrays;
  */
 public class TableSmall
     extends Container
+    implements Component.Layout
 {
 
 
@@ -53,15 +54,29 @@ public class TableSmall
     }
     @Override
     public void modified(){
+
+        this.fit = false;
+
         super.modified();
 
         this.layout();
     }
     @Override
     public void resized(){
+
+        this.fit = false;
+
         super.resized();
 
         this.layout();
+    }
+    public Component.Layout.Order queryLayout(){
+
+        return Component.Layout.Order.Content;
+    }
+    public void layout(Component.Layout.Order order){
+
+        this.modified();
     }
     protected void layout(){
 

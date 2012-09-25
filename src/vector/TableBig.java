@@ -30,6 +30,7 @@ import java.awt.geom.Rectangle2D;
  */
 public class TableBig
     extends Container
+    implements Component.Layout
 {
 
     protected float cellSpacing;
@@ -68,6 +69,25 @@ public class TableBig
         super.resized();
 
         this.layout();
+    }
+    public Component.Layout.Order queryLayout(){
+        if (this.fixed)
+            return Component.Layout.Order.Content;
+        else
+            return Component.Layout.Order.Parent;
+    }
+    public void layout(Component.Layout.Order order){
+        switch(order){
+        case Content:
+            this.fixed = true;
+            break;
+        case Parent:
+            this.fixed = false;
+            break;
+        default:
+            throw new IllegalStateException(order.name());
+        }
+        this.modified();
     }
     protected void layout(){
 

@@ -273,12 +273,15 @@ public class Container<T extends Component>
 
         for (Component c: this){
 
-            Graphics2D cg = (Graphics2D)g.create();
-            try {
-                c.outputScene(cg);
-            }
-            finally {
-                cg.dispose();
+            if (c.isVisible()){
+
+                Graphics2D cg = (Graphics2D)g.create();
+                try {
+                    c.outputScene(cg);
+                }
+                finally {
+                    cg.dispose();
+                }
             }
         }
         return this;
@@ -289,12 +292,15 @@ public class Container<T extends Component>
 
         for (Component c: this){
 
-            Graphics2D cg = (Graphics2D)g.create();
-            try {
-                c.outputOverlay(cg);
-            }
-            finally {
-                cg.dispose();
+            if (c.isVisible()){
+
+                Graphics2D cg = (Graphics2D)g.create();
+                try {
+                    c.outputOverlay(cg);
+                }
+                finally {
+                    cg.dispose();
+                }
             }
         }
         return this;
