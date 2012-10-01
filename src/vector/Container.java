@@ -267,7 +267,7 @@ public class Container<T extends Component>
             throw new IllegalStateException(e.getType().name());
         }
     }
-    public final Container outputScene(Graphics2D g){
+    public Container outputScene(Graphics2D g){
 
         this.getTransformParent().transformFrom(g);
 
@@ -286,7 +286,7 @@ public class Container<T extends Component>
         }
         return this;
     }
-    public final Container outputOverlay(Graphics2D g){
+    public Container outputOverlay(Graphics2D g){
 
         this.getTransformParent().transformFrom(g);
 
@@ -308,7 +308,7 @@ public class Container<T extends Component>
     /**
      * @return Geometric union of "content" children and (0,0) origin
      */
-    public final Bounds queryBoundsContent(){
+    public Bounds queryBoundsContent(){
 
         float w = Float.MIN_VALUE, h = Float.MIN_VALUE;
 
@@ -323,7 +323,7 @@ public class Container<T extends Component>
         return new Bounds(w,h);
     }
 
-    public final java.util.Iterator<T> iterator(){
+    public final Component.Iterator<T> iterator(){
         return new Component.Iterator(this.components);
     }
     public final int count(){

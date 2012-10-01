@@ -46,13 +46,14 @@ public class Grid
     implements Component.Layout
 {
 
+
     protected Color color;
 
-    protected boolean mouse, fixed;
+    protected boolean fixed;
 
     protected float[] domain, range;
 
-    protected Path2D.Float shape, pointer;
+    protected Path2D.Float shape;
 
 
     public Grid(){
@@ -67,7 +68,7 @@ public class Grid
         super.init();
 
         this.color = Color.black;
-        this.mouse = false;
+
         this.fixed = false;
     }
     @Override
@@ -78,7 +79,6 @@ public class Grid
         this.range = null;
 
         this.shape = null;
-        this.pointer = null;
     }
     /**
      * Calls {@link #layout()}
@@ -86,8 +86,6 @@ public class Grid
     @Override
     public void resized(){
         super.resized();
-
-        this.pointer = null;
 
         this.layout();
     }
@@ -99,15 +97,11 @@ public class Grid
     public void modified(){
         super.modified();
 
-        this.pointer = null;
-
         this.layout();
     }
     @Override
     public void relocated(){
         super.relocated();
-
-        this.pointer = null;
 
         this.layout();
     }
@@ -125,8 +119,10 @@ public class Grid
     public void layout(Component.Layout.Order order){
         switch(order){
         case Content:
+            this.fixed = true;
             break;
         case Parent:
+            this.fixed = false;
             break;
         default:
             throw new IllegalStateException(order.name());
@@ -148,21 +144,6 @@ public class Grid
             return this.setColor(new Color(code));
         else
             return this;
-    }
-    public final boolean isMouse(){
-        return this.mouse;
-    }
-    public final Boolean getMouse(){
-        return this.mouse;
-    }
-    public final Grid setMouse(boolean mouse){
-        this.mouse = mouse;
-        return this;
-    }
-    public final Grid setMouse(Boolean mouse){
-        if (null != mouse)
-            this.mouse = mouse;
-        return this;
     }
     public final float[] getDomain(){
         float[] domain = this.domain;
@@ -226,64 +207,56 @@ public class Grid
         if (null != shape){
             this.getTransformParent().transformFrom(g);
 
-            g.setColor(this.getColor());
+            g.setColor(this.color);
             g.draw(shape);
         }
         return this;
     }
     public Grid outputOverlay(Graphics2D g){
-        Shape shape = this.pointer;
-        if (null != shape){
-            g.setColor(this.getColor());
-            g.draw(shape);
-        }
+
         return this;
     }
-    @Override
-    public boolean input(Event e){
+    // @Override
+    // public boolean input(Event e){
 
-        switch(e.getType()){
+    //     switch(e.getType()){
 
-        case MouseEntered:
-            this.mouseIn = true;
-            return true;
-        case MouseExited:
-            this.mouseIn = false;
-            if (this.mouse){
-                this.pointer = null;
-                this.outputOverlay();
-            }
-            return true;
-        case MouseMoved:
-            if (this.mouse){
+    //     case MouseEntered:
+    //         this.mouseIn = true;
+    //         return true;
+    //     case MouseExited:
+    //         this.mouseIn = false;
+    //         return true;
+    //     case MouseMoved:
+    //         if (this.mouse){
 
-                final float radius = Radius(this.getBoundsVector());
+    //             final Bounds bounds = this.getBoundsVector();
 
-                final Point2D mouse = ((Event.Mouse.Motion)e).getPoint();
-                {
-                    final float x = (float)mouse.getX();
-                    final float y = (float)mouse.getY();
-                    final float x0 = (x-radius);
-                    final float x1 = (x+radius);
-                    final float y0 = (y-radius);
-                    final float y1 = (y+radius);
+    //             final Point2D mouse = ((Event.Mouse.Motion)e).getPoint();
+    //             {
+    //                 final float x = (float)mouse.getX();
+    //                 final float y = (float)mouse.getY();
+    //                 final float x0 = (x-radius);
+    //                 final float x1 = (x+radius);
+    //                 final float y0 = (y-radius);
+    //                 final float y1 = (y+radius);
 
-                    final Path2D.Float pointer = new Path2D.Float();
-                    {
-                        pointer.moveTo(x0,y);
-                        pointer.lineTo(x1,y);
-                        pointer.moveTo(x,y0);
-                        pointer.lineTo(x,y1);
-                    }
-                    this.pointer = pointer;
-                }
-                this.outputOverlay();
-            }
-            return false;
-        default:
-            return false;
-        }
-    }
+    //                 final Path2D.Float pointer = new Path2D.Float();
+    //                 {
+    //                     pointer.moveTo(x0,y);
+    //                     pointer.lineTo(x1,y);
+    //                     pointer.moveTo(x,y0);
+    //                     pointer.lineTo(x,y1);
+    //                 }
+    //                 this.pointer = pointer;
+    //             }
+    //             this.outputOverlay();
+    //         }
+    //         return false;
+    //     default:
+    //         return false;
+    //     }
+    // }
     protected void layout(){
 
         if (!this.fixed){
@@ -329,8 +302,6 @@ public class Grid
 
         thisModel.setValue("color", this.getColor());
 
-        thisModel.setValue("mouse",this.getMouse());
-
         thisModel.setValue("domain", this.getDomain());
 
         thisModel.setValue("range", this.getRange());
@@ -344,8 +315,6 @@ public class Grid
         super.fromJson(thisModel);
 
         this.setColor( (Color)thisModel.getValue("color",Color.class));
-
-        this.setMouse( (Boolean)thisModel.getValue("mouse"));
 
         this.setDomain( (float[])thisModel.getValue("domain",float[].class));
 
@@ -365,12 +334,5 @@ public class Grid
             list[cc] = (float)start;
         }
         return list;
-    }
-    public final static float Radius(Bounds dim){
-        float gross = Math.max(dim.width,dim.height);
-        if (100f < gross)
-            return (0.01f * gross);
-        else
-            return (0.05f * gross);
     }
 }

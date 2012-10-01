@@ -263,6 +263,13 @@ public class Border
 
         return this.style;
     }
+    public final String getStyleString(){
+        Style style = this.style;
+        if (null != style)
+            return style.toString();
+        else
+            return null;
+    }
     public final Border setStyle(Style style){
         if (null != style){
             this.style = style;
@@ -399,7 +406,7 @@ public class Border
         thisModel.setValue("color-over",this.getColorOver());
         thisModel.setValue("background",this.getBackground());
         thisModel.setValue("background-over",this.getBackgroundOver());
-        thisModel.setValue("style",this.getStyle());
+        thisModel.setValue("style",this.getStyleString());
         thisModel.setValue("fill",this.getFill());
         thisModel.setValue("fixed",this.getFixed());
         thisModel.setValue("arc",this.getArc());

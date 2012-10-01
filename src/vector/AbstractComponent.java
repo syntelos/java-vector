@@ -21,6 +21,7 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
+import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
@@ -231,6 +232,14 @@ public abstract class AbstractComponent
     protected AbstractComponent setTransformLocal(float sx, float sy){
 
         return this.setTransformLocal(Transform.getScaleInstance(sx,sy));
+    }
+    protected AbstractComponent setTransformLocal(Shape shape){
+
+        return this.setTransformLocal(new Bounds(shape));
+    }
+    protected AbstractComponent setTransformLocal(Bounds shape){
+
+        return this.setTransformLocal(this.getBoundsVector().scaleFrom(shape));
     }
     public boolean input(Event e){
 
