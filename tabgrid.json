@@ -7,6 +7,7 @@
             "components": [
                 {
                     "class": "vector.Container",
+                    "clip": true,
                     "components": [
                         {
                             "class": "vector.Grid",
@@ -19,6 +20,7 @@
                                     "class": "vector.Path",
                                     "color": "#FF0000",
                                     "color-over": "#0000FF",
+                                    "fixed": true,
                                     "align": "center",
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
@@ -28,6 +30,7 @@
                 },
                 {
                     "class": "vector.Container",
+                    "clip": true,
                     "components": [
                         {
                             "class": "vector.Grid",
@@ -40,6 +43,7 @@
                                     "class": "vector.Path",
                                     "color": "#FF0000",
                                     "color-over": "#0000FF",
+                                    "fixed": true,
                                     "align": "center",
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
@@ -49,6 +53,7 @@
                 },
                 {
                     "class": "vector.Container",
+                    "clip": true,
                     "components": [
                         {
                             "class": "vector.Grid",
@@ -61,71 +66,7 @@
                                     "class": "vector.Path",
                                     "color": "#FF0000",
                                     "color-over": "#0000FF",
-                                    "align": "center",
-                                    "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
-                                }
-                            ]
-                        }
-                    ]
-                },
-
-                {
-                    "class": "vector.Container",
-                    "background": "#40AFAFEF",
-                    "components": [
-                        {
-                            "class": "vector.Grid",
-                            "color": "#808F8FAF",
-                        },
-                        {
-                            "class": "vector.TrackPointer",
-                            "components": [
-                                {
-                                    "class": "vector.Path",
-                                    "color": "#FF0000",
-                                    "color-over": "#0000FF",
-                                    "align": "center",
-                                    "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "class": "vector.Container",
-                    "components": [
-                        {
-                            "class": "vector.Grid",
-                            "color": "#808F8FAF",
-                        },
-                        {
-                            "class": "vector.TrackPointer",
-                            "components": [
-                                {
-                                    "class": "vector.Path",
-                                    "color": "#FF0000",
-                                    "color-over": "#0000FF",
-                                    "align": "center",
-                                    "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "class": "vector.Container",
-                    "components": [
-                        {
-                            "class": "vector.Grid",
-                            "color": "#808F8FAF",
-                        },
-                        {
-                            "class": "vector.TrackPointer",
-                            "components": [
-                                {
-                                    "class": "vector.Path",
-                                    "color": "#FF0000",
-                                    "color-over": "#0000FF",
+                                    "fixed": true,
                                     "align": "center",
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
@@ -136,6 +77,7 @@
 
                 {
                     "class": "vector.Container",
+                    "clip": true,
                     "components": [
                         {
                             "class": "vector.Grid",
@@ -148,6 +90,7 @@
                                     "class": "vector.Path",
                                     "color": "#FF0000",
                                     "color-over": "#0000FF",
+                                    "fixed": true,
                                     "align": "center",
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
@@ -157,6 +100,7 @@
                 },
                 {
                     "class": "vector.Container",
+                    "clip": true,
                     "components": [
                         {
                             "class": "vector.Grid",
@@ -169,6 +113,7 @@
                                     "class": "vector.Path",
                                     "color": "#FF0000",
                                     "color-over": "#0000FF",
+                                    "fixed": true,
                                     "align": "center",
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
@@ -178,6 +123,7 @@
                 },
                 {
                     "class": "vector.Container",
+                    "clip": true,
                     "components": [
                         {
                             "class": "vector.Grid",
@@ -190,6 +136,77 @@
                                     "class": "vector.Path",
                                     "color": "#FF0000",
                                     "color-over": "#0000FF",
+                                    "fixed": true,
+                                    "align": "center",
+                                    "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
+                                }
+                            ]
+                        }
+                    ]
+                },
+
+                {
+                    "class": "vector.Container",
+                    "clip": true,
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                        },
+                        {
+                            "class": "vector.TrackPointer",
+                            "components": [
+                                {
+                                    "class": "vector.Path",
+                                    "color": "#FF0000",
+                                    "color-over": "#0000FF",
+                                    "fixed": true,
+                                    "align": "center",
+                                    "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "class": "vector.Container",
+                    "clip": true,
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                        },
+                        {
+                            "class": "vector.TrackPointer",
+                            "components": [
+                                {
+                                    "class": "vector.Path",
+                                    "color": "#FF0000",
+                                    "color-over": "#0000FF",
+                                    "fixed": true,
+                                    "align": "center",
+                                    "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "class": "vector.Container",
+                    "clip": true,
+                    "components": [
+                        {
+                            "class": "vector.Grid",
+                            "color": "#808F8FAF",
+                        },
+                        {
+                            "class": "vector.TrackPointer",
+                            "components": [
+                                {
+                                    "class": "vector.Path",
+                                    "color": "#FF0000",
+                                    "color-over": "#0000FF",
+                                    "fixed": true,
                                     "align": "center",
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }

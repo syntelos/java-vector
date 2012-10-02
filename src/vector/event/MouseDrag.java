@@ -28,10 +28,10 @@ import java.awt.geom.Point2D;
 public class MouseDrag
     extends AbstractMousePoint
 {
-    public MouseDrag(Action action, Point2D point){
+    public MouseDrag(Action action, Point2D.Float point){
         super(Event.Type.MouseDrag,action,point);
     }
-    public MouseDrag(Mouse e, Point2D point){
+    public MouseDrag(Mouse e, Point2D.Float point){
         super(e.getType(),e.getAction(),point);
     }
 }

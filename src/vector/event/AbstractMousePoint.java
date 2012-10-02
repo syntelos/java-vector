@@ -30,10 +30,10 @@ public class AbstractMousePoint
     implements Event.Mouse.Point
 {
 
-    public final Point2D point;
+    public final Point2D.Float point;
 
 
-    public AbstractMousePoint(Type type, Action action, Point2D point){
+    public AbstractMousePoint(Type type, Action action, Point2D.Float point){
         super(type,action);
         if (null != point)
             this.point = point;
@@ -42,7 +42,7 @@ public class AbstractMousePoint
     }
 
 
-    public final Point2D getPoint(){
+    public final Point2D.Float getPoint(){
         return this.point;
     }
     protected StringBuilder toStringBuilder(){

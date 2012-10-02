@@ -19,12 +19,90 @@
 package vector;
 
 /**
- * General 2D alignment property value
+ * General 2D alignment property value.
+ * 
+ * The class design of the user will define a layout strategy which
+ * interprets the meaning of "bounding box" in the following
+ * specification of the values of this class.  
+ * 
+ * The "bounding box" to align to should be the bounding box of the
+ * immediate parent, which should but may not enclose (or contain) the
+ * component that aligns itself to that box.  This is an indempotent
+ * solution, while a component class may be designed for other
+ * indempotent solutions.
+ * 
+ * This alignment should change the location of the component, while a
+ * component class might possibly be designed for an alternative
+ * interpretation such as scaling.
  */
 public enum Align {
-    LEFT, RIGHT, CENTER, TOP, BOTTOM;
+    /**
+     * Align left edge of content to left edge of bounding box: <code>X = 0</code>
+     */
+    LEFT, 
+    /**
+     * Align right edge of content to right edge of bounding box: <code>X = (parent.width - this.width)</code>
+     */
+    RIGHT, 
+    /**
+     * Align center of content to center of bounding box: <code>X = (parent.width - this.width)/2.0; Y = (parent.height - this.height)/2.0</code>
+     */
+    CENTER, 
+    /**
+     * Align top edge of content to top edge of bounding box: <code>Y = 0</code>
+     */
+    TOP, 
+    /**
+     * Align bottom edge of content to bottom edge of bounding box: <code>Y = (parent.height - this.height)</code>
+     */
+    BOTTOM;
 
 
+    /**
+     * Apply alignment to component bounds and return
+     * 
+     * @param component Component bounds having this alignment
+     * @param parent Parent bounding box circumscribing alignment
+     * 
+     * @return Component bounds
+     */
+    public Bounds apply(Bounds component, Bounds parent){
+        switch(this){
+        case LEFT:
+
+            component.x = 0.0f;
+
+            return component;
+
+        case RIGHT:
+
+            component.x = (parent.width - component.width);
+
+            return component;
+
+        case CENTER:
+
+            component.x = (parent.width - component.width)/2.0f;
+            component.y = (parent.height - component.height)/2.0f;
+
+            return component;
+
+        case TOP:
+
+            component.y = 0.0f;
+
+            return component;
+
+        case BOTTOM:
+
+            component.y = (parent.height - component.height);
+
+            return component;
+
+        default:
+            throw new IllegalStateException(this.name());
+        }
+    }
     public String toString(){
         return this.name().toLowerCase();
     }
@@ -49,6 +127,38 @@ public enum Align {
         LEFT, CENTER, RIGHT;
 
 
+        /**
+         * Apply alignment to component bounds and return
+         * 
+         * @param component Component bounds having this alignment
+         * @param parent Parent bounding box circumscribing alignment
+         * 
+         * @return Component bounds
+         */
+        public Bounds apply(Bounds component, Bounds parent){
+            switch(this){
+            case LEFT:
+
+                component.x = 0.0f;
+
+                return component;
+
+            case CENTER:
+
+                component.x = (parent.width - component.width)/2.0f;
+
+                return component;
+
+            case RIGHT:
+
+                component.x = (parent.width - component.width);
+
+                return component;
+
+            default:
+                throw new IllegalStateException(this.name());
+            }
+        }
         public String toString(){
             return this.name().toLowerCase();
         }
@@ -73,6 +183,39 @@ public enum Align {
         TOP, CENTER, BOTTOM;
 
 
+        /**
+         * Apply alignment to component bounds and return
+         * 
+         * @param component Component bounds having this alignment
+         * @param parent Parent bounding box circumscribing alignment
+         * 
+         * @return Component bounds
+         */
+        public Bounds apply(Bounds component, Bounds parent){
+            switch(this){
+
+            case TOP:
+
+                component.y = 0.0f;
+
+                return component;
+
+            case CENTER:
+
+                component.y = (parent.height - component.height)/2.0f;
+
+                return component;
+
+            case BOTTOM:
+
+                component.y = (parent.height - component.height);
+
+                return component;
+
+            default:
+                throw new IllegalStateException(this.name());
+            }
+        }
         public String toString(){
             return this.name().toLowerCase();
         }

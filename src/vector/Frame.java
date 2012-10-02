@@ -116,28 +116,39 @@ public class Frame
         if (0 < argv.length){
 
             String string = argv[0];
-
             try {
-                URL url = new URL(string);
+                try {
+                    URL url = new URL(string);
 
-                if (!frame.open(url))
-                    System.exit(1);
-
-            }
-            catch (MalformedURLException exc){
-
-                File file = new File(string);
-                if (file.isFile()){
-
-                    if (!frame.open(file))
+                    if (!frame.open(url))
                         System.exit(1);
-                }
-                else {
 
-                    frame.warn("Error, unrecognized file '%s'",file);
-                    System.exit(1);
+                }
+                catch (MalformedURLException exc){
+
+                    File file = new File(string);
+                    if (file.isFile()){
+
+                        if (!frame.open(file))
+                            System.exit(1);
+                    }
+                    else {
+
+                        frame.warn("Error, unrecognized file '%s'",file);
+                        System.exit(1);
+                    }
                 }
             }
+            catch (Throwable t){
+
+                frame.warn(t,"Error loading '%s'",string);
+                System.exit(1);
+            }
+        }
+        else {
+
+            frame.warn("Error, require argument JSON file");
+            System.exit(1);
         }
     }
 }

@@ -18,8 +18,10 @@
  */
 package vector;
 
-import java.util.StringTokenizer;
+import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.RoundRectangle2D;
+import java.util.StringTokenizer;
 
 /**
  * Storage class, not intermediate value, employs 32 bit floating point.
@@ -106,6 +108,32 @@ public class Bounds
     public RoundRectangle2D.Float round(float arc){
 
         return new RoundRectangle2D.Float(this.x,this.y,this.width,this.height,arc,arc);
+    }
+    /**
+     * @return Interior midpoint relative to box location: width
+     * divided by two, height divided by two
+     */
+    public Point2D.Float midpoint(){
+        float x = (this.width/2.0f);
+        float y = (this.height/2.0f);
+        return new Point2D.Float(x,y);
+    }
+    public Bounds apply(Align align, Bounds parent){
+
+        if (null != align)
+            return align.apply(this,parent);
+        else
+            return this;
+    }
+    /**
+     * @param g Graphics context
+     * @return The argument graphics context, not a clone or copy
+     */
+    public Graphics2D clip(Graphics2D g){
+
+        g.translate(this.x,this.y);
+        g.clipRect(0,0,(int)Math.ceil(this.width+1),(int)Math.ceil(this.height+1));
+        return g;
     }
     public Bounds clone(){
         return (Bounds)super.clone();

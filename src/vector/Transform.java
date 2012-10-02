@@ -202,12 +202,16 @@ public class Transform
     /**
      * Common graphics transformation from parent to child -- this is
      * the parent transform.
+     * 
+     * @param g Graphics context
+     * 
+     * @return The argument graphics context (not a clone or copy)
      */
-    public Transform transformFrom(Graphics2D g){
+    public Graphics2D transformFrom(Graphics2D g){
 
         g.transform(this);
 
-        return this;
+        return g;
     }
     @Override
     public Transform createInverse(){

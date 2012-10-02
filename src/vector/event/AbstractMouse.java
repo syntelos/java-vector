@@ -57,8 +57,8 @@ public class AbstractMouse
     }
     public final Event transformFrom(Transform parent){
         if (this instanceof Motion){
-            final Point2D src = ((Motion)this).getPoint();
-            final Point2D dst = parent.transformFrom(src);
+            final Point2D.Float src = ((Motion)this).getPoint();
+            final Point2D.Float dst = parent.transformFrom(src);
 
             switch(this.getType()){
             case MouseEntered:
@@ -72,8 +72,8 @@ public class AbstractMouse
             }
         }
         else if (this instanceof Point){
-            final Point2D src = ((Point)this).getPoint();
-            final Point2D dst = parent.transformFrom(src);
+            final Point2D.Float src = ((Point)this).getPoint();
+            final Point2D.Float dst = parent.transformFrom(src);
 
             switch(this.getType()){
             case MouseDown:

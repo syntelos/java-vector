@@ -30,16 +30,34 @@ public class TrackPointer
     implements Component.Layout
 {
 
+    protected Point2D.Float midpoint;
+
+
     public TrackPointer(){
         super();
     }
 
 
     @Override
+    public void init(){
+        super.init();
+
+        this.fit = false;
+        this.visible = false;
+    }
+    @Override
+    public void destroy(){
+        super.destroy();
+
+        this.midpoint = null;
+    }
+    @Override
     public void resized(){
         this.fit = false;
 
         this.setBoundsVectorInit(this.getParentVector());
+
+        this.midpoint = this.getBoundsVector().midpoint();
 
         super.resized();
     }
@@ -48,6 +66,8 @@ public class TrackPointer
         this.fit = false;
 
         this.setBoundsVectorInit(this.getParentVector());
+
+        this.midpoint = this.getBoundsVector().midpoint();
 
         super.modified();
     }
@@ -73,9 +93,11 @@ public class TrackPointer
 
         case MouseEntered:{
             this.mouseIn = true;
+            this.visible = true;
 
-            final Point2D.Float point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
-            final Event entered = new vector.event.MouseEntered(point);
+            this.moveto(((Event.Mouse.Motion)e).getPoint());
+
+            final Event entered = ((Event.Mouse)e).transformFrom(this.getTransformParent());
 
             final Component.Iterator<Component> it = this.iterator();
 
@@ -83,10 +105,13 @@ public class TrackPointer
 
                 c.input(entered);
             }
+            this.outputOverlay();
+
             return true;
         }
         case MouseExited:{
             this.mouseIn = false;
+            this.visible = false;
 
             final Event exited = ((Event.Mouse)e).transformFrom(this.getTransformParent());
 
@@ -96,12 +121,15 @@ public class TrackPointer
 
                 c.input(exited);
             }
+            this.outputOverlay();
+
             return true;
         }
         case MouseMoved:{
-            final Point2D.Float point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
 
-            final Event moved = new vector.event.MouseMoved(point);
+            this.moveto(((Event.Mouse.Motion)e).getPoint());
+
+            final Event moved = ((Event.Mouse)e).transformFrom(this.getTransformParent());
 
             final Component.Iterator<Component> it = this.iterator();
 
@@ -109,6 +137,9 @@ public class TrackPointer
 
                 c.input(moved);
             }
+
+            this.outputOverlay();
+
             return false;
         }
         case MouseDown:
@@ -123,19 +154,9 @@ public class TrackPointer
             }
             return false;
         }
-        case MouseDrag:{
-            final Event.Mouse.Point m = (Event.Mouse.Point)e;
-            final Point2D.Float point = this.transformFromParent(m.getPoint());
-            final Event dragged = new vector.event.MouseDrag(m,point);
-
-            final Component.Iterator<Component> it = this.iterator();
-
-            for (Component c: it){
-
-                c.input(dragged);
-            }
+        case MouseDrag:
             return false;
-        }
+
         case MouseWheel:
         case KeyDown:
         case KeyUp:{
@@ -168,26 +189,46 @@ public class TrackPointer
             throw new IllegalStateException(e.getType().name());
         }
     }
+    public Container outputScene(Graphics2D g){
+
+        return this;
+    }
     public Container outputOverlay(Graphics2D g){
 
-        this.getTransformParent().transformFrom(g);
+        if (this.visible){
 
-        final Component.Iterator<Component> it = this.iterator();
+            this.getTransformParent().transformFrom(g);
 
-        for (Component c: it){
+            final Component.Iterator<Component> it = this.iterator();
 
-            if (c.isVisible()){
+            for (Component c: it){
 
-                Graphics2D cg = (Graphics2D)g.create();
-                try {
-                    c.outputScene(cg);
-                }
-                finally {
-                    cg.dispose();
+                if (c.isVisible()){
+
+                    Graphics2D cg = (Graphics2D)g.create();
+                    try {
+                        c.outputScene(cg);
+                    }
+                    finally {
+                        cg.dispose();
+                    }
                 }
             }
         }
         return this;
     }
+    protected TrackPointer moveto(Point2D.Float input){
 
+        float x = (input.x-this.midpoint.x);
+        float y = (input.y-this.midpoint.y);
+
+        return (TrackPointer)this.setLocationVector(x,y);
+    }
+    /**
+     * As contained by its parent, this is always true
+     */
+    @Override
+    public boolean contains(Point2D.Float p){
+        return true;
+    }
 }

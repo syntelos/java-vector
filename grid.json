@@ -3,8 +3,7 @@
   "components": [
     {
       "class": "vector.Grid",
-      "color": "#000000",
-      "mouse": true
+      "color": "#000000"
     }
   ]
 }

@@ -21,6 +21,7 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
+import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -104,6 +105,13 @@ public abstract class AbstractComponent
     public final <T extends Component> T getParentVector(){
 
         return (T)this.parent;
+    }
+    protected final Bounds getParentBounds(){
+
+        if (null != this.parent)
+            return this.parent.getBoundsVector();
+        else
+            throw new IllegalStateException();
     }
     public final Component setParentVector(Component parent){
         if (null != parent){
@@ -191,15 +199,15 @@ public abstract class AbstractComponent
         else
             return this;
     }
-    public final boolean contains(int x, int y){
+    public boolean contains(int x, int y){
 
         return this.bounds.contains(x,y);
     }
-    public final boolean contains(float x, float y){
+    public boolean contains(float x, float y){
 
         return this.bounds.contains(x,y);
     }
-    public final boolean contains(Point2D.Float p){
+    public boolean contains(Point2D.Float p){
 
         return this.bounds.contains(p.x,p.y);
     }
@@ -212,7 +220,12 @@ public abstract class AbstractComponent
         this.bounds.x = (float)point.getX();
         this.bounds.y = (float)point.getY();
 
-        this.relocated();
+        return this;
+    }
+    public final Component setLocationVector(float x, float y){
+
+        this.bounds.x = x;
+        this.bounds.y = y;
 
         return this;
     }
@@ -240,6 +253,50 @@ public abstract class AbstractComponent
     protected AbstractComponent setTransformLocal(Bounds shape){
 
         return this.setTransformLocal(this.getBoundsVector().scaleFrom(shape));
+    }
+    /**
+     * Apply parent transform via clipping: an alternative to the
+     * unclipped {@link Container} pattern
+     * <pre>
+     * this.getTransformParent().transformFrom(g);
+     * </pre> which is
+     * <pre>
+     * this.getTransformLocal().transformFrom(this.getBoundsVector().clip(g));
+     * </pre>
+     * 
+     * @param g Graphics context
+     * 
+     * @return The argument graphics context (not a clone or copy),
+     * clipped to this bounding box and transformed with the local
+     * transform
+     * 
+     * @see #transformFrom(java.awt.Graphics2D)
+     */
+    protected Graphics2D clipFrom(Graphics2D g){
+
+        return this.getTransformLocal().transformFrom(this.getBoundsVector().clip(g));
+    }
+    /**
+     * Apply parent transform without clipping: an alternative to the
+     * clipped {@link Container} pattern 
+     * <pre>
+     * this.getTransformLocal().transformFrom(this.getBoundsVector().clip(g));
+     * </pre> which is
+     * <pre>
+     * this.getTransformParent().transformFrom(g);
+     * </pre>
+     * 
+     * @param g Graphics context
+     * 
+     * @return The argument graphics context (not a clone or copy),
+     * clipped to this bounding box and transformed with the local
+     * transform
+     * 
+     * @see #clipFrom(java.awt.Graphics2D)
+     */
+    protected Graphics2D transformFrom(Graphics2D g){
+
+        return this.getTransformParent().transformFrom(g);
     }
     public boolean input(Event e){
 

@@ -105,6 +105,8 @@ public class Path
 
     protected Color color, colorOver;
 
+    protected Stroke stroke, strokeOver;
+
     protected Path2D.Float path;
 
     protected Path.Winding winding;
@@ -131,7 +133,6 @@ public class Path
         this.setWindingNonZero();
 
         this.color = Color.black;
-        this.colorOver = null;
         this.fixed = false;
         this.fill = false;
     }
@@ -141,6 +142,9 @@ public class Path
 
         this.path = null;
         this.winding = null;
+        this.colorOver = null;
+        this.stroke = null;
+        this.strokeOver = null;
     }
     @Override
     public void modified(){
@@ -356,6 +360,27 @@ public class Path
     public Path setAlign(String align){
         return this.setAlign(Align.For(align));
     }
+    public final Stroke getStroke(){
+
+        return this.stroke;
+    }
+    public final Path setStroke(Stroke stroke){
+
+        this.stroke = stroke;
+
+        return this;
+    }
+    public final Stroke getStrokeOver(){
+
+        return this.strokeOver;
+    }
+    public final Path setStrokeOver(Stroke strokeOver){
+
+        this.strokeOver = strokeOver;
+
+        return this;
+    }
+
     public Path moveTo(Point2D.Float p)
         throws vector.Path.Winding.Missing
     {
@@ -528,6 +553,7 @@ public class Path
 
         return this.setWinding(w);
     }
+
     public Path outputScene(Graphics2D g){
         Shape shape = this.path;
         if (null != shape){
@@ -538,17 +564,11 @@ public class Path
             else
                 g.setColor(this.color);
 
-            if (null != this.align){
-                Bounds shapeBounds = new Bounds(shape);
+            if (this.mouseIn && null != this.strokeOver)
+                g.setStroke(this.strokeOver);
+            else if (null != this.stroke)
+                g.setStroke(this.stroke);
 
-                switch(this.align){
-                case LEFT:
-                case RIGHT:
-                case CENTER:
-                case TOP:
-                case BOTTOM:
-                }
-            }
 
             if (this.fill)
                 g.fill(shape);
@@ -566,16 +586,13 @@ public class Path
         ObjectJson thisModel = (ObjectJson)super.toJson();
 
         thisModel.setValue("color", this.getColor());
-
         thisModel.setValue("color-over", this.getColorOver());
-
-        thisModel.setValue("d", this.getD());
-
+        thisModel.setValue("stroke",this.getStroke());
+        thisModel.setValue("stroke-over",this.getStrokeOver());
         thisModel.setValue("fixed",this.getFixed());
-
         thisModel.setValue("fill",this.getFill());
-
         thisModel.setValue("align",this.getAlignString());
+        thisModel.setValue("d", this.getD());
 
         return thisModel;
     }
@@ -584,24 +601,31 @@ public class Path
         super.fromJson(thisModel);
 
         this.setColor( (Color)thisModel.getValue("color",Color.class));
-
-        this.setD( (String)thisModel.getValue("d"));
-
+        this.setColorOver( (Color)thisModel.getValue("color-over",Color.class));
+        this.setStroke( (Stroke)thisModel.getValue("stroke",Stroke.class));
+        this.setStrokeOver( (Stroke)thisModel.getValue("stroke-over",Stroke.class));
         this.setFixed( (Boolean)thisModel.getValue("fixed"));
-
         this.setFill( (Boolean)thisModel.getValue("fill"));
-
         this.setAlign( (String)thisModel.getValue("align"));
+        this.setD( (String)thisModel.getValue("d"));
 
         return true;
     }
     protected void layout(){
 
-        if (!this.fixed){
-            if (null != this.path)
-                this.setTransformLocal(this.path);
-            else
-                this.setTransformLocal(1f,1f);
+        if (null != this.path){
+
+            /*
+             * Optional scaling
+             */
+            if (!this.fixed){
+
+                this.setTransformLocal(new Bounds(this.path));
+            }
+            /*
+             * Optional alignment
+             */
+            this.setBoundsVector(this.getBoundsVector().apply(this.align,this.getParentBounds()));
         }
     }
 

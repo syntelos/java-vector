@@ -253,31 +253,60 @@ public class Display<T extends Component>
     }
     public final void update(Graphics g){
 
-        this.output((Graphics2D)g);
+        this.output1((Graphics2D)g);
     }
     public final void paint(Graphics g){
 
-        this.output((Graphics2D)g);
+        this.output1((Graphics2D)g);
     }
-    protected final void output(Graphics2D g){
+    protected final void output1(Graphics2D g){
 
         if (this.output.requireOverlay()){
 
-            this.outputOverlay(this.output.offscreen(this).blit(this,g));
+            this.outputOverlay(this.output.scene(this).blit(this,g));
         }
         else {
-            Offscreen offscreen = this.output.offscreen(this);
+            Offscreen scene = this.output.scene(this);
 
-            Graphics2D og = offscreen.create();
+            Graphics2D gscene = scene.create();
             try {
-                this.outputScene(og);
+                this.outputScene(gscene);
             }
             finally {
-                og.dispose();
+                gscene.dispose();
             }
-            offscreen.blit(this,g);
+            scene.blit(this,g);
 
             this.outputOverlay(g);
+        }
+    }
+    protected final void output2(Graphics2D g){
+
+        if (this.output.requireOverlay()){
+
+            this.outputOverlay(this.output.overlay(this).blit(this,g));
+        }
+        else {
+            Offscreen scene = this.output.scene(this);
+            Offscreen overlay = this.output.overlay(this);
+            Graphics2D goverlay = overlay.create();
+            try {
+                Graphics2D gscene = scene.create();
+                try {
+                    this.outputScene(gscene);
+                }
+                finally {
+                    gscene.dispose();
+                }
+                scene.blit(this,goverlay);
+
+                this.outputOverlay(goverlay);
+
+                overlay.blit(this,g);
+            }
+            finally {
+                goverlay.dispose();
+            }
         }
     }
     public final Display outputScene(Graphics2D g){

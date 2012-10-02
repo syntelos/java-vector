@@ -53,7 +53,7 @@ public class Container<T extends Component>
 
     protected Component[] components;
 
-    protected boolean fit;
+    protected boolean fit, clip;
 
 
     public Container(){
@@ -66,6 +66,7 @@ public class Container<T extends Component>
         super.init();
 
         this.fit = false;
+        this.clip = false;
     }
     @Override
     public void destroy(){
@@ -143,6 +144,27 @@ public class Container<T extends Component>
     public final Container setFit(Boolean fit){
         if (null != fit)
             return this.setFit(fit.booleanValue());
+        else
+            return this;
+    }
+    public final boolean isClip(){
+        return this.clip;
+    }
+    public final Boolean getClip(){
+        if (this.clip)
+            return Boolean.TRUE;
+        else
+            return Boolean.FALSE;
+    }
+    public final Container setClip(boolean clip){
+
+        this.clip = clip;
+
+        return this;
+    }
+    public final Container setClip(Boolean clip){
+        if (null != clip)
+            return this.setClip(clip.booleanValue());
         else
             return this;
     }
@@ -269,7 +291,10 @@ public class Container<T extends Component>
     }
     public Container outputScene(Graphics2D g){
 
-        this.getTransformParent().transformFrom(g);
+        if (this.clip)
+            this.clipFrom(g);
+        else
+            this.transformFrom(g);
 
         for (Component c: this){
 
@@ -288,7 +313,10 @@ public class Container<T extends Component>
     }
     public Container outputOverlay(Graphics2D g){
 
-        this.getTransformParent().transformFrom(g);
+        if (this.clip)
+            this.clipFrom(g);
+        else
+            this.transformFrom(g);
 
         for (Component c: this){
 
@@ -438,7 +466,7 @@ public class Container<T extends Component>
         ObjectJson thisModel =  super.toJson();
 
         thisModel.setValue("fit",this.getFit());
-
+        thisModel.setValue("clip",this.getClip());
         thisModel.setValue("components",new ArrayJson(this));
 
         return thisModel;
@@ -448,6 +476,7 @@ public class Container<T extends Component>
         super.fromJson(thisModel);
 
         this.setFit( (Boolean)thisModel.getValue("fit"));
+        this.setClip( (Boolean)thisModel.getValue("clip"));
 
         Component.Tools.DecodeComponents(this,thisModel);
         /*

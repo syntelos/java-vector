@@ -36,7 +36,7 @@ public final class Output
     }
 
 
-    private Offscreen offscreen;
+    private Offscreen scene, overlay;
 
     private Require require = Require.Init;
 
@@ -69,21 +69,38 @@ public final class Output
 
         return (Require.Overlay == this.require);
     }
-    public Offscreen offscreen(java.awt.Component component){
+    public Offscreen scene(java.awt.Component component){
 
-        if (null == this.offscreen){
+        if (null == this.scene){
 
-            this.offscreen = new Offscreen(component);
+            this.scene = new Offscreen(component);
         }
-        return this.offscreen;
+        return this.scene;
+    }
+    public Offscreen overlay(java.awt.Component component){
+
+        if (null == this.overlay){
+
+            this.overlay = new Offscreen(component);
+        }
+        return this.overlay;
     }
     public void flush(){
 
-        Offscreen offscreen = this.offscreen;
-        if (null != offscreen){
-            this.offscreen = null;
+        Offscreen scene = this.scene;
+        if (null != scene){
+            this.scene = null;
             try {
-                offscreen.flush();
+                scene.flush();
+            }
+            catch (Exception ignore){
+            }
+        }
+        Offscreen overlay = this.overlay;
+        if (null != overlay){
+            this.overlay = null;
+            try {
+                overlay.flush();
             }
             catch (Exception ignore){
             }

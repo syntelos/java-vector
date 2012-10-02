@@ -147,12 +147,12 @@ public interface Event {
         public interface Motion
             extends Mouse
         {
-            public Point2D getPoint();
+            public Point2D.Float getPoint();
         }
         public interface Point
             extends Mouse
         {
-            public Point2D getPoint();
+            public Point2D.Float getPoint();
         }
         public interface Wheel
             extends Mouse
