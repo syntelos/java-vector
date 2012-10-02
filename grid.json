@@ -1,9 +1,22 @@
 {
-  "background": "#FFFFFF",
-  "components": [
-    {
-      "class": "vector.Grid",
-      "color": "#000000"
-    }
-  ]
+    "background": "#FFFFFF",
+    "components": [
+        {
+            "class": "vector.Grid",
+            "color": "#000000"
+        },
+        {
+            "class": "vector.TrackPointer",
+            "components": [
+                {
+                    "class": "vector.Path",
+                    "color": "#FF0000",
+                    "color-over": "#0000FF",
+                    "fixed": true,
+                    "align": "center",
+                    "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
+                }
+            ]
+        }
+    ]
 }
