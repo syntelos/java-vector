@@ -90,7 +90,8 @@ public class TrackLabel
         this.modified();
     }
     /**
-     * As contained by its parent, this is always true
+     * @return True to receive the motion events of the parent, as for
+     * {@link TrackPointer}
      */
     @Override
     public boolean contains(Point2D.Float p){

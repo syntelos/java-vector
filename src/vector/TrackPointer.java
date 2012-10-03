@@ -73,6 +73,8 @@ public class TrackPointer
     }
     /**
      * As contained by its parent, this is always true
+     * 
+     * @return True to receive the motion events of the parent
      */
     @Override
     public boolean contains(Point2D.Float p){
