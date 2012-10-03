@@ -135,6 +135,8 @@ public class TrackLabel
 
         if (super.input(e)){
 
+            this.setVisibleVector(this.getParentVector().isMouseIn());
+
             this.moveto(((Event.Mouse.Motion)e).getPoint());
 
             this.outputOverlay();
@@ -163,8 +165,10 @@ public class TrackLabel
     }
     public TrackLabel outputOverlay(Graphics2D g){
 
-        super.outputScene(g);
+        if (this.isNotEmpty()){
 
+            super.outputScene(g);
+        }
         return this;
     }
 

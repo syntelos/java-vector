@@ -25,6 +25,36 @@
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
                             ]
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "left",
+                            "vertical": "center",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "center",
+                            "vertical": "bottom",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
                         }
                     ]
                 },
@@ -48,6 +78,36 @@
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
                             ]
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "left",
+                            "vertical": "center",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "center",
+                            "vertical": "bottom",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
                         }
                     ]
                 },
@@ -71,6 +131,36 @@
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
                             ]
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "left",
+                            "vertical": "center",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "center",
+                            "vertical": "bottom",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
                         }
                     ]
                 },
@@ -95,6 +185,36 @@
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
                             ]
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "left",
+                            "vertical": "center",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "center",
+                            "vertical": "bottom",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
                         }
                     ]
                 },
@@ -118,6 +238,36 @@
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
                             ]
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "left",
+                            "vertical": "center",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "center",
+                            "vertical": "bottom",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
                         }
                     ]
                 },
@@ -141,6 +291,36 @@
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
                             ]
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "left",
+                            "vertical": "center",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "center",
+                            "vertical": "bottom",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
                         }
                     ]
                 },
@@ -165,6 +345,36 @@
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
                             ]
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "left",
+                            "vertical": "center",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "center",
+                            "vertical": "bottom",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
                         }
                     ]
                 },
@@ -188,6 +398,36 @@
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
                             ]
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "left",
+                            "vertical": "center",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "center",
+                            "vertical": "bottom",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
                         }
                     ]
                 },
@@ -211,6 +451,36 @@
                                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                                 }
                             ]
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "left",
+                            "vertical": "center",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
+                        },
+                        {
+                            "class": "vector.TrackLabel",
+                            "font": "monospaced-8",
+                            "horizontal": "center",
+                            "vertical": "bottom",
+                            "cols": "8",
+                            "color": "#000000",
+                            "color-over": "#0000FF",
+                            "border": {
+                                "color": "#000000",
+                                "color-over": "#0000FF",
+                                "background": "#FFFFFF",
+                                "style": "square"
+                            }
                         }
                     ]
                 }
