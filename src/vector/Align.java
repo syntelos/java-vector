@@ -119,6 +119,15 @@ public enum Align {
             }
         }
     }
+    /**
+     * Marker for listing
+     */
+    public interface Component
+        extends vector.Component
+    {
+
+        public Align getAlign();
+    }
 
     /**
      * Horizontal 1D alignment property value
@@ -175,6 +184,16 @@ public enum Align {
                 }
             }
         }
+        /**
+         * Marker for listing
+         */
+        public interface Component
+            extends vector.Component
+        {
+
+            public Horizontal getHorizontal();
+        }
+
     }
     /**
      * Vertical 1D alignment property value
@@ -232,6 +251,16 @@ public enum Align {
                 }
             }
         }
+        /**
+         * Marker for listing
+         */
+        public interface Component
+            extends vector.Component
+        {
+
+            public Vertical getVertical();
+        }
+
     }
 
 }

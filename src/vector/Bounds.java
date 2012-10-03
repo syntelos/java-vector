@@ -125,6 +125,20 @@ public class Bounds
         else
             return this;
     }
+    public Bounds apply(Align.Horizontal align, Bounds parent){
+
+        if (null != align)
+            return align.apply(this,parent);
+        else
+            return this;
+    }
+    public Bounds apply(Align.Vertical align, Bounds parent){
+
+        if (null != align)
+            return align.apply(this,parent);
+        else
+            return this;
+    }
     /**
      * @param g Graphics context
      * @return The argument graphics context, not a clone or copy

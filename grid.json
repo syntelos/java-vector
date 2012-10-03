@@ -17,6 +17,44 @@
                     "d": "M-3000,0 L3000,0 M0,-3000 L0,3000"
                 }
             ]
+        },
+        {
+            "class": "vector.TrackLabel",
+            "font": "monospaced-16",
+            "horizontal": "left",
+            "vertical": "center",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#0000FF",
+            "border": {
+                "color": "#000000",
+                "color-over": "#0000FF",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.TrackLabel",
+            "font": "monospaced-16",
+            "horizontal": "center",
+            "vertical": "bottom",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#0000FF",
+            "border": {
+                "color": "#000000",
+                "color-over": "#0000FF",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
         }
     ]
 }

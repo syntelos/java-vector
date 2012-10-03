@@ -173,6 +173,9 @@ public class Container<T extends Component>
         switch(e.getType()){
 
         case MouseEntered:{
+            /*
+             * Broad-cast
+             */
             this.mouseIn = true;
 
             final Point2D.Float point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
@@ -193,6 +196,9 @@ public class Container<T extends Component>
             return true;
         }
         case MouseExited:{
+            /*
+             * Broad-cast
+             */
             this.mouseIn = false;
 
             final Event m = ((Event.Mouse)e).transformFrom(this.getTransformParent());
@@ -204,6 +210,9 @@ public class Container<T extends Component>
             return true;
         }
         case MouseMoved:{
+            /*
+             * Broad-cast
+             */
             final Point2D.Float point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
 
             final Event moved = new vector.event.MouseMoved(point);
@@ -230,6 +239,9 @@ public class Container<T extends Component>
         }
         case MouseDown:
         case MouseUp:{
+            /*
+             * Narrow-cast
+             */
             final Event m = ((Event.Mouse)e).transformFrom(this.getTransformParent());
             for (Component c: this){
                 if (c.input(m))
@@ -238,6 +250,9 @@ public class Container<T extends Component>
             return false;
         }
         case MouseDrag:{
+            /*
+             * Broad-cast
+             */
             final Event.Mouse.Point m = (Event.Mouse.Point)e;
             final Point2D.Float point = this.transformFromParent(m.getPoint());
             final Event dragged = new vector.event.MouseDrag(m,point);
@@ -277,7 +292,7 @@ public class Container<T extends Component>
         case Action:{
             boolean re = false;
             /*
-             * Broadcast
+             * Broad-cast
              */
             for (Component c: this){
 

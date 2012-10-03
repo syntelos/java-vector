@@ -63,6 +63,8 @@ public class Display<T extends Component>
 
     protected Color background;
 
+    protected boolean bufferOverlay;
+
     protected Component[] components;
 
     protected final Transform transform = new Transform();
@@ -93,6 +95,8 @@ public class Display<T extends Component>
         this.destroy();
 
         this.mouseIn = false;
+
+        this.bufferOverlay = true;
 
         this.transform.init();
 
@@ -156,6 +160,24 @@ public class Display<T extends Component>
     public final Display setBackground(String code){
         if (null != code)
             return this.setBackground(new Color(code));
+        else
+            return this;
+    }
+    public boolean isBufferOverlay(){
+        return this.bufferOverlay;
+    }
+    public Boolean getBufferOverlay(){
+        return this.bufferOverlay;
+    }
+    public Display setBufferOverlay(boolean value){
+
+        this.bufferOverlay = value;
+
+        return this;
+    }
+    public Display setBufferOverlay(Boolean value){
+        if (null != value)
+            return this.setBufferOverlay(value.booleanValue());
         else
             return this;
     }
@@ -253,11 +275,17 @@ public class Display<T extends Component>
     }
     public final void update(Graphics g){
 
-        this.output1((Graphics2D)g);
+        if (this.bufferOverlay)
+            this.output2((Graphics2D)g);
+        else
+            this.output1((Graphics2D)g);
     }
     public final void paint(Graphics g){
 
-        this.output1((Graphics2D)g);
+        if (this.bufferOverlay)
+            this.output2((Graphics2D)g);
+        else
+            this.output1((Graphics2D)g);
     }
     protected final void output1(Graphics2D g){
 
@@ -266,16 +294,16 @@ public class Display<T extends Component>
             this.outputOverlay(this.output.scene(this).blit(this,g));
         }
         else {
-            Offscreen scene = this.output.scene(this);
+            Offscreen bScene = this.output.scene(this);
 
-            Graphics2D gscene = scene.create();
+            Graphics2D gScene = bScene.create();
             try {
-                this.outputScene(gscene);
+                this.outputScene(gScene);
             }
             finally {
-                gscene.dispose();
+                gScene.dispose();
             }
-            scene.blit(this,g);
+            bScene.blit(this,g);
 
             this.outputOverlay(g);
         }
@@ -284,28 +312,41 @@ public class Display<T extends Component>
 
         if (this.output.requireOverlay()){
 
-            this.outputOverlay(this.output.overlay(this).blit(this,g));
-        }
-        else {
-            Offscreen scene = this.output.scene(this);
-            Offscreen overlay = this.output.overlay(this);
-            Graphics2D goverlay = overlay.create();
+            Offscreen bScene = this.output.scene(this);
+            Offscreen bOverlay = this.output.overlay(this);
+            Graphics2D gOverlay = bOverlay.create();
             try {
-                Graphics2D gscene = scene.create();
-                try {
-                    this.outputScene(gscene);
-                }
-                finally {
-                    gscene.dispose();
-                }
-                scene.blit(this,goverlay);
 
-                this.outputOverlay(goverlay);
+                bScene.blit(this,gOverlay);
 
-                overlay.blit(this,g);
+                this.outputOverlay(gOverlay);
+
+                bOverlay.blit(this,g);
             }
             finally {
-                goverlay.dispose();
+                gOverlay.dispose();
+            }
+        }
+        else {
+            Offscreen bScene = this.output.scene(this);
+            Offscreen bOverlay = this.output.overlay(this);
+            Graphics2D gOverlay = bOverlay.create();
+            try {
+                Graphics2D gScene = bScene.create();
+                try {
+                    this.outputScene(gScene);
+                }
+                finally {
+                    gScene.dispose();
+                }
+                bScene.blit(this,gOverlay);
+
+                this.outputOverlay(gOverlay);
+
+                bOverlay.blit(this,g);
+            }
+            finally {
+                gOverlay.dispose();
             }
         }
     }
@@ -514,7 +555,9 @@ public class Display<T extends Component>
     public void mouseClicked(MouseEvent evt){
     }
     public void mousePressed(MouseEvent evt){
-
+        /*
+         * Narrow-cast
+         */
         final Event.Mouse.Action action = Event.Mouse.Action.PointButton(evt);
 
         if (null != action){
@@ -530,7 +573,9 @@ public class Display<T extends Component>
         }
     }
     public void mouseReleased(MouseEvent evt){
-
+        /*
+         * Narrow-cast
+         */
         final Event.Mouse.Action action = Event.Mouse.Action.PointButton(evt);
 
         if (null != action){
@@ -546,6 +591,9 @@ public class Display<T extends Component>
         }
     }
     public void mouseEntered(MouseEvent evt){
+        /*
+         * Broad-cast
+         */
         this.requestFocus();
 
         this.mouseIn = true;
@@ -569,6 +617,9 @@ public class Display<T extends Component>
         }
     }
     public void mouseExited(MouseEvent evt){
+        /*
+         * Broad-cast
+         */
         this.mouseIn = false;
 
         final Point2D.Float point = this.transformFromParent(evt.getPoint());
@@ -581,7 +632,9 @@ public class Display<T extends Component>
         }
     }
     public void mouseDragged(MouseEvent evt){
-
+        /*
+         * Broad-cast
+         */
         final Event.Mouse.Action action = Event.Mouse.Action.PointButton(evt);
 
         if (null != action){
@@ -612,7 +665,9 @@ public class Display<T extends Component>
         }
     }
     public void mouseMoved(MouseEvent evt){
-
+        /*
+         * Broad-cast
+         */
         final Point2D.Float point = this.transformFromParent(evt.getPoint());
 
         final Event moved = new vector.event.MouseMoved(point);
@@ -639,7 +694,9 @@ public class Display<T extends Component>
         }
     }
     public void mouseWheelMoved(MouseWheelEvent evt){
-
+        /*
+         * Narrow-cast
+         */
         final Event e = new vector.event.MouseWheel(evt.getWheelRotation());
 
         for (Component c: this){
@@ -651,7 +708,9 @@ public class Display<T extends Component>
     public void keyTyped(KeyEvent e){
     }
     public void keyPressed(KeyEvent evt){
-
+        /*
+         * Narrow-cast
+         */
         final Event e = new vector.event.KeyDown(evt);
 
         for (Component c: this){
@@ -661,7 +720,9 @@ public class Display<T extends Component>
         }
     }
     public void keyReleased(KeyEvent evt){
-
+        /*
+         * Narrow-cast
+         */
         final Event e = new vector.event.KeyUp(evt);
 
         for (Component c: this){
@@ -711,6 +772,7 @@ public class Display<T extends Component>
         thisModel.setValue("transform",this.transform);
         thisModel.setValue("bounds",this.getBoundsVector());
         thisModel.setValue("background",this.getBackground());
+        thisModel.setValue("buffer-overlay",this.getBufferOverlay());
         thisModel.setValue("components",new ArrayJson(this));
         return thisModel;
     }
@@ -719,10 +781,9 @@ public class Display<T extends Component>
         this.init( (Boolean)thisModel.getValue("init"));
 
         this.setTransformLocal( thisModel.getValue("transform",Transform.class));
-
         this.setBoundsVectorForScale( thisModel.getValue("bounds",Bounds.class));
-
         this.setBackground( thisModel.getValue("background",Color.class));
+        this.setBufferOverlay( (Boolean)thisModel.getValue("buffer-overlay"));
 
         Component.Tools.DecodeComponents(this,thisModel);
 

@@ -103,19 +103,10 @@ public class Text
      */
     @Override
     public void resized(){
+
+        this.layout();
+
         super.resized();
-        /*
-         * Changes to transforms including location
-         */
-        this.layout();
-    }
-    @Override
-    public void relocated(){
-        super.relocated();
-        /*
-         * Changes to transforms including location
-         */
-        this.layout();
     }
     /**
      * Clears the visual state derived from properties, and calls
@@ -123,13 +114,14 @@ public class Text
      */
     @Override
     public void modified(){
-        super.modified();
 
         this.vector = null;
         this.shape = null;
         this.localPositions = null;
 
         this.layout();
+
+        super.modified();
     }
     public Order queryLayout(){
         if (this.fixed)
@@ -267,10 +259,14 @@ public class Text
             this.string = new Visual(text);
 
             this.cols = text.length();
+
+            this.shape = null;
         }
-        else
+        else {
             this.string = null;
 
+            this.shape = null;
+        }
         return this;
     }
     public final int getCols(){

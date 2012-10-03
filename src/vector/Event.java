@@ -27,6 +27,7 @@ import java.awt.geom.Point2D;
  * ease of application development.
  */
 public interface Event {
+
     /**
      * Mouse drag is a point action
      * 

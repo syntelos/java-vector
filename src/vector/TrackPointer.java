@@ -71,6 +71,13 @@ public class TrackPointer
 
         super.modified();
     }
+    /**
+     * As contained by its parent, this is always true
+     */
+    @Override
+    public boolean contains(Point2D.Float p){
+        return true;
+    }
     public Component.Layout.Order queryLayout(){
         return Component.Layout.Order.Parent;
     }
@@ -189,11 +196,11 @@ public class TrackPointer
             throw new IllegalStateException(e.getType().name());
         }
     }
-    public Container outputScene(Graphics2D g){
+    public TrackPointer outputScene(Graphics2D g){
 
         return this;
     }
-    public Container outputOverlay(Graphics2D g){
+    public TrackPointer outputOverlay(Graphics2D g){
 
         if (this.visible){
 
@@ -223,12 +230,5 @@ public class TrackPointer
         float y = (input.y-this.midpoint.y);
 
         return (TrackPointer)this.setLocationVector(x,y);
-    }
-    /**
-     * As contained by its parent, this is always true
-     */
-    @Override
-    public boolean contains(Point2D.Float p){
-        return true;
     }
 }
