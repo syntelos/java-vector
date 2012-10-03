@@ -33,7 +33,7 @@ import java.awt.geom.Rectangle2D;
  */
 public class Path
     extends AbstractComponent
-    implements Align.Component
+    implements Component.Align2D
 {
 
     /** 

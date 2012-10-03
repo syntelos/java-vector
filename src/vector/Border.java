@@ -33,7 +33,7 @@ public class Border
                java.lang.Cloneable
 {
     public enum Style {
-        SQUARE, ROUND;
+        SQUARE, ROUND, NONE;
 
 
         public String toString(){
@@ -309,7 +309,7 @@ public class Border
     public final Border outputScene(Graphics2D g){
 
         final Shape shape = this.shape;
-        if (null != shape && this.visible){
+        if (this.visible){
             final boolean mouseIn = this.mouseIn;
             /*
              *
@@ -321,46 +321,52 @@ public class Border
                     g.setColor(backgroundOver);
                 else 
                     g.setColor(this.background);
-                
-                g.fill(shape);
+
+                if (null != shape)
+                    g.fill(shape);
+                else
+                    g.fill(this.getBoundsVector());
             }
             /*
              *
              */
-            final Color colorOver = this.colorOver;
-            if (null != colorOver && mouseIn) 
-                g.setColor(colorOver);
-            else
-                g.setColor(this.color);
+            if (null != shape){
 
-            if (this.fill){
+                final Color colorOver = this.colorOver;
+                if (null != colorOver && mouseIn) 
+                    g.setColor(colorOver);
+                else
+                    g.setColor(this.color);
 
-                g.fill(shape);
-            }
+                if (this.fill){
+
+                    g.fill(shape);
+                }
 
 
-            final Stroke strokeOver = this.strokeOver;
-            if (null != strokeOver && mouseIn){
+                final Stroke strokeOver = this.strokeOver;
+                if (null != strokeOver && mouseIn){
 
-                if (null != strokeOver.color)
-                    g.setColor(strokeOver.color);
+                    if (null != strokeOver.color)
+                        g.setColor(strokeOver.color);
 
-                g.setStroke(strokeOver);
+                    g.setStroke(strokeOver);
 
-                g.draw(shape);
-            }
-            else if (null != this.stroke){
+                    g.draw(shape);
+                }
+                else if (null != this.stroke){
 
-                if (null != stroke.color)
-                    g.setColor(stroke.color);
+                    if (null != stroke.color)
+                        g.setColor(stroke.color);
 
-                g.setStroke(this.stroke);
+                    g.setStroke(this.stroke);
 
-                g.draw(shape);
-            }
-            else {
+                    g.draw(shape);
+                }
+                else {
 
-                g.draw(shape);
+                    g.draw(shape);
+                }
             }
         }
         return this;
@@ -383,6 +389,9 @@ public class Border
             break;
         case ROUND:
             this.shape = bounds.round(this.arc);
+            break;
+        case NONE:
+            this.shape = null;
             break;
         default:
             throw new IllegalStateException(this.style.name());

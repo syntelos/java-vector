@@ -353,6 +353,43 @@ public interface Component
      * @return Requested removal performed successfully
      */
     public boolean drop(Component c);
+
+    /**
+     * Marker for layout and listing
+     */
+    public interface Margin
+        extends Component
+    {
+
+        public Padding getMargin();
+    }
+    /**
+     * Marker for layout and listing
+     */
+    public interface Align2D
+        extends Component
+    {
+
+        public Align getAlign();
+    }
+    /**
+     * Marker for layout and listing
+     */
+    public interface AlignVertical
+        extends Component
+    {
+
+        public Align.Vertical getVertical();
+    }
+    /**
+     * Marker for layout and listing
+     */
+    public interface AlignHorizontal
+        extends Component
+    {
+
+        public Align.Horizontal getHorizontal();
+    }
 
 
     /**

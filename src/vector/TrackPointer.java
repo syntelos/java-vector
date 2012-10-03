@@ -228,9 +228,14 @@ public class TrackPointer
     }
     protected TrackPointer moveto(Point2D.Float input){
 
-        float x = (input.x-this.midpoint.x);
-        float y = (input.y-this.midpoint.y);
+        final Point2D.Float midpoint = this.midpoint;
+        if (null != midpoint){
 
-        return (TrackPointer)this.setLocationVector(x,y);
+            float x = (input.x-this.midpoint.x);
+            float y = (input.y-this.midpoint.y);
+
+            this.setLocationVector(x,y);
+        }
+        return this;
     }
 }

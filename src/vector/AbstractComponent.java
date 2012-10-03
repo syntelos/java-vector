@@ -175,8 +175,8 @@ public abstract class AbstractComponent
      * component origin (0,0).  The component location is changed to
      * (0,0).
      */
-    protected Component setBoundsVectorInit(Component component){
-        Bounds bounds = component.getBoundsVector();
+    protected Component setBoundsVectorInit(Component parent){
+        Bounds bounds = parent.getBoundsVector();
         bounds.x = 0f;
         bounds.y = 0f;
 
@@ -186,18 +186,42 @@ public abstract class AbstractComponent
      * Union of origin and bounds for resizing to these extents of
      * within a component.  The component location is unchanged.
      */
-    protected Component setBoundsVectorInit(Bounds bounds){
-        if (null != bounds){
+    protected Component setBoundsVectorInit(Bounds content){
+        if (null != content){
 
-            bounds.width += bounds.x;
-            bounds.height += bounds.y;
-            bounds.x = this.bounds.x;
-            bounds.y = this.bounds.y;
+            content.width += content.x;
+            content.height += content.y;
+            content.x = this.bounds.x;
+            content.y = this.bounds.y;
 
-            return this.setBoundsVector(bounds);
+            return this.setBoundsVector(content);
         }
         else
             return this;
+    }
+    /**
+     * Dimensions of component for resizing to the parent with
+     * component origin (margin.left,margin.top).  The component
+     * location is changed to (margin.left,margin.top), and the
+     * component bounds are changed to subtract the margin.
+     */
+    protected Component setBoundsVectorInit(Component parent, Padding margin){
+        Bounds bounds = parent.getBoundsVector();
+
+        bounds.x = margin.left;
+        bounds.y = margin.top;
+        bounds.width -= margin.getWidth();
+        bounds.height -= margin.getHeight();
+
+        return this.setBoundsVector(bounds);
+    }
+    /**
+     * Union of origin and bounds for resizing to these extents of
+     * within a component.  The component location is unchanged.
+     */
+    protected Component setBoundsVectorInit(Bounds content, Padding margin){
+
+        return this.setBoundsVectorInit(content);
     }
     public boolean contains(int x, int y){
 

@@ -245,10 +245,7 @@ public class Grid
 
         if (!this.fixed){
 
-            Component parent = this.getParentVector();
-
-            this.setBoundsVectorInit(parent);
-            this.setTransformLocal(parent.getTransformLocal());
+            this.setBoundsVectorInit(this.getParentVector());
         }
 
         final Bounds bounds = this.getBoundsVector();
@@ -290,7 +287,7 @@ public class Grid
     }
 
     public ObjectJson toJson(){
-        ObjectJson thisModel = (ObjectJson)super.toJson();
+        ObjectJson thisModel = super.toJson();
 
         thisModel.setValue("color", this.getColor());
         thisModel.setValue("domain", this.getDomain());

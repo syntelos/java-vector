@@ -112,6 +112,9 @@ public class Transform
 
         this.setToIdentity();
     }
+    /**
+     * Transform from coordinate space
+     */
     public Bounds transform(Bounds in){
         double[] src = new double[]{
             in.x, in.y,
@@ -125,6 +128,59 @@ public class Transform
         in.y = (float)tgt[1];
         in.width = (float)(tgt[2]-tgt[0]);
         in.height = (float)(tgt[3]-tgt[1]);
+
+        return in;
+    }
+    /**
+     * Transform to coordinate space
+     */
+    public Bounds inverseTransform(Bounds in){
+        double[] src = new double[]{
+            in.x, in.y,
+            (in.x+in.width), (in.y+in.height)
+        };
+        double[] tgt = new double[4];
+        try {
+            super.inverseTransform(src,0,tgt,0,2);
+
+            in.x = (float)tgt[0];
+            in.y = (float)tgt[1];
+            in.width = (float)(tgt[2]-tgt[0]);
+            in.height = (float)(tgt[3]-tgt[1]);
+
+            return in;
+        }
+        catch (NoninvertibleTransformException exc){
+            throw new IllegalStateException(this.toString(),exc);
+        }
+    }
+    /**
+     * Scale from coordinate space
+     */
+    public Bounds scaleFrom(Bounds in){
+
+        final double sx = this.getScaleX();
+        final double sy = this.getScaleY();
+
+        in.x = (float)(in.x * sx);
+        in.y = (float)(in.y * sy);
+        in.width = (float)(in.width * sx);
+        in.height = (float)(in.height * sy);
+
+        return in;
+    }
+    /**
+     * Scale to coordinate space
+     */
+    public Bounds scaleTo(Bounds in){
+
+        final double sx = this.getScaleX();
+        final double sy = this.getScaleY();
+
+        in.x = (float)(in.x / sx);
+        in.y = (float)(in.y / sy);
+        in.width = (float)(in.width / sx);
+        in.height = (float)(in.height / sy);
 
         return in;
     }

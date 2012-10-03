@@ -31,7 +31,7 @@ import java.awt.geom.Point2D;
  */
 public class TrackLabel
     extends Text
-    implements Align.Horizontal.Component, Align.Vertical.Component
+    implements Component.AlignHorizontal, Component.AlignVertical
 {
 
     protected Align.Horizontal horizontal;
@@ -196,8 +196,8 @@ public class TrackLabel
 
             Bounds bounds = this.getBoundsVector();
             Bounds parent = this.getParentBounds();
-            bounds.apply(this.horizontal,parent);
-            bounds.apply(this.vertical,parent);
+            bounds.apply(this.horizontal,this.getMargin(),parent);
+            bounds.apply(this.vertical,this.getMargin(),parent);
             this.setBoundsVector(bounds);
         }
     }
@@ -241,7 +241,7 @@ public class TrackLabel
                 bounds.x -= (bounds.width/2.0f);
             }
             else {
-                bounds.apply(this.horizontal,parent);
+                bounds.apply(this.horizontal,this.getMargin(),parent);
             }
 
 
@@ -250,7 +250,7 @@ public class TrackLabel
                 bounds.y -= (bounds.height/2.0f);
             }
             else {
-                bounds.apply(this.vertical,parent);
+                bounds.apply(this.vertical,this.getMargin(),parent);
             }
 
             this.setBoundsVector(bounds);

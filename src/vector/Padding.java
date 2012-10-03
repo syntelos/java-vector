@@ -21,8 +21,10 @@ package vector;
 import java.util.StringTokenizer;
 
 /**
- * Internal padding (as opposed to external margin) is contained
- * within the boundaries of a {@link Component}.
+ * Internal padding is contained within the boundaries of a {@link
+ * Component}.  External margin is not contained within the boundaries
+ * of a {@link Component}, it is external to the bounding box of a
+ * {@link Component}.
  * 
  * @see Component
  * @see Text
@@ -31,6 +33,7 @@ public class Padding
     extends Object
     implements Cloneable
 {
+
     public final static Padding Default(){
         return new Padding(4,4);
     }

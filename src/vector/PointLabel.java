@@ -37,7 +37,7 @@ import java.awt.geom.Point2D;
  */
 public class PointLabel
     extends Text
-    implements Align.Horizontal.Component, Align.Vertical.Component
+    implements Component.AlignHorizontal, Component.AlignVertical
 {
 
     protected Align.Horizontal horizontal;
@@ -191,29 +191,24 @@ public class PointLabel
 
         if (null != this.horizontal || null != this.vertical){
 
-            Bounds bounds = this.getBoundsVector();
-            Bounds parent = this.getParentBounds();
-            bounds.apply(this.horizontal,parent);
-            bounds.apply(this.vertical,parent);
 
             Float ordinate = this.getTextPoint();
             if (null != ordinate){
 
+                Bounds bounds = this.getBoundsVector();
+                Bounds parent = this.getParentBounds();
+
                 if (Align.Horizontal.CENTER == this.horizontal){
 
                     bounds.x = (ordinate - (bounds.width/2.0f));
-                }
-                else {
-                    bounds.apply(this.horizontal,parent);
-                }
 
-
-                if (Align.Vertical.CENTER == this.vertical){
+                    bounds.apply(this.vertical,this.getMargin(),parent);
+                }
+                else if (Align.Vertical.CENTER == this.vertical){
 
                     bounds.y = (ordinate - (bounds.height/2.0f));
-                }
-                else {
-                    bounds.apply(this.vertical,parent);
+
+                    bounds.apply(this.horizontal,this.getMargin(),parent);
                 }
 
                 this.setBoundsVector(bounds);

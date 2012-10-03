@@ -103,6 +103,52 @@ public enum Align {
             throw new IllegalStateException(this.name());
         }
     }
+    /**
+     * Apply alignment to component bounds and return
+     * 
+     * @param component Component bounds having this alignment
+     * @param margin Component bounds exterior margin
+     * @param parent Parent bounding box circumscribing alignment
+     * 
+     * @return Component bounds
+     */
+    public Bounds apply(Bounds component, Padding margin, Bounds parent){
+        switch(this){
+        case LEFT:
+
+            component.x = margin.left;
+
+            return component;
+
+        case RIGHT:
+
+            component.x = (parent.width - component.width - margin.getWidth());
+
+            return component;
+
+        case CENTER:
+
+            component.x = (parent.width - component.width - margin.getWidth())/2.0f;
+            component.y = (parent.height - component.height - margin.getHeight())/2.0f;
+
+            return component;
+
+        case TOP:
+
+            component.y = margin.top;
+
+            return component;
+
+        case BOTTOM:
+
+            component.y = (parent.height - component.height - margin.bottom);
+
+            return component;
+
+        default:
+            throw new IllegalStateException(this.name());
+        }
+    }
     public String toString(){
         return this.name().toLowerCase();
     }
@@ -118,15 +164,6 @@ public enum Align {
                 return null;
             }
         }
-    }
-    /**
-     * Marker for listing
-     */
-    public interface Component
-        extends vector.Component
-    {
-
-        public Align getAlign();
     }
 
     /**
@@ -168,6 +205,39 @@ public enum Align {
                 throw new IllegalStateException(this.name());
             }
         }
+        /**
+         * Apply alignment to component bounds and return
+         * 
+         * @param component Component bounds having this alignment
+         * @param margin Component bounds exterior margin
+         * @param parent Parent bounding box circumscribing alignment
+         * 
+         * @return Component bounds
+         */
+        public Bounds apply(Bounds component, Padding margin, Bounds parent){
+            switch(this){
+            case LEFT:
+
+                component.x = margin.left;
+
+                return component;
+
+            case CENTER:
+
+                component.x = (parent.width - component.width - margin.getWidth())/2.0f;
+
+                return component;
+
+            case RIGHT:
+
+                component.x = (parent.width - component.width - margin.getWidth());
+
+                return component;
+
+            default:
+                throw new IllegalStateException(this.name());
+            }
+        }
         public String toString(){
             return this.name().toLowerCase();
         }
@@ -184,16 +254,6 @@ public enum Align {
                 }
             }
         }
-        /**
-         * Marker for listing
-         */
-        public interface Component
-            extends vector.Component
-        {
-
-            public Horizontal getHorizontal();
-        }
-
     }
     /**
      * Vertical 1D alignment property value
@@ -235,6 +295,40 @@ public enum Align {
                 throw new IllegalStateException(this.name());
             }
         }
+        /**
+         * Apply alignment to component bounds and return
+         * 
+         * @param component Component bounds having this alignment
+         * @param margin Component bounds exterior margin
+         * @param parent Parent bounding box circumscribing alignment
+         * 
+         * @return Component bounds
+         */
+        public Bounds apply(Bounds component, Padding margin, Bounds parent){
+            switch(this){
+
+            case TOP:
+
+                component.y = margin.top;
+
+                return component;
+
+            case CENTER:
+
+                component.y = (parent.height - component.height - margin.getHeight())/2.0f;
+
+                return component;
+
+            case BOTTOM:
+
+                component.y = (parent.height - component.height - margin.bottom);
+
+                return component;
+
+            default:
+                throw new IllegalStateException(this.name());
+            }
+        }
         public String toString(){
             return this.name().toLowerCase();
         }
@@ -251,16 +345,6 @@ public enum Align {
                 }
             }
         }
-        /**
-         * Marker for listing
-         */
-        public interface Component
-            extends vector.Component
-        {
-
-            public Vertical getVertical();
-        }
-
     }
 
 }

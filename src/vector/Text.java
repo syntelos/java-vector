@@ -41,12 +41,15 @@ import java.awt.geom.Rectangle2D;
 public class Text
     extends BorderComponent
     implements CharSequence,
+               Component.Margin,
                Component.Layout.Text
 {
 
     protected Font font;
 
     protected final Padding padding = new Padding();
+
+    protected final Padding margin = new Padding();
 
     protected Color color, colorOver;
 
@@ -80,6 +83,7 @@ public class Text
         this.fixed = false;
         this.cols = 25;
         this.padding.set(this.font);
+        this.margin.init();
     }
     /**
      * This method will not remove the text string, itself, in order
@@ -194,6 +198,27 @@ public class Text
     public final vector.Text clearPadding(){
 
         this.padding.init();
+
+        return this;
+    }
+    public final Padding getMargin(){
+
+        return this.margin.clone();
+    }
+    public final vector.Text setMargin(Padding margin){
+
+        if (null != margin){
+
+            this.margin.set(margin);
+        }
+        return this;
+    }
+    /**
+     * For {@link TextLayout} children
+     */
+    public final vector.Text clearMargin(){
+
+        this.margin.init();
 
         return this;
     }
@@ -537,6 +562,7 @@ public class Text
         thisModel.setValue("text", this.toString());
         thisModel.setValue("font", this.getFont());
         thisModel.setValue("padding", this.getPadding());
+        thisModel.setValue("margin", this.getMargin());
         thisModel.setValue("color", this.getColor());
         thisModel.setValue("color-over", this.getColorOver());
         thisModel.setValue("fill",this.getFill());
@@ -554,6 +580,7 @@ public class Text
         this.setText( (String)thisModel.getValue("text"));
         this.setFont( (Font)thisModel.getValue("font",Font.class));
         this.setPadding( (Padding)thisModel.getValue("padding",Padding.class));
+        this.setMargin( (Padding)thisModel.getValue("margin",Padding.class));
         this.setColor( (Color)thisModel.getValue("color",Color.class));
         this.setColorOver( (Color)thisModel.getValue("color-over",Color.class));
         this.setFill( (Boolean)thisModel.getValue("fill"));
@@ -613,14 +640,14 @@ public class Text
      * parent.
      */
     protected void resizeToParent(){
-        this.setBoundsVectorInit(this.getParentVector());
+        this.setBoundsVectorInit(this.getParentVector(),this.getMargin());
     }
     /**
      * May be called from {@link #layout()} to set dimensions from
      * {@link #queryBoundsContent()}.
      */
     protected void resizeToShapeArea(){
-        this.setBoundsVectorInit(this.queryBoundsContent());
+        this.setBoundsVectorInit(this.queryBoundsContent(),this.getMargin());
     }
     /**
      * Define transform local as 1:1 scale.

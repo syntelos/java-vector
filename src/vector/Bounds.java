@@ -25,11 +25,21 @@ import java.awt.geom.RoundRectangle2D;
 import java.util.StringTokenizer;
 
 /**
- * Storage class, not intermediate value, employs 32 bit floating point.
+ * {@link Component} bounding box is a storage class, not intermediate
+ * value, in 32 bit floating point.
+ * 
+ * <p> Internal {@link Padding} is contained within the boundaries of
+ * a {@link Component}.  External margin is not contained within the
+ * boundaries of a {@link Component}, it is external to the bounding
+ * box of a {@link Component}. </p>
+ * 
+ * @see Padding
+ * @see Component
  */
 public class Bounds
     extends Rectangle2D.Float
 {
+
     public Bounds(){
         super(0,0,0,0);
     }
@@ -172,6 +182,27 @@ public class Bounds
 
         if (null != align)
             return align.apply(this,parent);
+        else
+            return this;
+    }
+    public Bounds apply(Align align, Padding margin, Bounds parent){
+
+        if (null != align)
+            return align.apply(this,margin,parent);
+        else
+            return this;
+    }
+    public Bounds apply(Align.Horizontal align, Padding margin, Bounds parent){
+
+        if (null != align)
+            return align.apply(this,margin,parent);
+        else
+            return this;
+    }
+    public Bounds apply(Align.Vertical align, Padding margin, Bounds parent){
+
+        if (null != align)
+            return align.apply(this,margin,parent);
         else
             return this;
     }
