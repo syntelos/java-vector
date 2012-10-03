@@ -6,6 +6,406 @@
             "color": "#000000"
         },
         {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "center",
+            "vertical": "bottom",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/domain/0",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "center",
+            "vertical": "bottom",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/domain/1",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "center",
+            "vertical": "bottom",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/domain/2",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "center",
+            "vertical": "bottom",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/domain/3",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "center",
+            "vertical": "bottom",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/domain/4",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "center",
+            "vertical": "bottom",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/domain/5",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "center",
+            "vertical": "bottom",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/domain/6",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "center",
+            "vertical": "bottom",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/domain/7",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "center",
+            "vertical": "bottom",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/domain/8",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "center",
+            "vertical": "bottom",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/domain/9",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "left",
+            "vertical": "center",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/range/0",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "left",
+            "vertical": "center",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/range/1",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "left",
+            "vertical": "center",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/range/2",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "left",
+            "vertical": "center",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/range/3",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "left",
+            "vertical": "center",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/range/4",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "left",
+            "vertical": "center",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/range/5",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "left",
+            "vertical": "center",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/range/6",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "left",
+            "vertical": "center",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/range/7",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "left",
+            "vertical": "center",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/range/8",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
+            "class": "vector.PointLabel",
+            "font": "monospaced-16",
+            "horizontal": "left",
+            "vertical": "center",
+            "cols": "8",
+            "color": "#000000",
+            "color-over": "#00FF00",
+            "point-reference": "../components/0/range/9",
+            "border": {
+                "color": "#000000",
+                "color-over": "#00FF00",
+                "background": "#FFFFFF",
+                "style": "round",
+                "arc":  10.0,
+                "stroke":{
+                    "line-width": 1.0
+                }
+            }
+        },
+        {
             "class": "vector.TrackPointer",
             "components": [
                 {

@@ -54,6 +54,10 @@ public class Grid
     protected float[] domain, range;
 
     protected Path2D.Float shape;
+    /**
+     * Preserves the indempotence of a default grid layout
+     */
+    protected boolean dynamic;
 
 
     public Grid(){
@@ -70,6 +74,8 @@ public class Grid
         this.color = Color.black;
 
         this.fixed = false;
+
+        this.dynamic = false;
     }
     @Override
     public void destroy(){
@@ -129,6 +135,25 @@ public class Grid
         }
         this.modified();
     }
+    public boolean isDynamic(){
+        return this.dynamic;
+    }
+    public Boolean getDynamic(){
+        if (this.dynamic)
+            return Boolean.TRUE;
+        else
+            return Boolean.FALSE;
+    }
+    public Grid setDynamic(boolean dynamic){
+        this.dynamic = dynamic;
+        return this;
+    }
+    public Grid setDynamic(Boolean dynamic){
+        if (null != dynamic)
+            return this.setDynamic(dynamic.booleanValue());
+        else
+            return this;
+    }
     public final Color getColor(){
 
         return this.color;
@@ -152,7 +177,7 @@ public class Grid
         else
             return new float[0];
     }
-    public final Grid setDomain(float[] domain){
+    public Grid setDomain(float[] domain){
 
         if (null != domain && 0 < domain.length)
 
@@ -169,7 +194,7 @@ public class Grid
         else
             return new float[0];
     }
-    public final Grid setRange(float[] range){
+    public Grid setRange(float[] range){
 
         if (null != range && 0 < range.length)
 
@@ -216,47 +241,6 @@ public class Grid
 
         return this;
     }
-    // @Override
-    // public boolean input(Event e){
-
-    //     switch(e.getType()){
-
-    //     case MouseEntered:
-    //         this.mouseIn = true;
-    //         return true;
-    //     case MouseExited:
-    //         this.mouseIn = false;
-    //         return true;
-    //     case MouseMoved:
-    //         if (this.mouse){
-
-    //             final Bounds bounds = this.getBoundsVector();
-
-    //             final Point2D mouse = ((Event.Mouse.Motion)e).getPoint();
-    //             {
-    //                 final float x = (float)mouse.getX();
-    //                 final float y = (float)mouse.getY();
-    //                 final float x0 = (x-radius);
-    //                 final float x1 = (x+radius);
-    //                 final float y0 = (y-radius);
-    //                 final float y1 = (y+radius);
-
-    //                 final Path2D.Float pointer = new Path2D.Float();
-    //                 {
-    //                     pointer.moveTo(x0,y);
-    //                     pointer.lineTo(x1,y);
-    //                     pointer.moveTo(x,y0);
-    //                     pointer.lineTo(x,y1);
-    //                 }
-    //                 this.pointer = pointer;
-    //             }
-    //             this.outputOverlay();
-    //         }
-    //         return false;
-    //     default:
-    //         return false;
-    //     }
-    // }
     protected void layout(){
 
         if (!this.fixed){
@@ -270,12 +254,20 @@ public class Grid
         final Bounds bounds = this.getBoundsVector();
         if (!bounds.isEmpty()){
             float[] range = this.range;
-            if (null == range){
+            if (null == range || this.dynamic){
+                this.dynamic = true;
+
                 range = Default(bounds.height);
+
+                this.setRange(range);
             }
             float[] domain = this.domain;
-            if (null == domain){
+            if (null == domain || this.dynamic){
+                this.dynamic = true;
+
                 domain = Default(bounds.width);
+
+                this.setDomain(domain);
             }
 
             final float x0 = 0f;
@@ -301,12 +293,10 @@ public class Grid
         ObjectJson thisModel = (ObjectJson)super.toJson();
 
         thisModel.setValue("color", this.getColor());
-
         thisModel.setValue("domain", this.getDomain());
-
         thisModel.setValue("range", this.getRange());
-
         thisModel.setValue("fixed",this.getFixed());
+        thisModel.setValue("dynamic",this.getDynamic());
 
         return thisModel;
     }
@@ -315,12 +305,10 @@ public class Grid
         super.fromJson(thisModel);
 
         this.setColor( (Color)thisModel.getValue("color",Color.class));
-
         this.setDomain( (float[])thisModel.getValue("domain",float[].class));
-
         this.setRange( (float[])thisModel.getValue("range",float[].class));
-
         this.setFixed( (Boolean)thisModel.getValue("fixed"));
+        this.setDynamic( (Boolean)thisModel.getValue("dynamic"));
 
         return true;
     }

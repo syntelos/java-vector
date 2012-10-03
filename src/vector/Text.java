@@ -248,7 +248,7 @@ public class Text
         }
         return this;
     }
-    public final String getText(){
+    public String getText(){
 
         return this.toString();
     }

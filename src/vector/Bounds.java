@@ -20,6 +20,7 @@ package vector;
 
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
 import java.util.StringTokenizer;
 
@@ -27,7 +28,7 @@ import java.util.StringTokenizer;
  * Storage class, not intermediate value, employs 32 bit floating point.
  */
 public class Bounds
-    extends java.awt.geom.Rectangle2D.Float
+    extends Rectangle2D.Float
 {
     public Bounds(){
         super(0,0,0,0);
@@ -86,6 +87,41 @@ public class Bounds
     public void init(){
 
         this.setFrame(0,0,0,0);
+    }
+    /**
+     * Optimized relation of spatial peers (siblings)
+     */
+    public boolean contains(Rectangle2D.Float that){
+        if (this.x <= that.x && this.y <= that.y){
+
+            final float thisX1 = (this.x + this.width);
+            final float thisY1 = (this.y + this.height);
+
+            final float thatX1 = (that.x + that.width);
+            final float thatY1 = (that.y + that.height);
+
+            return (thisX1 >= thatX1 && thisY1 >= thatY1);
+        }
+        else
+            return false;
+    }
+    /**
+     * Relation of container (this parent) and contained (that child)
+     */
+    public boolean pcontains(Rectangle2D.Float that){
+
+        if (0.0f <= that.x && 0.0f <= that.y){
+
+            final float thisX1 = this.width;
+            final float thisY1 = this.height;
+
+            final float thatX1 = (that.x + that.width);
+            final float thatY1 = (that.y + that.height);
+
+            return (thisX1 >= thatX1 && thisY1 >= thatY1);
+        }
+        else
+            return false;
     }
     /**
      * @return Objective scale to this from that
