@@ -6,7 +6,7 @@
             "color": "#000000",
             "font": "monospaced-18",
             "bounds": "(50,50,50,50)",
-            "fit": true,
+            "content": true,
             "debug": true,
             "components": [
                 {

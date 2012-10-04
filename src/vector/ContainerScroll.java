@@ -38,7 +38,7 @@ public class ContainerScroll<T extends Component>
     @Override
     public void resized(){
 
-        this.fit = false;
+        this.content = false;
 
         super.resized();
 
@@ -47,7 +47,7 @@ public class ContainerScroll<T extends Component>
     @Override
     public void modified(){
 
-        this.fit = false;
+        this.content = false;
 
         super.modified();
 
@@ -56,7 +56,7 @@ public class ContainerScroll<T extends Component>
     @Override
     public void relocated(){
 
-        this.fit = false;
+        this.content = false;
 
         super.relocated();
 

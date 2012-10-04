@@ -42,7 +42,6 @@ public class TrackPointer
     public void init(){
         super.init();
 
-        this.fit = false;
         this.visible = false;
     }
     @Override
@@ -53,23 +52,21 @@ public class TrackPointer
     }
     @Override
     public void resized(){
-        this.fit = false;
 
-        this.setBoundsVectorInit(this.getParentVector());
-
-        this.midpoint = this.getBoundsVector().midpoint();
+        this.content = false;
 
         super.resized();
+
+        this.midpoint = this.getBoundsVector().midpoint();
     }
     @Override
     public void modified(){
-        this.fit = false;
 
-        this.setBoundsVectorInit(this.getParentVector());
-
-        this.midpoint = this.getBoundsVector().midpoint();
+        this.content = false;
 
         super.modified();
+
+        this.midpoint = this.getBoundsVector().midpoint();
     }
     /**
      * As contained by its parent, this is always true
@@ -79,9 +76,6 @@ public class TrackPointer
     @Override
     public boolean contains(Point2D.Float p){
         return true;
-    }
-    public Component.Layout.Order queryLayout(){
-        return Component.Layout.Order.Parent;
     }
     public Bounds queryBoundsContent(){
 

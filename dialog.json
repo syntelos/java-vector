@@ -6,7 +6,7 @@
             "enum-class": "vector.Dialog$AcceptCancel",
             "cellspacing": 4.0,
             "bounds": "100,100,100,100",
-            "fit": true,
+            "content": true,
             "background": "#08000000",
             "components": [
                 {

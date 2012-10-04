@@ -215,8 +215,9 @@ public class TextLayout
     }
 
     /**
-     * Trivial text parser permits this class to accept a property
-     * named "text", which is most useful for testing.
+     * Trivial text parser permits this class to accept a pseudo
+     * (read-only) property named "text", which is most useful for
+     * testing.
      */
     protected void parse(String text){
         final StringTokenizer strtok = new StringTokenizer(text," \t\n",true);
@@ -225,7 +226,9 @@ public class TextLayout
 
         while (strtok.hasMoreTokens()){
             String tok = strtok.nextToken();
-
+            /*
+             * Accumulate (merge) horizontal whitespace
+             */
             if (" ".equals(tok)){
 
                 sp.append(' ');
@@ -233,8 +236,10 @@ public class TextLayout
                 continue;
             }
             else if (0 < sp.length()){
-
-                Text child = new Text();
+                /*
+                 * Add horizontal whitespace child
+                 */
+                vector.Text child = new vector.Text();
                 this.add(child);
 
                 child.setFont(this.font);
@@ -255,8 +260,10 @@ public class TextLayout
 
                 sp.setLength(0);
             }
-
-            Text child = new Text();
+            /*
+             * Add non-horizontal-whitespace child
+             */
+            vector.Text child = new vector.Text();
             this.add(child);
 
             child.setFont(this.font);

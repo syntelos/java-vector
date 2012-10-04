@@ -396,6 +396,11 @@ public interface Component
      * Layout determination support for strong container dependence on
      * its children.
      * 
+     * <p> The general layout order is "content".  The "parent" layout
+     * order applies only to the case where a bounding box is derived
+     * from, or is identical to the parent's bounding box.  All other
+     * cases are in the "content" category. </p>
+     * 
      * @see Component$Layout$Text
      * @see TextLayout
      */
@@ -404,6 +409,11 @@ public interface Component
     {
         /**
          * Layout strategy
+         * 
+         * <p> The general layout order is "content".  The "parent"
+         * layout order applies only to the case where a bounding box
+         * is derived from, or is identical to the parent's bounding
+         * box.  All other cases are in the "content" category. </p>
          */
         public enum Order {
             /**

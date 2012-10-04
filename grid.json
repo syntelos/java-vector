@@ -307,6 +307,7 @@
         },
         {
             "class": "vector.TrackPointer",
+            "parent": true,
             "components": [
                 {
                     "class": "vector.Path",

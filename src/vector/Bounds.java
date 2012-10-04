@@ -98,10 +98,13 @@ public class Bounds
 
         this.setFrame(0,0,0,0);
     }
+    public final boolean isNotEmpty(){
+        return (0.0f != this.width && 0.0f != this.height);
+    }
     /**
      * Optimized relation of spatial peers (siblings)
      */
-    public boolean contains(Rectangle2D.Float that){
+    public final boolean contains(Rectangle2D.Float that){
         if (this.x <= that.x && this.y <= that.y){
 
             final float thisX1 = (this.x + this.width);
@@ -118,7 +121,7 @@ public class Bounds
     /**
      * Relation of container (this parent) and contained (that child)
      */
-    public boolean pcontains(Rectangle2D.Float that){
+    public final boolean pcontains(Rectangle2D.Float that){
 
         if (0.0f <= that.x && 0.0f <= that.y){
 

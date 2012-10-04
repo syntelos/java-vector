@@ -40,20 +40,45 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * This class has a boolean property named "fit" which will cause it
- * to set its bounds to the geometric union of all children (except
- * members of class {@link Border}).
+ * Simple implementation of the {@link Component$Container Container}
+ * interface with a few essential application features.
+ * 
+ * <h3>clip</h3>
+ * 
+ * The boolean property named "clip" may enable the clipping of the
+ * output of children to their bounding box.
+ * 
+ * <h3>content</h3>
+ * 
+ * The boolean property named "content" will cause a container to set
+ * its bounds to the union of its content children.  It is mutually
+ * exclusive of "parent".
+ * 
+ * <h3>parent</h3>
+ * 
+ * The boolean property named "parent" will cause a container to set
+ * its bounds to the difference of the parent and its margin.  It is
+ * mutually exclusive of "content".
+ * 
+ * <h3>scale</h3>
+ * 
+ * The boolean property named "scale" will define a scaling transform
+ * to fit the content bounds into this bounding box.
+ * 
  */
 public class Container<T extends Component>
     extends AbstractComponent
-    implements Component.Container<T>
+    implements Component.Container<T>, Component.Margin, Component.Layout
 {
 
     protected final Logger log = Logger.getLogger(this.getClass().getName());
 
     protected Component[] components;
 
-    protected boolean fit, clip;
+    protected boolean content, parent, clip, scale;
+
+    protected final Padding margin = new Padding();
+
 
 
     public Container(){
@@ -65,8 +90,11 @@ public class Container<T extends Component>
     public void init(){
         super.init();
 
-        this.fit = false;
+        this.content = false;
+        this.parent = false;
         this.clip = false;
+        this.scale = false;
+        this.margin.init();
     }
     @Override
     public void destroy(){
@@ -84,28 +112,74 @@ public class Container<T extends Component>
     public void resized(){
         super.resized();
 
-        for (Component c: this){
+        if (this.content){
 
-            c.resized();
+            final Component.Iterator<Component> it = this.listContent(Component.class);
+
+            for (Component c: it){
+
+                c.resized();
+            }
+
+            this.content();
+        }
+        else if (this.parent){
+
+            this.parent();
+
+            for (Component c: this){
+
+                c.resized();
+            }
+        }
+        else {
+
+            for (Component c: this){
+
+                c.resized();
+            }
         }
 
-        if (this.fit){
+        if (this.scale){
 
-            this.fit();
+            this.scale();
         }
     }
     @Override
     public void modified(){
         super.modified();
 
-        for (Component c: this){
+        if (this.content){
 
-            c.modified();
+            final Component.Iterator<Component> it = this.listContent(Component.class);
+
+            for (Component c: it){
+
+                c.modified();
+            }
+
+            this.content();
+        }
+        else if (this.parent){
+
+            this.parent();
+
+            for (Component c: this){
+
+                c.modified();
+            }
+        }
+        else {
+
+            for (Component c: this){
+
+                c.modified();
+            }
         }
 
-        if (this.fit){
+        if (this.scale){
 
-            this.fit();
+            this.scale();
         }
     }
     @Override
@@ -116,34 +190,91 @@ public class Container<T extends Component>
 
             c.relocated();
         }
+    }
+
+    public Component.Layout.Order queryLayout(){
 
-        if (this.fit){
+        if (this.parent)
+            return Component.Layout.Order.Parent;
+        else 
+            return Component.Layout.Order.Content;
+    }
+    public void layout(Component.Layout.Order order){
 
-            this.fit();
+        switch (order){
+        case Parent:
+            this.parent = true;
+            this.content = false;
+            break;
+        case Content:
+            this.parent = false;
+            this.content = true;
+            break;
+        default:
+            throw new IllegalStateException(order.name());
         }
+        this.modified();
+    }
+    /**
+     * @return Geometric union of "content" children and (0,0) origin
+     */
+    public Bounds queryBoundsContent(){
+
+        float w = 0.0f, h = 0.0f;
+
+        for (Component c : this.listContent(Component.class)){
+
+            Bounds cb = c.getBoundsVector();
+
+            w = Math.max(w,(cb.x+cb.width));
+
+            h = Math.max(h,(cb.y+cb.height));
+        }
+        return new Bounds(w,h);
     }
     /**
      * Resize to the geometric union of all children (except members
      * of class {@link Border}).
      */
-    public final boolean isFit(){
-        return this.fit;
+    public final boolean isContent(){
+        return this.content;
     }
-    public final Boolean getFit(){
-        if (this.fit)
+    public final Boolean getContent(){
+        if (this.content)
             return Boolean.TRUE;
         else
             return Boolean.FALSE;
     }
-    public final Container setFit(boolean fit){
+    public final Container setContent(boolean content){
 
-        this.fit = fit;
+        this.content = content;
 
         return this;
     }
-    public final Container setFit(Boolean fit){
-        if (null != fit)
-            return this.setFit(fit.booleanValue());
+    public final Container setContent(Boolean content){
+        if (null != content)
+            return this.setContent(content.booleanValue());
+        else
+            return this;
+    }
+    public final boolean isParent(){
+        return this.parent;
+    }
+    public final Boolean getParent(){
+        if (this.parent)
+            return Boolean.TRUE;
+        else
+            return Boolean.FALSE;
+    }
+    public final Container setParent(boolean parent){
+
+        this.parent = parent;
+
+        return this;
+    }
+    public final Container setParent(Boolean parent){
+        if (null != parent)
+            return this.setParent(parent.booleanValue());
         else
             return this;
     }
@@ -168,6 +299,49 @@ public class Container<T extends Component>
         else
             return this;
     }
+    public final boolean isScale(){
+        return this.scale;
+    }
+    public final Boolean getScale(){
+        if (this.scale)
+            return Boolean.TRUE;
+        else
+            return Boolean.FALSE;
+    }
+    public final Container setScale(boolean scale){
+
+        this.scale = scale;
+
+        return this;
+    }
+    public final Container setScale(Boolean scale){
+        if (null != scale)
+            return this.setScale(scale.booleanValue());
+        else
+            return this;
+    }
+    public final Padding getMargin(){
+
+        return this.margin.clone();
+    }
+    public final Container setMargin(Padding margin){
+
+        if (null != margin){
+
+            this.margin.set(margin);
+        }
+        return this;
+    }
+    /**
+     * For {@link TextLayout} children
+     */
+    public final Container clearMargin(){
+
+        this.margin.init();
+
+        return this;
+    }
+
     public boolean input(Event e){
 
         switch(e.getType()){
@@ -348,23 +522,6 @@ public class Container<T extends Component>
         }
         return this;
     }
-    /**
-     * @return Geometric union of "content" children and (0,0) origin
-     */
-    public Bounds queryBoundsContent(){
-
-        float w = Float.MIN_VALUE, h = Float.MIN_VALUE;
-
-        for (Component c : this.listContent(Component.class)){
-
-            Bounds cb = c.getBoundsVector();
-
-            w = Math.max(w,(cb.x+cb.width));
-
-            h = Math.max(h,(cb.y+cb.height));
-        }
-        return new Bounds(w,h);
-    }
 
     public final Component.Iterator<T> iterator(){
         return new Component.Iterator(this.components);
@@ -480,8 +637,11 @@ public class Container<T extends Component>
     public ObjectJson toJson(){
         ObjectJson thisModel =  super.toJson();
 
-        thisModel.setValue("fit",this.getFit());
+        thisModel.setValue("content",this.getContent());
+        thisModel.setValue("parent",this.getParent());
         thisModel.setValue("clip",this.getClip());
+        thisModel.setValue("scale",this.getScale());
+        thisModel.setValue("margin",this.getMargin());
         thisModel.setValue("components",new ArrayJson(this));
 
         return thisModel;
@@ -490,8 +650,11 @@ public class Container<T extends Component>
 
         super.fromJson(thisModel);
 
-        this.setFit( (Boolean)thisModel.getValue("fit"));
+        this.setContent( (Boolean)thisModel.getValue("content"));
+        this.setParent( (Boolean)thisModel.getValue("parent"));
         this.setClip( (Boolean)thisModel.getValue("clip"));
+        this.setScale( (Boolean)thisModel.getValue("scale"));
+        this.setMargin( (Padding)thisModel.getValue("margin",Padding.class));
 
         Component.Tools.DecodeComponents(this,thisModel);
         /*
@@ -507,7 +670,7 @@ public class Container<T extends Component>
         return true;
     }
 
-    protected void fit(){
+    protected void content(){
 
         if (0 < this.count()){
 
@@ -515,18 +678,35 @@ public class Container<T extends Component>
 
             final Bounds children = this.queryBoundsContent();
 
-            bounds.width = children.width;
-            bounds.height = children.height;
+            bounds.width = (children.x+children.width);
+            bounds.height = (children.y+children.height);
 
             this.setBoundsVector(bounds);
 
             for (Component.Layout c : this.listParent(Component.Layout.class)){
 
-                if (Layout.Order.Parent == c.queryLayout()){
-
-                    c.resized();
-                }
+                c.resized();
             }
+        }
+    }
+    protected void parent(){
+
+        this.setBoundsVectorInit(this.getParentVector(),this.getMargin());
+    }
+    protected void scale(){
+
+        if (0 < this.count()){
+
+            final Bounds bounds = this.getBoundsVector();
+
+            final Bounds children = this.queryBoundsContent();
+
+            if (children.isNotEmpty() && (!children.equals(bounds))){
+
+                this.setTransformLocal(bounds.scaleFrom(children));
+            }
+            else
+                this.setTransformLocal(1f,1f);
         }
     }
 }

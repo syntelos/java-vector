@@ -39,8 +39,6 @@ public class TableBig
 
     protected int rows, cols;
 
-    protected boolean fixed;
-
 
     public TableBig(){
         super();
@@ -54,7 +52,6 @@ public class TableBig
         this.cellSpacing = 0f;
         this.cellWidth = 0f;
         this.cellHeight = 0f;
-        this.fixed = false;
         this.rows = 0;
         this.cols = 0;
     }
@@ -70,30 +67,8 @@ public class TableBig
 
         this.layout();
     }
-    public Component.Layout.Order queryLayout(){
-        if (this.fixed)
-            return Component.Layout.Order.Content;
-        else
-            return Component.Layout.Order.Parent;
-    }
-    public void layout(Component.Layout.Order order){
-        switch(order){
-        case Content:
-            this.fixed = true;
-            break;
-        case Parent:
-            this.fixed = false;
-            break;
-        default:
-            throw new IllegalStateException(order.name());
-        }
-        this.modified();
-    }
     protected void layout(){
 
-        if (!this.fixed){
-            this.setBoundsVectorInit(this.getParentVector());
-        }
         final int count = this.count();
         if (0 < count){
             final Bounds bounds = this.getBoundsVector();
@@ -147,22 +122,6 @@ public class TableBig
             }
         }
     }
-    public final boolean isFixed(){
-        return this.fixed;
-    }
-    public final Boolean getFixed(){
-        return this.fixed;
-    }
-    public final TableBig setFixed(boolean fixed){
-        this.fixed = fixed;
-        return this;
-    }
-    public final TableBig setFixed(Boolean fixed){
-        if (null != fixed){
-            this.fixed = fixed;
-        }
-        return this;
-    }
     public float getCellSpacing(){
         return this.cellSpacing;
     }
@@ -184,8 +143,6 @@ public class TableBig
 
         thisModel.setValue("cellspacing",this.getCellSpacing());
 
-        thisModel.setValue("fixed",this.getFixed());
-
         return thisModel;
     }
     public boolean fromJson(Json thisModel){
@@ -193,8 +150,6 @@ public class TableBig
         super.fromJson(thisModel);
 
         this.setCellSpacing( thisModel.getValue("cellspacing",Float.class));
-
-        this.setFixed( (Boolean)thisModel.getValue("fixed"));
 
         Component.Tools.DecodeComponents(this,thisModel);
 

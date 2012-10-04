@@ -647,7 +647,7 @@ public class Text
      * {@link #queryBoundsContent()}.
      */
     protected void resizeToShapeArea(){
-        this.setBoundsVectorInit(this.queryBoundsContent(),this.getMargin());
+        this.setBoundsVectorInit(this.queryBoundsContent());
     }
     /**
      * Define transform local as 1:1 scale.

@@ -19,7 +19,6 @@
                 {
                     "class": "vector.TableBig",
                     "bounds": "(0,0,3000,3000)",
-                    "fixed": true,
                     "cellspacing": 2.0,
                     "components": [
                         {

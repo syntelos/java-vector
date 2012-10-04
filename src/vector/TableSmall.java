@@ -55,7 +55,9 @@ public class TableSmall
     @Override
     public void modified(){
 
-        this.fit = false;
+        this.content = false;
+        this.parent = false;
+        this.scale = false;
 
         super.modified();
 
@@ -64,7 +66,9 @@ public class TableSmall
     @Override
     public void resized(){
 
-        this.fit = false;
+        this.content = false;
+        this.parent = false;
+        this.scale = false;
 
         super.resized();
 

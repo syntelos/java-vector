@@ -215,14 +215,6 @@ public abstract class AbstractComponent
 
         return this.setBoundsVector(bounds);
     }
-    /**
-     * Union of origin and bounds for resizing to these extents of
-     * within a component.  The component location is unchanged.
-     */
-    protected Component setBoundsVectorInit(Bounds content, Padding margin){
-
-        return this.setBoundsVectorInit(content);
-    }
     public boolean contains(int x, int y){
 
         return this.bounds.contains(x,y);
