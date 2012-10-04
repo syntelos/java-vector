@@ -59,6 +59,9 @@ public class Grid
      */
     protected boolean dynamic;
 
+    protected Stroke stroke;
+
+
 
     public Grid(){
         super();
@@ -83,6 +86,7 @@ public class Grid
 
         this.domain = null;
         this.range = null;
+        this.stroke = null;
 
         this.shape = null;
     }
@@ -227,12 +231,34 @@ public class Grid
         else
             return this;
     }
+    public final Stroke getStroke(){
+
+        return this.stroke;
+    }
+    public final Grid setStroke(Stroke stroke){
+
+        this.stroke = stroke;
+
+        return this;
+    }
+
     public Grid outputScene(Graphics2D g){
         Shape shape = this.shape;
         if (null != shape){
             this.getTransformParent().transformFrom(g);
 
-            g.setColor(this.color);
+            if (null != this.stroke){
+
+                if (null != this.stroke.color)
+                    g.setColor(this.stroke.color);
+                else
+                    g.setColor(this.color);
+
+                g.setStroke(this.stroke);
+            }
+            else
+                g.setColor(this.color);
+
             g.draw(shape);
         }
         return this;
@@ -290,10 +316,11 @@ public class Grid
         ObjectJson thisModel = super.toJson();
 
         thisModel.setValue("color", this.getColor());
-        thisModel.setValue("domain", this.getDomain());
-        thisModel.setValue("range", this.getRange());
+        thisModel.setValue("stroke",this.getStroke());
         thisModel.setValue("fixed",this.getFixed());
         thisModel.setValue("dynamic",this.getDynamic());
+        thisModel.setValue("domain", this.getDomain());
+        thisModel.setValue("range", this.getRange());
 
         return thisModel;
     }
@@ -302,10 +329,11 @@ public class Grid
         super.fromJson(thisModel);
 
         this.setColor( (Color)thisModel.getValue("color",Color.class));
-        this.setDomain( (float[])thisModel.getValue("domain",float[].class));
-        this.setRange( (float[])thisModel.getValue("range",float[].class));
+        this.setStroke( (Stroke)thisModel.getValue("stroke",Stroke.class));
         this.setFixed( (Boolean)thisModel.getValue("fixed"));
         this.setDynamic( (Boolean)thisModel.getValue("dynamic"));
+        this.setDomain( (float[])thisModel.getValue("domain",float[].class));
+        this.setRange( (float[])thisModel.getValue("range",float[].class));
 
         return true;
     }

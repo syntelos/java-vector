@@ -3,7 +3,13 @@
     "components": [
         {
             "class": "vector.Grid",
-            "color": "#000000"
+            "color": "#000000",
+            "stroke":{
+                "cap": "round",
+                "join": "round",
+                "line-width": 0.5,
+                "dash-array": [1.0,2.0]
+            },
         },
         {
             "class": "vector.TrackPointer",

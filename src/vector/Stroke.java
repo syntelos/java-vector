@@ -192,36 +192,14 @@ public class Stroke
             return 10.0f;
     }
     public final static float[] DashArray(Json model){
-        Object value = model.getValue("dash-array");
+        Json array = model.at("dash-array");
 
-        if (value instanceof List){
-            Number[] list = (Number[])((List)value).toArray(Number.class);
-            if (null == list)
+        if (null != array){
+            float[] list = array.getValue(float[].class);
+            if (null == list || 1 > list.length)
                 return null;
-            else {
-                final int count = list.length;
-                if (1 > count)
-                    return null;
-                else {
-
-                    final float[] re = new float[count];
-
-                    for (int cc = 0; cc < count; cc++){
-
-                        Number n = list[cc];
-
-                        if (null != n)
-                            re[cc] = n.floatValue();
-                        else
-                            throw new IllegalArgumentException(value.toString());
-                    }
-                    return re;
-                }
-            }
-        }
-        else if (value instanceof float[]){
-
-            return (float[])value;
+            else 
+                return list;
         }
         else
             return null;

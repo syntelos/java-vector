@@ -356,8 +356,8 @@ public class Border
                 }
                 else if (null != this.stroke){
 
-                    if (null != stroke.color)
-                        g.setColor(stroke.color);
+                    if (null != this.stroke.color)
+                        g.setColor(this.stroke.color);
 
                     g.setStroke(this.stroke);
 
