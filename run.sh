@@ -4,16 +4,15 @@ if [ -n "${1}" ]&&[ -f "${1}" ]
 then
     definition="${1}"
 
-    jarfcore=$(ls vector-[0-9]*.[0-9]*.[0-9]*.jar | egrep -v demo | tail -n 1 )
     jarfdemo=$(ls vector-demo-*.jar | tail -n 1 )
-    if [ -n "${jarfdemo}" ]&&[ -f "${jarfdemo}" ]&&[ -n "${jarfcore}" ]&&[ -f "${jarfcore}" ]
+    if [ -n "${jarfdemo}" ]&&[ -f "${jarfdemo}" ]
     then
         cat<<EOF
 
   Running '${definition}'...
 
 EOF
-        if java -cp ${jarfdemo}:${jarfcore} vector.Frame ${definition}
+        if java -jar ${jarfdemo} ${definition}
         then
             exit 0
         else
