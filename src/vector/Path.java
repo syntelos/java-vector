@@ -21,7 +21,6 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
@@ -555,7 +554,7 @@ public class Path
         return this.setWinding(w);
     }
 
-    public Path outputScene(Graphics2D g){
+    public Path outputScene(Context g){
         Shape shape = this.path;
         if (null != shape){
             this.getTransformParent().transformFrom(g);
@@ -578,7 +577,7 @@ public class Path
         }
         return this;
     }
-    public Path outputOverlay(Graphics2D g){
+    public Path outputOverlay(Context g){
 
         return this;
     }

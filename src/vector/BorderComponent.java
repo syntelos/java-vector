@@ -21,9 +21,7 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Graphics2D;
 import java.awt.Shape;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 /**
@@ -180,11 +178,11 @@ public class BorderComponent
             return false;
         }
     }
-    public BorderComponent outputScene(Graphics2D g){
+    public BorderComponent outputScene(Context g){
         /*
          * Compatible with subclass override
          */
-        final AffineTransform restore = g.getTransform();
+        final Transform restore = g.getTransform();
         try {
             if (null != this.border){
 
@@ -211,7 +209,7 @@ public class BorderComponent
                         g.fill(this.border.getBoundsVector());
                 }
 
-                Graphics2D cg = (Graphics2D)g.create();
+                Context cg = g.create();
                 try {
                     border.outputScene(cg);
                 }
@@ -229,17 +227,17 @@ public class BorderComponent
         }
         return this;
     }
-    public BorderComponent outputOverlay(Graphics2D g){
+    public BorderComponent outputOverlay(Context g){
         /*
          * Compatible with subclass override
          */
-        final AffineTransform restore = g.getTransform();
+        final Transform restore = g.getTransform();
         try {
             if (null != this.border){
 
                 this.getTransformParent().transformFrom(g);
 
-                Graphics2D cg = (Graphics2D)g.create();
+                Context cg = g.create();
                 try {
                     border.outputOverlay(cg);
                 }

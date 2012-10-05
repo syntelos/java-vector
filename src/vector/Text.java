@@ -23,7 +23,6 @@ import vector.text.Visual;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Path2D;
@@ -515,7 +514,7 @@ public class Text
             }
         }
     }
-    public vector.Text outputScene(Graphics2D g){
+    public vector.Text outputScene(Context g){
 
         super.outputScene(g);
 

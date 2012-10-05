@@ -128,6 +128,10 @@ public class Stroke
     public Stroke(float lineWidth, Color color){
         this(lineWidth,Cap.Default,Join.Default,10.0f,null,1.0f,color);
     }
+    public Stroke(java.awt.BasicStroke s){
+        super(s.getLineWidth(),s.getEndCap(),s.getLineJoin(),s.getMiterLimit(),s.getDashArray(),s.getDashPhase());
+        this.color = null;
+    }
 
 
     public final boolean hasColor(){

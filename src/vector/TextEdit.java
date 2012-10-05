@@ -21,7 +21,6 @@ package vector;
 import vector.text.Editor;
 import vector.text.Home;
 
-import java.awt.Graphics2D;
 import java.awt.Shape;
 
 /**
@@ -151,7 +150,7 @@ public class TextEdit
             return super.input(e);
         }
     }
-    public TextEdit outputOverlay(Graphics2D g){
+    public TextEdit outputOverlay(Context g){
 
         super.outputOverlay(g);
 

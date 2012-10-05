@@ -9,6 +9,7 @@
   <property name="lib" value="lib"/>
   <property name="dst" value="."/>
 
+  <property name="awt.src" value="awt/src"/>
   <property name="demo.src" value="demo/src"/>
   <property name="geda.src" value="geda/src"/>
 
@@ -28,20 +29,72 @@
     </fileset>
   </path>
 
+  <target name="all" description="Rebuild all jars">
+    <antcall target="update"/>
+    <antcall target="update-awt"/>
+    <antcall target="demo"/>
+    <antcall target="geda"/>
+  </target>
+
+  <target name="update-awt" if="vector.awt.update" depends="awt" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.awt.update'.">
+
+    <do-update src="${awt.jar}" tgt="${vector.awt.update}" />
+  </target>
+
+  <target name="awt" depends="awt-compile" description="Package awt jar, clean bin.  Depends on the target jar.">
+
+    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest">
+      <arg value="${target.jar}"/>
+      <arg value="${toString:lib.path}"/>
+    </java>
+    <echo message="Main-Class: awt.Frame"/>
+    <echo message="Class-Path: ${lib.path.manifest}"/>
+
+    <delete file="${awt.jar}"/>
+
+    <jar jarfile="${awt.jar}" basedir="${bin}" >
+      <manifest>
+        <attribute name="Main-Class" value="awt.Frame"/>
+        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+      </manifest>
+    </jar>
+
+    <delete dir="${bin}"/>
+  </target>
+
+  <target name="awt-compile" depends="version">
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+    <copy todir="${bin}">
+      <fileset dir="${awt.src}" includes="**/*.properties"/>
+      <fileset dir="${awt.src}" includes="**/*.txt"/>
+      <fileset dir="${awt.src}" includes="**/*.xml"/>
+    </copy>
+    <javac srcdir="${awt.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <pathelement path="${lib.path}"/>
+        <pathelement location="${target.jar}"/>
+      </classpath>
+    </javac>
+  </target>
+
   <target name="demo" depends="demo-compile" description="Package demo jar, clean bin.  Depends on the target jar.">
 
     <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest">
+      <arg value="${awt.jar}"/>
+      <arg value="${target.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
-    <echo message="Main-Class: vector.Frame"/>
-    <echo message="Class-Path: ${target.jar} ${lib.path.manifest}"/>
+    <echo message="Main-Class: awt.Frame"/>
+    <echo message="Class-Path: ${lib.path.manifest}"/>
 
     <delete file="${demo.jar}"/>
 
     <jar jarfile="${demo.jar}" basedir="${bin}" >
       <manifest>
-        <attribute name="Main-Class" value="vector.Frame"/>
-        <attribute name="Class-Path" value="${target.jar} ${lib.path.manifest}"/>
+        <attribute name="Main-Class" value="awt.Frame"/>
+        <attribute name="Class-Path" value="${lib.path.manifest}"/>
       </manifest>
     </jar>
 
@@ -68,17 +121,19 @@
   <target name="geda" depends="geda-compile" description="Package geda jar, clean bin.  Depends on the target jar.">
 
     <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest">
+      <arg value="${awt.jar}"/>
+      <arg value="${target.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
     <echo message="Main-Class: geda.Frame"/>
-    <echo message="Class-Path: ${target.jar} ${lib.path.manifest}"/>
+    <echo message="Class-Path: ${lib.path.manifest}"/>
 
     <delete file="${geda.jar}"/>
 
     <jar jarfile="${geda.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="geda.Frame"/>
-        <attribute name="Class-Path" value="${target.jar} ${lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${lib.path.manifest}"/>
       </manifest>
     </jar>
 
@@ -110,15 +165,16 @@
   <target name="jar" depends="compile" description="Package bin to target jar, clean bin.">
 
     <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest">
+      <arg value="${awt.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
-    <echo message="Main-Class: vector.Frame"/>
+    <echo message="Main-Class: awt.Frame"/>
     <echo message="Class-Path: ${lib.path.manifest}"/>
 
     <delete file="${target.jar}"/>
     <jar jarfile="${target.jar}" basedir="${bin}" >
       <manifest>
-        <attribute name="Main-Class" value="vector.Frame"/>
+        <attribute name="Main-Class" value="awt.Frame"/>
         <attribute name="Class-Path" value="${lib.path.manifest}"/>
       </manifest>
     </jar>
@@ -145,6 +201,7 @@
   <target name="version" description="Report current version.">
     <version/>
     <property name="target.jar" value="${dst}/${ant.project.name}-${this.version}.jar"/>
+    <property name="awt.jar" value="${dst}/${ant.project.name}-awt-${this.version}.jar"/>
     <property name="demo.jar" value="${dst}/${ant.project.name}-demo-${this.version}.jar"/>
     <property name="geda.jar" value="${dst}/${ant.project.name}-geda-${this.version}.jar"/>
   </target>

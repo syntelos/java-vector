@@ -1,12 +1,12 @@
 package demo;
 
 import vector.Color;
+import vector.Context;
 import vector.Event;
 
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
 public class ScrollBar
@@ -49,10 +49,10 @@ public class ScrollBar
             }
         }
     }
-    public ScrollBar outputScene(Graphics2D g){
+    public ScrollBar outputScene(Context g){
         return this;
     }
-    public ScrollBar outputOverlay(Graphics2D g){
+    public ScrollBar outputOverlay(Context g){
 
         if (null != this.axis){
 
@@ -63,11 +63,11 @@ public class ScrollBar
             else
                 g.setColor(this.color);
 
-            int x = (int)p.x;
-            int y = (int)p.y;
-            int d = (int)(2.0f*this.radius);
+            // int x = (int)p.x;
+            // int y = (int)p.y;
+            // int d = (int)(2.0f*this.radius);
 
-            g.fillOval(x,y,d,d);
+            // g.fillOval(x,y,d,d);
         }
         return this;
     }

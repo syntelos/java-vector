@@ -29,7 +29,13 @@ public class LibPathManifest {
     }
 
     public final static String Rel(String dirpath){
-        int idx0 = dirpath.replace('\\','/').lastIndexOf("/lib/");
-        return dirpath.substring(idx0+1);
+        dirpath = dirpath.replace('\\','/');
+        int idx0 = dirpath.lastIndexOf("/lib/");
+        if (-1 < idx0)
+            return dirpath.substring(idx0+1);
+        else if (dirpath.startsWith("./"))
+            return dirpath.substring(2);
+        else
+            return dirpath;
     }
 }

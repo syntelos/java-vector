@@ -25,8 +25,6 @@ import json.ObjectJson;
 import lxl.List;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.event.ComponentEvent;
@@ -478,7 +476,7 @@ public class Container<T extends Component>
             throw new IllegalStateException(e.getType().name());
         }
     }
-    public Container outputScene(Graphics2D g){
+    public Container outputScene(Context g){
 
         if (this.clip)
             this.clipFrom(g);
@@ -489,7 +487,7 @@ public class Container<T extends Component>
 
             if (c.isVisible()){
 
-                Graphics2D cg = (Graphics2D)g.create();
+                Context cg = g.create();
                 try {
                     c.outputScene(cg);
                 }
@@ -500,7 +498,7 @@ public class Container<T extends Component>
         }
         return this;
     }
-    public Container outputOverlay(Graphics2D g){
+    public Container outputOverlay(Context g){
 
         if (this.clip)
             this.clipFrom(g);
@@ -511,7 +509,7 @@ public class Container<T extends Component>
 
             if (c.isVisible()){
 
-                Graphics2D cg = (Graphics2D)g.create();
+                Context cg = g.create();
                 try {
                     c.outputOverlay(cg);
                 }

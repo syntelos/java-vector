@@ -1,5 +1,5 @@
 /*
- * Vector (http://code.google.com/p/java-vector/)
+ * Vector (http://code.google.com/p/java-awt/)
  * Copyright (C) 2012, The DigiVac Company
  * 
  * This program is free software: you can redistribute it and/or
@@ -16,7 +16,7 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector;
+package awt;
 
 import json.Json;
 import json.Reader;

@@ -18,8 +18,6 @@
  */
 package geda;
 
-import java.awt.Graphics2D;
-
 import java.io.LineNumberReader;
 import java.io.IOException;
 import java.io.OutputStream;

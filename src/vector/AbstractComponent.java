@@ -21,7 +21,6 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -286,9 +285,9 @@ public abstract class AbstractComponent
      * clipped to this bounding box and transformed with the local
      * transform
      * 
-     * @see #transformFrom(java.awt.Graphics2D)
+     * @see #transformFrom(Context)
      */
-    public Graphics2D clipFrom(Graphics2D g){
+    public Context clipFrom(Context g){
 
         return this.getTransformLocal().transformFrom(this.getBoundsVector().clip(g));
     }
@@ -308,9 +307,9 @@ public abstract class AbstractComponent
      * clipped to this bounding box and transformed with the local
      * transform
      * 
-     * @see #clipFrom(java.awt.Graphics2D)
+     * @see #clipFrom(Context)
      */
-    public Graphics2D transformFrom(Graphics2D g){
+    public Context transformFrom(Context g){
 
         return this.getTransformParent().transformFrom(g);
     }

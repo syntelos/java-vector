@@ -16,9 +16,8 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector;
+package awt;
 
-import java.awt.Component;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import static java.awt.RenderingHints.*;
@@ -33,33 +32,42 @@ public final class Offscreen
     extends java.awt.image.BufferedImage
 {
 
-    public Offscreen(Component component){
+    private ImageObserver observer;
+
+
+    public Offscreen(java.awt.Component component){
         this(component.getBounds());
+        this.observer = component;
     }
-    public Offscreen(Rectangle bounds){
+    private Offscreen(Rectangle bounds){
         this(bounds.width,bounds.height);
     }
-    public Offscreen(int width, int height){
+    private Offscreen(int width, int height){
         super(width,height,TYPE_INT_ARGB);
     }
 
 
-    public Graphics2D blit(ImageObserver p, Graphics2D g){
+    @Override
+    public void flush(){
 
-        g.drawImage(this,0,0,p);
+        this.observer = null;
 
-        return this.hint(g);
+        super.flush();
     }
-    public Graphics2D create(){
+    public Context blit(Context g){
 
-        return this.hint((Graphics2D)this.getGraphics());
+        g.drawImage(this,0,0);
+
+        return g;
     }
-    public Graphics2D hint(Graphics2D g){
+    public Context create(){
+
+        final Graphics2D g = (Graphics2D)this.getGraphics();
 
         g.setRenderingHint(KEY_RENDERING,VALUE_RENDER_QUALITY);
         g.setRenderingHint(KEY_ANTIALIASING,VALUE_ANTIALIAS_ON);
         g.setRenderingHint(KEY_TEXT_ANTIALIASING,VALUE_TEXT_ANTIALIAS_ON);
 
-        return g;
+        return new Context(this.observer,g);
     }
 }

@@ -23,7 +23,6 @@ import vector.text.Visual;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Graphics2D;
 import java.util.StringTokenizer;
 
 /**

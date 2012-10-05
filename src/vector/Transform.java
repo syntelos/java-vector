@@ -18,7 +18,6 @@
  */
 package vector;
 
-import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.RectangularShape;
 import java.awt.geom.NoninvertibleTransformException;
@@ -263,7 +262,7 @@ public class Transform
      * 
      * @return The argument graphics context (not a clone or copy)
      */
-    public Graphics2D transformFrom(Graphics2D g){
+    public Context transformFrom(Context g){
 
         g.transform(this);
 

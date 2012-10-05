@@ -21,7 +21,6 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Path2D;
@@ -242,7 +241,7 @@ public class Grid
         return this;
     }
 
-    public Grid outputScene(Graphics2D g){
+    public Grid outputScene(Context g){
         Shape shape = this.shape;
         if (null != shape){
             this.getTransformParent().transformFrom(g);
@@ -263,7 +262,7 @@ public class Grid
         }
         return this;
     }
-    public Grid outputOverlay(Graphics2D g){
+    public Grid outputOverlay(Context g){
 
         return this;
     }

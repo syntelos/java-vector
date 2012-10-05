@@ -1,5 +1,5 @@
 /*
- * Vector (http://code.google.com/p/java-vector/)
+ * Vector (http://code.google.com/p/java-awt/)
  * Copyright (C) 2012, The DigiVac Company
  * 
  * This program is free software: you can redistribute it and/or
@@ -16,8 +16,13 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector;
+package awt;
 
+import vector.Bounds;
+import vector.Color;
+import vector.Component;
+import vector.Event;
+import vector.Transform;
 import vector.event.Repainter;
 
 import json.ArrayJson;
@@ -276,52 +281,52 @@ public class Display<T extends Component>
     public final void update(Graphics g){
 
         if (this.bufferOverlay)
-            this.output2((Graphics2D)g);
+            this.output2(new Context(this,(Graphics2D)g));
         else
-            this.output1((Graphics2D)g);
+            this.output1(new Context(this,(Graphics2D)g));
     }
     public final void paint(Graphics g){
 
         if (this.bufferOverlay)
-            this.output2((Graphics2D)g);
+            this.output2(new Context(this,(Graphics2D)g));
         else
-            this.output1((Graphics2D)g);
+            this.output1(new Context(this,(Graphics2D)g));
     }
-    protected final void output1(Graphics2D g){
+    protected final void output1(Context g){
 
         if (this.output.requireOverlay()){
 
-            this.outputOverlay(this.output.scene(this).blit(this,g));
+            this.outputOverlay(this.output.scene(this).blit(g));
         }
         else {
             Offscreen bScene = this.output.scene(this);
 
-            Graphics2D gScene = bScene.create();
+            Context gScene = bScene.create();
             try {
                 this.outputScene(gScene);
             }
             finally {
                 gScene.dispose();
             }
-            bScene.blit(this,g);
+            bScene.blit(g);
 
             this.outputOverlay(g);
         }
     }
-    protected final void output2(Graphics2D g){
+    protected final void output2(Context g){
 
         if (this.output.requireOverlay()){
 
             Offscreen bScene = this.output.scene(this);
             Offscreen bOverlay = this.output.overlay(this);
-            Graphics2D gOverlay = bOverlay.create();
+            Context gOverlay = bOverlay.create();
             try {
 
-                bScene.blit(this,gOverlay);
+                bScene.blit(gOverlay);
 
                 this.outputOverlay(gOverlay);
 
-                bOverlay.blit(this,g);
+                bOverlay.blit(g);
             }
             finally {
                 gOverlay.dispose();
@@ -330,27 +335,27 @@ public class Display<T extends Component>
         else {
             Offscreen bScene = this.output.scene(this);
             Offscreen bOverlay = this.output.overlay(this);
-            Graphics2D gOverlay = bOverlay.create();
+            Context gOverlay = bOverlay.create();
             try {
-                Graphics2D gScene = bScene.create();
+                Context gScene = bScene.create();
                 try {
                     this.outputScene(gScene);
                 }
                 finally {
                     gScene.dispose();
                 }
-                bScene.blit(this,gOverlay);
+                bScene.blit(gOverlay);
 
                 this.outputOverlay(gOverlay);
 
-                bOverlay.blit(this,g);
+                bOverlay.blit(g);
             }
             finally {
                 gOverlay.dispose();
             }
         }
     }
-    public final Display outputScene(Graphics2D g){
+    public final Display outputScene(vector.Context g){
 
         this.output.completedScene();
 
@@ -368,7 +373,7 @@ public class Display<T extends Component>
 
             if (c.isVisible()){
 
-                Graphics2D cg = (Graphics2D)g.create();
+                vector.Context cg = g.create();
                 try {
                     c.outputScene(cg);
                 }
@@ -379,7 +384,7 @@ public class Display<T extends Component>
         }
         return this;
     }
-    public final Display outputOverlay(Graphics2D g){
+    public final Display outputOverlay(vector.Context g){
 
         this.output.completedOverlay();
 
@@ -389,7 +394,7 @@ public class Display<T extends Component>
 
             if (c.isVisible()){
 
-                Graphics2D cg = (Graphics2D)g.create();
+                vector.Context cg = g.create();
                 try {
                     c.outputOverlay(cg);
                 }

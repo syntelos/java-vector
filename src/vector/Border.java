@@ -21,7 +21,6 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Graphics2D;
 import java.awt.Shape;
 
 /**
@@ -306,7 +305,7 @@ public class Border
 
         return this.shape;
     }
-    public final Border outputScene(Graphics2D g){
+    public final Border outputScene(Context g){
 
         final Shape shape = this.shape;
         if (this.visible){
@@ -371,7 +370,7 @@ public class Border
         }
         return this;
     }
-    public Border outputOverlay(Graphics2D g){
+    public Border outputOverlay(Context g){
 
         return this;
     }

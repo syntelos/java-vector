@@ -18,7 +18,6 @@
  */
 package vector;
 
-import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
@@ -231,7 +230,7 @@ public class Bounds
      * @param g Graphics context
      * @return The argument graphics context, not a clone or copy
      */
-    public Graphics2D clip(Graphics2D g){
+    public Context clip(Context g){
 
         g.translate(this.x,this.y);
         g.clipRect(0,0,(int)Math.ceil(this.width+1),(int)Math.ceil(this.height+1));

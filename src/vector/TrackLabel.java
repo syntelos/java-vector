@@ -21,7 +21,6 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
 /**
@@ -160,11 +159,11 @@ public class TrackLabel
             }
         }
     }
-    public TrackLabel outputScene(Graphics2D g){
+    public TrackLabel outputScene(Context g){
 
         return this;
     }
-    public TrackLabel outputOverlay(Graphics2D g){
+    public TrackLabel outputOverlay(Context g){
 
         if (this.isNotEmpty()){
 

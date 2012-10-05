@@ -23,7 +23,6 @@ import json.Json;
 import lxl.List;
 
 import java.awt.Dimension;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
 
@@ -326,13 +325,13 @@ public interface Component
      * 
      * @param g A copy of the parent's graphics context.
      */
-    public Component outputScene(Graphics2D g);
+    public Component outputScene(Context g);
     /**
      * Overlay
      * 
      * @param g A copy of the parent's graphics context.
      */
-    public Component outputOverlay(Graphics2D g);
+    public Component outputOverlay(Context g);
     /**
      * Request global overlay animation from the root container.
      * 

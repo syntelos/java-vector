@@ -18,7 +18,6 @@
  */
 package vector;
 
-import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
 /**
@@ -192,11 +191,11 @@ public class TrackPointer
             throw new IllegalStateException(e.getType().name());
         }
     }
-    public TrackPointer outputScene(Graphics2D g){
+    public TrackPointer outputScene(Context g){
 
         return this;
     }
-    public TrackPointer outputOverlay(Graphics2D g){
+    public TrackPointer outputOverlay(Context g){
 
         if (this.visible){
 
@@ -208,7 +207,7 @@ public class TrackPointer
 
                 if (c.isVisible()){
 
-                    Graphics2D cg = (Graphics2D)g.create();
+                    Context cg = g.create();
                     try {
                         c.outputScene(cg);
                     }
