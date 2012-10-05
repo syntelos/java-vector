@@ -612,7 +612,7 @@ public class Path
 
         return true;
     }
-    protected void layout(){
+    public void layout(){
 
         if (null != this.path){
 

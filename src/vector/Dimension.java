@@ -116,7 +116,7 @@ public abstract class Dimension
     }
 
 
-    protected Dimension() {
+    public Dimension() {
         super();
     }
 

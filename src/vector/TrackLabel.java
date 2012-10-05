@@ -190,7 +190,7 @@ public class TrackLabel
 
         return true;
     }
-    protected void align(){
+    public void align(){
 
         if (null != this.horizontal || null != this.vertical){
 
@@ -205,13 +205,13 @@ public class TrackLabel
      * Called by {@link #moveto(java.awt.geom.Point2D$Float) moveto}
      * to update label string with tracking ordinate
      */
-    protected TrackLabel setText(float input){
+    public TrackLabel setText(float input){
 
         super.setText(String.valueOf(input));
 
         return this;
     }
-    protected TrackLabel moveto(Point2D.Float input){
+    public TrackLabel moveto(Point2D.Float input){
 
         if (null != this.horizontal || null != this.vertical){
 

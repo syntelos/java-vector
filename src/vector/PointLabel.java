@@ -180,7 +180,7 @@ public class PointLabel
 
         return true;
     }
-    protected void layout(){
+    public void layout(){
 
         if (null != this.pointReference){
 

@@ -257,7 +257,7 @@ public abstract class ContainerScrollPosition
      * @param ds Scale times position delta,
      * <i>i.e. (this.scale*(this.position - p))</i>.
      */
-    protected boolean move(float ds){
+    public boolean move(float ds){
         /*
          * Requires container for listing content 
          */
@@ -348,7 +348,7 @@ public abstract class ContainerScrollPosition
         else
             return false;
     }
-    protected void layout(){
+    public void layout(){
 
         this.boundsViewport = this.getParentVector().getBoundsVector();
     }

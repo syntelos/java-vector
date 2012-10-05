@@ -102,7 +102,7 @@ public class Display<T extends Component>
 
         this.layout();
     }
-    protected void init(Boolean init){
+    public void init(Boolean init){
         if (null != init && init.booleanValue()){
 
             this.init();
@@ -143,7 +143,7 @@ public class Display<T extends Component>
     }
     public void relocated(){
     }
-    protected void flush(){
+    public void flush(){
 
         this.output.flush();
     }
@@ -241,12 +241,12 @@ public class Display<T extends Component>
 
         return this.transform.clone();
     }
-    protected Display setTransformLocal(Transform transform){
+    public Display setTransformLocal(Transform transform){
         if (null != transform)
             this.transform.setTransform(transform);
         return this;
     }
-    protected Display setTransformLocal(float sx, float sy){
+    public Display setTransformLocal(float sx, float sy){
 
         return this.setTransformLocal(Transform.getScaleInstance(sx,sy));
     }
@@ -746,11 +746,11 @@ public class Display<T extends Component>
     public final void componentHidden(ComponentEvent evt){
         this.hidden();
     }
-    protected void shown(){
+    public void shown(){
 
         this.outputOverlayAnimateResume();
     }
-    protected void hidden(){
+    public void hidden(){
 
         this.outputOverlayAnimateSuspend();
     }
@@ -811,7 +811,7 @@ public class Display<T extends Component>
         }
         catch (IOException exc){
 
-            this.warn(exc,"Error reading file '%s'",file);
+            this.error(exc,"Reading file '%s'",file);
 
             return false;
         }
@@ -834,7 +834,7 @@ public class Display<T extends Component>
         }
         catch (IOException exc){
 
-            this.warn(exc,"Error reading URL '%s'",url);
+            this.error(exc,"Reading URL '%s'",url);
 
             return false;
         }

@@ -161,7 +161,7 @@ public class Padding
             throw new InternalError();
         }
     }
-    protected StringBuilder toStringBuilder(){
+    public StringBuilder toStringBuilder(){
         StringBuilder string = new StringBuilder();
         string.append('(');
         string.append(this.left);

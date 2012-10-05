@@ -25,7 +25,7 @@ libs=$(ls lib/*.jar )
 if [ -n "${libs}" ]
 then
     jarfdemo=$(ls vector-demo-*.jar | tail -n 1 )
-    jarfcore=$(ls vector-*.jar | egrep -v demo | tail -n 1 )
+    jarfcore=$(ls vector-[0-9]*.[0-9]*.[0-9]*.jar | egrep -v demo | tail -n 1 )
 
     if [ -n "${jarfdemo}" ]&&[ -f "${jarfdemo}" ]&&[ -n "${jarfcore}" ]&&[ -f "${jarfcore}" ]
     then

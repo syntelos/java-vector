@@ -10,6 +10,7 @@
   <property name="dst" value="."/>
 
   <property name="demo.src" value="demo/src"/>
+  <property name="geda.src" value="geda/src"/>
 
   <property name="compiler.source" value="1.5"/>
   <property name="compiler.target" value="1.5"/>
@@ -33,16 +34,21 @@
       <arg value="${toString:lib.path}"/>
     </java>
     <echo message="Main-Class: vector.Frame"/>
-    <echo message="Class-Path: ${lib.path.manifest}"/>
+    <echo message="Class-Path: ${target.jar} ${lib.path.manifest}"/>
 
     <delete file="${demo.jar}"/>
 
-    <jar jarfile="${demo.jar}" basedir="${bin}" />
+    <jar jarfile="${demo.jar}" basedir="${bin}" >
+      <manifest>
+        <attribute name="Main-Class" value="vector.Frame"/>
+        <attribute name="Class-Path" value="${target.jar} ${lib.path.manifest}"/>
+      </manifest>
+    </jar>
 
     <delete dir="${bin}"/>
   </target>
 
-  <target name="demo-compile" depends="version" description="Compile src to bin">
+  <target name="demo-compile" depends="version">
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -51,6 +57,43 @@
       <fileset dir="${demo.src}" includes="**/*.xml"/>
     </copy>
     <javac srcdir="${demo.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <pathelement path="${lib.path}"/>
+        <pathelement location="${target.jar}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="geda" depends="geda-compile" description="Package geda jar, clean bin.  Depends on the target jar.">
+
+    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest">
+      <arg value="${toString:lib.path}"/>
+    </java>
+    <echo message="Main-Class: geda.Frame"/>
+    <echo message="Class-Path: ${target.jar} ${lib.path.manifest}"/>
+
+    <delete file="${geda.jar}"/>
+
+    <jar jarfile="${geda.jar}" basedir="${bin}" >
+      <manifest>
+        <attribute name="Main-Class" value="geda.Frame"/>
+        <attribute name="Class-Path" value="${target.jar} ${lib.path.manifest}"/>
+      </manifest>
+    </jar>
+
+    <delete dir="${bin}"/>
+  </target>
+
+  <target name="geda-compile" depends="version">
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+    <copy todir="${bin}">
+      <fileset dir="${geda.src}" includes="**/*.properties"/>
+      <fileset dir="${geda.src}" includes="**/*.txt"/>
+      <fileset dir="${geda.src}" includes="**/*.xml"/>
+    </copy>
+    <javac srcdir="${geda.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement path="${lib.path}"/>
@@ -103,6 +146,7 @@
     <version/>
     <property name="target.jar" value="${dst}/${ant.project.name}-${this.version}.jar"/>
     <property name="demo.jar" value="${dst}/${ant.project.name}-demo-${this.version}.jar"/>
+    <property name="geda.jar" value="${dst}/${ant.project.name}-geda-${this.version}.jar"/>
   </target>
 
   <target name="build" description="Increment version build number and report result.">

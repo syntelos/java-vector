@@ -670,7 +670,7 @@ public class Container<T extends Component>
         return true;
     }
 
-    protected void content(){
+    public void content(){
 
         if (0 < this.count()){
 
@@ -689,11 +689,11 @@ public class Container<T extends Component>
             }
         }
     }
-    protected void parent(){
+    public void parent(){
 
         this.setBoundsVectorInit(this.getParentVector(),this.getMargin());
     }
-    protected void scale(){
+    public void scale(){
 
         if (0 < this.count()){
 

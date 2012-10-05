@@ -501,7 +501,7 @@ public class Text
 
         return this.font.boundingBox(this.getPadding(),1,this.shapeAreaWidth());
     }
-    protected float shapeAreaWidth(){
+    public float shapeAreaWidth(){
         if (this.fixed)
             return (this.font.em*this.cols);
         else {
@@ -602,7 +602,7 @@ public class Text
      * When fixed this method calls {@link #resizeToShapeArea()} and
      * {@link #layoutScaleToShapeArea()}.
      */
-    protected void layout(){
+    public void layout(){
 
         if (null == this.shape && 0 < this.length()){
 
@@ -628,7 +628,7 @@ public class Text
      * May be called from {@link #layout()} to scale the local
      * transform to fit the padded font-text to the dimensions.
      */
-    protected void layoutScaleToDimensions(){
+    public void layoutScaleToDimensions(){
         Bounds shape = this.queryBoundsContent();
         if (null != shape)
             this.transform.scaleFromAbsolute(this.getBoundsVector(),shape);
@@ -639,20 +639,20 @@ public class Text
      * May be called from {@link #layout()} to set dimensions from
      * parent.
      */
-    protected void resizeToParent(){
+    public void resizeToParent(){
         this.setBoundsVectorInit(this.getParentVector(),this.getMargin());
     }
     /**
      * May be called from {@link #layout()} to set dimensions from
      * {@link #queryBoundsContent()}.
      */
-    protected void resizeToShapeArea(){
+    public void resizeToShapeArea(){
         this.setBoundsVectorInit(this.queryBoundsContent());
     }
     /**
      * Define transform local as 1:1 scale.
      */
-    protected void layoutScaleToShapeArea(){
+    public void layoutScaleToShapeArea(){
         this.setTransformLocal(1f,1f);
     }
 }

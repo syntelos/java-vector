@@ -69,7 +69,7 @@ public abstract class AbstractComponent
 
         this.setParentVector(parent);
     }
-    protected void init(Boolean init){
+    public void init(Boolean init){
         if (null != init && init.booleanValue()){
 
             this.init();
@@ -175,7 +175,7 @@ public abstract class AbstractComponent
      * component origin (0,0).  The component location is changed to
      * (0,0).
      */
-    protected Component setBoundsVectorInit(Component parent){
+    protected final Component setBoundsVectorInit(Component parent){
         Bounds bounds = parent.getBoundsVector();
         bounds.x = 0f;
         bounds.y = 0f;
@@ -186,7 +186,7 @@ public abstract class AbstractComponent
      * Union of origin and bounds for resizing to these extents of
      * within a component.  The component location is unchanged.
      */
-    protected Component setBoundsVectorInit(Bounds content){
+    protected final Component setBoundsVectorInit(Bounds content){
         if (null != content){
 
             content.width += content.x;
@@ -205,7 +205,7 @@ public abstract class AbstractComponent
      * location is changed to (margin.left,margin.top), and the
      * component bounds are changed to subtract the margin.
      */
-    protected Component setBoundsVectorInit(Component parent, Padding margin){
+    protected final Component setBoundsVectorInit(Component parent, Padding margin){
         Bounds bounds = parent.getBoundsVector();
 
         bounds.x = margin.left;
@@ -253,20 +253,20 @@ public abstract class AbstractComponent
 
         return this.getTransformLocal().translateLocation(this.getLocationVector());
     }
-    protected AbstractComponent setTransformLocal(Transform transform){
+    public AbstractComponent setTransformLocal(Transform transform){
         if (null != transform)
             this.transform.setTransform(transform);
         return this;
     }
-    protected AbstractComponent setTransformLocal(float sx, float sy){
+    public AbstractComponent setTransformLocal(float sx, float sy){
 
         return this.setTransformLocal(Transform.getScaleInstance(sx,sy));
     }
-    protected AbstractComponent setTransformLocal(Shape shape){
+    public AbstractComponent setTransformLocal(Shape shape){
 
         return this.setTransformLocal(new Bounds(shape));
     }
-    protected AbstractComponent setTransformLocal(Bounds shape){
+    public AbstractComponent setTransformLocal(Bounds shape){
 
         return this.setTransformLocal(this.getBoundsVector().scaleFrom(shape));
     }
@@ -288,7 +288,7 @@ public abstract class AbstractComponent
      * 
      * @see #transformFrom(java.awt.Graphics2D)
      */
-    protected Graphics2D clipFrom(Graphics2D g){
+    public Graphics2D clipFrom(Graphics2D g){
 
         return this.getTransformLocal().transformFrom(this.getBoundsVector().clip(g));
     }
@@ -310,7 +310,7 @@ public abstract class AbstractComponent
      * 
      * @see #clipFrom(java.awt.Graphics2D)
      */
-    protected Graphics2D transformFrom(Graphics2D g){
+    public Graphics2D transformFrom(Graphics2D g){
 
         return this.getTransformParent().transformFrom(g);
     }
@@ -404,7 +404,7 @@ public abstract class AbstractComponent
     /**
      * Information for debugging
      */
-    protected StringBuilder toStringBuilder(){
+    public StringBuilder toStringBuilder(){
         StringBuilder string = new StringBuilder();
         string.append(this.getClass().getName());
         string.append(", x: ");

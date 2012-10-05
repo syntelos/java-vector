@@ -120,7 +120,7 @@ public class ContainerScroll<T extends Component>
      * An array of one may be horizontal or vertical.  An array of two
      * is always ordered.
      */
-    protected ContainerScrollPosition[] listContainerScrollPosition(){
+    public ContainerScrollPosition[] listContainerScrollPosition(){
 
         ContainerScrollPosition[] p = this.list(ContainerScrollPosition.class).list(ContainerScrollPosition.class);
         if (null == p)
@@ -166,7 +166,7 @@ public class ContainerScroll<T extends Component>
             }
         }
     }
-    protected void layout(){
+    public void layout(){
 
         this.setBoundsVectorInit(this.getParentVector());
 

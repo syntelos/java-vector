@@ -67,7 +67,7 @@ public class TableBig
 
         this.layout();
     }
-    protected void layout(){
+    public void layout(){
 
         final int count = this.count();
         if (0 < count){

@@ -220,7 +220,7 @@ public class TrackPointer
         }
         return this;
     }
-    protected TrackPointer moveto(Point2D.Float input){
+    public TrackPointer moveto(Point2D.Float input){
 
         final Point2D.Float midpoint = this.midpoint;
         if (null != midpoint){

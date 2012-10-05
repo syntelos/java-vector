@@ -219,7 +219,7 @@ public class TextLayout
      * (read-only) property named "text", which is most useful for
      * testing.
      */
-    protected void parse(String text){
+    public void parse(String text){
         final StringTokenizer strtok = new StringTokenizer(text," \t\n",true);
 
         final StringBuilder sp = new StringBuilder();
@@ -283,7 +283,7 @@ public class TextLayout
             child.modified();
         }
     }
-    protected void layout(){
+    public void layout(){
         Bounds shape;
         final float cr = this.padding.left;
         float lf = 0;

@@ -75,7 +75,7 @@ public class Frame
 
 
 
-    protected Display createDisplay(){
+    public Display createDisplay(){
 
         return new Display();
     }
@@ -100,6 +100,18 @@ public class Frame
 
         return this;
     }
+    public final Frame error(Throwable t, String fmt, Object... args){
+
+        this.log.log(Level.SEVERE,String.format(fmt,args),t);
+
+        return this;
+    }
+    public final Frame error(String fmt, Object... args){
+
+        this.log.log(Level.SEVERE,String.format(fmt,args));
+
+        return this;
+    }
     public final boolean open(File file){
 
         return this.display.open(file);
@@ -108,47 +120,65 @@ public class Frame
 
         return this.display.open(url);
     }
+    public final boolean eval(String[] cli){
+        if (0 < cli.length){
 
-
-    public static void main(String[] argv){
-
-        Frame frame = new Frame();
-        if (0 < argv.length){
-
-            String string = argv[0];
+            String string = cli[0];
             try {
                 try {
                     URL url = new URL(string);
 
-                    if (!frame.open(url))
-                        System.exit(1);
+                    if (!this.open(url)){
 
+                        this.error("Reading failed '%s'",url);
+
+                        return false;
+                    }
+                    else
+                        return true;
                 }
                 catch (MalformedURLException exc){
 
                     File file = new File(string);
                     if (file.isFile()){
 
-                        if (!frame.open(file))
-                            System.exit(1);
+                        if (!this.open(file)){
+
+                            this.error("Reading failed '%s'",file);
+
+                            return false;
+                        }
+                        else
+                            return true;
                     }
                     else {
 
-                        frame.warn("Error, unrecognized file '%s'",file);
-                        System.exit(1);
+                        this.error("File not found '%s'",file);
+
+                        return false;
                     }
                 }
             }
             catch (Throwable t){
 
-                frame.warn(t,"Error loading '%s'",string);
-                System.exit(1);
+                this.error(t,"Error reading '%s'",string);
+
+                return false;
             }
         }
         else {
 
-            frame.warn("Error, require argument JSON file");
-            System.exit(1);
+            this.error("Require file or url");
+
+            return false;
         }
+    }
+
+    public static void main(String[] argv){
+
+        if ((new Frame()).eval(argv))
+            return;
+        else
+            System.exit(1);
     }
 }

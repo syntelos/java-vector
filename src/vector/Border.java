@@ -375,7 +375,7 @@ public class Border
 
         return this;
     }
-    protected void layout(){
+    public void layout(){
 
         if (!this.fixed){
 
