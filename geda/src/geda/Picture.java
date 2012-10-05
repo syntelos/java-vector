@@ -36,7 +36,7 @@ public class Picture
 
     protected String filename, encoded;
 
-    protected boolean mark;
+    private boolean mark;
 
 
     public Picture(){
@@ -52,14 +52,13 @@ public class Picture
     public void init(){
         super.init();
 
-        this.mark = false;
         this.content = true;
     }
     @Override
     public void modified(){
         if (this.mark){
             this.mark = false;
-            this.init();
+
 
         }
         super.modified();

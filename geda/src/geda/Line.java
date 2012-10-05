@@ -32,7 +32,7 @@ public class Line
 {
     protected int x1, y1, x2, y2, color, width, capstyle, dashstyle, dashlength, dashspace;
 
-    protected boolean mark;
+    private boolean mark;
 
 
     public Line(){
@@ -48,14 +48,13 @@ public class Line
     public void init(){
         super.init();
 
-        this.mark = false;
         this.content = true;
     }
     @Override
     public void modified(){
         if (this.mark){
             this.mark = false;
-            this.init();
+
 
         }
         super.modified();

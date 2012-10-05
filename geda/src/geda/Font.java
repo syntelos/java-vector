@@ -34,7 +34,7 @@ public class Font
     protected int width;
     protected boolean flag;
 
-    protected boolean mark;
+    private boolean mark;
 
 
     public Font(){
@@ -50,14 +50,13 @@ public class Font
     public void init(){
         super.init();
 
-        this.mark = false;
         this.content = true;
     }
     @Override
     public void modified(){
         if (this.mark){
             this.mark = false;
-            this.init();
+
 
         }
         super.modified();

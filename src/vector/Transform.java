@@ -191,18 +191,18 @@ public class Transform
 
         this.inverse = null;
 
-        this.setTransform(internal.scaleFrom(external));
+        this.setTransform(internal.scaleFromAbsolute(external));
 
         return this;
     }
     /**
-     * Concatenate scale with internal scale from external
+     * Define scale with internal scale from external
      */
     public Transform scaleFromRelative(Bounds internal, RectangularShape external){
 
         this.inverse = null;
 
-        this.concatenate(internal.scaleFrom(external));
+        this.setTransform(internal.scaleFromRelative(external));
 
         return this;
     }
@@ -213,18 +213,18 @@ public class Transform
 
         this.inverse = null;
 
-        this.setTransform(internal.scaleTo(external));
+        this.setTransform(internal.scaleToAbsolute(external));
 
         return this;
     }
     /**
-     * Concatenate scale with internal scale to external
+     * Define scale with internal scale to external
      */
     public Transform scaleToRelative(Bounds internal, RectangularShape external){
 
         this.inverse = null;
 
-        this.concatenate(internal.scaleTo(external));
+        this.setTransform(internal.scaleToRelative(external));
 
         return this;
     }

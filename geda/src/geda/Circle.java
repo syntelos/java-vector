@@ -32,7 +32,7 @@ public class Circle
 {
     protected int x, y, radius, color, width, capstyle, dashstyle, dashlength, dashspace, filltype, fillwidth, angle1, pitch1, angle2, pitch2;
 
-    protected boolean mark;
+    private boolean mark;
 
 
     public Circle(){
@@ -48,14 +48,13 @@ public class Circle
     public void init(){
         super.init();
 
-        this.mark = false;
         this.content = true;
     }
     @Override
     public void modified(){
         if (this.mark){
             this.mark = false;
-            this.init();
+
 
         }
         super.modified();

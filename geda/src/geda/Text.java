@@ -60,7 +60,7 @@ public class Text
 
     protected NameValue[] lines;
 
-    protected boolean mark;
+    private boolean mark;
 
 
     public Text(){
@@ -79,14 +79,13 @@ public class Text
     public void init(){
         super.init();
 
-        this.mark = false;
         this.content = true;
     }
     @Override
     public void modified(){
         if (this.mark){
             this.mark = false;
-            this.init();
+
 
         }
         super.modified();

@@ -268,7 +268,7 @@ public abstract class AbstractComponent
     }
     public AbstractComponent setTransformLocal(Bounds shape){
 
-        return this.setTransformLocal(this.getBoundsVector().scaleFrom(shape));
+        return this.setTransformLocal(this.getBoundsVector().scaleFromAbsolute(shape));
     }
     /**
      * Apply parent transform via clipping: an alternative to the

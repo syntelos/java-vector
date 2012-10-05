@@ -762,7 +762,7 @@ public class Display<T extends Component>
         if (null == this.boundsUser){
             this.boundsUser = new Bounds(this.boundsNative);
         }
-        this.transform.scaleToAbsolute(this.boundsUser,this.boundsNative);
+        this.transform.scaleToRelative(this.boundsUser,this.boundsNative);
     }
 
     public Json toJson(){

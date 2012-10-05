@@ -112,7 +112,7 @@ public class Path
 
     protected Path.Winding winding;
 
-    protected boolean closed, fixed, fill;
+    protected boolean closed, content, fill;
 
     protected Align align;
 
@@ -134,7 +134,7 @@ public class Path
         this.setWindingNonZero();
 
         this.color = Color.black;
-        this.fixed = false;
+        this.content = false;
         this.fill = false;
     }
     @Override
@@ -161,7 +161,7 @@ public class Path
     }
     public Component.Layout.Order queryLayout(){
 
-        if (this.fixed)
+        if (this.content)
             return Component.Layout.Order.Content;
         else
             return Component.Layout.Order.Parent;
@@ -176,36 +176,36 @@ public class Path
     public void layout(Component.Layout.Order order){
         switch(order){
         case Content:
-            this.fixed = true;
+            this.content = true;
             break;
         case Parent:
-            this.fixed = false;
+            this.content = false;
             break;
         default:
             throw new IllegalStateException(order.name());
         }
         this.modified();
     }
-    public final boolean isFixed(){
+    public final boolean isContent(){
 
-        return this.fixed;
+        return this.content;
     }
-    public final Boolean getFixed(){
+    public final Boolean getContent(){
 
-        if (this.fixed)
+        if (this.content)
             return Boolean.TRUE;
         else
             return Boolean.FALSE;
     }
-    public final Path setFixed(boolean fixed){
+    public final Path setContent(boolean content){
 
-        this.fixed = fixed;
+        this.content = content;
         return this;
     }
-    public final Path setFixed(Boolean fixed){
+    public final Path setContent(Boolean content){
 
-        if (null != fixed)
-            return this.setFixed(fixed.booleanValue());
+        if (null != content)
+            return this.setContent(content.booleanValue());
         else
             return this;
     }
@@ -590,7 +590,7 @@ public class Path
         thisModel.setValue("color-over", this.getColorOver());
         thisModel.setValue("stroke",this.getStroke());
         thisModel.setValue("stroke-over",this.getStrokeOver());
-        thisModel.setValue("fixed",this.getFixed());
+        thisModel.setValue("content",this.getContent());
         thisModel.setValue("fill",this.getFill());
         thisModel.setValue("align",this.getAlignString());
         thisModel.setValue("d", this.getD());
@@ -605,7 +605,7 @@ public class Path
         this.setColorOver( (Color)thisModel.getValue("color-over",Color.class));
         this.setStroke( (Stroke)thisModel.getValue("stroke",Stroke.class));
         this.setStrokeOver( (Stroke)thisModel.getValue("stroke-over",Stroke.class));
-        this.setFixed( (Boolean)thisModel.getValue("fixed"));
+        this.setContent( (Boolean)thisModel.getValue("content"));
         this.setFill( (Boolean)thisModel.getValue("fill"));
         this.setAlign( (String)thisModel.getValue("align"));
         this.setD( (String)thisModel.getValue("d"));
@@ -616,17 +616,15 @@ public class Path
 
         if (null != this.path){
 
-            /*
-             * Optional scaling
-             */
-            if (!this.fixed){
+            if (this.content){
 
-                this.setTransformLocal(new Bounds(this.path));
+                this.setBoundsVector(new Bounds(this.path));
             }
-            /*
-             * Optional alignment
-             */
-            this.setBoundsVector(this.getBoundsVector().apply(this.align,this.getParentBounds()));
+
+            if (null != this.align){
+
+                this.setBoundsVector(this.getBoundsVector().apply(this.align,this.getParentBounds()));
+            }
         }
     }
 

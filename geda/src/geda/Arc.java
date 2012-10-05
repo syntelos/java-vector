@@ -32,7 +32,7 @@ public class Arc
 {
     protected int x, y, radius, startangle, sweepangle, color, width, capstyle, dashstyle, dashlength, dashspace;
 
-    protected boolean mark;
+    private boolean mark;
 
 
     public Arc(){
@@ -48,14 +48,13 @@ public class Arc
     public void init(){
         super.init();
 
-        this.mark = false;
         this.content = true;
     }
     @Override
     public void modified(){
         if (this.mark){
             this.mark = false;
-            this.init();
+
 
         }
         super.modified();

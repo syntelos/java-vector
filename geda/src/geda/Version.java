@@ -33,7 +33,7 @@ public class Version
 
     protected String version_tool, version_format;
 
-    protected boolean mark;
+    private boolean mark;
 
 
     public Version(){
@@ -50,14 +50,13 @@ public class Version
     public void init(){
         super.init();
 
-        this.mark = false;
         this.content = true;
     }
     @Override
     public void modified(){
         if (this.mark){
             this.mark = false;
-            this.init();
+
 
         }
         super.modified();

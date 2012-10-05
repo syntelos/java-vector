@@ -34,7 +34,7 @@ public class Path
     protected String[] lines;
     protected String lines_buffer;
 
-    protected boolean mark;
+    private boolean mark;
 
 
     public Path(){
@@ -50,14 +50,13 @@ public class Path
     public void init(){
         super.init();
 
-        this.mark = false;
         this.content = true;
     }
     @Override
     public void modified(){
         if (this.mark){
             this.mark = false;
-            this.init();
+
 
         }
         super.modified();

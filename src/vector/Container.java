@@ -703,10 +703,12 @@ public class Container<T extends Component>
 
             if (children.isNotEmpty() && (!children.equals(bounds))){
 
-                this.setTransformLocal(bounds.scaleFrom(children));
+                this.setTransformLocal(bounds.scaleFromAbsolute(children));
             }
-            else
+            else {
+
                 this.setTransformLocal(1f,1f);
+            }
         }
     }
 }

@@ -32,7 +32,7 @@ public class Pin
 {
     protected int x1, y1, x2, y2, color, pintype, whichend;
 
-    protected boolean mark;
+    private boolean mark;
 
 
     public Pin(){
@@ -48,17 +48,16 @@ public class Pin
     public void init(){
         super.init();
 
-        this.mark = false;
         this.content = true;
     }
     @Override
     public void modified(){
         if (this.mark){
             this.mark = false;
-            this.init();
 
-            vector.Path path = new vector.Path();
-            this.add(path);
+            final vector.Path path = (vector.Path)this.addUnique(new vector.Path());
+            path.init();
+            path.setContent(true);
             path.setColor(ColorMap.Color(this.color));
             path.moveTo(this.x1,this.y1);
             path.lineTo(this.x2,this.y2);

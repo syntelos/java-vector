@@ -139,7 +139,25 @@ public class Bounds
     /**
      * @return Objective scale to this from that
      */
-    public Transform scaleFrom(java.awt.geom.RectangularShape that){
+    public Transform scaleFromAbsolute(java.awt.geom.RectangularShape that){
+        final double sx = (this.width/(that.getX()+that.getWidth()));
+        final double sy = (this.height/(that.getY()+that.getHeight()));
+
+        return Transform.getScaleInstance(sx,sy);
+    }
+    /**
+     * @return Objective scale to that from this
+     */
+    public Transform scaleToAbsolute(java.awt.geom.RectangularShape that){
+        final double sx = ((that.getX()+that.getWidth())/this.width);
+        final double sy = ((that.getY()+that.getHeight())/this.height);
+
+        return Transform.getScaleInstance(sx,sy);
+    }
+    /**
+     * @return Objective scale to this from that
+     */
+    public Transform scaleFromRelative(java.awt.geom.RectangularShape that){
         final double sx = (this.width/that.getWidth());
         final double sy = (this.height/that.getHeight());
 
@@ -148,7 +166,7 @@ public class Bounds
     /**
      * @return Objective scale to that from this
      */
-    public Transform scaleTo(java.awt.geom.RectangularShape that){
+    public Transform scaleToRelative(java.awt.geom.RectangularShape that){
         final double sx = (that.getWidth()/this.width);
         final double sy = (that.getHeight()/this.height);
 

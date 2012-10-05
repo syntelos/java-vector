@@ -32,7 +32,7 @@ public class Box
 {
     protected int x, y, width, height, color, linewidth, capstyle, dashstyle, dashlength, dashspace, filltype, fillwidth, angle1, pitch1, angle2, pitch2;
 
-    protected boolean mark;
+    private boolean mark;
 
 
     public Box(){
@@ -48,17 +48,16 @@ public class Box
     public void init(){
         super.init();
 
-        this.mark = false;
         this.content = true;
     }
     @Override
     public void modified(){
         if (this.mark){
             this.mark = false;
-            this.init();
 
-            vector.Path path = new vector.Path();
-            this.add(path);
+            final vector.Path path = (vector.Path)this.addUnique(new vector.Path());
+            path.init();
+            path.setContent(true);
             path.setColor(ColorMap.Color(this.color));
             path.outlineBoxCW(this.x,this.y,this.width,this.height);
         }

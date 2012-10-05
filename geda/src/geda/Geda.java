@@ -40,6 +40,7 @@ public class Geda
 
         this.parent = true;
         this.scale = true;
+        this.setMargin(new vector.Padding(100,100));
     }
     public boolean read(LineNumberReader in)
         throws IOException
