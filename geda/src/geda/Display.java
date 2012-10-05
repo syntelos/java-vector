@@ -29,7 +29,7 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 /**
- * 
+ * One child {@link Geda}
  */
 public class Display
     extends vector.Display
@@ -42,6 +42,20 @@ public class Display
     }
 
 
+    @Override
+    public void init(){
+
+        this.setBackground(ColorMap.BACKGROUND_COLOR.getColor());
+
+        super.init();
+    }
+    @Override
+    public void modified(){
+
+        this.setBackground(ColorMap.BACKGROUND_COLOR.getColor());
+
+        super.modified();
+    }
     public Geda get(){
         if (this.has(0))
             return (Geda)this.get(0);
@@ -64,6 +78,8 @@ public class Display
                 if (geda.read(fin)){
 
                     this.modified();
+
+                    this.outputScene();
 
                     return true;
                 }
@@ -97,6 +113,8 @@ public class Display
                 if (geda.read(uin)){
 
                     this.modified();
+
+                    this.outputScene();
 
                     return true;
                 }

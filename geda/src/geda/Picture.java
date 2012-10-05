@@ -36,6 +36,8 @@ public class Picture
 
     protected String filename, encoded;
 
+    protected boolean mark;
+
 
     public Picture(){
         super();
@@ -46,7 +48,25 @@ public class Picture
     }
 
 
+    @Override
+    public void init(){
+        super.init();
+
+        this.mark = false;
+        this.content = true;
+    }
+    @Override
+    public void modified(){
+        if (this.mark){
+            this.mark = false;
+            this.init();
+
+        }
+        super.modified();
+    }
     public Picture readGeda(LineNumberReader in) throws IOException {
+        this.mark = true;
+
         final int lno1 = in.getLineNumber();
         final String line1 = in.readLine();
         StringTokenizer strtok = new StringTokenizer(line1," ");

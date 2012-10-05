@@ -21,9 +21,13 @@ package geda;
 import java.io.LineNumberReader;
 import java.io.IOException;
 
+/**
+ * Recreated via {@link Display} initialization to read a gEDA sch/sym file.
+ */
 public class Geda
     extends vector.Container
 {
+
 
     public Geda(){
         super();
@@ -31,15 +35,17 @@ public class Geda
 
 
     @Override
-    public void modified(){
+    public void init(){
+        super.init();
+
         this.parent = true;
         this.scale = true;
-
-        super.modified();
     }
     public boolean read(LineNumberReader in)
         throws IOException
     {
+        this.init();
+
         int offset = 0;
 
         int type = in.read();

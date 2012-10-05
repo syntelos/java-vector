@@ -60,6 +60,8 @@ public class Text
 
     protected NameValue[] lines;
 
+    protected boolean mark;
+
 
     public Text(){
         super();
@@ -73,7 +75,25 @@ public class Text
     public boolean isAttribute(){
         return (null != this.lines && this.lines[0].isAttribute());
     }
+    @Override
+    public void init(){
+        super.init();
+
+        this.mark = false;
+        this.content = true;
+    }
+    @Override
+    public void modified(){
+        if (this.mark){
+            this.mark = false;
+            this.init();
+
+        }
+        super.modified();
+    }
     public geda.Text readGeda(LineNumberReader in) throws IOException {
+        this.mark = true;
+
         final int lno = in.getLineNumber();
         final String line = in.readLine();
         StringTokenizer strtok = new StringTokenizer(line," ");

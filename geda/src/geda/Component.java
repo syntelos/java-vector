@@ -34,6 +34,8 @@ public class Component
     protected boolean selectable, mirror;
     protected String basename;
 
+    protected boolean mark;
+
 
     public Component(){
         super();
@@ -44,7 +46,25 @@ public class Component
     }
 
 
+    @Override
+    public void init(){
+        super.init();
+
+        this.mark = false;
+        this.content = true;
+    }
+    @Override
+    public void modified(){
+        if (this.mark){
+            this.mark = false;
+            this.init();
+
+        }
+        super.modified();
+    }
     public Component readGeda(LineNumberReader in) throws IOException {
+        this.mark = true;
+
         final int lno = in.getLineNumber();
         final String line = in.readLine();
         StringTokenizer strtok = new StringTokenizer(line," ");

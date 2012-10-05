@@ -32,6 +32,8 @@ public class Arc
 {
     protected int x, y, radius, startangle, sweepangle, color, width, capstyle, dashstyle, dashlength, dashspace;
 
+    protected boolean mark;
+
 
     public Arc(){
         super();
@@ -42,7 +44,25 @@ public class Arc
     }
 
 
+    @Override
+    public void init(){
+        super.init();
+
+        this.mark = false;
+        this.content = true;
+    }
+    @Override
+    public void modified(){
+        if (this.mark){
+            this.mark = false;
+            this.init();
+
+        }
+        super.modified();
+    }
     public Arc readGeda(LineNumberReader in) throws IOException {
+        this.mark = true;
+
         final int lno = in.getLineNumber();
         final String line = in.readLine();
         StringTokenizer strtok = new StringTokenizer(line," ");

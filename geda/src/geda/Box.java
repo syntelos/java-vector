@@ -32,6 +32,8 @@ public class Box
 {
     protected int x, y, width, height, color, linewidth, capstyle, dashstyle, dashlength, dashspace, filltype, fillwidth, angle1, pitch1, angle2, pitch2;
 
+    protected boolean mark;
+
 
     public Box(){
         super();
@@ -42,7 +44,29 @@ public class Box
     }
 
 
+    @Override
+    public void init(){
+        super.init();
+
+        this.mark = false;
+        this.content = true;
+    }
+    @Override
+    public void modified(){
+        if (this.mark){
+            this.mark = false;
+            this.init();
+
+            vector.Path path = new vector.Path();
+            this.add(path);
+            path.setColor(ColorMap.Color(this.color));
+            path.outlineBoxCW(this.x,this.y,this.width,this.height);
+        }
+        super.modified();
+    }
     public Box readGeda(LineNumberReader in) throws IOException {
+        this.mark = true;
+
         final int lno = in.getLineNumber();
         final String line = in.readLine();
         StringTokenizer strtok = new StringTokenizer(line," ");

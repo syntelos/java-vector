@@ -32,6 +32,8 @@ public class Line
 {
     protected int x1, y1, x2, y2, color, width, capstyle, dashstyle, dashlength, dashspace;
 
+    protected boolean mark;
+
 
     public Line(){
         super();
@@ -42,7 +44,25 @@ public class Line
     }
 
 
+    @Override
+    public void init(){
+        super.init();
+
+        this.mark = false;
+        this.content = true;
+    }
+    @Override
+    public void modified(){
+        if (this.mark){
+            this.mark = false;
+            this.init();
+
+        }
+        super.modified();
+    }
     public Line readGeda(LineNumberReader in) throws IOException {
+        this.mark = true;
+
         final int lno = in.getLineNumber();
         final String line = in.readLine();
         StringTokenizer strtok = new StringTokenizer(line," ");

@@ -32,6 +32,8 @@ public class Pin
 {
     protected int x1, y1, x2, y2, color, pintype, whichend;
 
+    protected boolean mark;
+
 
     public Pin(){
         super();
@@ -42,7 +44,30 @@ public class Pin
     }
 
 
+    @Override
+    public void init(){
+        super.init();
+
+        this.mark = false;
+        this.content = true;
+    }
+    @Override
+    public void modified(){
+        if (this.mark){
+            this.mark = false;
+            this.init();
+
+            vector.Path path = new vector.Path();
+            this.add(path);
+            path.setColor(ColorMap.Color(this.color));
+            path.moveTo(this.x1,this.y1);
+            path.lineTo(this.x2,this.y2);
+        }
+        super.modified();
+    }
     public Pin readGeda(LineNumberReader in) throws IOException {
+        this.mark = true;
+
         final int lno = in.getLineNumber();
         final String line = in.readLine();
         StringTokenizer strtok = new StringTokenizer(line," ");

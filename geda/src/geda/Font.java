@@ -34,6 +34,8 @@ public class Font
     protected int width;
     protected boolean flag;
 
+    protected boolean mark;
+
 
     public Font(){
         super();
@@ -44,7 +46,25 @@ public class Font
     }
 
 
+    @Override
+    public void init(){
+        super.init();
+
+        this.mark = false;
+        this.content = true;
+    }
+    @Override
+    public void modified(){
+        if (this.mark){
+            this.mark = false;
+            this.init();
+
+        }
+        super.modified();
+    }
     public Font readGeda(LineNumberReader in) throws IOException {
+        this.mark = true;
+
         final int lno = in.getLineNumber();
         final String line = in.readLine();
         StringTokenizer strtok = new StringTokenizer(line," ");
