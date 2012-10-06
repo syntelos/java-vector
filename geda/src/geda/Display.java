@@ -32,7 +32,7 @@ import java.nio.charset.Charset;
  * One child {@link Geda}
  */
 public class Display
-    extends awt.Display
+    extends platform.Display
 {
     protected final static Charset UTF8 = Charset.forName("UTF-8");
 

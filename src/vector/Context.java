@@ -18,9 +18,8 @@
  */
 package vector;
 
-import java.awt.Composite;
+
 import java.awt.Image;
-import java.awt.Paint;
 import java.awt.Shape;
 
 import java.awt.font.GlyphVector;
@@ -85,17 +84,11 @@ public interface Context {
 
     public void translate(float x, float y);
 
+    public void translate(double x, double y);
+
     public Font getFont();
 
     public void setFont(Font font);
-
-    public Composite getComposite();
-
-    public void setComposite(Composite composite0);
-
-    public Paint getPaint();
-
-    public void setPaint(Paint paint);
 
     public Stroke getStroke();
 
@@ -130,7 +123,5 @@ public interface Context {
     public boolean drawImage(Image image, int x, int y);
 
     public boolean drawImage(Image image, int x, int y, int w, int h);
-
-    public void setPaintMode();
 
 }

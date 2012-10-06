@@ -16,7 +16,7 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package awt;
+package platform;
 
 import vector.Bounds;
 import vector.Color;
@@ -25,9 +25,7 @@ import vector.Font;
 import vector.Stroke;
 import vector.Transform;
 
-import java.awt.Composite;
 import java.awt.Image;
-import java.awt.Paint;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.font.GlyphVector;
@@ -117,6 +115,11 @@ public class Context
         if (this.trace) DebugTrace.out.printf("[%d] transform(%f,%f)%n", this.depth, x, y);
         this.instance.translate(x,y);
     }
+    public void translate(double dob0, double dob1)
+    {
+        if (this.trace) DebugTrace.out.printf("[%d] translate(%g, %g)%n", this.depth, dob0, dob1);
+        this.instance.translate(dob0, dob1);
+    }
     public void fill(Shape shape)
     {
         if (this.trace) DebugTrace.out.printf("[%d] fill(%s)%n", this.depth, shape);
@@ -147,16 +150,6 @@ public class Context
         if (this.trace) DebugTrace.out.printf("[%d] drawString(%s, %f, %f)%n", this.depth, string0, flo1, flo2);
         this.instance.drawString(string0, flo1, flo2);
     }
-    public Composite getComposite()
-    {
-        if (this.trace) DebugTrace.out.printf("[%d] getComposite()%n", this.depth);
-        return this.instance.getComposite();
-    }
-    public Paint getPaint()
-    {
-        if (this.trace) DebugTrace.out.printf("[%d] getPaint()%n", this.depth);
-        return this.instance.getPaint();
-    }
     public Stroke getStroke()
     {
         if (this.trace) DebugTrace.out.printf("[%d] getStroke()%n", this.depth);
@@ -175,16 +168,6 @@ public class Context
         if (this.trace) DebugTrace.out.printf("[%d] getTransform()%n", this.depth);
         return new Transform( this.instance.getTransform());
     }
-    public void setComposite(Composite composite0)
-    {
-        if (this.trace) DebugTrace.out.printf("[%d] setComposite(%s)%n", this.depth, composite0);
-        this.instance.setComposite(composite0);
-    }
-    public void setPaint(Paint paint0)
-    {
-        if (this.trace) DebugTrace.out.printf("[%d] setPaint(%s)%n", this.depth, paint0);
-        this.instance.setPaint(paint0);
-    }
     public void setStroke(Stroke stroke)
     {
         if (this.trace) DebugTrace.out.printf("[%d] setStroke(%s)%n", this.depth, stroke);
@@ -194,21 +177,6 @@ public class Context
     {
         if (this.trace) DebugTrace.out.printf("[%d] setTransform(%s)%n", this.depth, at);
         this.instance.setTransform(at);
-    }
-    public void shear(double dob0, double dob1)
-    {
-        if (this.trace) DebugTrace.out.printf("[%d] shear(%g, %g)%n", this.depth, dob0, dob1);
-        this.instance.shear(dob0, dob1);
-    }
-    public void translate(int a0, int a1)
-    {
-        if (this.trace) DebugTrace.out.printf("[%d] translate(%d, %d)%n", this.depth, a0, a1);
-        this.instance.translate(a0, a1);
-    }
-    public void translate(double dob0, double dob1)
-    {
-        if (this.trace) DebugTrace.out.printf("[%d] translate(%g, %g)%n", this.depth, dob0, dob1);
-        this.instance.translate(dob0, dob1);
     }
     public void finalize()
     {
@@ -306,9 +274,5 @@ public class Context
         if (this.trace) DebugTrace.out.printf("[%d] setFont(%s)%n", this.depth, font);
         this.instance.setFont(font);
     }
-    public void setPaintMode()
-    {
-        if (this.trace) DebugTrace.out.printf("[%d] setPaintMode()%n", this.depth);
-        this.instance.setPaintMode();
-    }
+
 }

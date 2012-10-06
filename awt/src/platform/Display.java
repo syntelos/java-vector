@@ -16,7 +16,7 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package awt;
+package platform;
 
 import vector.Bounds;
 import vector.Color;

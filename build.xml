@@ -61,14 +61,14 @@
       <arg value="${target.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
-    <echo message="Main-Class: awt.Frame"/>
+    <echo message="Main-Class: platform.Frame"/>
     <echo message="Class-Path: ${lib.path.manifest}"/>
 
     <delete file="${awt.jar}"/>
 
     <jar jarfile="${awt.jar}" basedir="${bin}" >
       <manifest>
-        <attribute name="Main-Class" value="awt.Frame"/>
+        <attribute name="Main-Class" value="platform.Frame"/>
         <attribute name="Class-Path" value="${lib.path.manifest}"/>
       </manifest>
     </jar>
@@ -100,14 +100,14 @@
       <arg value="${target.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
-    <echo message="Main-Class: awt.Frame"/>
+    <echo message="Main-Class: platform.Frame"/>
     <echo message="Class-Path: ${lib.path.manifest}"/>
 
     <delete file="${demo.jar}"/>
 
     <jar jarfile="${demo.jar}" basedir="${bin}" >
       <manifest>
-        <attribute name="Main-Class" value="awt.Frame"/>
+        <attribute name="Main-Class" value="platform.Frame"/>
         <attribute name="Class-Path" value="${lib.path.manifest}"/>
       </manifest>
     </jar>
@@ -182,13 +182,13 @@
       <arg value="${awt.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
-    <echo message="Main-Class: awt.Frame"/>
+    <echo message="Main-Class: platform.Frame"/>
     <echo message="Class-Path: ${lib.path.manifest}"/>
 
     <delete file="${target.jar}"/>
     <jar jarfile="${target.jar}" basedir="${bin}" >
       <manifest>
-        <attribute name="Main-Class" value="awt.Frame"/>
+        <attribute name="Main-Class" value="platform.Frame"/>
         <attribute name="Class-Path" value="${lib.path.manifest}"/>
       </manifest>
     </jar>

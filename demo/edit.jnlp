@@ -12,14 +12,15 @@
   <resources>
     <j2se version="1.6+"/>
 
-    <jar href="vector-1.0.3.jar" main="true" download="eager"/>
+    <jar href="vector-1.0.3.jar" download="eager"/>
+    <jar href="vector-awt-1.0.3.jar" main="true" download="eager"/>
     <jar href="vector-demo-1.0.3.jar" download="eager"/>
     <jar href="lib/joda-time-2.0.jar" download="lazy" />
     <jar href="lib/json-2.1.1.jar" download="eager" />
     <jar href="lib/lxl-1.0.6.jar" download="eager" />
   </resources>
 
-  <application-desc main-class="vector.Frame">
+  <application-desc main-class="platform.Frame">
     <argument>http://java-vector.googlecode.com/git/edit.json</argument>
   </application-desc>
 </jnlp>

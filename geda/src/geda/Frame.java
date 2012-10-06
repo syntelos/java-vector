@@ -22,7 +22,7 @@ package geda;
  * 
  */
 public class Frame
-    extends awt.Frame
+    extends platform.Frame
 {
 
     public Frame(){

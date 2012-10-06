@@ -24,11 +24,16 @@ libs=$(ls lib/*.jar )
 
 if [ -n "${libs}" ]
 then
-    jarfdemo=$(ls vector-demo-*.jar | tail -n 1 )
-    jarfcore=$(ls vector-[0-9]*.[0-9]*.[0-9]*.jar | egrep -v demo | tail -n 1 )
+    jar_demo=$(ls vector-demo-[0-9]*.[0-9]*.[0-9]*.jar | tail -n 1 )
+    jar_awt=$(ls vector-awt-[0-9]*.[0-9]*.[0-9]*.jar | tail -n 1 )
+    jar_core=$(ls vector-[0-9]*.[0-9]*.[0-9]*.jar | tail -n 1 )
 
-    if [ -n "${jarfdemo}" ]&&[ -f "${jarfdemo}" ]&&[ -n "${jarfcore}" ]&&[ -f "${jarfcore}" ]
+    if [ -n "${jar_demo}" ]&&[ -f "${jar_demo}" ]&&[ -n "${jar_awt}" ]&&[ -f "${jar_awt}" ]&&[ -n "${jar_core}" ]&&[ -f "${jar_core}" ]
     then
+        cat<<EOF>&2
+Main ${jar_demo} ${jar_awt} ${jar_core}
+Lib ${libs}
+EOF
         for src in *.json
         do
             name=$(basename ${src} .json)
@@ -48,8 +53,9 @@ then
   <resources>
     <j2se version="1.6+"/>
 
-    <jar href="${jarfcore}" main="true" download="eager"/>
-    <jar href="${jarfdemo}" download="eager"/>
+    <jar href="${jar_core}" download="eager"/>
+    <jar href="${jar_awt}" main="true" download="eager"/>
+    <jar href="${jar_demo}" download="eager"/>
 EOF
             for libf in ${libs}
             do
@@ -60,7 +66,7 @@ EOF
             cat<<EOF>>${tgt}
   </resources>
 
-  <application-desc main-class="vector.Frame">
+  <application-desc main-class="platform.Frame">
     <argument>${codebase}/${src}</argument>
   </application-desc>
 </jnlp>
@@ -79,7 +85,7 @@ EOF
         #
     else
         cat<<EOF>&2
-Error, file not found: 'vector-X.Y.Z.jar' or 'vector-demo-X.Y.Z.jar'.  Run 'ant demo' to build.
+Error, missing required jar file.  Use 'ant' to build jar files.
 EOF
         exit 1
     fi

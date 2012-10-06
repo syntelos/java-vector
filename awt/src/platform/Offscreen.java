@@ -16,7 +16,7 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package awt;
+package platform;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
