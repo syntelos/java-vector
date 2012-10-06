@@ -36,6 +36,20 @@
     <antcall target="geda"/>
   </target>
 
+  <target name="and">
+
+    <java outputproperty="and.lib.path" classpath="${ant}" classname="AndroidLibPath" failonerror="true">
+      <arg value="16"/>
+      <arg value="15"/>
+      <arg value="14"/>
+      <arg value="13"/>
+      <arg value="12"/>
+      <arg value="11"/>
+      <arg value="10"/>
+    </java>
+    <echo message="Android-Lib-Path: ${and.lib.path}"/>
+  </target>
+
   <target name="update-awt" if="vector.awt.update" depends="awt" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.awt.update'.">
 
     <do-update src="${awt.jar}" tgt="${vector.awt.update}" />
@@ -43,7 +57,7 @@
 
   <target name="awt" depends="awt-compile" description="Package awt jar, clean bin.  Depends on the target jar.">
 
-    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest">
+    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${target.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
@@ -81,7 +95,7 @@
 
   <target name="demo" depends="demo-compile" description="Package demo jar, clean bin.  Depends on the target jar.">
 
-    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest">
+    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${awt.jar}"/>
       <arg value="${target.jar}"/>
       <arg value="${toString:lib.path}"/>
@@ -120,7 +134,7 @@
 
   <target name="geda" depends="geda-compile" description="Package geda jar, clean bin.  Depends on the target jar.">
 
-    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest">
+    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${awt.jar}"/>
       <arg value="${target.jar}"/>
       <arg value="${toString:lib.path}"/>
@@ -164,7 +178,7 @@
 
   <target name="jar" depends="compile" description="Package bin to target jar, clean bin.">
 
-    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest">
+    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${awt.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
