@@ -20,7 +20,7 @@ function download_style {
     esac
 }
 
-libs=$(ls lib/*.jar )
+libs=$(ls lib/*.jar | tr '\n' ' ')
 
 if [ -n "${libs}" ]
 then

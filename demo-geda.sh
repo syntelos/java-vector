@@ -20,16 +20,20 @@ function download_style {
     esac
 }
 
-libs=$(ls lib/*.jar )
+libs=$(ls lib/*.jar | tr '\n' ' ')
 
 if [ -n "${libs}" ]
 then
+    jar_geda=$(ls vector-geda-[0-9]*.[0-9]*.[0-9]*.jar | tail -n 1 )
+    jar_awt=$(ls vector-awt-[0-9]*.[0-9]*.[0-9]*.jar | tail -n 1 )
+    jar_core=$(ls vector-[0-9]*.[0-9]*.[0-9]*.jar | tail -n 1 )
 
-    jarfgeda=$(ls vector-geda-*.jar | tail -n 1 )
-    jarfcore=$(ls vector-[0-9]*.[0-9]*.[0-9]*.jar | tail -n 1 )
-
-    if [ -n "${jarfgeda}" ]&&[ -f "${jarfgeda}" ]&&[ -n "${jarfcore}" ]&&[ -f "${jarfcore}" ]
+    if [ -n "${jar_geda}" ]&&[ -f "${jar_geda}" ]&&[ -n "${jar_awt}" ]&&[ -f "${jar_awt}" ]&&[ -n "${jar_core}" ]&&[ -f "${jar_core}" ]
     then
+        cat<<EOF>&2
+Main ${jar_geda} ${jar_awt} ${jar_core}
+Lib ${libs}
+EOF
         for src in geda/*.sym
         do
             name=$(basename ${src} .sym)
@@ -49,8 +53,9 @@ then
   <resources>
     <j2se version="1.6+"/>
 
-    <jar href="${jarfcore}" main="true" download="eager"/>
-    <jar href="${jarfgeda}" download="eager"/>
+    <jar href="${jar_awt}" main="true" download="eager"/>
+    <jar href="${jar_core}" download="eager"/>
+    <jar href="${jar_geda}" download="eager"/>
 EOF
             for libf in ${libs}
             do
@@ -80,7 +85,7 @@ EOF
         #
     else
         cat<<EOF>&2
-Error, file not found: 'vector-X.Y.Z.jar' or 'vector-geda-X.Y.Z.jar'.  Run 'ant geda' to build.
+Error, missing required jar file.  Use 'ant' to build jar files.
 EOF
         exit 1
     fi
