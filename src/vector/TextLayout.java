@@ -116,12 +116,6 @@ public class TextLayout
         }
         return this;
     }
-    public final TextLayout setFont(java.awt.Font font){
-        if (font instanceof Font)
-            return this.setFont((Font)font);
-        else
-            return this.setFont(new Font(font));
-    }
     public final Padding getPadding(){
 
         return this.padding.clone();

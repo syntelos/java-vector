@@ -77,89 +77,89 @@ public class Update
                     File[] targets = Target(src,argv);
 
                     if (null != targets){
-			if (Debug){
-			    try {
-				for (File tgt: targets){
-				    /*
-				     * Copy source to target
-				     */
-				    System.out.printf("+ copy '%s' to '%s' in '%s'%n",src.getPath(),tgt.getName(),tgt.getParentFile().getPath());
-				    /*
-				     * Delete old versions
-				     */
-				    File[] deletes = ListDeletes(src,tgt);
-				    if (null != deletes){
+                        if (Debug){
+                            try {
+                                for (File tgt: targets){
+                                    /*
+                                     * Copy source to target
+                                     */
+                                    System.out.printf("+ copy '%s' to '%s' in '%s'%n",src.getPath(),tgt.getName(),tgt.getParentFile().getPath());
+                                    /*
+                                     * Delete old versions
+                                     */
+                                    File[] deletes = ListDeletes(src,tgt);
+                                    if (null != deletes){
 
-					for (File del: deletes){
+                                        for (File del: deletes){
 
-					    if (DeleteFile(del))
-						System.out.printf("Deleted %s\n",del.getPath());
-					    else
-						System.out.printf("Failed to delete %s\n",del.getPath());
-					}
-				    }
-				    /*
-				     * Add new versions
-				     */
-				    if (AddFile(tgt))
-					System.out.printf("Added %s\n",tgt.getPath());
-				    else
-					System.out.printf("Modified %s\n",tgt.getPath());
-				}
-			    }
-			    catch (Exception exc){
-				exc.printStackTrace();
-				System.exit(1);
-			    }
-			}
-			else {
-			    final long srclen = src.length();
-			    try {
-				FileChannel source = new FileInputStream(src).getChannel();
-				try {
-				    for (File tgt: targets){
-					/*
-					 * Copy source to target
-					 */
-					FileChannel target = new FileOutputStream(tgt).getChannel();
-					try {
-					    source.transferTo(0L,srclen,target);
-					}
-					finally {
-					    target.close();
-					}
-					/*
-					 * Delete old versions
-					 */
-					File[] deletes = ListDeletes(src,tgt);
-					if (null != deletes){
+                                            if (DeleteFile(del))
+                                                System.out.printf("Deleted %s\n",del.getPath());
+                                            else
+                                                System.out.printf("Failed to delete %s\n",del.getPath());
+                                        }
+                                    }
+                                    /*
+                                     * Add new versions
+                                     */
+                                    if (AddFile(tgt))
+                                        System.out.printf("Added %s\n",tgt.getPath());
+                                    else
+                                        System.out.printf("Modified %s\n",tgt.getPath());
+                                }
+                            }
+                            catch (Exception exc){
+                                exc.printStackTrace();
+                                System.exit(1);
+                            }
+                        }
+                        else {
+                            final long srclen = src.length();
+                            try {
+                                FileChannel source = new FileInputStream(src).getChannel();
+                                try {
+                                    for (File tgt: targets){
+                                        /*
+                                         * Copy source to target
+                                         */
+                                        FileChannel target = new FileOutputStream(tgt).getChannel();
+                                        try {
+                                            source.transferTo(0L,srclen,target);
+                                        }
+                                        finally {
+                                            target.close();
+                                        }
+                                        /*
+                                         * Delete old versions
+                                         */
+                                        File[] deletes = ListDeletes(src,tgt);
+                                        if (null != deletes){
 
-					    for (File del: deletes){
+                                            for (File del: deletes){
 
-						if (DeleteFile(del))
-						    System.out.printf("Deleted %s\n",del.getPath());
-						else
-						    System.out.printf("Failed to delete %s\n",del.getPath());
-					    }
-					}
-					/*
-					 * Add new versions
-					 */
-					if (AddFile(tgt))
-					    System.out.printf("Added %s\n",tgt.getPath());
-					else
-					    System.out.printf("Modified %s\n",tgt.getPath());
-				    }
-				}
-				finally {
-				    source.close();
-				}
-			    }
-			    catch (Exception exc){
-				exc.printStackTrace();
-				System.exit(1);
-			    }
-			}
+                                                if (DeleteFile(del))
+                                                    System.out.printf("Deleted %s\n",del.getPath());
+                                                else
+                                                    System.out.printf("Failed to delete %s\n",del.getPath());
+                                            }
+                                        }
+                                        /*
+                                         * Add new versions
+                                         */
+                                        if (AddFile(tgt))
+                                            System.out.printf("Added %s\n",tgt.getPath());
+                                        else
+                                            System.out.printf("Modified %s\n",tgt.getPath());
+                                    }
+                                }
+                                finally {
+                                    source.close();
+                                }
+                            }
+                            catch (Exception exc){
+                                exc.printStackTrace();
+                                System.exit(1);
+                            }
+                        }
                     }
                 }
                 System.exit(0);
@@ -184,14 +184,14 @@ public class Update
         String svn = null, git = null, rm = null;
         try {
             StringTokenizer strtok = new StringTokenizer(System.getenv("PATH"),File.pathSeparator);
-	    File chk;
+            File chk;
             while (strtok.hasMoreTokens()){
                 String pel = strtok.nextToken();
                 chk = new File(pel,"svn");
                 if (chk.isFile() && chk.canExecute()){
                     svn = chk.getPath();
-		    if (null != git && null != rm)
-			break;
+                    if (null != git && null != rm)
+                        break;
                 }
                 else {
                     chk = new File(pel,"svn.exe");
@@ -201,11 +201,11 @@ public class Update
                             break;
                     }
                 }
-		chk = new File(pel,"git");
+                chk = new File(pel,"git");
                 if (chk.isFile() && chk.canExecute()){
                     git = chk.getPath();
-		    if (null != svn && null != rm)
-			break;
+                    if (null != svn && null != rm)
+                        break;
                 }
                 else {
                     chk = new File(pel,"git.exe");
@@ -222,7 +222,7 @@ public class Update
         }
         Svn = svn;
         Git = git;
-	UserHome = System.getProperty("user.home");
+        UserHome = System.getProperty("user.home");
     }
     private final static File UserHomeDir = new File(UserHome);
 
@@ -231,31 +231,31 @@ public class Update
 
     static {
         if (HaveSvn){
-	    if (HaveGit){
-		if (Debug)
-		    System.err.println("Using git and subversion.  Using Debug (Dry Run).");
-		else
-		    System.err.println("Using git and subversion.");
-	    }
-	    else {
-		if (Debug)
-		    System.err.println("Using subversion but not git.  Using Debug (Dry Run).");
-		else
-		    System.err.println("Using subversion but not git.");
-	    }
-	}
-	else if (HaveGit){
-	    if (Debug)
-		System.err.println("Using git but not subversion.  Using Debug (Dry Run).");
-	    else
-		System.err.println("Using git but not subversion.");
-	}
+            if (HaveGit){
+                if (Debug)
+                    System.err.println("Using git and subversion.  Using Debug (Dry Run).");
+                else
+                    System.err.println("Using git and subversion.");
+            }
+            else {
+                if (Debug)
+                    System.err.println("Using subversion but not git.  Using Debug (Dry Run).");
+                else
+                    System.err.println("Using subversion but not git.");
+            }
+        }
+        else if (HaveGit){
+            if (Debug)
+                System.err.println("Using git but not subversion.  Using Debug (Dry Run).");
+            else
+                System.err.println("Using git but not subversion.");
+        }
         else {
-	    if (Debug)
-		System.err.println("Not using either of subversion or git.  Using Debug (Dry Run).");
-	    else
-		System.err.println("Not using either of subversion or git.");
-	}
+            if (Debug)
+                System.err.println("Not using either of subversion or git.  Using Debug (Dry Run).");
+            else
+                System.err.println("Not using either of subversion or git.");
+        }
     }
 
     private final static Runtime RT = Runtime.getRuntime();
@@ -264,28 +264,28 @@ public class Update
         throws java.io.IOException,
                java.lang.InterruptedException
     {
-	if (file.isFile()){
-	    if (IsSvnRepo(file)){
-		if (SvnContains(file))
-		    return SvnDelete(file);
-		else if (Debug){
-		    System.out.printf("+ delete %s in %s%n",file.getName(),file.getParentFile().getPath());
-		    return true;
-		}
-		else
-		    return file.delete();
-	    }
-	    else if (GitContains(file))
-		return GitDelete(file);
-	    else if (Debug){
-		System.out.printf("+ delete %s in %s%n",file.getName(),file.getParentFile().getPath());
-		return true;
-	    }
-	    else
-		return file.delete();
-	}
-	else
-	    return false;
+        if (file.isFile()){
+            if (IsSvnRepo(file)){
+                if (SvnContains(file))
+                    return SvnDelete(file);
+                else if (Debug){
+                    System.out.printf("+ delete %s in %s%n",file.getName(),file.getParentFile().getPath());
+                    return true;
+                }
+                else
+                    return file.delete();
+            }
+            else if (GitContains(file))
+                return GitDelete(file);
+            else if (Debug){
+                System.out.printf("+ delete %s in %s%n",file.getName(),file.getParentFile().getPath());
+                return true;
+            }
+            else
+                return file.delete();
+        }
+        else
+            return false;
     }
     private final static boolean SvnDelete(File file)
         throws java.io.IOException,
@@ -353,20 +353,20 @@ public class Update
         throws java.io.IOException,
                java.lang.InterruptedException
     {
-	if (Update.HaveSvn && IsSvnRepo(file)){
-	    if (SvnContains(file))
-		return false;
-	    else
-		return SvnAdd(file);
-	}
-	else if (Update.HaveGit && IsGitRepo(file)){
-	    if (GitContains(file))
-		return false;
-	    else
-		return GitAdd(file);
-	}
-	else
-	    return false;
+        if (Update.HaveSvn && IsSvnRepo(file)){
+            if (SvnContains(file))
+                return false;
+            else
+                return SvnAdd(file);
+        }
+        else if (Update.HaveGit && IsGitRepo(file)){
+            if (GitContains(file))
+                return false;
+            else
+                return GitAdd(file);
+        }
+        else
+            return false;
     }
     private final static boolean SvnAdd(File file)
         throws java.io.IOException,
@@ -431,22 +431,24 @@ public class Update
             return false;
     }
     private final static boolean IsSvnRepo(File file){
-	File dir = new File(file.getParentFile(),".svn");
-	return (dir.isDirectory());
+        File dir = new File(file.getParentFile(),".svn");
+        return (dir.isDirectory());
     }
     private final static boolean IsGitRepo(File file){
-	if (null != UserHome && file.getPath().startsWith(UserHome)){
-	    File parent = file.getParentFile();
-	    while (null != parent && (!parent.equals(UserHomeDir))){
-		File dir = new File(parent,".git");
-		if (dir.isDirectory())
-		    return true;
-		else {
-		    parent = parent.getParentFile();
-		}
-	    }
-	}
-	return false;
+
+        File parent = file;
+        if (!file.isDirectory())
+            parent = file.getParentFile();
+
+        while (null != parent){
+            File dir = new File(parent,".git");
+            if (dir.isDirectory())
+                return true;
+            else {
+                parent = parent.getParentFile();
+            }
+        }
+        return false;
     }
     private final static boolean SvnContains(File file)
         throws java.io.IOException,
@@ -519,20 +521,20 @@ public class Update
             String[] files = argv[cc].split(":");
             for (int ccc = 0, ccz = files.length; ccc < ccz; ccc++){
 
-		String tgts = files[ccc];
+                String tgts = files[ccc];
                 File tgt;
 
-		if (tgts.startsWith("${user.home}/"))
-		    tgt = new File(UserHomeDir,tgts.substring(13));
-		else
-		    tgt = new File(tgts);
+                if (tgts.startsWith("${user.home}/"))
+                    tgt = new File(UserHomeDir,tgts.substring(13));
+                else
+                    tgt = new File(tgts);
 
                 if (tgt.isDirectory()){
                     tgt = new File(tgt,src.getName());
                 }
 		
-		if (!tgt.getAbsolutePath().equals(src.getAbsolutePath()))
-		    list = Add(list,tgt);
+                if (!tgt.getAbsolutePath().equals(src.getAbsolutePath()))
+                    list = Add(list,tgt);
             }
         }
         return list;
@@ -540,19 +542,19 @@ public class Update
     private final static Pattern DeletesBasenameRe = Pattern.compile("-([kK][0-9]{2}[A-L][0-9]{2}|[0-9.]+)\\.jar");
 
     private final static File[] ListDeletes(File src, File tgt){
-	File tgtd = tgt.getParentFile();
-	if (null != tgtd){
-	    String name = src.getName();
-	    String basename = Basename(name);
-	    if (name.equals(basename)){
-		if (Debug)
-		    System.out.printf("+ listing deletes, basename (%s) == name (%s)%n",basename,name);
-		return null;
-	    }
-	    else
-		return tgtd.listFiles(new Update(basename,name));
-	}
-	return null;
+        File tgtd = tgt.getParentFile();
+        if (null != tgtd){
+            String name = src.getName();
+            String basename = Basename(name);
+            if (name.equals(basename)){
+                if (Debug)
+                    System.out.printf("+ listing deletes, basename (%s) == name (%s)%n",basename,name);
+                return null;
+            }
+            else
+                return tgtd.listFiles(new Update(basename,name));
+        }
+        return null;
     }
     private final static String Basename(String name){
         String[] s = DeletesBasenameRe.split(name,0);
@@ -590,21 +592,21 @@ public class Update
         }
     }
     private final static boolean Contains(ByteArrayOutputStream stdout, String name){
-	return Contains(stdout.toByteArray(),name);
+        return Contains(stdout.toByteArray(),name);
     }
     private final static boolean Contains(byte[] stdout, String name){
-	if (null != stdout && 0 < stdout.length)
-	    return Contains(new String(stdout,0,0,stdout.length),name);
-	else
-	    return false;
+        if (null != stdout && 0 < stdout.length)
+            return Contains(new String(stdout,0,0,stdout.length),name);
+        else
+            return false;
     }
     private final static boolean Contains(String stdout, String name){
-	StringTokenizer strtok = new StringTokenizer(stdout,"\r\n");
-	while (strtok.hasMoreTokens()){
-	    if (name.equals(strtok.nextToken()))
-		return true;
-	}
-	return false;
+        StringTokenizer strtok = new StringTokenizer(stdout,"\r\n");
+        while (strtok.hasMoreTokens()){
+            if (name.equals(strtok.nextToken()))
+                return true;
+        }
+        return false;
     }
     private final static String[] ENV = new String[0];
 
@@ -619,31 +621,31 @@ public class Update
         super();
         this.include = include;
         this.exclude = exclude;
-	if (Debug)
-	    System.out.printf("+ list deletes filter include (%s) exclude (%s)%n",include,exclude);
+        if (Debug)
+            System.out.printf("+ list deletes filter include (%s) exclude (%s)%n",include,exclude);
     }
 
     public boolean accept(File file){
-	if (file.isFile()){
-	    final String name = file.getName();
-	    /*
-	     * Files to delete
-	     */
-	    if (name.startsWith(this.include)){
-		/*
-		 */
-		if (DeletesBasenameRe.matcher(name.substring(this.include.length())).matches()){
-		    /*
-		     */
-		    if (!name.equals(this.exclude)){
-			if (Debug)
-			    System.out.printf("+ list deletes filter (%s)%n",file.getPath());
+        if (file.isFile()){
+            final String name = file.getName();
+            /*
+             * Files to delete
+             */
+            if (name.startsWith(this.include)){
+                /*
+                 */
+                if (DeletesBasenameRe.matcher(name.substring(this.include.length())).matches()){
+                    /*
+                     */
+                    if (!name.equals(this.exclude)){
+                        if (Debug)
+                            System.out.printf("+ list deletes filter (%s)%n",file.getPath());
 
-			return true;
-		    }
-		}
-	    }
-	}
-	return false;
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
