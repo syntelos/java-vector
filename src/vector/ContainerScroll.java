@@ -25,8 +25,8 @@ import java.awt.geom.Rectangle2D;
  * This {@link Container} expects to have zero or one or two {@link
  * ContainerScrollPosition} children which it manages.
  */
-public class ContainerScroll<T extends Component>
-    extends Container<T>
+public class ContainerScroll
+    extends Container
     implements Component.Layout
 {
 

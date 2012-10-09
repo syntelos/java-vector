@@ -36,5 +36,8 @@ public class Font
     public Font(String code){
         super(code);
     }
+    public Font(platform.Font font){
+        super(font);
+    }
 
 }

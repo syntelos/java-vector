@@ -101,6 +101,12 @@ public class Padding
     public float getHeight(){
         return (this.top + this.bottom);
     }
+    public boolean isEmpty(){
+        return (0.0f == this.getWidth() && 0.0f == this.getHeight());
+    }
+    public boolean isNotEmpty(){
+        return (0.0f != this.getWidth() && 0.0f != this.getHeight());
+    }
     public Padding set(java.awt.geom.RectangularShape rect){
 
         return this.set(rect.getX(), 0.0, rect.getY(), 0.0);

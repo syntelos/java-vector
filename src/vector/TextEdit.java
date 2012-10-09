@@ -99,40 +99,46 @@ public class TextEdit
                             this.modified();
                             this.outputScene();
                         }
-                        break;
+                        return true;
+
                     case END:
                         if (((Editor)this.string).end()){
                             this.blink.set();
                             this.outputOverlay();
                         }
-                        break;
+                        return true;
+
                     case HOME:
                         if (((Editor)this.string).home()){
                             this.blink.set();
                             this.outputOverlay();
                         }
-                        break;
+                        return true;
+
                     case LEFT:
                         if (((Editor)this.string).left()){
                             this.blink.set();
                             this.outputOverlay();
                         }
-                        break;
+                        return true;
+
                     case RIGHT:
                         if (((Editor)this.string).right()){
                             this.blink.set();
                             this.outputOverlay();
                         }
-                        break;
+                        return true;
+
                     case DELETE:
                         if (((Editor)this.string).delete()){
                             this.blink.set();
                             this.modified();
                             this.outputScene();
                         }
-                        break;
+                        return true;
+
                     default:
-                        break;
+                        return false;
                     }
                 }
                 else {
@@ -140,9 +146,11 @@ public class TextEdit
                         this.blink.set();
                         this.modified();
                         this.outputScene();
+                        return true;
                     }
+                    else
+                        return false;
                 }
-                return true;
             }
             else
                 return false;

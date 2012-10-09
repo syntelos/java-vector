@@ -31,14 +31,30 @@ import java.util.StringTokenizer;
  * new DebugTrace("format: %d",int).print();
  * </pre>
  * 
- * Consecutive trace prints are indented for the call stack relation
- * to the previous debug trace print, as an aid to the intensive
- * application of this tool.
+ * <p> Consecutive trace prints are indented for the call stack
+ * relation to the previous debug trace print, as an aid to the
+ * intensive application of this tool. </p>
+ * 
+ * <h3>Output</h3>
+ * 
+ * <p> This class presents the standard error stream for debug message
+ * output.  This may evolve to a system property for stream targets.
+ * However, the utility of this facility is not as high as for
+ * logging.  </p>
+ * 
+ * <p> Development-time debugging is distinct from logging which
+ * applies to production and development run-times.  Debug message
+ * code is temporary, it is not committed into version control, and
+ * has far less utility from the tooling available to logging. </p>
  * 
  */
 public class DebugTrace 
     extends Throwable
 {
+    /**
+     * Output target for debug messages is the process error output
+     * stream.
+     */
     public final static PrintStream out = System.err;
 
 

@@ -64,9 +64,9 @@ import java.util.logging.Logger;
  * to fit the content bounds into this bounding box.
  * 
  */
-public class Container<T extends Component>
+public class Container
     extends AbstractComponent
-    implements Component.Container<T>, Component.Margin, Component.Layout
+    implements Component.Container, Component.Margin, Component.Layout
 {
 
     protected final Logger log = Logger.getLogger(this.getClass().getName());
@@ -112,9 +112,7 @@ public class Container<T extends Component>
 
         if (this.content){
 
-            final Component.Iterator<Component> it = this.listContent(Component.class);
-
-            for (Component c: it){
+            for (Component c: this.listContent(Component.class)){
 
                 c.resized();
             }
@@ -149,9 +147,7 @@ public class Container<T extends Component>
 
         if (this.content){
 
-            final Component.Iterator<Component> it = this.listContent(Component.class);
-
-            for (Component c: it){
+            for (Component c: this.listContent(Component.class)){
 
                 c.modified();
             }
@@ -521,7 +517,7 @@ public class Container<T extends Component>
         return this;
     }
 
-    public final Component.Iterator<T> iterator(){
+    public final Component.Iterator iterator(){
         return new Component.Iterator(this.components);
     }
     public final int count(){
@@ -532,9 +528,9 @@ public class Container<T extends Component>
 
         return Component.Tools.Has(this.components,idx);
     }
-    public final T get(int idx){
+    public final <C extends Component> C get(int idx){
 
-        return (T)Component.Tools.Get(this.components,idx);
+        return (C)Component.Tools.Get(this.components,idx);
     }
     public final int indexOf(Component comp){
 
@@ -544,7 +540,7 @@ public class Container<T extends Component>
 
         return Component.Tools.IndexOf(this.components,compClass);
     }
-    public final T add(T comp){
+    public final <C extends Component> C add(C comp){
         if (null != comp){
             this.components = Component.Tools.Add(this.components,comp);
 
@@ -553,7 +549,7 @@ public class Container<T extends Component>
         }
         return comp;
     }
-    public T insert(T comp, int idx){
+    public <C extends Component> C insert(C comp, int idx){
         if (null != comp){
             this.components = Component.Tools.Insert(this.components,comp,idx);
 
@@ -562,20 +558,20 @@ public class Container<T extends Component>
         }
         return comp;
     }
-    public final T addUnique(T comp){
+    public final <C extends Component> C addUnique(C comp){
         int idx = Component.Tools.IndexOf(this.components,comp.getClass());
         if (-1 < idx)
-            return (T)Component.Tools.Get(this.components,idx);
+            return (C)Component.Tools.Get(this.components,idx);
         else 
             return this.add(comp);
     }
-    public final T remove(T comp){
+    public final <C extends Component> C remove(C comp){
         return this.remove(Component.Tools.IndexOf(this.components,comp));
     }
-    public final T remove(int idx){
-        T comp = null;
+    public final <C extends Component> C remove(int idx){
+        C comp = null;
         if (-1 < idx){
-            comp = (T)this.components[idx];
+            comp = (C)this.components[idx];
 
             this.components = Component.Tools.Remove(this.components,idx);
         }

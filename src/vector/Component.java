@@ -495,16 +495,16 @@ public interface Component
      * 
      * @see Display
      */
-    public interface Container<T extends Component>
+    public interface Container
         extends Component,
-                Iterable<T>
+                Iterable<Component>
     {
 
         public int count();
 
         public boolean has(int idx);
 
-        public T get(int idx);
+        public <C extends Component> C get(int idx);
 
         public int indexOf(Component comp);
 
@@ -518,22 +518,25 @@ public interface Component
          * This process have been defined in the {@link
          * Component$Tools Tools}.
          */
-        public T add(T comp);
+        public <C extends Component> C add(C comp);
         /**
          * @param comp New component to add to list
-         * @param index New component index in list
+         * @param index New component index in list: zero-positive
+         * indeces from head, negative indeces from tail, degenerate
+         * insert to index zero.  For example, insertion index
+         * negative two on list length one inserts to index zero.
          */
-        public T insert(T comp, int index);
+        public <C extends Component> C insert(C comp, int index);
         /**
          * If another component exists in the same class (including
          * subclass) of the argument, then return it.  Otherwise add
          * the argument.
          */
-        public T addUnique(T comp);
+        public <C extends Component> C addUnique(C comp);
 
-        public T remove(T comp);
+        public <C extends Component> C remove(C comp);
 
-        public T remove(int idx);
+        public <C extends Component> C remove(int idx);
         /**
          * Iterable example
          * <pre>
@@ -678,10 +681,19 @@ public interface Component
         public static Component[] Insert(Component[] components, Component comp, int index){
             if (null == comp)
                 return components;
-            else if (-1 < index){
-                int len = ((null != components)?(components.length):(0));
-                int nlen = Math.max((len+1),(index+1));
-                Component[] copier = new Component[nlen];
+            else {
+                final int len = ((null != components)?(components.length):(0));
+                final int nlen = Math.max((len+1),(index+1));
+                final Component[] copier = new Component[nlen];
+
+                if (0 > index){
+                    /*
+                     * Index from tail of list, -1 for tail,
+                     * degenerating to insert to index zero
+                     */
+                    index = Math.max(0,(index + len));
+                }
+
                 if (null != components){
                     if (0 == index){
                         System.arraycopy(components,0,copier,1,len);
@@ -697,8 +709,6 @@ public interface Component
                 copier[index] = comp;
                 return copier;
             }
-            else
-                throw new ArrayIndexOutOfBoundsException(String.valueOf(index));
         }
         public static <C extends Component> C[] Add(C[] components, Component comp, Class<C> clas){
             if (null != comp){

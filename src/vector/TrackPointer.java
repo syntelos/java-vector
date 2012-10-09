@@ -101,9 +101,7 @@ public class TrackPointer
 
             final Event entered = ((Event.Mouse)e).transformFrom(this.getTransformParent());
 
-            final Component.Iterator<Component> it = this.iterator();
-
-            for (Component c: it){
+            for (Component c: this){
 
                 c.input(entered);
             }
@@ -117,9 +115,7 @@ public class TrackPointer
 
             final Event exited = ((Event.Mouse)e).transformFrom(this.getTransformParent());
 
-            final Component.Iterator<Component> it = this.iterator();
-
-            for (Component c: it){
+            for (Component c: this){
 
                 c.input(exited);
             }
@@ -133,9 +129,7 @@ public class TrackPointer
 
             final Event moved = ((Event.Mouse)e).transformFrom(this.getTransformParent());
 
-            final Component.Iterator<Component> it = this.iterator();
-
-            for (Component c: it){
+            for (Component c: this){
 
                 c.input(moved);
             }
@@ -148,9 +142,7 @@ public class TrackPointer
         case MouseUp:{
             final Event m = ((Event.Mouse)e).transformFrom(this.getTransformParent());
 
-            final Component.Iterator<Component> it = this.iterator();
-
-            for (Component c: it){
+            for (Component c: this){
                 if (c.input(m))
                     return true;
             }
@@ -165,9 +157,7 @@ public class TrackPointer
             /*
              * Narrow-cast
              */
-            final Component.Iterator<Component> it = this.iterator();
-
-            for (Component c: it){
+            for (Component c: this){
                 if (c.input(e)){
                     return true;
                 }
@@ -179,9 +169,7 @@ public class TrackPointer
             /*
              * Broadcast
              */
-            final Component.Iterator<Component> it = this.iterator();
-
-            for (Component c: it){
+            for (Component c: this){
 
                 re = (c.input(e) || re);
             }

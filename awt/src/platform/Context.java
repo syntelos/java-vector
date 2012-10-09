@@ -257,7 +257,10 @@ public class Context
     public Font getFont()
     {
         if (this.trace) DebugTrace.out.printf("[%d] getFont()%n", this.depth);
-        return new Font( this.instance.getFont());
+        /*
+         * TODO: Review for complexity
+         */
+        return new Font( new platform.Font(this.instance.getFont()));
     }
     public void setClip(int x, int y, int w, int h)
     {

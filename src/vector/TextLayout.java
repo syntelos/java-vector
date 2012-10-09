@@ -54,7 +54,7 @@ import java.util.StringTokenizer;
  * kind of character content}.
  */
 public class TextLayout
-    extends Container<Component.Layout.Text>
+    extends Container
 {
 
     protected Font font;
