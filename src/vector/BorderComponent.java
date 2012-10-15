@@ -179,62 +179,63 @@ public class BorderComponent
         }
     }
     public BorderComponent outputScene(Context g){
-        /*
-         * Compatible with subclass override
-         */
-        final Transform restore = g.getTransform();
-        try {
-            if (null != this.border){
+        if (null != this.border || null != this.background){
+            /*
+             * Compatible with subclass override
+             */
+            final Transform restore = g.getTransform();
+            try {
+                if (null != this.border){
 
-                this.getTransformParent().transformFrom(g);
+                    this.getTransformParent().transformFrom(g);
 
-                if (this.mouseIn && null != this.backgroundOver){
-                    g.setColor(this.backgroundOver);
+                    if (this.mouseIn && null != this.backgroundOver){
+                        g.setColor(this.backgroundOver);
 
-                    Shape borderShape = this.border.getShape();
-                    if (null != borderShape){
-                        g.fill(borderShape);
+                        Shape borderShape = this.border.getShape();
+                        if (null != borderShape){
+                            g.fill(borderShape);
+                        }
+                        else
+                            g.fill(this.border.getBoundsVector());
                     }
-                    else
-                        g.fill(this.border.getBoundsVector());
+                    else if (null != this.background){
+                        g.setColor(this.background);
+
+                        Shape borderShape = this.border.getShape();
+                        if (null != borderShape){
+                            g.fill(borderShape);
+                        }
+                        else
+                            g.fill(this.border.getBoundsVector());
+                    }
+
+                    Context cg = g.create();
+                    try {
+                        border.outputScene(cg);
+                    }
+                    finally {
+                        cg.dispose();
+                    }
                 }
                 else if (null != this.background){
                     g.setColor(this.background);
-
-                    Shape borderShape = this.border.getShape();
-                    if (null != borderShape){
-                        g.fill(borderShape);
-                    }
-                    else
-                        g.fill(this.border.getBoundsVector());
-                }
-
-                Context cg = g.create();
-                try {
-                    border.outputScene(cg);
-                }
-                finally {
-                    cg.dispose();
+                    g.fill(this.getBoundsVector());
                 }
             }
-            else if (null != this.background){
-                g.setColor(this.background);
-                g.fill(this.getBoundsVector());
+            finally {
+                g.setTransform(restore);
             }
-        }
-        finally {
-            g.setTransform(restore);
         }
         return this;
     }
     public BorderComponent outputOverlay(Context g){
-        /*
-         * Compatible with subclass override
-         */
-        final Transform restore = g.getTransform();
-        try {
-            if (null != this.border){
-
+        if (null != this.border){
+            /*
+             * Compatible with subclass override
+             */
+            final Transform restore = g.getTransform();
+            try {
                 this.getTransformParent().transformFrom(g);
 
                 Context cg = g.create();
@@ -245,9 +246,9 @@ public class BorderComponent
                     cg.dispose();
                 }
             }
-        }
-        finally {
-            g.setTransform(restore);
+            finally {
+                g.setTransform(restore);
+            }
         }
         return this;
     }
