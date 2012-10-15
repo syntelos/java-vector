@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="vector" default="update">
 
-  <property name="main" value="llg.Main"/>
-
   <property name="src" value="src"/>
   <property name="ant" value="ant"/>
   <property name="bin" value="bin"/>
@@ -36,12 +34,12 @@
     <antcall target="geda"/>
   </target>
 
-  <target name="update-awt" if="vector.awt.update" depends="awt" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.awt.update'.">
+  <target name="awt" if="vector.awt.update" depends="awt-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.awt.update'.">
 
     <do-update src="${target.awt.jar}" tgt="${vector.awt.update}" />
   </target>
 
-  <target name="awt" depends="awt-compile" description="Package awt jar, clean bin.  Depends on the target jar.">
+  <target name="awt-jar" depends="awt-compile" description="Package awt jar, clean bin.">
 
     <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${target.vector.jar}"/>

@@ -248,10 +248,7 @@ public class Grid
 
             if (null != this.stroke){
 
-                if (null != this.stroke.color)
-                    g.setColor(this.stroke.color);
-                else
-                    g.setColor(this.color);
+                g.setColor(this.color);
 
                 g.setStroke(this.stroke);
             }

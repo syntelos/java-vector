@@ -346,17 +346,11 @@ public class Border
                 final Stroke strokeOver = this.strokeOver;
                 if (null != strokeOver && mouseIn){
 
-                    if (null != strokeOver.color)
-                        g.setColor(strokeOver.color);
-
                     g.setStroke(strokeOver);
 
                     g.draw(shape);
                 }
                 else if (null != this.stroke){
-
-                    if (null != this.stroke.color)
-                        g.setColor(this.stroke.color);
 
                     g.setStroke(this.stroke);
 

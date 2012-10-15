@@ -171,7 +171,11 @@ public class Context
     public void setStroke(Stroke stroke)
     {
         if (this.trace) DebugTrace.out.printf("[%d] setStroke(%s)%n", this.depth, stroke);
+
         this.instance.setStroke(stroke);
+
+        if (null != stroke.color)
+            this.instance.setColor(stroke.color);
     }
     public void setTransform(Transform at)
     {

@@ -91,7 +91,9 @@ public interface Context {
     public void setFont(Font font);
 
     public Stroke getStroke();
-
+    /**
+     * Define stroke with its optional color
+     */
     public void setStroke(Stroke stroke);
 
     public void setClip(int x, int y, int w, int h);

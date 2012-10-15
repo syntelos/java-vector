@@ -529,17 +529,11 @@ public class Text
 
             if (mouseIn && null != this.strokeOver){
 
-                if (null != this.strokeOver.color)
-                    g.setColor(this.strokeOver.color);
-
                 g.setStroke(this.strokeOver);
 
                 g.draw(shape);
             }
             else if (null != this.stroke){
-
-                if (null != this.stroke.color)
-                    g.setColor(this.stroke.color);
 
                 g.setStroke(this.stroke);
 
