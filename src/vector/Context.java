@@ -65,6 +65,16 @@ public interface Context {
      * @see DebugTrace
      */
     public Context setTracing(boolean trace);
+    /**
+     * @return Debug call stack tracing enabled
+     * @see DebugTrace
+     */
+    public boolean isTracingDeep();
+    /**
+     * @param trace Enable debug call stack tracing 
+     * @see DebugTrace
+     */
+    public Context setTracingDeep(boolean trace);
 
     public vector.Context create();
 

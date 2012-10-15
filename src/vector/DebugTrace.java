@@ -174,8 +174,6 @@ public class DebugTrace
 
 
 
-        public final int pn, px;
-
         private Stack[] lines;
 
         private boolean external;
@@ -183,31 +181,27 @@ public class DebugTrace
         private int indent = -1;
 
 
-        public Buffer(){
-            this(2);
-        }
-        public Buffer(int pop){
+
+        public Buffer(int indent){
             super();
-            if (-1 < pop){
-                this.pn = pop;
-                this.px = (pop-1);
-            }
-            else
-                throw new IllegalArgumentException(String.valueOf(pop));
-        }
 
-
-        public int indent(){
-            if (-1 == this.indent){
+            if (-1 == indent){
 
                 if (null == Previous)
 
                     this.indent = 0;
                 else 
                     this.indent = this.commonTo(Previous);
-
-                Previous = this;
             }
+            else
+                this.indent = indent;
+
+            Previous = this;
+        }
+
+
+        public int indent(){
+
             return this.indent;
         }
         public Stack[] compile(){
@@ -221,9 +215,9 @@ public class DebugTrace
                 for (int cc = 0; cc < count; cc++){
                     String stack = strtok.nextToken();
                     /*
-                     * pop (pn) lines from head stack trace
+                     * pop (1) line from head stack trace
                      */
-                    if (this.px < cc){
+                    if (0 < cc){
                         /*
                          * limit tail end of stack trace to first external
                          */
@@ -287,8 +281,6 @@ public class DebugTrace
 
             StringBuilder strbuf = new StringBuilder();
 
-            final int indent = this.indent();
-
             boolean once = true;
 
             for (Stack stack: list){
@@ -297,7 +289,7 @@ public class DebugTrace
                 else 
                     strbuf.append('\n');
 
-                strbuf.append(stack.toString(indent));
+                strbuf.append(stack.toString(this.indent));
             }
             return strbuf.toString();
         }
@@ -306,18 +298,30 @@ public class DebugTrace
 
     public final String message;
 
+    public final int indent;
+
     private Buffer buffer;
 
 
     public DebugTrace(String fmt, Object... args){
         this(String.format(fmt,args));
     }
+    public DebugTrace(int indent, String fmt, Object... args){
+        this(indent, String.format(fmt,args));
+    }
     public DebugTrace(Object o){
         this(o.toString());
     }
+    public DebugTrace(int indent, Object o){
+        this(indent,o.toString());
+    }
     public DebugTrace(String m){
+        this(-1,m);
+    }
+    public DebugTrace(int indent, String m){
         super(m);
         this.message = m;
+        this.indent = indent;
     }
 
 
@@ -325,7 +329,7 @@ public class DebugTrace
         Buffer buffer = this.buffer;
         if (null == buffer){
 
-            buffer = new Buffer(1);
+            buffer = new Buffer(this.indent);
 
             this.printStackTrace(new PrintStream(buffer));
 
@@ -338,6 +342,11 @@ public class DebugTrace
     public void print(){
         DebugTrace.out.println(this.message);
         DebugTrace.out.println(this.caller());
+    }
+    public void print(boolean stack){
+        DebugTrace.out.println(this.message);
+        if (stack)
+            DebugTrace.out.println(this.caller());
     }
     public void printStackTrace(){
         DebugTrace.out.println(this.message);

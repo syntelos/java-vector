@@ -35,6 +35,19 @@ import java.awt.image.ImageObserver;
 
 /**
  * Graphics output context for AWT
+ * 
+ * <h3>System properties</h3>
+ * 
+ * The following properties are read at class initialization time.
+ * 
+ * <dl>
+ * <dt><code>platform.Context.Trace</code></dt>
+ * <dd> Boolean to enable context tracing to process standard error
+ * </dd>
+ * <dt><code>platform.Context.Deep</code></dt>
+ * <dd> Boolean to enable context call stack tracing to process standard error
+ * </dd>
+ * <dl>
  */
 public class Context
     extends Object
@@ -54,6 +67,19 @@ public class Context
         Trace = trace;
     }
 
+    public final static boolean Deep;
+    static {
+        boolean deep = false;
+        try {
+            String conf = System.getProperty("platform.Context.Deep");
+            deep = (null != conf && conf.equals("true"));
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+        Deep = deep;
+    }
+
 
 
 
@@ -63,7 +89,7 @@ public class Context
 
     private java.awt.Graphics2D instance;
 
-    private boolean trace = Context.Trace;
+    private boolean trace = Context.Trace, deep = Context.Deep;
 
 
     public Context(ImageObserver observer, java.awt.Graphics2D instance){
@@ -84,6 +110,7 @@ public class Context
             this.observer = context.observer;
             this.depth = (context.depth+1);
             this.trace = context.trace;
+            this.deep = context.deep;
         }
         else
             throw new IllegalArgumentException();
@@ -96,6 +123,7 @@ public class Context
             this.observer = context.observer;
             this.depth = (context.depth+1);
             this.trace = context.trace;
+            this.deep = context.deep;
         }
         else
             throw new IllegalArgumentException();
@@ -121,54 +149,61 @@ public class Context
         this.trace = trace;
         return this;
     }
+    public boolean isTracingDeep(){
+        return this.deep;
+    }
+    public vector.Context setTracingDeep(boolean deep){
+        this.deep = deep;
+        return this;
+    }
     public void transform(Transform at)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] transform(%s)%n", this.depth, at);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] transform(%s)", this.depth, at)).print(this.deep);
         this.instance.transform(at);
     }
     public void translate(float x, float y)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] transform(%f,%f)%n", this.depth, x, y);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] transform(%f,%f)", this.depth, x, y)).print(this.deep);
         this.instance.translate(x,y);
     }
     public void translate(double dob0, double dob1)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] translate(%g, %g)%n", this.depth, dob0, dob1);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] translate(%g, %g)", this.depth, dob0, dob1)).print(this.deep);
         this.instance.translate(dob0, dob1);
     }
     public void fill(Shape shape)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] fill(%s)%n", this.depth, shape);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] fill(%s)", this.depth, shape)).print(this.deep);
         this.instance.fill(shape);
     }
     public void clip(Shape shape)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] clip(%s)%n", this.depth, shape);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] clip(%s)", this.depth, shape)).print(this.deep);
         this.instance.clip(shape);
     }
     public void draw(Shape shape)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] draw(%s)%n", this.depth, shape);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] draw(%s)", this.depth, shape)).print(this.deep);
         this.instance.draw(shape);
     }
     public void drawGlyphVector(GlyphVector glyphVector0, float flo1, float flo2)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] drawGlyphVector(%s, %f, %f)%n", this.depth, glyphVector0, flo1, flo2);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] drawGlyphVector(%s, %f, %f)", this.depth, glyphVector0, flo1, flo2)).print(this.deep);
         this.instance.drawGlyphVector(glyphVector0, flo1, flo2);
     }
     public void drawString(String string0, int a1, int a2)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] drawString(%s, %d, %d)%n", this.depth, string0, a1, a2);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] drawString(%s, %d, %d)", this.depth, string0, a1, a2)).print(this.deep);
         this.instance.drawString(string0, a1, a2);
     }
     public void drawString(String string0, float flo1, float flo2)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] drawString(%s, %f, %f)%n", this.depth, string0, flo1, flo2);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] drawString(%s, %f, %f)", this.depth, string0, flo1, flo2)).print(this.deep);
         this.instance.drawString(string0, flo1, flo2);
     }
     public Stroke getStroke()
     {
-        if (this.trace) DebugTrace.out.printf("[%d] getStroke()%n", this.depth);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] getStroke()", this.depth)).print(this.deep);
         java.awt.Stroke stroke = this.instance.getStroke();
         if (stroke instanceof Stroke)
             return (Stroke)stroke;
@@ -181,7 +216,7 @@ public class Context
     }
     public Transform getTransform()
     {
-        if (this.trace) DebugTrace.out.printf("[%d] getTransform()%n", this.depth);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] getTransform()", this.depth)).print(this.deep);
         return new Transform( this.instance.getTransform());
     }
     public void setStroke(Stroke stroke)
@@ -189,94 +224,94 @@ public class Context
         if (null != stroke.color)
             this.setColor(stroke.color);
 
-        if (this.trace) DebugTrace.out.printf("[%d] setStroke(%s)%n", this.depth, stroke);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] setStroke(%s)", this.depth, stroke)).print(this.deep);
 
         this.instance.setStroke(stroke);
     }
     public void setTransform(Transform at)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] setTransform(%s)%n", this.depth, at);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] setTransform(%s)", this.depth, at)).print(this.deep);
         this.instance.setTransform(at);
     }
     public void finalize()
     {
-        if (this.trace) DebugTrace.out.printf("[%d] finalize()%n", this.depth);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] finalize()", this.depth)).print(this.deep);
         this.instance.finalize();
     }
     public String toString()
     {
-        if (this.trace) DebugTrace.out.printf("[%d] toString()%n", this.depth);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] toString()", this.depth)).print(this.deep);
         return this.instance.toString();
     }
     public vector.Context create()
     {
-        if (this.trace) DebugTrace.out.printf("[%d] create()%n", this.depth);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] create()", this.depth)).print(this.deep);
         return new Context(this);
     }
     public vector.Context create(int x, int y, int w, int h)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] create(%d, %d, %d, %d)%n", this.depth, x, y, w, h);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] create(%d, %d, %d, %d)", this.depth, x, y, w, h)).print(this.deep);
         return new Context(this,x,y,w,h);
     }
     public boolean drawImage(Image image, Transform at)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] drawImage(%s, %s, %s)%n", this.depth, image, at, this.observer);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] drawImage(%s, %s, %s)", this.depth, image, at, this.observer)).print(this.deep);
         return this.instance.drawImage(image, at, this.observer);
     }
     public boolean drawImage(Image image0, int x, int y)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] drawImage(%s, %d, %d, %s)%n", this.depth, image0, x, y, this.observer);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] drawImage(%s, %d, %d, %s)", this.depth, image0, x, y, this.observer)).print(this.deep);
         return this.instance.drawImage(image0, x, y, this.observer);
     }
     public boolean drawImage(Image image0, int x, int y, int w, int h)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] drawImage(%s, %d, %d, %d, %d, %s)%n", this.depth, image0, x, y, w, h, this.observer);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] drawImage(%s, %d, %d, %d, %d, %s)", this.depth, image0, x, y, w, h, this.observer)).print(this.deep);
         return this.instance.drawImage(image0, x, y, w, h, this.observer);
     }
     public Color getColor()
     {
-        if (this.trace) DebugTrace.out.printf("[%d] getColor()%n", this.depth);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] getColor()", this.depth)).print(this.deep);
         return new Color( this.instance.getColor());
     }
     public void setColor(Color color0)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] setColor(%s)%n", this.depth, color0);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] setColor(%s)", this.depth, color0)).print(this.deep);
         this.instance.setColor(color0);
     }
     public void clipRect(int a0, int a1, int a2, int a3)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] clipRect(%d, %d, %d, %d)%n", this.depth, a0, a1, a2, a3);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] clipRect(%d, %d, %d, %d)", this.depth, a0, a1, a2, a3)).print(this.deep);
         this.instance.clipRect(a0, a1, a2, a3);
     }
     public void dispose()
     {
-        if (this.trace) DebugTrace.out.printf("[%d] dispose()%n", this.depth);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] dispose()", this.depth)).print(this.deep);
         this.instance.dispose();
     }
     public Shape getClip()
     {
-        if (this.trace) DebugTrace.out.printf("[%d] getClip()%n", this.depth);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] getClip()", this.depth)).print(this.deep);
         return this.instance.getClip();
     }
     public Bounds getClipBounds()
     {
-        if (this.trace) DebugTrace.out.printf("[%d] getClipBounds()%n", this.depth);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] getClipBounds()", this.depth)).print(this.deep);
         return new Bounds( this.instance.getClipBounds());
     }
     public Bounds getClipBounds(Bounds bounds)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] getClipBounds(%s)%n", this.depth, bounds);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] getClipBounds(%s)", this.depth, bounds)).print(this.deep);
         bounds.setFrame(this.instance.getClipBounds());
         return bounds;        
     }
     public Bounds getClipRect()
     {
-        if (this.trace) DebugTrace.out.printf("[%d] getClipRect()%n", this.depth);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] getClipRect()", this.depth)).print(this.deep);
         return new Bounds( this.instance.getClipRect());
     }
     public Font getFont()
     {
-        if (this.trace) DebugTrace.out.printf("[%d] getFont()%n", this.depth);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] getFont()", this.depth)).print(this.deep);
         /*
          * TODO: Review for complexity
          */
@@ -284,17 +319,17 @@ public class Context
     }
     public void setClip(int x, int y, int w, int h)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] setClip(%d, %d, %d, %d)%n", this.depth, x, y, w, h);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] setClip(%d, %d, %d, %d)", this.depth, x, y, w, h)).print(this.deep);
         this.instance.setClip(x, y, w, h);
     }
     public void setClip(Shape shape)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] setClip(%s)%n", this.depth, shape);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] setClip(%s)", this.depth, shape)).print(this.deep);
         this.instance.setClip(shape);
     }
     public void setFont(Font font)
     {
-        if (this.trace) DebugTrace.out.printf("[%d] setFont(%s)%n", this.depth, font);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] setFont(%s)", this.depth, font)).print(this.deep);
         this.instance.setFont(font);
     }
 
