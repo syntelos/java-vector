@@ -425,6 +425,12 @@ public class Reference
     public Element.Iterator iterator(){
         return new Element.Iterator(this.elements);
     }
+    public boolean matches(String re){
+        return this.toString().matches(re);
+    }
+    public boolean contains(String re){
+        return this.toString().contains(re);
+    }
     public String toString(){
         StringBuilder string = new StringBuilder();
 
@@ -441,5 +447,44 @@ public class Reference
             }
         }
         return string.toString();
+    }
+
+    private static void usage(){
+        System.err.println("Usage");
+        System.err.println();
+        System.err.println("    vector.Reference <ref> ('matches'|'contains') <string>");
+        System.err.println();
+        System.exit(1);
+    }
+    public static void main(String[] argv){
+        if (3 == argv.length){
+            try {
+                Reference re = new Reference(argv[0]);
+                if ("matches".equals(argv[1])){
+
+                    if (re.matches(argv[2]))
+                        System.out.println("true");
+                    else
+                        System.out.println("false");
+                }
+                else if ("contains".equals(argv[1])){
+
+                    if (re.contains(argv[2]))
+                        System.out.println("true");
+                    else
+                        System.out.println("false");
+                }
+                else {
+                    usage();
+                }
+            }
+            catch (Exception exc){
+                exc.printStackTrace();
+                System.exit(1);
+            }
+        }
+        else {
+            usage();
+        }
     }
 }
