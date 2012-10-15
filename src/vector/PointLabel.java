@@ -125,6 +125,9 @@ public class PointLabel
 
         return this;
     }
+    public boolean isHorizontal(Align.Horizontal align){
+        return (align == this.horizontal);
+    }
     public Align.Horizontal getHorizontal(){
         return this.horizontal;
     }
@@ -141,6 +144,9 @@ public class PointLabel
     }
     public PointLabel setHorizontal(String horizontal){
         return this.setHorizontal(Align.Horizontal.For(horizontal));
+    }
+    public boolean isVertical(Align.Vertical align){
+        return (align == this.vertical);
     }
     public Align.Vertical getVertical(){
         return this.vertical;
