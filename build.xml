@@ -29,7 +29,7 @@
 
   <target name="all" description="Rebuild all jars">
     <antcall target="update"/>
-    <antcall target="update-awt"/>
+    <antcall target="awt"/>
     <antcall target="demo"/>
     <antcall target="geda"/>
   </target>
@@ -155,7 +155,7 @@
     </javac>
   </target>
 
-  <target name="update" if="vector.update" depends="jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.update'.">
+  <target name="update" if="vector.update" depends="jar" description="Build and copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.update'.">
 
     <do-update src="${target.vector.jar}" tgt="${vector.update}" />
   </target>

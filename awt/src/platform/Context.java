@@ -41,13 +41,29 @@ public class Context
     implements vector.Context
 {
 
+    public final static boolean Trace;
+    static {
+        boolean trace = false;
+        try {
+            String conf = System.getProperty("platform.Context.Trace");
+            trace = (null != conf && conf.equals("true"));
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+        Trace = trace;
+    }
+
+
+
+
     private final int depth;
 
     private ImageObserver observer;
 
     private java.awt.Graphics2D instance;
 
-    private boolean trace;
+    private boolean trace = Context.Trace;
 
 
     public Context(ImageObserver observer, java.awt.Graphics2D instance){
@@ -170,12 +186,12 @@ public class Context
     }
     public void setStroke(Stroke stroke)
     {
+        if (null != stroke.color)
+            this.setColor(stroke.color);
+
         if (this.trace) DebugTrace.out.printf("[%d] setStroke(%s)%n", this.depth, stroke);
 
         this.instance.setStroke(stroke);
-
-        if (null != stroke.color)
-            this.instance.setColor(stroke.color);
     }
     public void setTransform(Transform at)
     {
