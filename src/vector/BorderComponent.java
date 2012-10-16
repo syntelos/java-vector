@@ -187,7 +187,7 @@ public class BorderComponent
             try {
                 if (null != this.border){
 
-                    this.getTransformParent().transformFrom(g);
+                    this.transformFrom(g);
 
                     if (this.mouseIn && null != this.backgroundOver){
                         g.setColor(this.backgroundOver);
@@ -236,7 +236,7 @@ public class BorderComponent
              */
             final Transform restore = g.getTransform();
             try {
-                this.getTransformParent().transformFrom(g);
+                this.transformFrom(g);
 
                 Context cg = g.create();
                 try {
