@@ -244,7 +244,8 @@ public class Grid
     public Grid outputScene(Context g){
         Shape shape = this.shape;
         if (null != shape){
-            this.getTransformParent().transformFrom(g);
+
+            this.transformFrom(g);
 
             if (null != this.stroke){
 

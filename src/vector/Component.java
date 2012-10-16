@@ -250,15 +250,31 @@ public interface Component
      */
     public <T extends Component> T getRootContainer();
     /**
-     * In the {@link Display}, this is an {@link
-     * java.lang.UnsupportedOperationException unsupported operation}.
-     * In any component, it is an {@link
-     * java.lang.IllegalArgumentException illegal argument} for the
-     * argument to be null, and an {@link
-     * java.lang.IllegalStateException illegal state} for a non-null
-     * argument to be applied in the case of a non-null field value.
+     * The implementor may ignore a null argument when the class has
+     * coherent states with no reference to the parent.  
      * 
-     * @param parent Required parent.
+     * The implementor must throw an {@link
+     * java.lang.IllegalStateException illegal state exception} for a
+     * non-null argument applied in the case of an existing (not null)
+     * field value.
+     * 
+     * A null argument must never be assigned to the internal parent
+     * field (reference), as this would violate the component operator
+     * protocol.
+     * 
+     * Ignoring a null argument preserves the full application
+     * envelope for classes with coherent states that have no
+     * reference to the parent component.  For classes in which a
+     * possible use case is not attached to a conventional scene
+     * graph, the initialization procedure depends on this method
+     * ignoring a null argument.
+     * 
+     * In the {@link Display}, this method throws an {@link
+     * java.lang.UnsupportedOperationException unsupported operation
+     * exception}.
+     * 
+     * @param parent Reference to parent component (may be a
+     * Container).
      * 
      * @return this
      */

@@ -112,18 +112,22 @@ public abstract class AbstractComponent
         else
             throw new IllegalStateException();
     }
+    /**
+     * This method ignores a null argument.  Subclasses that require a
+     * parent in all coherent states should check the parent field in
+     * the init method, and throw an {@link
+     * java.lang.IllegalStateException illegal state exception} when
+     * null.
+     */
     public final Component setParentVector(Component parent){
         if (null != parent){
             if (null != this.parent)
                 throw new IllegalStateException();
             else {
                 this.parent = parent;
-
-                return this;
             }
         }
-        else
-            throw new IllegalArgumentException();
+        return this;
     }
     public final <T extends Component> T getRootContainer(){
         Component p = this.getParentVector();
@@ -175,11 +179,15 @@ public abstract class AbstractComponent
      * (0,0).
      */
     protected final Component setBoundsVectorInit(Component parent){
-        Bounds bounds = parent.getBoundsVector();
-        bounds.x = 0f;
-        bounds.y = 0f;
+        if (null != parent){
+            Bounds bounds = parent.getBoundsVector();
+            bounds.x = 0f;
+            bounds.y = 0f;
 
-        return this.setBoundsVector(bounds);
+            return this.setBoundsVector(bounds);
+        }
+        else
+            throw new IllegalArgumentException("Require parent");
     }
     /**
      * Union of origin and bounds for resizing to these extents of
@@ -205,14 +213,18 @@ public abstract class AbstractComponent
      * component bounds are changed to subtract the margin.
      */
     protected final Component setBoundsVectorInit(Component parent, Padding margin){
-        Bounds bounds = parent.getBoundsVector();
+        if (null != parent){
+            Bounds bounds = parent.getBoundsVector();
 
-        bounds.x = margin.left;
-        bounds.y = margin.top;
-        bounds.width -= margin.getWidth();
-        bounds.height -= margin.getHeight();
+            bounds.x = margin.left;
+            bounds.y = margin.top;
+            bounds.width -= margin.getWidth();
+            bounds.height -= margin.getHeight();
 
-        return this.setBoundsVector(bounds);
+            return this.setBoundsVector(bounds);
+        }
+        else
+            throw new IllegalArgumentException("Require parent");
     }
     public boolean contains(int x, int y){
 
@@ -357,7 +369,7 @@ public abstract class AbstractComponent
         else
             throw new IllegalStateException();
     }
-    protected final Point2D.Float transformFromParent(Point2D point){
+    public final Point2D.Float transformFromParent(Point2D point){
 
         return this.getTransformParent().transformFrom(point);
     }
