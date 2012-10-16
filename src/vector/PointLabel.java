@@ -194,14 +194,18 @@ public class PointLabel
 
         super.layout();
 
+        if (this.hasParentVector()){
+
+            this.layoutIn(this.getParentBounds());
+        }
+    }
+    public void layoutIn(Bounds parent){
         if (null != this.horizontal || null != this.vertical){
 
-
-            Float ordinate = this.getTextPoint();
+            final Float ordinate = this.getTextPoint();
             if (null != ordinate){
 
-                Bounds bounds = this.getBoundsVector();
-                Bounds parent = this.getParentBounds();
+                final Bounds bounds = this.getBoundsVector();
 
                 if (Align.Horizontal.CENTER == this.horizontal){
 
@@ -220,7 +224,8 @@ public class PointLabel
 
                 this.setVisibleVector(parent.pcontains(bounds));
             }
+            else
+                this.setVisibleVector(false);
         }
     }
-
 }

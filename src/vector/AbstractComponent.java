@@ -101,6 +101,10 @@ public abstract class AbstractComponent
      */
     public void relocated(){
     }
+    protected final boolean hasParentVector(){
+
+        return (null != this.parent);
+    }
     public final <T extends Component> T getParentVector(){
 
         return (T)this.parent;
