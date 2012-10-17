@@ -101,7 +101,7 @@ public abstract class AbstractComponent
      */
     public void relocated(){
     }
-    protected final boolean hasParentVector(){
+    public final boolean hasParentVector(){
 
         return (null != this.parent);
     }
@@ -109,7 +109,7 @@ public abstract class AbstractComponent
 
         return (T)this.parent;
     }
-    protected final Bounds getParentBounds(){
+    public final Bounds getParentBounds(){
 
         if (null != this.parent)
             return this.parent.getBoundsVector();

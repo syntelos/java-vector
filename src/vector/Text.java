@@ -516,28 +516,35 @@ public class Text
         if (null != shape){
             final boolean mouseIn = this.mouseIn;
 
-            this.getTransformParent().transformFrom(g);
+            final Transform restore = g.getTransform();
+            try {
 
-            if (mouseIn && null != this.colorOver)
-                g.setColor(this.colorOver);
-            else
-                g.setColor(this.color);
+                this.getTransformParent().transformFrom(g);
 
-            if (this.fill){
-                g.fill(shape);
+                if (mouseIn && null != this.colorOver)
+                    g.setColor(this.colorOver);
+                else
+                    g.setColor(this.color);
+
+                if (this.fill){
+                    g.fill(shape);
+                }
+
+                if (mouseIn && null != this.strokeOver){
+
+                    g.setStroke(this.strokeOver);
+
+                    g.draw(shape);
+                }
+                else if (null != this.stroke){
+
+                    g.setStroke(this.stroke);
+
+                    g.draw(shape);
+                }
             }
-
-            if (mouseIn && null != this.strokeOver){
-
-                g.setStroke(this.strokeOver);
-
-                g.draw(shape);
-            }
-            else if (null != this.stroke){
-
-                g.setStroke(this.stroke);
-
-                g.draw(shape);
+            finally {
+                g.setTransform(restore);
             }
         }
         return this;
