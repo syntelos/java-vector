@@ -19,7 +19,8 @@
 package vector.text;
 
 import vector.Text;
-import vector.Font;
+
+import platform.Font;
 
 import java.awt.Shape;
 import java.awt.font.GlyphVector;

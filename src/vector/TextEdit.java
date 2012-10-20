@@ -18,8 +18,12 @@
  */
 package vector;
 
+import platform.Color;
+
 import vector.text.Editor;
 import vector.text.Home;
+
+import platform.Transform;
 
 import java.awt.Shape;
 

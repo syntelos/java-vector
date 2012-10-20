@@ -18,9 +18,10 @@
  */
 package vector.text;
 
-import vector.Font;
 import vector.Padding;
 import vector.Text;
+
+import platform.Font;
 
 import java.awt.Shape;
 import java.awt.geom.Path2D;

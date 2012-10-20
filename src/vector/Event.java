@@ -18,6 +18,8 @@
  */
 package vector;
 
+import platform.Transform;
+
 import java.awt.event.MouseEvent;
 import static java.awt.event.MouseEvent.*;
 import java.awt.geom.Point2D;
@@ -699,8 +701,51 @@ public interface Event {
     public interface NamedAction<T extends Enum<T>>
         extends Event
     {
+        /**
+         * Action producer
+         * @see Button
+         */
+        public interface Producer<P extends Enum<P>>
+            extends Component
+        {
+            public Class<Enum<P>> getEnumClass();
+
+            public Producer setEnumClass(Class<Enum<P>> clas);
+
+            public String getEnumClassName();
+
+            public Producer setEnumClassName(String name);
+
+            public Enum<P> getEnumValue();
+
+            public String getEnumValueName();
+
+            public Producer setEnumValueName(String name);
+        }
+        /**
+         * Action consumer
+         * @see Dialog
+         */
+        public interface Consumer<C extends Enum<C>>
+            extends Component
+        {
+            public Class<Enum<C>> getEnumClass();
+
+            public Consumer setEnumClass(Class<Enum<C>> clas);
+
+            public String getEnumClassName();
+
+            public Consumer setEnumClassName(String name);
+        }
 
         public Class<T> getValueClass();
+
+        /**
+         * @param clas If null, return false
+         * 
+         * @return Result of class equals, or false for null argument
+         */
+        public boolean isValueClass(Class<? extends Enum> clas);
 
         public T getValue();
 

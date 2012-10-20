@@ -18,6 +18,8 @@
  */
 package vector;
 
+import platform.Color;
+
 import json.Json;
 import json.ObjectJson;
 

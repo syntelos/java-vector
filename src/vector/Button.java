@@ -31,6 +31,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class Button<E extends Enum<E>>
     extends Text
+    implements Event.NamedAction.Producer<E>
 {
 
     protected Class<Enum<E>> enumClass;
@@ -113,7 +114,7 @@ public class Button<E extends Enum<E>>
 
                     this.enumClass = (Class<Enum<E>>)clas;
 
-                    this.enumValueOf = EnumValueMethod(this.enumClass);
+                    this.enumValueOf = Component.Tools.EnumValueMethod(this.enumClass);
                 }
                 else
                     throw new IllegalArgumentException(name);
@@ -135,7 +136,7 @@ public class Button<E extends Enum<E>>
     }
     public final Button setEnumValueName(String name){
         if (null != this.enumValueOf){
-            this.enumValue = EnumValueOf(this.enumValueOf,name);
+            this.enumValue = Component.Tools.EnumValueOf(this.enumValueOf,name);
         }
         return this;
     }
@@ -159,34 +160,5 @@ public class Button<E extends Enum<E>>
         this.setEnumValueName( (String)thisModel.getValue("enum-value"));
 
         return true;
-    }
-
-
-    public final static <T extends Enum<T>> Method EnumValueMethod(Class<Enum<T>> clas){
-        try {
-            return clas.getMethod("valueOf",String.class);
-        }
-        catch (NoSuchMethodException interr){
-            throw new IllegalStateException(clas.getName(),interr);
-        }
-        catch (SecurityException interr){
-            throw new IllegalStateException(clas.getName(),interr);
-        }
-    }
-    public final static <T extends Enum<T>> Enum<T> EnumValueOf(Method m, String name){
-        try {
-            return (Enum<T>)m.invoke(null,name);
-        }
-        catch (IllegalAccessException interr){
-
-            throw new IllegalArgumentException(m.getDeclaringClass().getName(),interr);
-        }
-        catch (InvocationTargetException arg){
-            Throwable t = arg.getCause();
-            if (t instanceof RuntimeException)
-                throw (RuntimeException)t;
-            else
-                throw new IllegalArgumentException(name,t);
-        }
     }
 }

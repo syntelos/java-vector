@@ -1,0 +1,7 @@
+
+Wed Oct 17 21:24:03 EDT 2012
+
+* Opening component model to unconventional hierarchies
+
+* Multi-platform portability
+

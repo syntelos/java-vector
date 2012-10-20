@@ -18,6 +18,8 @@
  */
 package vector;
 
+import platform.Transform;
+
 import json.Json;
 import json.ObjectJson;
 

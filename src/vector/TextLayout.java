@@ -18,6 +18,9 @@
  */
 package vector;
 
+import platform.Color;
+import platform.Font;
+
 import vector.text.Visual;
 
 import json.Json;

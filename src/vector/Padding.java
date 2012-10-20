@@ -18,6 +18,8 @@
  */
 package vector;
 
+import platform.Font;
+
 import java.util.StringTokenizer;
 
 /**

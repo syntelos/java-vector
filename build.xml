@@ -10,6 +10,7 @@
   <property name="awt.src" value="awt/src"/>
   <property name="demo.src" value="demo/src"/>
   <property name="geda.src" value="geda/src"/>
+  <property name="fonview.src" value="fonview/src"/>
 
   <property name="compiler.source" value="1.5"/>
   <property name="compiler.target" value="1.5"/>
@@ -32,6 +33,7 @@
     <antcall target="awt"/>
     <antcall target="demo"/>
     <antcall target="geda"/>
+    <antcall target="fonview"/>
   </target>
 
   <target name="awt" if="vector.awt.update" depends="awt-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.awt.update'.">
@@ -149,8 +151,49 @@
     <javac srcdir="${geda.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
-        <pathelement path="${lib.path}"/>
         <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${existing.awt.jar}"/>
+        <pathelement path="${lib.path}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="fonview" depends="fonview-compile" description="Package fonview jar, clean bin.  Depends on the target jar.">
+
+    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+      <arg value="${target.awt.jar}"/>
+      <arg value="${target.vector.jar}"/>
+      <arg value="${toString:lib.path}"/>
+    </java>
+    <echo message="Main-Class: fonview.Frame"/>
+    <echo message="Class-Path: ${lib.path.manifest}"/>
+
+    <delete file="${existing.fonview.jar}"/>
+
+    <jar jarfile="${target.fonview.jar}" basedir="${bin}" >
+      <manifest>
+        <attribute name="Main-Class" value="fonview.Frame"/>
+        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+      </manifest>
+    </jar>
+
+    <delete dir="${bin}"/>
+  </target>
+
+  <target name="fonview-compile" depends="version">
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+    <copy todir="${bin}">
+      <fileset dir="${fonview.src}" includes="**/*.properties"/>
+      <fileset dir="${fonview.src}" includes="**/*.txt"/>
+      <fileset dir="${fonview.src}" includes="**/*.xml"/>
+    </copy>
+    <javac srcdir="${fonview.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${existing.awt.jar}"/>
+        <pathelement path="${lib.path}"/>
       </classpath>
     </javac>
   </target>
@@ -206,6 +249,7 @@
     <property name="target.awt.jar" value="${dst}/${ant.project.name}-awt-${this.version}.jar"/>
     <property name="target.demo.jar" value="${dst}/${ant.project.name}-demo-${this.version}.jar"/>
     <property name="target.geda.jar" value="${dst}/${ant.project.name}-geda-${this.version}.jar"/>
+    <property name="target.fonview.jar" value="${dst}/${ant.project.name}-fonview-${this.version}.jar"/>
 
     <java outputproperty="existing.vector.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
       <arg value="${ant.project.name}"/>
@@ -218,6 +262,9 @@
     </java>
     <java outputproperty="existing.geda.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
       <arg value="${ant.project.name}-geda"/>
+    </java>
+    <java outputproperty="existing.fonview.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
+      <arg value="${ant.project.name}-fonview"/>
     </java>
 
   </target>

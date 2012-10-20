@@ -19,10 +19,9 @@
 package platform;
 
 import vector.Bounds;
-import vector.Color;
 import vector.Component;
 import vector.Event;
-import vector.Transform;
+
 import vector.event.Repainter;
 
 import json.ArrayJson;
@@ -535,6 +534,12 @@ public class Display
     public final Display error(Throwable t, String fmt, Object... args){
 
         this.log.log(Level.SEVERE,String.format(fmt,args),t);
+
+        return this;
+    }
+    public final Display error(String fmt, Object... args){
+
+        this.log.log(Level.SEVERE,String.format(fmt,args));
 
         return this;
     }

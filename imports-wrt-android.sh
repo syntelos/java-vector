@@ -7,12 +7,14 @@ tmpf=/tmp/tmp$$
 
 tgt=src/vector
 
+android_level='10'
+
 if [ -n "${1}" ]&&[ -d "${1}" ]
 then
     tgt="${1}"
 fi
 
-if jarf=$(java -cp ant AndroidLibPath 16 15 14 13 12 11 10 ) &&[ -n "${jarf}" ]&&[ -f "${jarf}" ]
+if jarf=$(java -cp ant AndroidLibPath ${android_level} ) &&[ -n "${jarf}" ]&&[ -f "${jarf}" ]
 then
     if unzip -l $jarf | awk '{print $4}' | egrep '\.class$' > ${tmpf} 
     then
@@ -50,7 +52,7 @@ EOF
     fi
 else
     cat<<EOF>&2
-Error, unable to locate 'android.jar'
+Error, unable to locate 'android.jar' for API level(s): ${android_level}
 EOF
     exit 1
 fi

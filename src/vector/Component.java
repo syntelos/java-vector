@@ -18,6 +18,8 @@
  */
 package vector;
 
+import platform.Transform;
+
 import json.Json;
 
 import lxl.List;
@@ -29,6 +31,8 @@ import java.awt.Rectangle;
 import java.awt.geom.Dimension2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+
+import java.lang.reflect.Method;
 
 import java.util.StringTokenizer;
 
@@ -979,6 +983,33 @@ public interface Component
                 return camel.toString();
             else
                 return null;
+        }
+        public final static <T extends Enum<T>> Method EnumValueMethod(Class<Enum<T>> clas){
+            try {
+                return clas.getMethod("valueOf",String.class);
+            }
+            catch (NoSuchMethodException interr){
+                throw new IllegalStateException(clas.getName(),interr);
+            }
+            catch (SecurityException interr){
+                throw new IllegalStateException(clas.getName(),interr);
+            }
+        }
+        public final static <T extends Enum<T>> Enum<T> EnumValueOf(Method m, String name){
+            try {
+                return (Enum<T>)m.invoke(null,name);
+            }
+            catch (IllegalAccessException interr){
+
+                throw new IllegalArgumentException(m.getDeclaringClass().getName(),interr);
+            }
+            catch (java.lang.reflect.InvocationTargetException arg){
+                Throwable t = arg.getCause();
+                if (t instanceof RuntimeException)
+                    throw (RuntimeException)t;
+                else
+                    throw new IllegalArgumentException(name,t);
+            }
         }
     }
 

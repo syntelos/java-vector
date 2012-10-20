@@ -19,7 +19,8 @@
 package vector.event;
 
 import vector.Event;
-import vector.Transform;
+
+import platform.Transform;
 
 import java.awt.geom.Point2D;
 

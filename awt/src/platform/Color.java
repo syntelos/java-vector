@@ -16,7 +16,7 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector;
+package platform;
 
 import json.Hex;
 
@@ -79,8 +79,18 @@ public class Color
     public Color(int argb){
         super(argb,(0 != ((argb>>24)&0xFF)));
     }
+    public Color(float r, float g, float b){
+        super(r,g,b);
+    }
+    public Color(float r, float g, float b, float a){
+        super(r,g,b,a);
+    }
 
 
+    public Color opacity(float a){
+
+        return new Color((this.getRed()/255f),(this.getGreen()/255f),(this.getBlue()/255f),a);
+    }
     public String toString(){
         StringBuilder string = new StringBuilder();
         string.append('#');

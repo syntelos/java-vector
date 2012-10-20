@@ -1,8 +1,9 @@
 package demo;
 
-import vector.Color;
 import vector.Context;
 import vector.Event;
+
+import platform.Color;
 
 import json.Json;
 import json.ObjectJson;

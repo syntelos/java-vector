@@ -18,6 +18,10 @@
  */
 package vector;
 
+import platform.Color;
+import platform.Font;
+import platform.Transform;
+
 import vector.text.Visual;
 
 import json.Json;
@@ -387,44 +391,14 @@ public class Text
      */
     public Point2D.Float getShapeBaseline(){
 
-        final float x = this.padding.left;
-        final float y = (this.font.ascent + this.padding.top);
-
-        return new Point2D.Float(x,y);
+        return this.font.queryBaseline(this.padding);
     }
     private float[] positions(){
         if (null == this.localPositions){
 
-            final int c = this.length();
-
-            if (0 < c){
-
-                final GlyphVector vector = this.vector;
-
-                if (null != vector){
-
-                    final Point2D.Float baseline = this.getShapeBaseline();
-
-                    final int count = (c+1);
-
-                    this.localPositions = vector.getGlyphPositions(0,count,new float[count<<1]);
-
-                    for (int cc = 0; cc < count; cc++){
-                        int ix = (cc<<1);
-                        int iy = (ix+1);
-                        this.localPositions[ix] += baseline.x;
-                        this.localPositions[iy] += baseline.y;
-                    }
-                    return this.localPositions;
-                }
-                else
-                    return new float[0];
-            }
-            else
-                return new float[0];
+            this.localPositions = this.font.queryBaselinePositions(this.padding,this.vector,this.length());
         }
-        else
-            return this.localPositions;
+        return this.localPositions;
     }
     /**
      * Glyph position coordinates in shape coordinate space.
@@ -582,8 +556,6 @@ public class Text
         this.setCols( (Integer)thisModel.getValue("cols",Integer.class));
         this.setStroke( (Stroke)thisModel.getValue("stroke",Stroke.class));
         this.setStrokeOver( (Stroke)thisModel.getValue("stroke-over",Stroke.class));
-
-        this.modified();
 
         return true;
     }

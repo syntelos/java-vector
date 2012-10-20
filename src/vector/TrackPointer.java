@@ -18,6 +18,8 @@
  */
 package vector;
 
+import platform.Transform;
+
 import java.awt.geom.Point2D;
 
 /**

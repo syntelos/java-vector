@@ -18,7 +18,7 @@
  */
 package geda;
 
-import vector.Color;
+import platform.Color;
 
 /**
  * Indexed color map

@@ -34,6 +34,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class Dialog<E extends Enum<E>>
     extends Container
+    implements Event.NamedAction.Consumer<E>
 {
     public enum AcceptCancel {
         Accept, Cancel;
@@ -63,7 +64,7 @@ public class Dialog<E extends Enum<E>>
             case Action:{
                 Event.NamedAction action = (Event.NamedAction)e;
 
-                if (this.mouseIn && null != this.enumClass && this.enumClass.equals(action.getValueClass())){
+                if (this.mouseIn && action.isValueClass(this.enumClass)){
 
                     this.drop(this);
 

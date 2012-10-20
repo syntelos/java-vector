@@ -19,11 +19,8 @@
 package platform;
 
 import vector.Bounds;
-import vector.Color;
 import vector.DebugTrace;
-import vector.Font;
 import vector.Stroke;
-import vector.Transform;
 
 import java.awt.Image;
 import java.awt.Rectangle;

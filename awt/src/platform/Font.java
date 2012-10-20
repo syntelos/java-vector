@@ -25,6 +25,7 @@ import java.awt.FontMetrics;
 import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
 import java.awt.font.GlyphVector;
+import java.awt.geom.Point2D;
 
 /**
  * Font primitive.
@@ -32,6 +33,11 @@ import java.awt.font.GlyphVector;
 public class Font
     extends java.awt.Font
 {
+
+    public final static Font decode(String string){
+
+        return new Font(string);
+    }
 
 
     /**
@@ -41,10 +47,12 @@ public class Font
     public final static float PW = 4f;
     public final static float PH = 1f;
 
-    public final static String DefaultFontName = "monospaced-11";
-
     protected final static Toolkit TK = Toolkit.getDefaultToolkit();
 
+
+    public final static String DefaultFontName = "monospaced-11";
+
+    public final static Font Default = new Font(DefaultFontName);
 
 
     public final FontRenderContext frc;
@@ -71,6 +79,57 @@ public class Font
     }
 
 
+    /**
+     * @param padding Text padding
+     * 
+     * @return Glyph text baseline origin
+     */
+    public Point2D.Float queryBaseline(Padding padding){
+        if (null != padding){
+            final float x = padding.left;
+            final float y = (this.ascent + padding.top);
+
+            return new Point2D.Float(x,y);
+        }
+        else
+            return new Point2D.Float(0f,this.ascent);
+    }
+    /**
+     * Glyph baseline position coordinates in shape coordinate space.
+     * 
+     * <pre>
+     * ix = (idx*2);
+     * iy = (ix+1);
+     * </pre>
+     * 
+     * @param padding Text padding
+     * @param vector Text vector
+     * @param count Number of characters in text vector
+     * 
+     * @return Glyph baseline coordinates for characters in text
+     * vector as an array of coordinates in order
+     * <i>{Xo,Yo,...,Xn,Yn}</i>, or an array of length zero
+     */
+    public float[] queryBaselinePositions(Padding padding, GlyphVector vector, int count){
+        if (null != vector && 0 < count){
+
+            final Point2D.Float baseline = this.queryBaseline(padding);
+
+            final int c = (count+1);
+
+            float[] positions = vector.getGlyphPositions(0,c,new float[c<<1]);
+
+            for (int cc = 0; cc < c; cc++){
+                int ix = (cc<<1);
+                int iy = (ix+1);
+                positions[ix] += baseline.x;
+                positions[iy] += baseline.y;
+            }
+            return positions;
+        }
+        else
+            return new float[0];
+    }
     public final Padding defaultPadding(){
         final float prop = this.getSize2D()/SZ;
         return new Padding( prop*PW, prop*PH);

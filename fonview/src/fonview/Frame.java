@@ -16,28 +16,36 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector;
+package fonview;
 
 /**
- * Font primitive.
+ * 
  */
-public class Font
-    extends platform.Font
+public class Frame
+    extends platform.Frame
 {
 
-    public final static Font decode(String string){
-
-        return new Font(string);
+    public Frame(){
+        this(null);
+    }
+    public Frame(String title){
+        super((null != title)?(title):("Vector FONVIEW"));
     }
 
-    public final static Font Default = new Font(DefaultFontName);
 
+    @Override
+    public Display createDisplay(){
 
-    public Font(String code){
-        super(code);
+        return new Display();
     }
-    public Font(platform.Font font){
-        super(font);
+
+
+    public static void main(String[] argv){
+
+        if ((new Frame()).eval(argv))
+            return;
+        else
+            System.exit(1);
     }
 
 }

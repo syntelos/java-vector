@@ -16,7 +16,10 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector;
+package platform;
+
+import vector.Bounds;
+import vector.Context;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.RectangularShape;

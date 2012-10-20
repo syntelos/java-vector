@@ -18,6 +18,9 @@
  */
 package vector;
 
+import platform.Color;
+import platform.Font;
+import platform.Transform;
 
 import java.awt.Image;
 import java.awt.Shape;

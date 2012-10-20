@@ -48,6 +48,12 @@ public class NamedAction<T extends Enum<T>>
 
         return (Class<T>)this.value.getClass();
     }
+    public final boolean isValueClass(Class<? extends Enum> clas){
+        if (null != clas)
+            return clas.equals(this.value.getClass());
+        else
+            return false;
+    }
     public final T getValue(){
 
         return (T)this.value;

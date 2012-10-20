@@ -1,0 +1,79 @@
+
+  Solution set
+
+    A common library of platform adaptation for vector is defined as a
+    package named "platform" which is available through multiple JAR
+    package files.  
+
+    One platform package is made available to the vector runtime by
+    the selection of a platform package JAR file in the java
+    application Class Path.
+
+  Implementation architecture
+
+    There's two architectural strategies: one in which the API is in
+    the platform package, and another in which the API is in the
+    vector package.
+
+    Discussion
+
+      Ideally, the API would be in the vector package.  However this
+      strategy has only one tactic (that can solve the problem), the
+      interface and factory or tooling classes as in the case of
+      vector Component and Component Tools.
+
+      A singular interface strategy to platform adaptation would
+      result in a vector interface factory class that calls
+      constructors in a platform agnostic way with the unique name
+      "platform.Classname".
+
+      Therefore the the pure interface strategy necessarily
+      degenerates to the mixed or dual strategy by dropping the
+      factory class and presenting the "platform.Classname" to the
+      library and applications for direct use.
+
+    API platform
+
+      The platform package implements vector package interfaces for
+      operator classes like the graphics context, and presents common
+      required geometric classes like Path, Rectangle and Ellipse.
+
+    API vector
+
+      The vector package is primarily a component scene graph for
+      interactive applications.  A reasonable level of usability
+      implies a dependence on the platform package as highlighted in
+      the case of the Color and Font classes.
+
+      The Color and Font classes are employed in an operational way.
+      Without public or protected access to internal data fields, use
+      is exclusive to method calls.  However, they are not purely
+      operational because library code usage is dominated by the use
+      of constructors for these classes.  A vector package interface
+      is not a complete solution in this case.
+
+      The Color and Font classes are not members of the same
+      structural or architectural case as geometry classes.
+
+      A collection of vector geometry classes will be adapted to each
+      platform Path implementation.  This choice maximizes utility
+      subject to platform options.
+
+      The solution of the Path binding problem on the Android platform
+      will require the adaptation class to replicate path data in
+      memory.  Users of the android graphics Path class are unable to
+      retrieve path data entered into the (native) API.  
+
+
+  Available platforms
+
+    AWT
+
+  Planned future platforms
+
+    Android
+
+  Possible future platforms
+
+    JOGL
+
