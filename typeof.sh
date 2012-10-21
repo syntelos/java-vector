@@ -3,10 +3,10 @@
 function usage {
     cat<<EOF>&2
 Usage
-    $0 {awt-classname}
+    $0 {java-rt-classname}
 
 Returns
-    One of 'class', 'abstract', or 'interface'.
+    One of 'class', 'abstract', 'final', or 'interface'.
 
 EOF
     exit 1
@@ -27,7 +27,7 @@ then
 
     if [ -f "${srcf}" ]
     then
-        egrep "^public .* ${basename}" ${srcf} | sed "s/public//; s/${basename}.*//; s/abstract class/abstract/; s/^ *//g; s/ *$//g"
+        egrep "^public .* ${basename}" ${srcf} | sed "s/public//; s/${basename}.*//; s/  / /g; s/abstract class/abstract/; s/final class/final/; s/^ *//g; s/ *$//g"
     else
         cat<<EOF>&2
 Error, file not found '${srcf}'.
