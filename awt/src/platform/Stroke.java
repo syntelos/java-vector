@@ -18,15 +18,17 @@
  */
 package platform;
 
-public interface Shape
-    extends java.awt.Shape
+import json.Json;
+
+/**
+ * 
+ */
+public abstract class Stroke
+    extends java.awt.BasicStroke
 {
 
-    public vector.Bounds getBoundsVector();
+    public Stroke(float lineWidth, int endCap, int lineJoin, float miterLimit, float[] dashArray, float dashPhase){
+        super(lineWidth,endCap,lineJoin,miterLimit,dashArray,dashPhase);
+    }
 
-    public platform.Path toPath();
-    /**
-     * @return Path string in SVG Path attribute "d" format
-     */
-    public java.lang.String toString();
 }

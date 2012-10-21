@@ -27,8 +27,6 @@ import platform.geom.Rectangle;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.geom.PathIterator;
-
 /**
  * Component consumes and produces W3C SVG Path attribute "d" data.
  */
@@ -77,18 +75,6 @@ public class Path
             default:
                 return null;
             }
-        }
-        public final static Path.Winding For(Shape path){
-
-            if (path instanceof Path)
-                return ((Path)path).getWinding();
-            else if (null != path){
-                PathIterator pit = path.getPathIterator(null);
-                if (null != pit){
-                    return For(pit.getWindingRule());
-                }
-            }
-            return Winding.Future;
         }
 
         /**
@@ -272,7 +258,7 @@ public class Path
 
         Shape path = this.path;
         if (null != path)
-            return Path.Formatter.ToString(path);
+            return platform.Path.ToString(path);
         else
             return null;
     }
@@ -283,7 +269,7 @@ public class Path
      */
     public Path setD(String d){
 
-        this.path = Path.Apply(new platform.Path(),d);
+        this.path = Path.Parser.Apply(new platform.Path(),d);
 
         return this;
     }
@@ -764,302 +750,88 @@ public class Path
         public java.util.Iterator<Parser.Token> iterator(){
             return this;
         }
-    }
-    /**
-     * Format SVG Path "d" attribute value
-     */
-    public final static class Formatter 
-        extends Object
-    {
 
-        public final static String ToString(Shape shape){
-            StringBuilder string = new StringBuilder();
-            PathIterator p = shape.getPathIterator(null);
-            double[] s = new double[6];
-            while (!p.isDone()){
+        public final static platform.Path Apply(platform.Path shape, String pexpr){
+            return (platform.Path)Apply(shape,new vector.Path.Parser(pexpr));
+        }
+        public final static vector.geom.Path Apply(vector.geom.Path shape, vector.Path.Parser p){
+            vector.Path.Parser.Token last = null;
 
-                switch(p.currentSegment(s)){
-                case PathIterator.SEG_MOVETO:
-                    string.append('M');
-                    string.append(String.format(FFmt,s[0]));
-                    string.append(',');
-                    string.append(String.format(FFmt,s[1]));
+            double mx = 0, my = 0, sx = 0, sy = 0;
+
+            for (vector.Path.Parser.Token tok : p){
+                switch(tok){
+                case Coordinate:
+                case M:
+                    shape.moveTo((mx = p.getCoordinate()),(my = p.getCoordinate()));
+                    sx = mx;
+                    sy = my;
                     break;
-                case PathIterator.SEG_LINETO:
-                    string.append('L');
-                    string.append(String.format(FFmt,s[0]));
-                    string.append(',');
-                    string.append(String.format(FFmt,s[1]));
+                case m:
+                    shape.moveTo((mx += p.getCoordinate()),(my += p.getCoordinate()));
+                    sx = mx;
+                    sy = my;
                     break;
-                case PathIterator.SEG_QUADTO:
-                    string.append('Q');
-                    string.append(String.format(FFmt,s[0]));
-                    string.append(',');
-                    string.append(String.format(FFmt,s[1]));
-                    string.append(',');
-                    string.append(String.format(FFmt,s[2]));
-                    string.append(',');
-                    string.append(String.format(FFmt,s[3]));
+                case Z:
+                case z:
+                    shape.close();
                     break;
-                case PathIterator.SEG_CUBICTO:
-                    string.append('C');
-                    string.append(String.format(FFmt,s[0]));
-                    string.append(',');
-                    string.append(String.format(FFmt,s[1]));
-                    string.append(',');
-                    string.append(String.format(FFmt,s[2]));
-                    string.append(',');
-                    string.append(String.format(FFmt,s[3]));
-                    string.append(',');
-                    string.append(String.format(FFmt,s[4]));
-                    string.append(',');
-                    string.append(String.format(FFmt,s[5]));
+                case L:
+                    shape.lineTo((sx = p.getCoordinate()),(sy = p.getCoordinate()));
                     break;
-                case PathIterator.SEG_CLOSE:
-                    string.append('Z');
+                case l:
+                    shape.lineTo((sx += p.getCoordinate()),(sy += p.getCoordinate()));
                     break;
+                case H:
+                    sx = p.getCoordinate();
+                    shape.lineTo(sx,sy);
+                    break;
+                case h:
+                    sx += p.getCoordinate();
+                    shape.lineTo(sx,sy);
+                    break;
+                case V:
+                    sy = p.getCoordinate();
+                    shape.lineTo(sx,sy);
+                    break;
+                case v:
+                    sy += p.getCoordinate();
+                    shape.lineTo(sx,sy);
+                    break;
+                case C:
+                    shape.curveTo(p.getCoordinate(),p.getCoordinate(),
+                                  p.getCoordinate(),p.getCoordinate(),
+                                  (sx = p.getCoordinate()),(sy = p.getCoordinate()));
+                    break;
+                case c:
+                    shape.curveTo((sx + p.getCoordinate()),(sy + p.getCoordinate()),
+                                  (sx + p.getCoordinate()),(sy + p.getCoordinate()),
+                                  (sx += p.getCoordinate()),(sy += p.getCoordinate()));
+                    break;
+                case S:
+                case s:
+                    throw new UnsupportedOperationException(tok.name());
+                case Q:
+                    shape.quadTo(p.getCoordinate(),p.getCoordinate(),
+                                 (sx = p.getCoordinate()),(sy = p.getCoordinate()));
+                    break;
+                case q:
+                    shape.quadTo((sx + p.getCoordinate()),(sy + p.getCoordinate()),
+                                 (sx += p.getCoordinate()),(sy += p.getCoordinate()));
+                    break;
+                case T:
+                case t:
+                    throw new UnsupportedOperationException(tok.name());
+                case A:
+                case a:
+                    throw new UnsupportedOperationException(tok.name());
+                default:
+                    throw new IllegalArgumentException(tok.name());
                 }
-                p.next();
+                last = tok;
             }
-            return string.toString();
+            return shape;
         }
-        private final static String FFmt = "%f";
-
     }
-
-
-
-    public final static boolean IsOpen(Shape shape){
-        boolean closed = false;
-
-        PathIterator p = shape.getPathIterator(null);
-        double[] s = new double[6];
-        if (!p.isDone()){
-            switch(p.currentSegment(s)){
-            case PathIterator.SEG_MOVETO:
-                return true;
-            }
-        }
-        return false;
-    }
-    public final static boolean IsClosed(Shape shape){
-        boolean closed = false;
-
-        PathIterator p = shape.getPathIterator(null);
-        double[] s = new double[6];
-        while (!p.isDone()){
-            switch(p.currentSegment(s)){
-            case PathIterator.SEG_MOVETO:
-                closed = false;
-                break;
-            case PathIterator.SEG_LINETO:
-                closed = false;
-                break;
-            case PathIterator.SEG_QUADTO:
-                closed = false;
-                break;
-            case PathIterator.SEG_CUBICTO:
-                closed = false;
-                break;
-            case PathIterator.SEG_CLOSE:
-                closed = true;
-                break;
-            }
-            p.next();
-        }
-        return closed;
-    }
-    public final static boolean IsCloser(Shape shape, Point pt){
-        boolean closer = false;
-
-        PathIterator p = shape.getPathIterator(null);
-        double[] s = new double[6];
-        while (!p.isDone()){
-            switch(p.currentSegment(s)){
-            case PathIterator.SEG_MOVETO:
-                closer = Path.EqPoint(pt,s[0],s[1],8);
-                break;
-            case PathIterator.SEG_LINETO:
-                break;
-            case PathIterator.SEG_QUADTO:
-                break;
-            case PathIterator.SEG_CUBICTO:
-                break;
-            case PathIterator.SEG_CLOSE:
-                break;
-            }
-            p.next();
-        }
-        return closer;
-    }
-    public final static boolean IsNotClosed(Shape shape){
-        return (!IsClosed(shape));
-    }
-    public final static platform.Path Apply(platform.Path shape, String pexpr){
-        return (platform.Path)Apply(shape,new Path.Parser(pexpr));
-    }
-    public final static platform.Path Apply(platform.Path shape, Path.Parser p){
-        Path.Parser.Token last = null;
-
-        double mx = 0, my = 0, sx = 0, sy = 0;
-
-        for (Path.Parser.Token tok : p){
-            switch(tok){
-            case Coordinate:
-            case M:
-                shape.moveTo((mx = p.getCoordinate()),(my = p.getCoordinate()));
-                sx = mx;
-                sy = my;
-                break;
-            case m:
-                shape.moveTo((mx += p.getCoordinate()),(my += p.getCoordinate()));
-                sx = mx;
-                sy = my;
-                break;
-            case Z:
-            case z:
-                shape.closePath();
-                break;
-            case L:
-                shape.lineTo((sx = p.getCoordinate()),(sy = p.getCoordinate()));
-                break;
-            case l:
-                shape.lineTo((sx += p.getCoordinate()),(sy += p.getCoordinate()));
-                break;
-            case H:
-                sx = p.getCoordinate();
-                shape.lineTo(sx,sy);
-                break;
-            case h:
-                sx += p.getCoordinate();
-                shape.lineTo(sx,sy);
-                break;
-            case V:
-                sy = p.getCoordinate();
-                shape.lineTo(sx,sy);
-                break;
-            case v:
-                sy += p.getCoordinate();
-                shape.lineTo(sx,sy);
-                break;
-            case C:
-                shape.curveTo(p.getCoordinate(),p.getCoordinate(),
-                             p.getCoordinate(),p.getCoordinate(),
-                             (sx = p.getCoordinate()),(sy = p.getCoordinate()));
-                break;
-            case c:
-                shape.curveTo((sx + p.getCoordinate()),(sy + p.getCoordinate()),
-                             (sx + p.getCoordinate()),(sy + p.getCoordinate()),
-                             (sx += p.getCoordinate()),(sy += p.getCoordinate()));
-                break;
-            case S:
-            case s:
-                throw new UnsupportedOperationException(tok.name());
-            case Q:
-                shape.quadTo(p.getCoordinate(),p.getCoordinate(),
-                            (sx = p.getCoordinate()),(sy = p.getCoordinate()));
-                break;
-            case q:
-                shape.quadTo((sx + p.getCoordinate()),(sy + p.getCoordinate()),
-                            (sx += p.getCoordinate()),(sy += p.getCoordinate()));
-                break;
-            case T:
-            case t:
-                throw new UnsupportedOperationException(tok.name());
-            case A:
-            case a:
-                throw new UnsupportedOperationException(tok.name());
-            default:
-                throw new IllegalArgumentException(tok.name());
-            }
-            last = tok;
-        }
-        return shape;
-    }
-    public final static int IndexOf(Shape shape, Point pt){
-        int index = 0;
-        PathIterator p = shape.getPathIterator(null);
-        double[] s = new double[6];
-        while (!p.isDone()){
-
-            switch(p.currentSegment(s)){
-            case PathIterator.SEG_MOVETO:
-                if (Path.EqPoint(pt,s[0],s[1]))
-                    return index;
-                else
-                    index++;
-                break;
-            case PathIterator.SEG_LINETO:
-                if (Path.EqPoint(pt,s[0],s[1]))
-                    return index;
-                else
-                    index++;
-                break;
-            case PathIterator.SEG_QUADTO:
-                if (Path.EqPoint(pt,s[0],s[1]))
-                    return index;
-                else {
-                    index++;
-                    if (Path.EqPoint(pt,s[2],s[3]))
-                        return index;
-                    else
-                        index++;
-                }
-                break;
-            case PathIterator.SEG_CUBICTO:
-                if (Path.EqPoint(pt,s[0],s[1]))
-                    return index;
-                else {
-                    index++;
-                    if (Path.EqPoint(pt,s[2],s[3]))
-                        return index;
-                    else {
-                        index++;
-                        if (Path.EqPoint(pt,s[4],s[5]))
-                            return index;
-                        else 
-                            index++;
-                    }
-                }
-                break;
-            case PathIterator.SEG_CLOSE:
-                break;
-            }
-            p.next();
-        }
-        return -1;
-    }
-    public final static platform.Path LineTo(platform.Path shape, Point a){
-        shape.lineTo(a.getX(),a.getY());
-        return shape;
-    }
-    public final static platform.Path MoveTo(platform.Path shape, Point a){
-        shape.moveTo(a.getX(),a.getY());
-        return shape;
-    }
-    public final static platform.Path QuadTo(platform.Path shape, Point a, Point b){
-        shape.quadTo(a.getX(),a.getY(),b.getX(),b.getY());
-        return shape;
-    }
-    public final static platform.Path CurveTo(platform.Path shape, Point a, Point b, Point c){
-        shape.curveTo(a.getX(),a.getY(),b.getX(),b.getY(),c.getX(),c.getY());
-        return shape;
-    }
-    public final static String ToString(Shape shape){
-        return Path.Formatter.ToString(shape);
-    }
-    public final static boolean EqPoint(Point p, double x, double y){
-
-        return EqPoint(p.getX(),p.getY(),x,y,3);
-    }
-    public final static boolean EqPoint(Point p, double x, double y, double r){
-
-        return EqPoint(p.getX(),p.getY(),x,y,r);
-    }
-    public final static boolean EqPoint(double xp, double yp, double xc, double yc, double r){
-
-        return (xc > (xp-r) && xc < (xp+r) && yc > (yp-r) && yc < (yp+r));
-    }
-
 }
 

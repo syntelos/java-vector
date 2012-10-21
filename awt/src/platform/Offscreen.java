@@ -30,6 +30,7 @@ import java.awt.image.ImageObserver;
  */
 public final class Offscreen
     extends java.awt.image.BufferedImage
+    implements vector.Image
 {
 
     private ImageObserver observer;

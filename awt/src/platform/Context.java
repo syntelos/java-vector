@@ -20,9 +20,8 @@ package platform;
 
 import vector.Bounds;
 import vector.DebugTrace;
+import vector.Image;
 import vector.Stroke;
-
-import java.awt.Image;
 
 import java.awt.image.ImageObserver;
 
@@ -196,12 +195,10 @@ public class Context
         java.awt.Stroke stroke = this.instance.getStroke();
         if (stroke instanceof Stroke)
             return (Stroke)stroke;
-        else if (stroke instanceof java.awt.BasicStroke)
-            return new Stroke( (java.awt.BasicStroke)stroke);
-        else if (null != stroke)
-            throw new IllegalStateException(stroke.getClass().getName());
-        else
+        else if (null == stroke)
             return null;
+        else
+            throw new IllegalStateException(stroke.getClass().getName());
     }
     public Transform getTransform()
     {
@@ -245,17 +242,17 @@ public class Context
     public boolean drawImage(Image image, Transform at)
     {
         if (this.trace) (new DebugTrace(this.depth,"[%d] drawImage(%s, %s, %s)", this.depth, image, at, this.observer)).print(this.deep);
-        return this.instance.drawImage(image, at, this.observer);
+        return this.instance.drawImage((java.awt.Image)image, at, this.observer);
     }
     public boolean drawImage(Image image0, int x, int y)
     {
         if (this.trace) (new DebugTrace(this.depth,"[%d] drawImage(%s, %d, %d, %s)", this.depth, image0, x, y, this.observer)).print(this.deep);
-        return this.instance.drawImage(image0, x, y, this.observer);
+        return this.instance.drawImage((java.awt.Image)image0, x, y, this.observer);
     }
     public boolean drawImage(Image image0, int x, int y, int w, int h)
     {
         if (this.trace) (new DebugTrace(this.depth,"[%d] drawImage(%s, %d, %d, %d, %d, %s)", this.depth, image0, x, y, w, h, this.observer)).print(this.deep);
-        return this.instance.drawImage(image0, x, y, w, h, this.observer);
+        return this.instance.drawImage((java.awt.Image)image0, x, y, w, h, this.observer);
     }
     public Color getColor()
     {

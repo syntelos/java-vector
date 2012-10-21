@@ -23,8 +23,6 @@ import platform.Font;
 import platform.Shape;
 import platform.Transform;
 
-import java.awt.Image;
-
 /**
  * Platform independent graphics context
  * 

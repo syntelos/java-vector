@@ -18,6 +18,8 @@
  */
 package platform.geom;
 
+import platform.Path;
+
 import vector.Bounds;
 
 /**
@@ -42,6 +44,12 @@ public class Line
     public Bounds getBoundsVector(){
         java.awt.geom.Rectangle2D bounds = super.getBounds2D();
         return new Bounds(bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
+    }
+    public Path toPath(){
+        return new Path(this);
+    }
+    public String toString(){
+        return Path.ToString(this);
     }
 
 }

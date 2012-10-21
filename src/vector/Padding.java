@@ -19,6 +19,7 @@
 package vector;
 
 import platform.Font;
+import platform.geom.RectangularShape;
 
 import java.util.StringTokenizer;
 
@@ -109,7 +110,7 @@ public class Padding
     public boolean isNotEmpty(){
         return (0.0f != this.getWidth() && 0.0f != this.getHeight());
     }
-    public Padding set(java.awt.geom.RectangularShape rect){
+    public Padding set(RectangularShape rect){
 
         return this.set(rect.getX(), 0.0, rect.getY(), 0.0);
     }

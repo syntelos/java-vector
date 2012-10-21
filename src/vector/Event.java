@@ -20,9 +20,6 @@ package vector;
 
 import platform.Transform;
 
-import java.awt.event.MouseEvent;
-import static java.awt.event.MouseEvent.*;
-
 
 /**
  * Immutable universal event for a single input method, intended for
@@ -109,22 +106,6 @@ public interface Event {
                     return false;
                 }
             }
-
-            public final static Action PointButton(MouseEvent evt){
-                switch(evt.getButton()){
-                case BUTTON1:
-                    return Event.Mouse.Action.Point1;
-
-                case BUTTON2:
-                    return Event.Mouse.Action.Point2;
-
-                case BUTTON3:
-                    return Event.Mouse.Action.Point3;
-
-                default:
-                    return null;
-                }
-            }
         }
 
         public Action getAction();
@@ -164,9 +145,7 @@ public interface Event {
         }
     }
     /**
-     * Keyboard input employs {@link java.awt.event.KeyEvent AWT
-     * KeyEvent} values, however, only the essential reliable
-     * properties have been propagated.
+     * Essential reliable properties 
      */
     public interface Key
         extends Event

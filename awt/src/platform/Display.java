@@ -36,6 +36,7 @@ import java.awt.Graphics2D;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import static java.awt.event.MouseEvent.*;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
 
@@ -565,7 +566,7 @@ public class Display
         /*
          * Narrow-cast
          */
-        final Event.Mouse.Action action = Event.Mouse.Action.PointButton(evt);
+        final Event.Mouse.Action action = PointButton(evt);
 
         if (null != action){
             final Point point = this.transformFromParent(evt.getPoint());
@@ -583,7 +584,7 @@ public class Display
         /*
          * Narrow-cast
          */
-        final Event.Mouse.Action action = Event.Mouse.Action.PointButton(evt);
+        final Event.Mouse.Action action = PointButton(evt);
 
         if (null != action){
             final Point point = this.transformFromParent(evt.getPoint());
@@ -642,7 +643,7 @@ public class Display
         /*
          * Broad-cast
          */
-        final Event.Mouse.Action action = Event.Mouse.Action.PointButton(evt);
+        final Event.Mouse.Action action = PointButton(evt);
 
         if (null != action){
             final Point point = this.transformFromParent(evt.getPoint());
@@ -851,6 +852,22 @@ public class Display
             this.error(exc,"Reading URL '%s'",url);
 
             return false;
+        }
+    }
+
+    public final static Event.Mouse.Action PointButton(MouseEvent evt){
+        switch(evt.getButton()){
+        case BUTTON1:
+            return Event.Mouse.Action.Point1;
+
+        case BUTTON2:
+            return Event.Mouse.Action.Point2;
+
+        case BUTTON3:
+            return Event.Mouse.Action.Point3;
+
+        default:
+            return null;
         }
     }
 }

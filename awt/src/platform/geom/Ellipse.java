@@ -18,6 +18,8 @@
  */
 package platform.geom;
 
+import platform.Path;
+
 import vector.Bounds;
 
 /**
@@ -40,4 +42,11 @@ public class Ellipse
 
         return new Bounds(this.x,this.y,this.width,this.height);
     }
+    public Path toPath(){
+        return new Path(this);
+    }
+    public String toString(){
+        return Path.ToString(this);
+    }
+
 }
