@@ -16,20 +16,37 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package platform.geom;
+package vector.geom;
 
-public class Point
-    extends java.awt.geom.Point2D.Float
-    implements vector.geom.Point
+/**
+ * 
+ */
+public interface RectangularShape
+    extends platform.Shape
 {
 
-    public Point(){
-        super();
-    }
-    public Point(float x, float y){
-        super(x,y);
-    }
-    public Point(double x, double y){
-        super((float)x,(float)y);
-    }
+    public boolean isEmpty();
+
+    public double getX();
+
+    public double getY();
+
+    public double getWidth();
+
+    public double getHeight();
+
+    public double getMinX();
+
+    public double getMinY();
+
+    public double getMaxX();
+
+    public double getMaxY();
+
+    public double getCenterX();
+
+    public double getCenterY();
+
+    public void setFrame(double x, double y, double w, double h);
+
 }

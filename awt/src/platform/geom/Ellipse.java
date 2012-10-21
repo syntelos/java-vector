@@ -27,7 +27,7 @@ import vector.Bounds;
  */
 public class Ellipse
     extends java.awt.geom.Ellipse2D.Float
-    implements platform.Shape
+    implements vector.geom.Ellipse
 {
 
     public Ellipse(){

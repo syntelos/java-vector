@@ -20,9 +20,9 @@ package platform;
 
 import vector.Bounds;
 import vector.Context;
+import vector.geom.RectangularShape;
 
 import platform.geom.Point;
-import platform.geom.RectangularShape;
 
 import java.awt.geom.NoninvertibleTransformException;
 import java.util.StringTokenizer;

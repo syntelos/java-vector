@@ -18,12 +18,13 @@
  */
 package vector;
 
+import vector.geom.RectangularShape;
+
 import platform.Shape;
 import platform.Transform;
 
 import platform.geom.Point;
 import platform.geom.Rectangle;
-import platform.geom.RectangularShape;
 import platform.geom.RoundRectangle;
 
 import java.util.StringTokenizer;
@@ -90,8 +91,11 @@ public class Bounds
     public Bounds(RectangularShape r){
         this(r.getX(),r.getY(),r.getWidth(),r.getHeight());
     }
+    public Bounds(Rectangle r){
+        this(r.x,r.y,r.width,r.height);
+    }
     public Bounds(Shape s){
-        this(s.getBoundsVector());
+        this((Rectangle)s.getBoundsVector());
     }
     public Bounds(Component c){
         this(c.getBoundsVector());
@@ -143,7 +147,7 @@ public class Bounds
     /**
      * @return Objective scale to this from that
      */
-    public Transform scaleFromAbsolute(platform.geom.RectangularShape that){
+    public Transform scaleFromAbsolute(RectangularShape that){
         final double sx = (this.width/(that.getX()+that.getWidth()));
         final double sy = (this.height/(that.getY()+that.getHeight()));
 
@@ -152,7 +156,7 @@ public class Bounds
     /**
      * @return Objective scale to that from this
      */
-    public Transform scaleToAbsolute(platform.geom.RectangularShape that){
+    public Transform scaleToAbsolute(RectangularShape that){
         final double sx = ((that.getX()+that.getWidth())/this.width);
         final double sy = ((that.getY()+that.getHeight())/this.height);
 
@@ -161,7 +165,7 @@ public class Bounds
     /**
      * @return Objective scale to this from that
      */
-    public Transform scaleFromRelative(platform.geom.RectangularShape that){
+    public Transform scaleFromRelative(RectangularShape that){
         final double sx = (this.width/that.getWidth());
         final double sy = (this.height/that.getHeight());
 
@@ -170,7 +174,7 @@ public class Bounds
     /**
      * @return Objective scale to that from this
      */
-    public Transform scaleToRelative(platform.geom.RectangularShape that){
+    public Transform scaleToRelative(RectangularShape that){
         final double sx = (that.getWidth()/this.width);
         final double sy = (that.getHeight()/this.height);
 

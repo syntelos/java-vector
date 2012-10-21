@@ -27,7 +27,7 @@ import vector.Bounds;
  */
 public class Line
     extends java.awt.geom.Line2D.Float
-    implements platform.Shape
+    implements vector.geom.Line
 {
 
     public Line(){

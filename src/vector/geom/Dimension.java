@@ -16,37 +16,21 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package platform.geom;
+package vector.geom;
 
 /**
  * 
  */
-public interface RectangularShape
-    extends platform.Shape
+public interface Dimension 
+    extends Cloneable
 {
 
     public boolean isEmpty();
-
-    public double getX();
-
-    public double getY();
-
+    public boolean isNotEmpty();
+    public void floor(platform.geom.Dimension d);
+    public void ceil(platform.geom.Dimension d);
     public double getWidth();
-
     public double getHeight();
-
-    public double getMinX();
-
-    public double getMinY();
-
-    public double getMaxX();
-
-    public double getMaxY();
-
-    public double getCenterX();
-
-    public double getCenterY();
-
-    public void setFrame(double x, double y, double w, double h);
-
+    public void setSize(double w, double h);
+    public java.lang.String toString();
 }

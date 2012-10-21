@@ -18,8 +18,9 @@
  */
 package vector;
 
+import vector.geom.RectangularShape;
+
 import platform.Font;
-import platform.geom.RectangularShape;
 
 import java.util.StringTokenizer;
 

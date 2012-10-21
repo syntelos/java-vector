@@ -27,7 +27,7 @@ import vector.Bounds;
  */
 public class Rectangle
     extends java.awt.geom.Rectangle2D.Float
-    implements RectangularShape
+    implements vector.geom.Rectangle
 {
 
     public Rectangle(){

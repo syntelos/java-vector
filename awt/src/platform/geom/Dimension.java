@@ -23,6 +23,7 @@ package platform.geom;
  */
 public class Dimension
     extends java.awt.geom.Dimension2D
+    implements vector.geom.Dimension
 {
     public float width, height;
 
