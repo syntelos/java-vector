@@ -5,3 +5,40 @@ Wed Oct 17 21:24:03 EDT 2012
 
 * Multi-platform portability
 
+Sun Oct 21 18:23:46 EDT 2012
+
+* Cleared known incorrect dependencies from the vector package
+
+  The AWT platform and vector packages remain in continuous
+  development status: applications are not testable for portability.
+
+  The future strategy for application portability and platform
+  conformance is primarily compiler based: platforms and applications
+  compile to correctness.
+
+  In the case of an application, compilation against multiple packages
+  validates correctness in portability.
+
+  In the case of a platform, interfaces in the vector package will
+  test method signatures.  Applications test platform fields and
+  semantics by coverage.
+
+  Type validation interfaces in the vector package include the
+  following.
+
+    src/vector/Context.java
+    src/vector/Event.java
+    src/vector/font/GlyphVector.java
+    src/vector/geom/Dimension.java
+    src/vector/geom/Ellipse.java
+    src/vector/geom/Line.java
+    src/vector/geom/Path.java
+    src/vector/geom/Point.java
+    src/vector/geom/Rectangle.java
+    src/vector/geom/RoundRectangle.java
+    src/vector/Image.java
+
+  These types are employed for platform type validation, but are not
+  necessarily useful for application programming (excepting Context,
+  Event, GlyphVector and Image).  Most programming employs platform
+  types directly.
