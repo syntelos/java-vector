@@ -1,0 +1,7 @@
+
+Development tool for FV3 integration and testing
+
+The Android PLATFORM (in vector) will employ fv3, which has incomplete status of its TTF font reader.  This tool will eventually display fonts and glyphs in Hershey or TTF format.
+
+It's possible that fv3 will be applied to the AWT platform as its font and path support matures.  In this case, the vector platform Font and Path would change dramatically.
+
