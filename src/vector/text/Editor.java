@@ -27,8 +27,6 @@ import platform.Path;
 import platform.geom.Point;
 import platform.geom.Rectangle;
 
-import java.awt.font.GlyphVector;
-
 /**
  * Line editor
  */

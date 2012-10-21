@@ -16,20 +16,20 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.event;
+package platform.event;
 
 import vector.Event;
 
 /**
  * 
  */
-public class MouseExited
+public class MouseMoved
     extends AbstractMouseMotion
 {
-    public MouseExited(platform.geom.Point point){
-        super(Event.Type.MouseExited,Event.Mouse.Action.Exited,point);
+    public MouseMoved(platform.geom.Point point){
+        super(Event.Type.MouseMoved,Event.Mouse.Action.Moved,point);
     }
-    public MouseExited(Mouse e, platform.geom.Point point){
+    public MouseMoved(Mouse e, platform.geom.Point point){
         super(e.getType(),e.getAction(),point);
     }
 }

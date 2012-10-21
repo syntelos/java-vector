@@ -19,10 +19,9 @@
 package vector;
 
 import platform.Color;
+import platform.event.NamedAction;
 import platform.geom.Point;
 import platform.geom.Rectangle;
-
-import vector.event.NamedAction;
 
 import java.lang.reflect.Method;
 

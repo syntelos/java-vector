@@ -22,16 +22,13 @@ import vector.Bounds;
 import vector.Component;
 import vector.Event;
 
-import vector.event.Repainter;
-
+import platform.event.Repainter;
 import platform.geom.Point;
 
 import json.ArrayJson;
 import json.Json;
 import json.ObjectJson;
 import json.Reader;
-
-import lxl.List;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -573,7 +570,7 @@ public class Display
         if (null != action){
             final Point point = this.transformFromParent(evt.getPoint());
 
-            final Event down = new vector.event.MouseDown(action,point);
+            final Event down = new platform.event.MouseDown(action,point);
 
             for (Component c: this){
 
@@ -591,7 +588,7 @@ public class Display
         if (null != action){
             final Point point = this.transformFromParent(evt.getPoint());
 
-            final Event up = new vector.event.MouseUp(action,point);
+            final Event up = new platform.event.MouseUp(action,point);
 
             for (Component c: this){
 
@@ -610,9 +607,9 @@ public class Display
 
         final Point point = this.transformFromParent(evt.getPoint());
 
-        final Event entered = new vector.event.MouseEntered(point);
+        final Event entered = new platform.event.MouseEntered(point);
 
-        final Event exited = new vector.event.MouseExited(point);
+        final Event exited = new platform.event.MouseExited(point);
 
         for (Component c: this){
 
@@ -634,7 +631,7 @@ public class Display
 
         final Point point = this.transformFromParent(evt.getPoint());
 
-        final Event exited = new vector.event.MouseExited(point);
+        final Event exited = new platform.event.MouseExited(point);
 
         for (Component c: this.listMouseIn(Component.class)){
 
@@ -650,11 +647,11 @@ public class Display
         if (null != action){
             final Point point = this.transformFromParent(evt.getPoint());
 
-            final Event dragged = new vector.event.MouseDrag(action,point);
+            final Event dragged = new platform.event.MouseDrag(action,point);
 
-            final Event entered = new vector.event.MouseEntered(point);
+            final Event entered = new platform.event.MouseEntered(point);
 
-            final Event exited = new vector.event.MouseExited(point);
+            final Event exited = new platform.event.MouseExited(point);
 
             for (Component c: this){
 
@@ -680,11 +677,11 @@ public class Display
          */
         final Point point = this.transformFromParent(evt.getPoint());
 
-        final Event moved = new vector.event.MouseMoved(point);
+        final Event moved = new platform.event.MouseMoved(point);
 
-        final Event entered = new vector.event.MouseEntered(point);
+        final Event entered = new platform.event.MouseEntered(point);
 
-        final Event exited = new vector.event.MouseExited(point);
+        final Event exited = new platform.event.MouseExited(point);
 
         for (Component c: this){
 
@@ -707,7 +704,7 @@ public class Display
         /*
          * Narrow-cast
          */
-        final Event e = new vector.event.MouseWheel(evt.getWheelRotation());
+        final Event e = new platform.event.MouseWheel(evt.getWheelRotation());
 
         for (Component c: this){
 
@@ -721,7 +718,7 @@ public class Display
         /*
          * Narrow-cast
          */
-        final Event e = new vector.event.KeyDown(evt);
+        final Event e = new platform.event.KeyDown(evt);
 
         for (Component c: this){
 
@@ -733,7 +730,7 @@ public class Display
         /*
          * Narrow-cast
          */
-        final Event e = new vector.event.KeyUp(evt);
+        final Event e = new platform.event.KeyUp(evt);
 
         for (Component c: this){
 

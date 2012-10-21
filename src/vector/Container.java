@@ -340,8 +340,8 @@ public class Container
             this.mouseIn = true;
 
             final Point point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
-            final Event entered = new vector.event.MouseEntered(point);
-            final Event exited = new vector.event.MouseExited(point);
+            final Event entered = new platform.event.MouseEntered(point);
+            final Event exited = new platform.event.MouseExited(point);
 
             for (Component c: this){
 
@@ -376,9 +376,9 @@ public class Container
              */
             final Point point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
 
-            final Event moved = new vector.event.MouseMoved(point);
-            final Event entered = new vector.event.MouseEntered(point);
-            final Event exited = new vector.event.MouseExited(point);
+            final Event moved = new platform.event.MouseMoved(point);
+            final Event entered = new platform.event.MouseEntered(point);
+            final Event exited = new platform.event.MouseExited(point);
 
             for (Component c: this){
 
@@ -416,9 +416,9 @@ public class Container
              */
             final Event.Mouse.Point m = (Event.Mouse.Point)e;
             final Point point = this.transformFromParent(m.getPoint());
-            final Event dragged = new vector.event.MouseDrag(m,point);
-            final Event entered = new vector.event.MouseEntered(point);
-            final Event exited = new vector.event.MouseExited(point);
+            final Event dragged = new platform.event.MouseDrag(m,point);
+            final Event entered = new platform.event.MouseEntered(point);
+            final Event exited = new platform.event.MouseExited(point);
 
             for (Component c: this){
 

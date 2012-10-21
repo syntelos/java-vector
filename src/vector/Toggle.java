@@ -22,7 +22,7 @@ import platform.Color;
 import platform.Shape;
 import platform.Path;
 
-import vector.event.NamedAction;
+import platform.event.NamedAction;
 
 import json.Json;
 import json.ObjectJson;

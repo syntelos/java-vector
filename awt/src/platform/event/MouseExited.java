@@ -16,27 +16,20 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.event;
+package platform.event;
 
 import vector.Event;
 
 /**
  * 
  */
-public class MouseWheel
-    extends AbstractMouse
-    implements Event.Mouse.Wheel
+public class MouseExited
+    extends AbstractMouseMotion
 {
-    public final int count;
-
-
-    public MouseWheel(int count){
-        super(Event.Type.MouseWheel,Event.Mouse.Action.Wheel);
-        this.count = count;
+    public MouseExited(platform.geom.Point point){
+        super(Event.Type.MouseExited,Event.Mouse.Action.Exited,point);
     }
-
-
-    public final int getCount(){
-        return this.count;
+    public MouseExited(Mouse e, platform.geom.Point point){
+        super(e.getType(),e.getAction(),point);
     }
 }

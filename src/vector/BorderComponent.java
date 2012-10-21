@@ -171,7 +171,7 @@ public class BorderComponent
 
                     final Point point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
 
-                    border.input(new vector.event.MouseMoved(point));
+                    border.input(new platform.event.MouseMoved(point));
                 }
             }
             return false;

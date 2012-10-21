@@ -25,8 +25,6 @@ import platform.Shape;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.font.GlyphVector;
-
 /**
  * <p> This class will draw a grid as defined by the domain and range
  * shape coordinates.  It can optionally track mouse motion. </p>

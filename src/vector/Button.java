@@ -18,7 +18,7 @@
  */
 package vector;
 
-import vector.event.NamedAction;
+import platform.event.NamedAction;
 
 import json.Json;
 import json.ObjectJson;

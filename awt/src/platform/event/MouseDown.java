@@ -16,20 +16,20 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.event;
+package platform.event;
 
 import vector.Event;
 
 /**
  * 
  */
-public class MouseUp
+public class MouseDown
     extends AbstractMousePoint
 {
-    public MouseUp(Action action, platform.geom.Point point){
-        super(Event.Type.MouseUp,action,point);
+    public MouseDown(Action action, platform.geom.Point point){
+        super(Event.Type.MouseDown,action,point);
     }
-    public MouseUp(Mouse e, platform.geom.Point point){
+    public MouseDown(Mouse e, platform.geom.Point point){
         super(e.getType(),e.getAction(),point);
     }
 }

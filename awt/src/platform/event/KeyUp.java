@@ -16,20 +16,19 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.event;
+package platform.event;
 
 import vector.Event;
+
+import java.awt.event.KeyEvent;
 
 /**
  * 
  */
-public class MouseMoved
-    extends AbstractMouseMotion
+public class KeyUp
+    extends AbstractKey
 {
-    public MouseMoved(platform.geom.Point point){
-        super(Event.Type.MouseMoved,Event.Mouse.Action.Moved,point);
-    }
-    public MouseMoved(Mouse e, platform.geom.Point point){
-        super(e.getType(),e.getAction(),point);
+    public KeyUp(KeyEvent evt){
+        super(Event.Type.KeyUp,evt);
     }
 }

@@ -16,38 +16,20 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.event;
+package platform.event;
 
 import vector.Event;
 
 /**
  * 
  */
-public class AbstractMousePoint
-    extends AbstractMouse
-    implements Event.Mouse.Point
+public class MouseEntered
+    extends AbstractMouseMotion
 {
-
-    public final platform.geom.Point point;
-
-
-    public AbstractMousePoint(Type type, Action action, platform.geom.Point point){
-        super(type,action);
-        if (null != point)
-            this.point = point;
-        else
-            throw new IllegalArgumentException();
+    public MouseEntered(platform.geom.Point point){
+        super(Event.Type.MouseEntered,Event.Mouse.Action.Entered,point);
     }
-
-
-    public final platform.geom.Point getPoint(){
-        return this.point;
-    }
-    protected StringBuilder toStringBuilder(){
-        StringBuilder string = super.toStringBuilder();
-
-        string.append(", point: ");
-        string.append(this.point.toString());
-        return string;
+    public MouseEntered(Mouse e, platform.geom.Point point){
+        super(e.getType(),e.getAction(),point);
     }
 }
