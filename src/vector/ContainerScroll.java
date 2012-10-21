@@ -18,8 +18,8 @@
  */
 package vector;
 
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
+import platform.Shape;
+import platform.geom.Rectangle;
 
 /**
  * This {@link Container} expects to have zero or one or two {@link
@@ -105,7 +105,7 @@ public class ContainerScroll
 
         if (null != hor || null != ver){
 
-            Rectangle2D bounds = shape.getBounds2D();
+            Bounds bounds = shape.getBoundsVector();
 
             if (null != hor)
                 re = (hor.position(bounds) || re);

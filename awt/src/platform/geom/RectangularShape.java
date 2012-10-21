@@ -16,5 +16,37 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.geom;
+package platform.geom;
 
+/**
+ * 
+ */
+public interface RectangularShape
+    extends platform.Shape
+{
+
+    public boolean isEmpty();
+
+    public double getX();
+
+    public double getY();
+
+    public double getWidth();
+
+    public double getHeight();
+
+    public double getMinX();
+
+    public double getMinY();
+
+    public double getMaxX();
+
+    public double getMaxY();
+
+    public double getCenterX();
+
+    public double getCenterY();
+
+    public void setFrame(double x, double y, double w, double h);
+
+}

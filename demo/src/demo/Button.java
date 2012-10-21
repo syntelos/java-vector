@@ -1,9 +1,10 @@
 package demo;
 
+import platform.geom.Point;
+
 import vector.Bounds;
 import vector.Event;
 
-import java.awt.geom.Point2D;
 import java.util.Random;
 
 public class Button
@@ -33,7 +34,7 @@ public class Button
             }
         }
     }
-    protected Point2D randomLocation(){
+    protected Point randomLocation(){
         final Bounds root = this.getRootContainer().getBoundsVector();
         final Bounds bounds = this.getBoundsVector();
         final float w = (root.width-bounds.width);
@@ -41,6 +42,6 @@ public class Button
         final float x = (PRNG.nextFloat()*w);
         final float y = (PRNG.nextFloat()*h);
 
-        return new Point2D.Float(x,y);
+        return new Point(x,y);
     }
 }

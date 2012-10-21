@@ -19,11 +19,10 @@
 package vector;
 
 import platform.Color;
+import platform.geom.Point;
+import platform.geom.Rectangle;
 
 import vector.event.NamedAction;
-
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import java.lang.reflect.Method;
 
@@ -47,7 +46,7 @@ public class ColorPalette<E extends Enum<E>>
 
     private float binX, binY, mbinX, mbinY;
 
-    private Rectangle2D.Float bin, binOver;
+    private Rectangle bin, binOver;
 
     private Color selected;
 
@@ -94,8 +93,8 @@ public class ColorPalette<E extends Enum<E>>
         this.binY = (b.height/S);
         this.mbinX = (this.binX/2f);
         this.mbinY = (this.binY/2f);
-        this.bin = new Rectangle2D.Float(0,0,this.binX,this.binY);
-        this.binOver = new Rectangle2D.Float(0,0,(this.binX+2),(this.binY+2));
+        this.bin = new Rectangle(0,0,this.binX,this.binY);
+        this.binOver = new Rectangle(0,0,(this.binX+2),(this.binY+2));
     }
     public Color getSelected(){
         return this.selected;
@@ -224,7 +223,7 @@ public class ColorPalette<E extends Enum<E>>
         else {
             switch(e.getType()){
             case MouseMoved:{
-                Point2D.Float p = ((Event.Mouse.Point)e).getPoint();
+                Point p = ((Event.Mouse.Point)e).getPoint();
 
                 this.overCol = (int)(p.x/this.binX);
                 this.overRow = (int)(p.y/this.binY);
@@ -243,7 +242,7 @@ public class ColorPalette<E extends Enum<E>>
                         if (null != root){
                             /*
                              */
-                            final Point2D.Float local = ((Event.Mouse.Point)e).getPoint();
+                            final Point local = ((Event.Mouse.Point)e).getPoint();
 
                             final int col = (int)(local.x/this.binX);
                             final int row = (int)(local.y/this.binY);

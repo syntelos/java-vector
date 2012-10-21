@@ -19,22 +19,13 @@
 package vector;
 
 import platform.Transform;
+import platform.geom.Point;
 
 import json.ArrayJson;
 import json.Json;
 import json.ObjectJson;
 
 import lxl.List;
-
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -348,7 +339,7 @@ public class Container
              */
             this.mouseIn = true;
 
-            final Point2D.Float point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
+            final Point point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
             final Event entered = new vector.event.MouseEntered(point);
             final Event exited = new vector.event.MouseExited(point);
 
@@ -383,7 +374,7 @@ public class Container
             /*
              * Broad-cast
              */
-            final Point2D.Float point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
+            final Point point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
 
             final Event moved = new vector.event.MouseMoved(point);
             final Event entered = new vector.event.MouseEntered(point);
@@ -424,7 +415,7 @@ public class Container
              * Broad-cast
              */
             final Event.Mouse.Point m = (Event.Mouse.Point)e;
-            final Point2D.Float point = this.transformFromParent(m.getPoint());
+            final Point point = this.transformFromParent(m.getPoint());
             final Event dragged = new vector.event.MouseDrag(m,point);
             final Event entered = new vector.event.MouseEntered(point);
             final Event exited = new vector.event.MouseExited(point);

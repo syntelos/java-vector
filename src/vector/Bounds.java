@@ -18,11 +18,14 @@
  */
 package vector;
 
+import platform.Shape;
 import platform.Transform;
 
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
+import platform.geom.Point;
+import platform.geom.Rectangle;
+import platform.geom.RectangularShape;
+import platform.geom.RoundRectangle;
+
 import java.util.StringTokenizer;
 
 /**
@@ -38,7 +41,7 @@ import java.util.StringTokenizer;
  * @see Component
  */
 public class Bounds
-    extends Rectangle2D.Float
+    extends Rectangle
 {
 
     public Bounds(){
@@ -84,11 +87,11 @@ public class Bounds
     public Bounds(double w, double h){
         super(0f,0f,(float)w,(float)h);
     }
-    public Bounds(java.awt.geom.RectangularShape rect){
-        this(rect.getX(),rect.getY(),rect.getWidth(),rect.getHeight());
+    public Bounds(RectangularShape r){
+        this(r.getX(),r.getY(),r.getWidth(),r.getHeight());
     }
-    public Bounds(java.awt.Shape shape){
-        this(shape.getBounds2D());
+    public Bounds(Shape s){
+        this(s.getBoundsVector());
     }
     public Bounds(Component c){
         this(c.getBoundsVector());
@@ -105,7 +108,7 @@ public class Bounds
     /**
      * Optimized relation of spatial peers (siblings)
      */
-    public final boolean contains(Rectangle2D.Float that){
+    public final boolean contains(Rectangle that){
         if (this.x <= that.x && this.y <= that.y){
 
             final float thisX1 = (this.x + this.width);
@@ -122,7 +125,7 @@ public class Bounds
     /**
      * Relation of container (this parent) and contained (that child)
      */
-    public final boolean pcontains(Rectangle2D.Float that){
+    public final boolean pcontains(Rectangle that){
 
         if (0.0f <= that.x && 0.0f <= that.y){
 
@@ -140,7 +143,7 @@ public class Bounds
     /**
      * @return Objective scale to this from that
      */
-    public Transform scaleFromAbsolute(java.awt.geom.RectangularShape that){
+    public Transform scaleFromAbsolute(platform.geom.RectangularShape that){
         final double sx = (this.width/(that.getX()+that.getWidth()));
         final double sy = (this.height/(that.getY()+that.getHeight()));
 
@@ -149,7 +152,7 @@ public class Bounds
     /**
      * @return Objective scale to that from this
      */
-    public Transform scaleToAbsolute(java.awt.geom.RectangularShape that){
+    public Transform scaleToAbsolute(platform.geom.RectangularShape that){
         final double sx = ((that.getX()+that.getWidth())/this.width);
         final double sy = ((that.getY()+that.getHeight())/this.height);
 
@@ -158,7 +161,7 @@ public class Bounds
     /**
      * @return Objective scale to this from that
      */
-    public Transform scaleFromRelative(java.awt.geom.RectangularShape that){
+    public Transform scaleFromRelative(platform.geom.RectangularShape that){
         final double sx = (this.width/that.getWidth());
         final double sy = (this.height/that.getHeight());
 
@@ -167,24 +170,24 @@ public class Bounds
     /**
      * @return Objective scale to that from this
      */
-    public Transform scaleToRelative(java.awt.geom.RectangularShape that){
+    public Transform scaleToRelative(platform.geom.RectangularShape that){
         final double sx = (that.getWidth()/this.width);
         final double sy = (that.getHeight()/this.height);
 
         return Transform.getScaleInstance(sx,sy);
     }
-    public RoundRectangle2D.Float round(float arc){
+    public RoundRectangle round(float arc){
 
-        return new RoundRectangle2D.Float(this.x,this.y,this.width,this.height,arc,arc);
+        return new RoundRectangle(this.x,this.y,this.width,this.height,arc,arc);
     }
     /**
      * @return Interior midpoint relative to box location: width
      * divided by two, height divided by two
      */
-    public Point2D.Float midpoint(){
+    public Point midpoint(){
         float x = (this.width/2.0f);
         float y = (this.height/2.0f);
-        return new Point2D.Float(x,y);
+        return new Point(x,y);
     }
     public Bounds apply(Align align, Bounds parent){
 
@@ -235,7 +238,7 @@ public class Bounds
     public Context clip(Context g){
 
         g.translate(this.x,this.y);
-        g.clipRect(0,0,(int)Math.ceil(this.width+1),(int)Math.ceil(this.height+1));
+        g.clipTo(0,0,(int)Math.ceil(this.width+1),(int)Math.ceil(this.height+1));
         return g;
     }
     public Bounds clone(){

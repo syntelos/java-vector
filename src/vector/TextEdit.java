@@ -18,14 +18,13 @@
  */
 package vector;
 
-import platform.Color;
-
 import vector.text.Editor;
 import vector.text.Home;
 
+import platform.Color;
+import platform.Shape;
 import platform.Transform;
 
-import java.awt.Shape;
 
 /**
  * Line editor

@@ -23,9 +23,9 @@ import platform.Transform;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Shape;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import platform.Shape;
+import platform.geom.Point;
+import platform.geom.Rectangle;
 
 /**
  * Common implementation of {@link Component} for convenience
@@ -240,15 +240,15 @@ public abstract class AbstractComponent
 
         return this.bounds.contains(x,y);
     }
-    public boolean contains(Point2D.Float p){
+    public boolean contains(Point p){
 
         return this.bounds.contains(p.x,p.y);
     }
-    public final Point2D.Float getLocationVector(){
+    public final Point getLocationVector(){
 
-        return new Point2D.Float(this.bounds.x,this.bounds.y);
+        return new Point(this.bounds.x,this.bounds.y);
     }
-    public final Component setLocationVector(Point2D point){
+    public final Component setLocationVector(Point point){
 
         this.bounds.x = (float)point.getX();
         this.bounds.y = (float)point.getY();
@@ -375,7 +375,7 @@ public abstract class AbstractComponent
         else
             throw new IllegalStateException();
     }
-    public final Point2D.Float transformFromParent(Point2D point){
+    public final Point transformFromParent(Point point){
 
         return this.getTransformParent().transformFrom(point);
     }

@@ -16,5 +16,11 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.geom;
+package platform;
 
+public interface Shape
+    extends java.awt.Shape
+{
+
+    public vector.Bounds getBoundsVector();
+}

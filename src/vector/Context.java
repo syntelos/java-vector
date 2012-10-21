@@ -20,12 +20,10 @@ package vector;
 
 import platform.Color;
 import platform.Font;
+import platform.Shape;
 import platform.Transform;
 
 import java.awt.Image;
-import java.awt.Shape;
-
-import java.awt.font.GlyphVector;
 
 /**
  * Platform independent graphics context
@@ -109,25 +107,15 @@ public interface Context {
      */
     public void setStroke(Stroke stroke);
 
-    public void setClip(int x, int y, int w, int h);
-
     public void setClip(Shape shape);
 
-    public void clipRect(int x, int y, int w, int h);
+    public void clipTo(int x, int y, int w, int h);
 
     public Shape getClip();
-
-    public Bounds getClipBounds();
-
-    public Bounds getClipBounds(Bounds rectangle);
-
-    public Bounds getClipRect();
 
     public void fill(Shape shape);
 
     public void draw(Shape shape);
-
-    public void drawGlyphVector(GlyphVector vector, float x, float y);
 
     public void drawString(String string, int x, int y);
 

@@ -16,5 +16,19 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.geom;
+package platform.geom;
 
+public class Point
+    extends java.awt.geom.Point2D.Float
+{
+
+    public Point(){
+        super();
+    }
+    public Point(float x, float y){
+        super(x,y);
+    }
+    public Point(double x, double y){
+        super((float)x,(float)y);
+    }
+}

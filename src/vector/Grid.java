@@ -19,15 +19,13 @@
 package vector;
 
 import platform.Color;
+import platform.Path;
+import platform.Shape;
 
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Shape;
 import java.awt.font.GlyphVector;
-import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 /**
  * <p> This class will draw a grid as defined by the domain and range
@@ -54,7 +52,7 @@ public class Grid
 
     protected float[] domain, range;
 
-    protected Path2D.Float shape;
+    protected Path shape;
     /**
      * Preserves the indempotence of a default grid layout
      */
@@ -297,7 +295,7 @@ public class Grid
             final float y0 = 0f;
             final float y1 = bounds.height;
 
-            final Path2D.Float shape = new Path2D.Float();
+            final Path shape = new Path();
 
             for (float x: domain){
                 shape.moveTo(x,y0);

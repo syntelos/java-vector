@@ -21,8 +21,6 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.geom.Point2D;
-
 /**
  * Label a horizontal or vertical point with the ordinate value.  One
  * of the horizontal or vertical {@link Align} properties set to

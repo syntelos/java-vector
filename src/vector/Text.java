@@ -18,20 +18,20 @@
  */
 package vector;
 
+import vector.font.GlyphVector;
+import vector.text.Visual;
+
 import platform.Color;
 import platform.Font;
+import platform.Path;
+import platform.Shape;
 import platform.Transform;
-
-import vector.text.Visual;
+import platform.geom.Point;
+import platform.geom.Rectangle;
 
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Shape;
-import java.awt.font.GlyphVector;
-import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 
 /**
@@ -389,14 +389,14 @@ public class Text
     /**
      * @return Baseline origin in shape coordinate space 
      */
-    public Point2D.Float getShapeBaseline(){
+    public Point getShapeBaseline(){
 
         return this.font.queryBaseline(this.padding);
     }
     private float[] positions(){
         if (null == this.localPositions){
 
-            this.localPositions = this.font.queryBaselinePositions(this.padding,this.vector,this.length());
+            this.localPositions = this.font.queryBaselinePositions(this.padding,this.vector);
         }
         return this.localPositions;
     }
@@ -417,32 +417,32 @@ public class Text
     /**
      * Shape coordinate space
      */
-    public final Point2D.Float getTopLeft(int idx){
+    public final Point getTopLeft(int idx){
 
         final int ix = (idx<<1);
 
-        return new Point2D.Float(this.positions()[ix],this.padding.top);
+        return new Point(this.positions()[ix],this.padding.top);
     }
     /**
      * Shape coordinate space
      */
-    public final Point2D.Float getTopRight(int idx){
+    public final Point getTopRight(int idx){
 
         final int ix = (idx+1)<<1;
 
-        return new Point2D.Float(this.positions()[ix],this.padding.top);
+        return new Point(this.positions()[ix],this.padding.top);
     }
     /**
      * Shape coordinate space
      */
-    public final Point2D.Float getBaseline(int idx){
+    public final Point getBaseline(int idx){
 
         final float[] positions = this.positions();
 
         final int ix = (idx<<1);
         final int iy = (ix+1);
 
-        return new Point2D.Float(positions[ix],positions[iy]);
+        return new Point(positions[ix],positions[iy]);
     }
     /**
      * @param start Inclusive glyph index
@@ -474,7 +474,8 @@ public class Text
         else {
             Shape shape = this.shape;
             if (null != shape){
-                Rectangle2D bounds = shape.getBounds2D();
+                Bounds bounds = shape.getBoundsVector();
+
                 return (float)(bounds.getX()+bounds.getWidth());
             }
             else {
@@ -572,11 +573,11 @@ public class Text
 
         if (null == this.shape && 0 < this.length()){
 
-            final Point2D.Float baseline = this.getShapeBaseline();
+            final Point baseline = this.getShapeBaseline();
 
-            this.vector = this.font.createGlyphVector(this.string);
+            this.vector = this.font.createGlyphVector(this.string.toString());
 
-            this.shape = this.vector.getOutline(baseline.x,baseline.y);
+            this.shape = this.vector.createOutline(baseline);
 
             this.localPositions = null;
         }

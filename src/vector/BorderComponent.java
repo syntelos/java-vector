@@ -19,13 +19,12 @@
 package vector;
 
 import platform.Color;
+import platform.Shape;
 import platform.Transform;
+import platform.geom.Point;
 
 import json.Json;
 import json.ObjectJson;
-
-import java.awt.Shape;
-import java.awt.geom.Point2D;
 
 /**
  * A component with a border and a background can work independently
@@ -170,7 +169,7 @@ public class BorderComponent
                 Border border = this.border;
                 if (null != border){
 
-                    final Point2D.Float point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
+                    final Point point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
 
                     border.input(new vector.event.MouseMoved(point));
                 }

@@ -16,5 +16,32 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.geom;
+package platform.geom;
 
+import vector.Bounds;
+
+/**
+ * 
+ */
+public class Line
+    extends java.awt.geom.Line2D.Float
+    implements platform.Shape
+{
+
+    public Line(){
+        super();
+    }
+    public Line(float x0, float y0, float x1, float y1){
+        super(x0,y0,x1,y1);
+    }
+    public Line(Point a, Point b){
+        super(a,b);
+    }
+
+
+    public Bounds getBoundsVector(){
+        java.awt.geom.Rectangle2D bounds = super.getBounds2D();
+        return new Bounds(bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
+    }
+
+}

@@ -20,12 +20,14 @@ package platform;
 
 import vector.Bounds;
 import vector.Padding;
+import vector.font.GlyphVector;
+
+import platform.geom.Point;
 
 import java.awt.FontMetrics;
 import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
-import java.awt.font.GlyphVector;
-import java.awt.geom.Point2D;
+
 
 /**
  * Font primitive.
@@ -84,15 +86,15 @@ public class Font
      * 
      * @return Glyph text baseline origin
      */
-    public Point2D.Float queryBaseline(Padding padding){
+    public Point queryBaseline(Padding padding){
         if (null != padding){
             final float x = padding.left;
             final float y = (this.ascent + padding.top);
 
-            return new Point2D.Float(x,y);
+            return new Point(x,y);
         }
         else
-            return new Point2D.Float(0f,this.ascent);
+            return new Point(0f,this.ascent);
     }
     /**
      * Glyph baseline position coordinates in shape coordinate space.
@@ -110,22 +112,12 @@ public class Font
      * vector as an array of coordinates in order
      * <i>{Xo,Yo,...,Xn,Yn}</i>, or an array of length zero
      */
-    public float[] queryBaselinePositions(Padding padding, GlyphVector vector, int count){
-        if (null != vector && 0 < count){
+    public float[] queryBaselinePositions(Padding padding, GlyphVector vector){
+        if (null != vector){
 
-            final Point2D.Float baseline = this.queryBaseline(padding);
+            final Point baseline = this.queryBaseline(padding);
 
-            final int c = (count+1);
-
-            float[] positions = vector.getGlyphPositions(0,c,new float[c<<1]);
-
-            for (int cc = 0; cc < c; cc++){
-                int ix = (cc<<1);
-                int iy = (ix+1);
-                positions[ix] += baseline.x;
-                positions[iy] += baseline.y;
-            }
-            return positions;
+            return vector.queryPositions(baseline);
         }
         else
             return new float[0];
@@ -171,9 +163,9 @@ public class Font
 
         return new Font(this.deriveFont(size));
     }
-    public final GlyphVector createGlyphVector(Object string){
+    public final GlyphVector createGlyphVector(String string){
 
-        return this.createGlyphVector(this.frc,string.toString());
+        return new platform.font.GlyphVector( super.createGlyphVector(this.frc,string), string.length());
     }
     public final float em(float n){
 

@@ -22,7 +22,7 @@ import platform.Transform;
 
 import java.awt.event.MouseEvent;
 import static java.awt.event.MouseEvent.*;
-import java.awt.geom.Point2D;
+
 
 /**
  * Immutable universal event for a single input method, intended for
@@ -150,12 +150,12 @@ public interface Event {
         public interface Motion
             extends Mouse
         {
-            public Point2D.Float getPoint();
+            public platform.geom.Point getPoint();
         }
         public interface Point
             extends Mouse
         {
-            public Point2D.Float getPoint();
+            public platform.geom.Point getPoint();
         }
         public interface Wheel
             extends Mouse

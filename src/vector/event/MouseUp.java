@@ -20,18 +20,16 @@ package vector.event;
 
 import vector.Event;
 
-import java.awt.geom.Point2D;
-
 /**
  * 
  */
 public class MouseUp
     extends AbstractMousePoint
 {
-    public MouseUp(Action action, Point2D.Float point){
+    public MouseUp(Action action, platform.geom.Point point){
         super(Event.Type.MouseUp,action,point);
     }
-    public MouseUp(Mouse e, Point2D.Float point){
+    public MouseUp(Mouse e, platform.geom.Point point){
         super(e.getType(),e.getAction(),point);
     }
 }

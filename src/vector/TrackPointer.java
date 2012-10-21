@@ -19,8 +19,7 @@
 package vector;
 
 import platform.Transform;
-
-import java.awt.geom.Point2D;
+import platform.geom.Point;
 
 /**
  * Children track mouse motion, are visible on mouse in the container,
@@ -31,7 +30,7 @@ public class TrackPointer
     implements Component.Layout
 {
 
-    protected Point2D.Float midpoint;
+    protected Point midpoint;
 
 
     public TrackPointer(){
@@ -75,7 +74,7 @@ public class TrackPointer
      * @return True to receive the motion events of the parent
      */
     @Override
-    public boolean contains(Point2D.Float p){
+    public boolean contains(Point p){
         return true;
     }
     public Bounds queryBoundsContent(){
@@ -209,9 +208,9 @@ public class TrackPointer
         }
         return this;
     }
-    public TrackPointer moveto(Point2D.Float input){
+    public TrackPointer moveto(Point input){
 
-        final Point2D.Float midpoint = this.midpoint;
+        final Point midpoint = this.midpoint;
         if (null != midpoint){
 
             float x = (input.x-this.midpoint.x);

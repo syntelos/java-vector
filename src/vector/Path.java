@@ -19,16 +19,15 @@
 package vector;
 
 import platform.Color;
+import platform.Shape;
 import platform.Transform;
+import platform.geom.Point;
+import platform.geom.Rectangle;
 
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.Shape;
-import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 /**
  * Component consumes and produces W3C SVG Path attribute "d" data.
@@ -110,7 +109,7 @@ public class Path
 
     protected Stroke stroke, strokeOver;
 
-    protected Path2D.Float path;
+    protected platform.Path path;
 
     protected Path.Winding winding;
 
@@ -284,22 +283,22 @@ public class Path
      */
     public Path setD(String d){
 
-        this.path = Path.Apply(new Path2D.Float(),d);
+        this.path = Path.Apply(new platform.Path(),d);
 
         return this;
     }
-    public Path2D.Float getPath(){
+    public platform.Path getPath(){
 
         return this.path;
     }
-    public Path2D.Float getCreatePath(Path.Winding winding){
+    public platform.Path getCreatePath(Path.Winding winding){
 
         if (null == this.path)
-            this.setPath(new Path2D.Float(winding.ordinal()));
+            this.setPath(new platform.Path(winding));
 
         return this.path;
     }
-    public Path setPath(Path2D.Float path){
+    public Path setPath(platform.Path path){
 
         this.path = path;
 
@@ -327,11 +326,11 @@ public class Path
         if (null != winding){
             switch(winding){
             case EvenOdd:
-                this.setPath( new Path2D.Float(Path2D.WIND_EVEN_ODD));
+                this.setPath( new platform.Path(Winding.EvenOdd));
 
                 break;
             case NonZero:
-                this.setPath( new Path2D.Float(Path2D.WIND_NON_ZERO));
+                this.setPath( new platform.Path(Winding.NonZero));
 
                 break;
             default:
@@ -384,7 +383,7 @@ public class Path
         return this;
     }
 
-    public Path moveTo(Point2D.Float p)
+    public Path moveTo(Point p)
         throws vector.Path.Winding.Missing
     {
         return this.moveTo(p.x,p.y);
@@ -401,7 +400,7 @@ public class Path
             return this;
         }
     }
-    public Path lineTo(Point2D.Float p)
+    public Path lineTo(Point p)
         throws vector.Path.Winding.Missing
     {
         return this.lineTo(p.x,p.y);
@@ -417,7 +416,7 @@ public class Path
             return this;
         }
     }
-    public Path quadTo(Point2D.Float a, Point2D.Float b)
+    public Path quadTo(Point a, Point b)
         throws vector.Path.Winding.Missing
     {
         return this.quadTo(a.x,a.y,b.x,b.y);
@@ -434,7 +433,7 @@ public class Path
             return this;
         }
     }
-    public Path curveTo(Point2D.Float a, Point2D.Float b, Point2D.Float c)
+    public Path curveTo(Point a, Point b, Point c)
         throws vector.Path.Winding.Missing
     {
         return this.curveTo(a.x,a.y,b.x,b.y,c.x,c.y);
@@ -454,7 +453,7 @@ public class Path
     /**
      * Clockwise outline box.
      */
-    public Path outlineBoxCW(Rectangle2D.Float box)
+    public Path outlineBoxCW(Rectangle box)
         throws vector.Path.Winding.Missing
     {
         return this.outlineBoxCW(box.x,box.y,box.width,box.height);
@@ -491,7 +490,7 @@ public class Path
     /**
      * CW outline box with CCW inset box.
      */
-    public Path outlineBoxCW(Rectangle2D.Float box, float in)
+    public Path outlineBoxCW(Rectangle box, float in)
         throws vector.Path.Winding.Missing
     {
         return this.outlineBoxCW(box.x,box.y,box.width,box.height,in);
@@ -620,7 +619,7 @@ public class Path
 
             if (this.content){
 
-                this.setBoundsVector(new Bounds(this.path));
+                this.setBoundsVector(this.path.getBoundsVector());
             }
 
             if (null != this.align){
@@ -870,7 +869,7 @@ public class Path
         }
         return closed;
     }
-    public final static boolean IsCloser(Shape shape, Point2D pt){
+    public final static boolean IsCloser(Shape shape, Point pt){
         boolean closer = false;
 
         PathIterator p = shape.getPathIterator(null);
@@ -896,13 +895,10 @@ public class Path
     public final static boolean IsNotClosed(Shape shape){
         return (!IsClosed(shape));
     }
-    public final static Path2D.Float Apply(Path2D.Float shape, String pexpr){
-        return (Path2D.Float)Apply(shape,new Path.Parser(pexpr));
+    public final static platform.Path Apply(platform.Path shape, String pexpr){
+        return (platform.Path)Apply(shape,new Path.Parser(pexpr));
     }
-    public final static Path2D Apply(Path2D shape, String pexpr){
-        return Apply(shape,new Path.Parser(pexpr));
-    }
-    public final static Path2D Apply(Path2D shape, Path.Parser p){
+    public final static platform.Path Apply(platform.Path shape, Path.Parser p){
         Path.Parser.Token last = null;
 
         double mx = 0, my = 0, sx = 0, sy = 0;
@@ -980,7 +976,7 @@ public class Path
         }
         return shape;
     }
-    public final static int IndexOf(Shape shape, Point2D pt){
+    public final static int IndexOf(Shape shape, Point pt){
         int index = 0;
         PathIterator p = shape.getPathIterator(null);
         double[] s = new double[6];
@@ -1033,30 +1029,30 @@ public class Path
         }
         return -1;
     }
-    public final static Path2D LineTo(Path2D shape, Point2D a){
+    public final static platform.Path LineTo(platform.Path shape, Point a){
         shape.lineTo(a.getX(),a.getY());
         return shape;
     }
-    public final static Path2D MoveTo(Path2D shape, Point2D a){
+    public final static platform.Path MoveTo(platform.Path shape, Point a){
         shape.moveTo(a.getX(),a.getY());
         return shape;
     }
-    public final static Path2D QuadTo(Path2D shape, Point2D a, Point2D b){
+    public final static platform.Path QuadTo(platform.Path shape, Point a, Point b){
         shape.quadTo(a.getX(),a.getY(),b.getX(),b.getY());
         return shape;
     }
-    public final static Path2D CurveTo(Path2D shape, Point2D a, Point2D b, Point2D c){
+    public final static platform.Path CurveTo(platform.Path shape, Point a, Point b, Point c){
         shape.curveTo(a.getX(),a.getY(),b.getX(),b.getY(),c.getX(),c.getY());
         return shape;
     }
     public final static String ToString(Shape shape){
         return Path.Formatter.ToString(shape);
     }
-    public final static boolean EqPoint(Point2D p, double x, double y){
+    public final static boolean EqPoint(Point p, double x, double y){
 
         return EqPoint(p.getX(),p.getY(),x,y,3);
     }
-    public final static boolean EqPoint(Point2D p, double x, double y, double r){
+    public final static boolean EqPoint(Point p, double x, double y, double r){
 
         return EqPoint(p.getX(),p.getY(),x,y,r);
     }

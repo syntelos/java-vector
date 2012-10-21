@@ -18,5 +18,34 @@
  */
 package vector.font;
 
+import platform.Shape;
+import platform.geom.Point;
+
+/**
+ * @see platform.Font
+ */
 public interface GlyphVector {
+    /**
+     * @param baseline Baseline origin coordinate
+     * 
+     * @return Outline from baseline origin
+     */
+    public Shape createOutline(Point baseline);
+    /**
+     * Glyph baseline position coordinates in shape coordinate space.
+     * 
+     * <pre>
+     * ix = (idx*2);
+     * iy = (ix+1);
+     * </pre>
+     * 
+     * @param padding Text padding
+     * @param vector Text vector
+     * @param count Number of characters in text vector
+     * 
+     * @return Glyph baseline coordinates for characters in text
+     * vector as an array of coordinates in order
+     * <i>{Xo,Yo,...,Xn,Yn}</i>, or an array of length zero
+     */
+    public float[] queryPositions(Point baseline);
 }

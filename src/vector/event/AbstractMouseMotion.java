@@ -20,8 +20,6 @@ package vector.event;
 
 import vector.Event;
 
-import java.awt.geom.Point2D;
-
 /**
  * 
  */
@@ -30,10 +28,10 @@ public class AbstractMouseMotion
     implements Event.Mouse.Motion
 {
 
-    public final Point2D.Float point;
+    public final platform.geom.Point point;
 
 
-    public AbstractMouseMotion(Type type, Action action, Point2D.Float point){
+    public AbstractMouseMotion(Type type, Action action, platform.geom.Point point){
         super(type,action);
         if (null != point)
             this.point = point;
@@ -42,7 +40,7 @@ public class AbstractMouseMotion
     }
 
 
-    public final Point2D.Float getPoint(){
+    public final platform.geom.Point getPoint(){
         return this.point;
     }
     protected StringBuilder toStringBuilder(){

@@ -20,18 +20,16 @@ package vector.event;
 
 import vector.Event;
 
-import java.awt.geom.Point2D;
-
 /**
  * 
  */
 public class MouseDrag
     extends AbstractMousePoint
 {
-    public MouseDrag(Action action, Point2D.Float point){
+    public MouseDrag(Action action, platform.geom.Point point){
         super(Event.Type.MouseDrag,action,point);
     }
-    public MouseDrag(Mouse e, Point2D.Float point){
+    public MouseDrag(Mouse e, platform.geom.Point point){
         super(e.getType(),e.getAction(),point);
     }
 }

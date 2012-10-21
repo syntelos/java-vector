@@ -18,10 +18,10 @@
  */
 package vector;
 
+import platform.geom.Point;
+
 import json.Json;
 import json.ObjectJson;
-
-import java.awt.geom.Point2D;
 
 /**
  * Track mouse motion with ordinate value.  One of the horizontal or
@@ -93,7 +93,7 @@ public class TrackLabel
      * {@link TrackPointer}
      */
     @Override
-    public boolean contains(Point2D.Float p){
+    public boolean contains(Point p){
         return true;
     }
 
@@ -207,7 +207,7 @@ public class TrackLabel
         }
     }
     /**
-     * Called by {@link #moveto(java.awt.geom.Point2D$Float) moveto}
+     * Called by {@link #moveto(platform.Point) moveto}
      * to update label string with tracking ordinate
      */
     public TrackLabel setText(float input){
@@ -216,7 +216,7 @@ public class TrackLabel
 
         return this;
     }
-    public TrackLabel moveto(Point2D.Float input){
+    public TrackLabel moveto(Point input){
 
         if (null != this.horizontal || null != this.vertical){
 

@@ -20,18 +20,16 @@ package vector.event;
 
 import vector.Event;
 
-import java.awt.geom.Point2D;
-
 /**
  * 
  */
 public class MouseEntered
     extends AbstractMouseMotion
 {
-    public MouseEntered(Point2D.Float point){
+    public MouseEntered(platform.geom.Point point){
         super(Event.Type.MouseEntered,Event.Mouse.Action.Entered,point);
     }
-    public MouseEntered(Mouse e, Point2D.Float point){
+    public MouseEntered(Mouse e, platform.geom.Point point){
         super(e.getType(),e.getAction(),point);
     }
 }

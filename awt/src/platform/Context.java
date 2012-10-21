@@ -23,10 +23,7 @@ import vector.DebugTrace;
 import vector.Stroke;
 
 import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.font.GlyphVector;
-import java.awt.geom.AffineTransform;
+
 import java.awt.image.ImageObserver;
 
 
@@ -183,11 +180,6 @@ public class Context
         if (this.trace) (new DebugTrace(this.depth,"[%d] draw(%s)", this.depth, shape)).print(this.deep);
         this.instance.draw(shape);
     }
-    public void drawGlyphVector(GlyphVector glyphVector0, float flo1, float flo2)
-    {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] drawGlyphVector(%s, %f, %f)", this.depth, glyphVector0, flo1, flo2)).print(this.deep);
-        this.instance.drawGlyphVector(glyphVector0, flo1, flo2);
-    }
     public void drawString(String string0, int a1, int a2)
     {
         if (this.trace) (new DebugTrace(this.depth,"[%d] drawString(%s, %d, %d)", this.depth, string0, a1, a2)).print(this.deep);
@@ -275,7 +267,7 @@ public class Context
         if (this.trace) (new DebugTrace(this.depth,"[%d] setColor(%s)", this.depth, color0)).print(this.deep);
         this.instance.setColor(color0);
     }
-    public void clipRect(int a0, int a1, int a2, int a3)
+    public void clipTo(int a0, int a1, int a2, int a3)
     {
         if (this.trace) (new DebugTrace(this.depth,"[%d] clipRect(%d, %d, %d, %d)", this.depth, a0, a1, a2, a3)).print(this.deep);
         this.instance.clipRect(a0, a1, a2, a3);
@@ -288,36 +280,25 @@ public class Context
     public Shape getClip()
     {
         if (this.trace) (new DebugTrace(this.depth,"[%d] getClip()", this.depth)).print(this.deep);
-        return this.instance.getClip();
-    }
-    public Bounds getClipBounds()
-    {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] getClipBounds()", this.depth)).print(this.deep);
-        return new Bounds( this.instance.getClipBounds());
-    }
-    public Bounds getClipBounds(Bounds bounds)
-    {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] getClipBounds(%s)", this.depth, bounds)).print(this.deep);
-        bounds.setFrame(this.instance.getClipBounds());
-        return bounds;        
-    }
-    public Bounds getClipRect()
-    {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] getClipRect()", this.depth)).print(this.deep);
-        return new Bounds( this.instance.getClipRect());
+        java.awt.Shape clip = this.instance.getClip();
+        if (clip instanceof Shape)
+            return (Shape)clip;
+        else if (null == clip)
+            return null;
+        else
+            throw new IllegalStateException(clip.getClass().getName());//[TODO]
     }
     public Font getFont()
     {
         if (this.trace) (new DebugTrace(this.depth,"[%d] getFont()", this.depth)).print(this.deep);
-        /*
-         * TODO: Review for complexity
-         */
-        return new Font( new platform.Font(this.instance.getFont()));
-    }
-    public void setClip(int x, int y, int w, int h)
-    {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] setClip(%d, %d, %d, %d)", this.depth, x, y, w, h)).print(this.deep);
-        this.instance.setClip(x, y, w, h);
+
+        java.awt.Font font = this.instance.getFont();
+        if (font instanceof Font)
+            return (Font)font;
+        else if (null == font)
+            return null;
+        else
+            return new Font(font);
     }
     public void setClip(Shape shape)
     {

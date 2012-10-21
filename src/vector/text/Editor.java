@@ -21,12 +21,13 @@ package vector.text;
 import vector.Text;
 
 import platform.Font;
+import platform.Shape;
+import platform.Path;
 
-import java.awt.Shape;
+import platform.geom.Point;
+import platform.geom.Rectangle;
+
 import java.awt.font.GlyphVector;
-import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 /**
  * Line editor

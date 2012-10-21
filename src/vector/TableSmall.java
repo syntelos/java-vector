@@ -21,7 +21,6 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 
 /**

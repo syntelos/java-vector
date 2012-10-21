@@ -24,6 +24,8 @@ import vector.Event;
 
 import vector.event.Repainter;
 
+import platform.geom.Point;
+
 import json.ArrayJson;
 import json.Json;
 import json.ObjectJson;
@@ -31,17 +33,14 @@ import json.Reader;
 
 import lxl.List;
 
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
+
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -79,9 +78,7 @@ public class Display
 
     protected boolean mouseIn;
 
-    protected Rectangle2D boundsNative;
-
-    protected Bounds boundsUser;
+    protected Bounds boundsNative, boundsUser;
 
 
     public Display(){
@@ -203,9 +200,12 @@ public class Display
     }
     public final Bounds getBoundsVector(){
 
-        if (null == this.boundsUser)
+        if (null == this.boundsUser){
 
-            return new Bounds(super.getBounds());
+            java.awt.Rectangle b = super.getBounds();
+
+            return new Bounds(b.x,b.y,b.width,b.height);
+        }
         else
             return this.boundsUser.clone();
     }
@@ -217,7 +217,7 @@ public class Display
     }
     public final Display setBounds(Bounds bounds){
         if (null != bounds){
-            super.setBounds(new Rectangle((int)Math.floor(bounds.x),(int)Math.floor(bounds.y),(int)Math.ceil(bounds.width),(int)Math.ceil(bounds.height)));
+            super.setBounds(new java.awt.Rectangle((int)Math.floor(bounds.x),(int)Math.floor(bounds.y),(int)Math.ceil(bounds.width),(int)Math.ceil(bounds.height)));
         }
         return this;
     }
@@ -230,15 +230,15 @@ public class Display
     public final boolean contains(float x, float y){
         return super.contains( (int)x, (int)y);
     }
-    public final boolean contains(Point2D.Float p){
+    public final boolean contains(Point p){
         return super.contains( (int)p.x, (int)p.y);
     }
-    public final Point2D.Float getLocationVector(){
-        Point p = super.getLocation();
-        return new Point2D.Float(p.x,p.y);
+    public final Point getLocationVector(){
+        java.awt.Point p = super.getLocation();
+        return new Point(p.x,p.y);
     }
-    public final Component setLocationVector(Point2D p){
-        super.setLocation( (int)p.getX(), (int)p.getY());
+    public final Component setLocationVector(Point p){
+        super.setLocation( (int)p.x, (int)p.y);
         return this;
     }
     public final Transform getTransformLocal(){
@@ -543,9 +543,9 @@ public class Display
 
         return this;
     }
-    protected final Point2D.Float transformFromParent(Point2D point){
+    protected final Point transformFromParent(Point2D point){
 
-        return this.getTransformParent().transformFrom(point);
+        return this.getTransformParent().transformFrom(new Point(point.getX(),point.getY()));
     }
     public boolean drop(Component c){
 
@@ -571,7 +571,7 @@ public class Display
         final Event.Mouse.Action action = Event.Mouse.Action.PointButton(evt);
 
         if (null != action){
-            final Point2D.Float point = this.transformFromParent(evt.getPoint());
+            final Point point = this.transformFromParent(evt.getPoint());
 
             final Event down = new vector.event.MouseDown(action,point);
 
@@ -589,7 +589,7 @@ public class Display
         final Event.Mouse.Action action = Event.Mouse.Action.PointButton(evt);
 
         if (null != action){
-            final Point2D.Float point = this.transformFromParent(evt.getPoint());
+            final Point point = this.transformFromParent(evt.getPoint());
 
             final Event up = new vector.event.MouseUp(action,point);
 
@@ -608,7 +608,7 @@ public class Display
 
         this.mouseIn = true;
 
-        final Point2D.Float point = this.transformFromParent(evt.getPoint());
+        final Point point = this.transformFromParent(evt.getPoint());
 
         final Event entered = new vector.event.MouseEntered(point);
 
@@ -632,7 +632,7 @@ public class Display
          */
         this.mouseIn = false;
 
-        final Point2D.Float point = this.transformFromParent(evt.getPoint());
+        final Point point = this.transformFromParent(evt.getPoint());
 
         final Event exited = new vector.event.MouseExited(point);
 
@@ -648,7 +648,7 @@ public class Display
         final Event.Mouse.Action action = Event.Mouse.Action.PointButton(evt);
 
         if (null != action){
-            final Point2D.Float point = this.transformFromParent(evt.getPoint());
+            final Point point = this.transformFromParent(evt.getPoint());
 
             final Event dragged = new vector.event.MouseDrag(action,point);
 
@@ -678,7 +678,7 @@ public class Display
         /*
          * Broad-cast
          */
-        final Point2D.Float point = this.transformFromParent(evt.getPoint());
+        final Point point = this.transformFromParent(evt.getPoint());
 
         final Event moved = new vector.event.MouseMoved(point);
 
@@ -743,7 +743,11 @@ public class Display
     }
     public final void componentResized(ComponentEvent evt){
         this.flush();
-        this.boundsNative = this.getBounds();
+        {
+            java.awt.Rectangle b = super.getBounds();
+
+            this.boundsNative = new Bounds(b.x,b.y,b.width,b.height);
+        }
         this.resized();
         this.repaint();
     }
@@ -767,10 +771,13 @@ public class Display
     @Override
     public void layout(){
         if (null == this.boundsNative){
-            this.boundsNative = this.getBounds();
+            java.awt.Rectangle b = super.getBounds();
+            
+            this.boundsNative = new Bounds(b.x,b.y,b.width,b.height);
         }
         if (null == this.boundsUser){
-            this.boundsUser = new Bounds(this.boundsNative);
+
+            this.boundsUser = this.boundsNative;
         }
         this.transform.scaleToRelative(this.boundsUser,this.boundsNative);
     }

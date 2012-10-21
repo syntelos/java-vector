@@ -16,5 +16,28 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.geom;
+package platform.geom;
 
+import vector.Bounds;
+
+/**
+ * 
+ */
+public class RoundRectangle
+    extends java.awt.geom.RoundRectangle2D.Float
+    implements RectangularShape
+{
+
+    public RoundRectangle(){
+        super();
+    }
+    public RoundRectangle(float x, float y, float w, float h, float aw, float ah){
+        super(x,y,w,h,aw,ah);
+    }
+
+
+    public Bounds getBoundsVector(){
+
+        return new Bounds(this.x,this.y,this.width,this.height);
+    }
+}

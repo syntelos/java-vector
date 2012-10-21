@@ -16,5 +16,28 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.geom;
+package platform.geom;
 
+import vector.Bounds;
+
+/**
+ * 
+ */
+public class Rectangle
+    extends java.awt.geom.Rectangle2D.Float
+    implements RectangularShape
+{
+
+    public Rectangle(){
+        super();
+    }
+    public Rectangle(float x, float y, float w, float h){
+        super(x,y,w,h);
+    }
+
+
+    public Bounds getBoundsVector(){
+
+        return new Bounds(this.x,this.y,this.width,this.height);
+    }
+}

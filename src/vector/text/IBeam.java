@@ -22,10 +22,9 @@ import vector.Padding;
 import vector.Text;
 
 import platform.Font;
-
-import java.awt.Shape;
-import java.awt.geom.Path2D;
-import java.awt.geom.Point2D;
+import platform.Path;
+import platform.Shape;
+import platform.geom.Point;
 
 
 /**
@@ -50,9 +49,9 @@ public class IBeam {
 
         final Font font = text.getFont();
 
-        final Path2D.Float cursor = new Path2D.Float();
+        final Path cursor = new Path();
 
-        final Point2D.Float top;
+        final Point top;
         if (left){
 
             top = text.getTopLeft(index);
@@ -77,7 +76,7 @@ public class IBeam {
         final Font font = text.getFont();
         final Padding padding = text.getPadding();
 
-        final Path2D.Float cursor = new Path2D.Float();
+        final Path cursor = new Path();
 
         final float x = padding.left, y0 = padding.top, y1 = (y0+font.height);
 

@@ -21,8 +21,9 @@ package platform;
 import vector.Bounds;
 import vector.Context;
 
-import java.awt.geom.Point2D;
-import java.awt.geom.RectangularShape;
+import platform.geom.Point;
+import platform.geom.RectangularShape;
+
 import java.awt.geom.NoninvertibleTransformException;
 import java.util.StringTokenizer;
 
@@ -230,7 +231,7 @@ public class Transform
 
         return this;
     }
-    public Transform translateLocation(Point2D.Float location){
+    public Transform translateLocation(Point location){
 
         this.inverse = null;
 
@@ -242,9 +243,9 @@ public class Transform
      * Common input transformation from parent to child -- this is the
      * parent transform.
      */
-    public Point2D.Float transformFrom(Point2D source){
+    public Point transformFrom(Point source){
         try {
-            Point2D.Float target = new Point2D.Float(0,0);
+            Point target = new Point(0,0);
             /*
              * The transform arithmetic is double, and the point class
              * will store to float

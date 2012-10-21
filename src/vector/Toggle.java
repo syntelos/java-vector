@@ -19,15 +19,13 @@
 package vector;
 
 import platform.Color;
+import platform.Shape;
+import platform.Path;
 
 import vector.event.NamedAction;
 
 import json.Json;
 import json.ObjectJson;
-
-import java.awt.Shape;
-import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
@@ -259,7 +257,7 @@ public abstract class Toggle<E extends Enum<E>>
                 final float y1 = b.height;
 
                 if (this.crossed){
-                    Path2D.Float p = new Path2D.Float();
+                    platform.Path p = new platform.Path();
                     //(rect)
                     p.moveTo(x0,y0);
                     p.lineTo(x1,y0);

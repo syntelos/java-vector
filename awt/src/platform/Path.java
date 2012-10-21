@@ -16,5 +16,37 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.geom;
+package platform;
 
+import vector.Bounds;
+
+/**
+ * 
+ */
+public class Path
+    extends java.awt.geom.Path2D.Float
+    implements Shape
+{
+
+    public Path(){
+        super();
+    }
+    public Path(vector.Path.Winding winding){
+        super(winding.ordinal());
+    }
+    public Path(Shape shape){
+        super(shape);
+    }
+    public Path(Shape shape, Transform xform){
+        super(shape,xform);
+    }
+    public Path(java.awt.Shape shape){
+        super(shape);
+    }
+
+
+    public Bounds getBoundsVector(){
+        java.awt.geom.Rectangle2D b = super.getBounds2D();
+        return new Bounds(b.getX(),b.getY(),b.getWidth(),b.getHeight());
+    }
+}

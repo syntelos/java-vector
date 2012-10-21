@@ -19,11 +19,10 @@
 package vector;
 
 import platform.Color;
+import platform.Shape;
 
 import json.Json;
 import json.ObjectJson;
-
-import java.awt.Shape;
 
 /**
  * Border for parent.

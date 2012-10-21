@@ -19,18 +19,11 @@
 package vector;
 
 import platform.Transform;
+import platform.geom.Point;
 
 import json.Json;
 
 import lxl.List;
-
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
-
-import java.awt.geom.Dimension2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 import java.lang.reflect.Method;
 
@@ -306,13 +299,13 @@ public interface Component
 
     public boolean contains(float x, float y);
 
-    public boolean contains(Point2D.Float p);
+    public boolean contains(Point p);
     /**
      * @return A clone or copy of the location coordinates
      */
-    public Point2D.Float getLocationVector();
+    public Point getLocationVector();
 
-    public Component setLocationVector(Point2D point);
+    public Component setLocationVector(Point point);
     /**
      * Scaling transform.  In many classes, or their possible
      * subclasses, the scaling transform is determined dynamically to

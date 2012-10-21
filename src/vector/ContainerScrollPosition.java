@@ -18,12 +18,12 @@
  */
 package vector;
 
+import platform.Shape;
+import platform.geom.Point;
+import platform.geom.Rectangle;
+
 import json.Json;
 import json.ObjectJson;
-
-import java.awt.Shape;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 /**
  * Child of {@link ContainerScroll} implements scroll bar
@@ -154,7 +154,7 @@ public abstract class ContainerScrollPosition
      * @return Scroll indicator position as a point on the parent's
      * (viewport's) bounding box.
      */
-    public Point2D.Float queryPosition(){
+    public Point queryPosition(){
         if (null != this.axis){
 
             final float x = this.boundsViewport.width;
@@ -163,10 +163,10 @@ public abstract class ContainerScrollPosition
             switch(this.axis){
 
             case Horizontal:
-                return new Point2D.Float((this.position * x),y);
+                return new Point((this.position * x),y);
 
             case Vertical:
-                return new Point2D.Float(x,(this.position * y));
+                return new Point(x,(this.position * y));
 
             default:
                 throw new IllegalStateException(this.axis.name());
@@ -179,7 +179,7 @@ public abstract class ContainerScrollPosition
      * @return Scroll indicator position as a point inside radius from
      * the parent's (viewport's) bounding box.
      */
-    public Point2D.Float queryPosition(float radius){
+    public Point queryPosition(float radius){
         if (null != this.axis){
 
             switch(this.axis){
@@ -188,13 +188,13 @@ public abstract class ContainerScrollPosition
                 final float x = this.boundsViewport.width-(4.0f*radius);
                 final float y = this.boundsViewport.height-(2.0f*radius);
 
-                return new Point2D.Float((this.position * x),y);
+                return new Point((this.position * x),y);
             }
             case Vertical:{
                 final float x = this.boundsViewport.width-(2.0f*radius);
                 final float y = this.boundsViewport.height-(4.0f*radius);
 
-                return new Point2D.Float(x,(this.position * y));
+                return new Point(x,(this.position * y));
             }
             default:
                 throw new IllegalStateException(this.axis.name());
@@ -208,7 +208,7 @@ public abstract class ContainerScrollPosition
      * 
      * @return Success (successful coherent state change)
      */
-    public final boolean position(Rectangle2D area){
+    public final boolean position(Rectangle area){
 
         if (this.visible){
 

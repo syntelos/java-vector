@@ -21,8 +21,6 @@ package vector;
 import json.Json;
 import json.ObjectJson;
 
-import java.awt.geom.Rectangle2D;
-
 /**
  * {@link TableBig} defines set of equally sized children, changing
  * both size and location and then calling {@link

@@ -16,38 +16,28 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector.event;
+package platform.geom;
 
-import vector.Event;
+import vector.Bounds;
 
 /**
  * 
  */
-public class AbstractMousePoint
-    extends AbstractMouse
-    implements Event.Mouse.Point
+public class Ellipse
+    extends java.awt.geom.Ellipse2D.Float
+    implements platform.Shape
 {
 
-    public final platform.geom.Point point;
-
-
-    public AbstractMousePoint(Type type, Action action, platform.geom.Point point){
-        super(type,action);
-        if (null != point)
-            this.point = point;
-        else
-            throw new IllegalArgumentException();
+    public Ellipse(){
+        super();
+    }
+    public Ellipse(float x, float y, float w, float h){
+        super(x,y,w,h);
     }
 
 
-    public final platform.geom.Point getPoint(){
-        return this.point;
-    }
-    protected StringBuilder toStringBuilder(){
-        StringBuilder string = super.toStringBuilder();
+    public Bounds getBoundsVector(){
 
-        string.append(", point: ");
-        string.append(this.point.toString());
-        return string;
+        return new Bounds(this.x,this.y,this.width,this.height);
     }
 }
