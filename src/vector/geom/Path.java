@@ -18,21 +18,29 @@
  */
 package vector.geom;
 
+import platform.geom.Point;
 
+/**
+ * 
+ */
 public interface Path
     extends platform.Shape
 {
     public void moveTo(float x, float y);
     public void moveTo(double x, double y);
+    public void moveTo(Point p);
 
     public void lineTo(float x, float y);
     public void lineTo(double x, double y);
+    public void lineTo(Point p);
 
     public void quadTo(float x0, float y0, float x1, float y1);
     public void quadTo(double x0, double y0, double x1, double y1);
+    public void quadTo(Point p0, Point p1);
 
     public void curveTo(float x0, float y0, float x1, float y1, float x2, float y2);
     public void curveTo(double x0, double y0, double x1, double y1, double x2, double y2);
+    public void curveTo(Point p0, Point p1, Point p2);
     /**
      * Connect tail (last pen down point, lineTo) to head (previous
      * pen up point, moveTo)

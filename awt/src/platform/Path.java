@@ -49,6 +49,18 @@ public class Path
     }
 
 
+    public void moveTo(Point p){
+        super.moveTo(p.x,p.y);
+    }
+    public void lineTo(Point p){
+        super.lineTo(p.x,p.y);
+    }
+    public void quadTo(Point p0, Point p1){
+        super.quadTo(p0.x,p0.y,p1.x,p1.y);
+    }
+    public void curveTo(Point p0, Point p1, Point p2){
+        super.curveTo(p0.x,p0.y,p1.x,p1.y,p2.x,p2.y);
+    }
     public void close(){
         super.closePath();
     }
