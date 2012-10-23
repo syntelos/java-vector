@@ -22,6 +22,7 @@ import platform.Color;
 import platform.Font;
 import platform.Shape;
 import platform.Transform;
+import platform.geom.Point;
 
 /**
  * Platform independent graphics context
@@ -115,14 +116,5 @@ public interface Context {
 
     public void draw(Shape shape);
 
-    public void drawString(String string, int x, int y);
-
-    public void drawString(String string, float x, float y);
-
-    public boolean drawImage(Image image, Transform at);
-
-    public boolean drawImage(Image image, int x, int y);
-
-    public boolean drawImage(Image image, int x, int y, int w, int h);
-
+    public void draw(Image image);
 }

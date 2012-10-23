@@ -18,5 +18,36 @@
  */
 package vector;
 
+import platform.Context;
+import platform.Transform;
+import platform.geom.Point;
+
+/**
+ * A raster image source or buffer is not transformed from its basic
+ * dimensions until it is output.
+ */
 public interface Image {
+
+    public int getWidth();
+
+    public int getHeight();
+
+    /**
+     * Discard internal image data
+     */
+    public void flush();
+    /**
+     * Draw image at context (0,0)
+     */
+    public Context blit(Context g);
+
+    /**
+     * The offscreen image application constructor requires the {@link
+     * platform.Display} with integer width and height dimensions.
+     */
+    public interface Offscreen
+        extends Image
+    {
+        public Context create();
+    }
 }

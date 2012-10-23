@@ -30,24 +30,46 @@ import java.awt.image.ImageObserver;
  */
 public final class Offscreen
     extends java.awt.image.BufferedImage
-    implements vector.Image
+    implements vector.Image.Offscreen
 {
+
+    private final int width, height;
 
     private ImageObserver observer;
 
 
+    /**
+     * @param component First argument to platform context (Display)
+     */
     public Offscreen(java.awt.Component component){
-        this(component.getBounds());
-        this.observer = component;
+        this(component,component.getBounds());
     }
-    private Offscreen(Rectangle bounds){
-        this(bounds.width,bounds.height);
+    private Offscreen(ImageObserver observer, Rectangle bounds){
+        this(observer,bounds.width,bounds.height);
     }
-    private Offscreen(int width, int height){
+    /**
+     * @param observer First argument to platform context (Display)
+     * @param width Pixel buffer X dimension
+     * @param height Pixel buffer Y dimension
+     */
+    public Offscreen(ImageObserver observer, int width, int height){
         super(width,height,TYPE_INT_ARGB);
+        if (null != observer && 0 < width && 0 < height){
+            this.observer = observer;
+            this.width = width;
+            this.height = height;
+        }
+        else
+            throw new IllegalArgumentException();
     }
 
 
+    public int getWidth(){
+        return this.width;
+    }
+    public int getHeight(){
+        return this.height;
+    }
     @Override
     public void flush(){
 
@@ -57,7 +79,7 @@ public final class Offscreen
     }
     public Context blit(Context g){
 
-        g.drawImage(this,0,0);
+        g.draw(this);
 
         return g;
     }

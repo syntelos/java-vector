@@ -23,6 +23,8 @@ import vector.DebugTrace;
 import vector.Image;
 import vector.Stroke;
 
+import platform.geom.Point;
+
 import java.awt.image.ImageObserver;
 
 
@@ -179,16 +181,6 @@ public class Context
         if (this.trace) (new DebugTrace(this.depth,"[%d] draw(%s)", this.depth, shape)).print(this.deep);
         this.instance.draw(shape);
     }
-    public void drawString(String string0, int a1, int a2)
-    {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] drawString(%s, %d, %d)", this.depth, string0, a1, a2)).print(this.deep);
-        this.instance.drawString(string0, a1, a2);
-    }
-    public void drawString(String string0, float flo1, float flo2)
-    {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] drawString(%s, %f, %f)", this.depth, string0, flo1, flo2)).print(this.deep);
-        this.instance.drawString(string0, flo1, flo2);
-    }
     public Stroke getStroke()
     {
         if (this.trace) (new DebugTrace(this.depth,"[%d] getStroke()", this.depth)).print(this.deep);
@@ -200,11 +192,6 @@ public class Context
         else
             throw new IllegalStateException(stroke.getClass().getName());
     }
-    public Transform getTransform()
-    {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] getTransform()", this.depth)).print(this.deep);
-        return new Transform( this.instance.getTransform());
-    }
     public void setStroke(Stroke stroke)
     {
         if (null != stroke.color)
@@ -214,20 +201,15 @@ public class Context
 
         this.instance.setStroke(stroke);
     }
+    public Transform getTransform()
+    {
+        if (this.trace) (new DebugTrace(this.depth,"[%d] getTransform()", this.depth)).print(this.deep);
+        return new Transform( this.instance.getTransform());
+    }
     public void setTransform(Transform at)
     {
         if (this.trace) (new DebugTrace(this.depth,"[%d] setTransform(%s)", this.depth, at)).print(this.deep);
         this.instance.setTransform(at);
-    }
-    public void finalize()
-    {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] finalize()", this.depth)).print(this.deep);
-        this.instance.finalize();
-    }
-    public String toString()
-    {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] toString()", this.depth)).print(this.deep);
-        return this.instance.toString();
     }
     public vector.Context create()
     {
@@ -239,20 +221,16 @@ public class Context
         if (this.trace) (new DebugTrace(this.depth,"[%d] create(%d, %d, %d, %d)", this.depth, x, y, w, h)).print(this.deep);
         return new Context(this,x,y,w,h);
     }
-    public boolean drawImage(Image image, Transform at)
+    public void draw(Image image)
     {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] drawImage(%s, %s, %s)", this.depth, image, at, this.observer)).print(this.deep);
-        return this.instance.drawImage((java.awt.Image)image, at, this.observer);
-    }
-    public boolean drawImage(Image image0, int x, int y)
-    {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] drawImage(%s, %d, %d, %s)", this.depth, image0, x, y, this.observer)).print(this.deep);
-        return this.instance.drawImage((java.awt.Image)image0, x, y, this.observer);
-    }
-    public boolean drawImage(Image image0, int x, int y, int w, int h)
-    {
-        if (this.trace) (new DebugTrace(this.depth,"[%d] drawImage(%s, %d, %d, %d, %d, %s)", this.depth, image0, x, y, w, h, this.observer)).print(this.deep);
-        return this.instance.drawImage((java.awt.Image)image0, x, y, w, h, this.observer);
+        if (this.trace) (new DebugTrace(this.depth,"[%d] draw(%s)", this.depth, image)).print(this.deep);
+
+        if (image instanceof java.awt.Image)
+            this.instance.drawImage((java.awt.Image)image, 0, 0, this.observer);
+        else if (image instanceof platform.Image)
+            this.instance.drawImage(((platform.Image)image).nativeImage, 0, 0, this.observer);
+        else
+            throw new IllegalArgumentException();
     }
     public Color getColor()
     {
