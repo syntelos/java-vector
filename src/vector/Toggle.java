@@ -40,19 +40,21 @@ public abstract class Toggle<E extends Enum<E>>
     implements Event.NamedAction.Producer<E>
 {
     /**
-     * Momentary on
+     * Go low on mouse entered, and high on mouse exited: for subclass
+     * extensions
      */
-    public abstract static class Momentary
+    public static class Rollover
         extends Toggle
     {
 
         protected boolean high;
 
+        protected Color colorHigh, colorLow;
 
-        public Momentary(){
+
+        public Rollover(){
             super();
         }
-
 
 
         @Override
@@ -62,18 +64,41 @@ public abstract class Toggle<E extends Enum<E>>
             this.high = false;
         }
         @Override
+        public void destroy(){
+            super.destroy();
+
+            this.colorHigh = null;
+            this.colorLow = null;
+        }
+        @Override
         public boolean isHigh(){
             return this.high;
         }
         @Override
         public boolean setHigh(){
-
             return (this.high = true);
         }
         @Override
         public boolean setLow(){
-
             return (this.high = false);
+        }
+        public Color getColorHigh(){
+            return this.colorHigh;
+        }
+        public Rollover setColorHigh(Color c){
+            if (null != c){
+                this.colorHigh = c;
+            }
+            return this;
+        }
+        public Color getColorLow(){
+            return this.colorLow;
+        }
+        public Rollover setColorLow(Color c){
+            if (null != c){
+                this.colorLow = c;
+            }
+            return this;
         }
         @Override
         public boolean input(Event e){
@@ -103,6 +128,27 @@ public abstract class Toggle<E extends Enum<E>>
             else
                 return true;
 
+        }
+        @Override
+        public Rollover outputScene(Context g){
+
+            super.outputScene(g);
+
+            if (this.high){
+                if (null != this.colorHigh)
+                    g.setColor(this.colorHigh);
+                else
+                    g.setColor(this.color);
+            }
+            else if (null != this.colorLow)
+                g.setColor(this.colorLow);
+            else
+                g.setColor(this.color);
+
+
+            g.fill(this.getShape());
+
+            return this;
         }
     }
     /**
@@ -144,7 +190,14 @@ public abstract class Toggle<E extends Enum<E>>
         public void modified(){
             super.modified();
 
-            this.colored = ((!this.crossed) && null != this.colorHigh && null != this.colorLow);
+            if (null != this.colorHigh && null != this.colorLow){
+
+                this.colored = (!this.crossed);
+            }
+            else {
+
+                this.crossed = true;
+            }
         }
         @Override
         public boolean isHigh(){
@@ -216,14 +269,20 @@ public abstract class Toggle<E extends Enum<E>>
             return true;
         }
         @Override
-        public Toggle outputScene(Context g){
+        public Check outputScene(Context g){
 
             super.outputScene(g);
 
-            if (this.high)
-                g.setColor(this.colorHigh);
-            else
+            if (this.high){
+                if (null != this.colorHigh)
+                    g.setColor(this.colorHigh);
+                else
+                    g.setColor(this.color);
+            }
+            else if (null != this.colorLow)
                 g.setColor(this.colorLow);
+            else
+                g.setColor(this.color);
 
             if (this.crossed){
 
@@ -312,8 +371,6 @@ public abstract class Toggle<E extends Enum<E>>
         extends Toggle
     {
 
-        protected Color color;
-
         protected ColorPalette palette;
 
 
@@ -322,17 +379,10 @@ public abstract class Toggle<E extends Enum<E>>
         }
 
 
-
-        @Override
-        public void init(){
-            super.init();
-
-        }
         @Override
         public void destroy(){
             super.destroy();
 
-            this.color = null;
             this.palette = null;
         }
         @Override
@@ -357,15 +407,6 @@ public abstract class Toggle<E extends Enum<E>>
         @Override
         public boolean setLow(){
             return false;
-        }
-        public Color getColor(){
-            return this.color;
-        }
-        public Colour setColor(Color c){
-            if (null != c){
-                this.color = c;
-            }
-            return this;
         }
         public boolean input(Event e){
 
@@ -392,15 +433,6 @@ public abstract class Toggle<E extends Enum<E>>
             }
         }
         @Override
-        public boolean mouseUp(){
-
-            this.toggle();
-
-            this.outputScene();
-
-            return true;
-        }
-        @Override
         public Colour outputScene(Context g){
 
             super.outputScene(g);
@@ -411,19 +443,12 @@ public abstract class Toggle<E extends Enum<E>>
 
             return this;
         }
-        public ObjectJson toJson(){
+        @Override
+        public boolean mouseUp(){
 
-            ObjectJson thisModel = super.toJson();
+            this.toggle();
 
-            thisModel.setValue("color", this.getColor());
-
-            return thisModel;
-        }
-        public boolean fromJson(Json thisModel){
-
-            super.fromJson(thisModel);
-
-            this.setColor( (Color)thisModel.getValue("color",Color.class));
+            this.outputScene();
 
             return true;
         }
@@ -437,6 +462,8 @@ public abstract class Toggle<E extends Enum<E>>
     protected Method enumValueOf;
 
     protected Shape shape;
+
+    protected Color color;
 
 
     public Toggle(){
@@ -472,12 +499,27 @@ public abstract class Toggle<E extends Enum<E>>
             return this.setHigh();
     }
     @Override
+    public void init(){
+        super.init();
+
+        this.color = Color.black;
+    }
+
+    @Override
     public void destroy(){
         super.destroy();
 
         this.enumClass = null;
         this.enumValueOf = null;
         this.enumValue = null;
+        this.color = null;
+        this.shape = null;
+    }
+    @Override
+    public void modified(){
+        super.modified();
+
+        this.shape = null;
     }
     protected boolean mouseUp(){
 
@@ -513,6 +555,15 @@ public abstract class Toggle<E extends Enum<E>>
                 return false;
             }
         }
+    }
+    public Color getColor(){
+        return this.color;
+    }
+    public Toggle setColor(Color c){
+        if (null != c){
+            this.color = c;
+        }
+        return this;
     }
     public final Class<Enum<E>> getEnumClass(){
         return this.enumClass;
@@ -581,6 +632,8 @@ public abstract class Toggle<E extends Enum<E>>
 
         thisModel.setValue("enum-value", this.getEnumValueName());
 
+        thisModel.setValue("color", this.getColor());
+
         return thisModel;
     }
     public boolean fromJson(Json thisModel){
@@ -591,7 +644,8 @@ public abstract class Toggle<E extends Enum<E>>
 
         this.setEnumValueName( (String)thisModel.getValue("enum-value"));
 
+        this.setColor( (Color)thisModel.getValue("color",Color.class));
+
         return true;
     }
-
 }
