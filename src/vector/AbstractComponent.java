@@ -232,6 +232,39 @@ public abstract class AbstractComponent
         else
             throw new IllegalArgumentException("Require parent");
     }
+    /**
+     * Change location for center in parent, require this and parent
+     * dimensions (previously defined).
+     * 
+     * @param parent Required (container dimensions)
+     * 
+     * @param margin Optional (may be null)
+     */
+    protected final Component setBoundsVectorCenter(Bounds parent, Padding margin){
+        if (null != parent){
+            Bounds bounds = this.getBoundsVector();
+
+            if (null == margin){
+                bounds.x = (parent.width/2)-(bounds.width/2);
+                bounds.y = (parent.height/2)-(bounds.height/2);
+            }
+            else {
+                bounds.x = (parent.width/2)-((bounds.width+margin.getWidth())/2)+(margin.left);
+                bounds.y = (parent.height/2)-((bounds.height+margin.getHeight())/2)+(margin.top);
+            }
+
+            return this.setBoundsVector(bounds);
+        }
+        else
+            throw new IllegalArgumentException("Require parent");
+    }
+    public Component setBoundsVectorCenter(Padding margin){
+        Component parent = this.getParentVector();
+        if (null != parent)
+            return this.setBoundsVectorCenter(parent.getBoundsVector(),margin);
+        else
+            throw new IllegalStateException();
+    }
     public boolean contains(int x, int y){
 
         return this.bounds.contains(x,y);

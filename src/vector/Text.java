@@ -622,4 +622,8 @@ public class Text
     public void layoutScaleToShapeArea(){
         this.setTransformLocal(1f,1f);
     }
+    public Component setBoundsVectorCenter(){
+
+        return this.setBoundsVectorCenter(this.margin);
+    }
 }

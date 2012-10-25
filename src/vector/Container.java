@@ -698,4 +698,9 @@ public class Container
             }
         }
     }
+    public Component setBoundsVectorCenter(){
+
+        return this.setBoundsVectorCenter(this.margin);
+    }
+
 }
