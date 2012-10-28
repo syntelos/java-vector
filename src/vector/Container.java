@@ -59,7 +59,7 @@ import java.util.logging.Logger;
  */
 public class Container
     extends AbstractComponent
-    implements Component.Container, Component.Margin, Component.Layout
+    implements Component.Container, Component.Margin, Component.Layout, Table.Col.Span
 {
 
     protected final Logger log = Logger.getLogger(this.getClass().getName());
@@ -70,6 +70,7 @@ public class Container
 
     protected final Padding margin = new Padding();
 
+    protected Integer colSpan;
 
 
     public Container(){
@@ -98,6 +99,7 @@ public class Container
         finally {
             this.components = null;
         }
+        this.colSpan = null;
     }
     @Override
     public void resized(){
@@ -264,6 +266,21 @@ public class Container
             return this.setParent(parent.booleanValue());
         else
             return this;
+    }
+    public final int getTableColSpan(){
+        if (null != this.colSpan)
+            return this.colSpan.intValue();
+        else
+            return 0;
+    }
+    public final boolean hasTableColSpan(){
+
+        return (null != this.colSpan);
+    }
+    public final Container setTableColSpan(Integer value){
+
+        this.colSpan = value;
+        return this;
     }
     public final boolean isClip(){
         return this.clip;
@@ -631,6 +648,10 @@ public class Container
         thisModel.setValue("margin",this.getMargin());
         thisModel.setValue("components",new ArrayJson(this));
 
+        if (this.hasTableColSpan()){
+            thisModel.setValue("col-span",this.getTableColSpan());
+        }
+
         return thisModel;
     }
     public boolean fromJson(Json thisModel){
@@ -642,6 +663,7 @@ public class Container
         this.setClip( (Boolean)thisModel.getValue("clip"));
         this.setScale( (Boolean)thisModel.getValue("scale"));
         this.setMargin( (Padding)thisModel.getValue("margin",Padding.class));
+        this.setTableColSpan( (Integer)thisModel.getValue("col-span",Integer.class));
 
         Component.Tools.DecodeComponents(this,thisModel);
         /*

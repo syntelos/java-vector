@@ -92,26 +92,54 @@ public class TableBig
 
                 double xx = x0, yy = x0;
 
-                int  rr = 0, cc = 0, cx;
+                int  rr, cc = 0, cx, cx1;
+
+                /*
+                 * spans are applied in sequence order to iterate over
+                 * a sparse index set
+                 */
+                int span = 0;
 
                 layout:
                 for (rr = 0; rr < this.rows; rr++){
 
                     for (cc = 0; cc < this.cols; cc++){
 
+                        Component c;
+
                         cx = ((rr*this.cols)+cc);
+                        if (0 == span){
 
-                        if (this.has(cx)){
-
-                            Component c = this.get(cx);
-
-                            c.setBoundsVector(new TableCell(rr,cc,xx,yy,this.cellWidth,this.cellHeight));
-                            c.resized();
-
-                            xx += dx;
+                            if (this.has(cx))
+                                c = this.get(cx);
+                            else
+                                break layout;
                         }
-                        else
-                            break layout;
+                        else {
+                            cx1 = (((rr)*cols)+(cc-span));
+
+                            if (cx1 > cx && this.has(cx1)){
+
+                                c = this.get(cx);
+                                cx = cx1;
+                            }
+                            else
+                                continue layout;
+                        }
+
+
+                        c.setBoundsVector(new Table.Cell(rr,cc,xx,yy,this.cellWidth,this.cellHeight));
+                        c.resized();
+
+                        xx += dx;
+
+                        if (c instanceof Table.Col.Span){
+
+                            int s = ((Table.Col.Span)c).getTableColSpan();
+                            if (1 < s){
+                                span += (s-1);
+                            }
+                        }
                     }
 
                     xx = x0;
@@ -148,10 +176,6 @@ public class TableBig
         super.fromJson(thisModel);
 
         this.setCellSpacing( thisModel.getValue("cellspacing",Float.class));
-
-        Component.Tools.DecodeComponents(this,thisModel);
-
-        this.modified();
 
         return true;
     }

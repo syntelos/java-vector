@@ -191,7 +191,7 @@ public class DebugTrace
 
                     this.indent = 0;
                 else 
-                    this.indent = this.commonTo(Previous);
+                    this.indent = this.commonTo(Previous);//[NPE:2]
             }
             else
                 this.indent = indent;
@@ -252,7 +252,7 @@ public class DebugTrace
             else {
                 Stack[] thisStack = this.compile();
                 Stack[] thatStack = that.compile();
-                int thisTail = (thisStack.length-1);
+                int thisTail = (thisStack.length-1);//[NPE:3]
                 int thatTail = (thatStack.length-1);
                 int ascent = 0;
                 while (-1 < thisTail && -1 < thatTail){
@@ -329,7 +329,7 @@ public class DebugTrace
         Buffer buffer = this.buffer;
         if (null == buffer){
 
-            buffer = new Buffer(this.indent);
+            buffer = new Buffer(this.indent);//[NPE:1]
 
             this.printStackTrace(new PrintStream(buffer));
 
@@ -341,7 +341,7 @@ public class DebugTrace
     }
     public void print(){
         DebugTrace.out.println(this.message);
-        DebugTrace.out.println(this.caller());
+        DebugTrace.out.println(this.caller());//[NPE:0]
     }
     public void print(boolean stack){
         DebugTrace.out.println(this.message);

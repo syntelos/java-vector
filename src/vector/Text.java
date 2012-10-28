@@ -70,6 +70,8 @@ public class Text
 
     private float[] localPositions;
 
+    private Integer colSpan;
+
 
     public Text(){
         super();
@@ -104,6 +106,7 @@ public class Text
         this.colorOver = null;
         this.stroke = null;
         this.strokeOver = null;
+        this.colSpan = null;
     }
     /**
      * Calls {@link #layout()}
@@ -326,6 +329,22 @@ public class Text
 
         return this;
     }
+    public final int getTableColSpan(){
+        if (null != this.colSpan)
+            return this.colSpan.intValue();
+        else
+            return 0;
+    }
+    public final boolean hasTableColSpan(){
+
+        return (null != this.colSpan);
+    }
+    public final Text setTableColSpan(Integer value){
+
+        this.colSpan = value;
+        return this;
+    }
+
     public final boolean isEmpty(){
         return (null == this.string || this.string.isEmpty());
     }
@@ -540,6 +559,10 @@ public class Text
         thisModel.setValue("stroke",this.getStroke());
         thisModel.setValue("stroke-over",this.getStrokeOver());
 
+        if (this.hasTableColSpan()){
+            thisModel.setValue("col-span",this.getTableColSpan());
+        }
+
         return thisModel;
     }
     public boolean fromJson(Json thisModel){
@@ -557,6 +580,7 @@ public class Text
         this.setCols( (Integer)thisModel.getValue("cols",Integer.class));
         this.setStroke( (Stroke)thisModel.getValue("stroke",Stroke.class));
         this.setStrokeOver( (Stroke)thisModel.getValue("stroke-over",Stroke.class));
+        this.setTableColSpan( (Integer)thisModel.getValue("col-span",Integer.class));
 
         return true;
     }

@@ -92,6 +92,8 @@ public class TableSmall
             if (0 < cols){
                 final int rows = (int)Math.ceil((float)count/(float)cols);
 
+                final int[] index = new int[rows*cols];
+
                 final double cs = this.cellSpacing;
 
                 final double[] colwidths = new double[cols];
@@ -100,25 +102,69 @@ public class TableSmall
                 Arrays.fill(colwidths,0.0);
                 Arrays.fill(rowheights,0.0);
 
-                int  rr, cc, cx;
+                int  rr, cc, cx = 0, cx1;
+
+                /*
+                 * spans are applied in sequence order to iterate over
+                 * a sparse index set
+                 */
+                int span = 0;
 
                 measurement:
                 for (rr = 0; rr < rows; rr++){
 
                     for (cc = 0; cc < cols; cc++){
 
-                        cx = ((rr*cols)+cc);
+                        Component c;
 
-                        if (this.has(cx)){
+                        if (0 == span){
+                            cx = (((rr)*cols)+(cc));
 
-                            Component c = this.get(cx);
-                            Bounds cb = c.getBoundsVector();
+                            index[cx] = cx; //
 
-                            colwidths[cc] = Math.max(colwidths[cc],(cs+cb.width));
-                            rowheights[rr] = Math.max(rowheights[rr],(cs+cb.height));
+                            if (this.has(cx)){
+
+                                new DebugTrace(1,"+ rr: %3d, cc: %3d, cx: %3d",rr,cc,cx).print();
+
+                                c = this.get(cx);
+                            }
+                            else {
+                                new DebugTrace(1,"- rr: %3d, cc: %3d, cx: %3d",rr,cc,cx).print();
+
+                                break measurement;
+                            }
                         }
-                        else
-                            break measurement;
+                        else {
+                            cx1 = (((rr)*cols)+(cc-span));
+
+                            if (cx1 > cx && this.has(cx1)){
+
+                                new DebugTrace(1,"+ rr: %3d, cc: %3d, cx: %3dd, cx1: %3d, span: %3d",rr,cc,cx,cx1,span).print();
+
+                                index[cx1] = cx1; //
+
+                                c = this.get(cx1);
+                                cx = cx1;
+                            }
+                            else {
+                                new DebugTrace(1,"- rr: %3d, cc: %3d, cx: %3dd, cx1: %3d, span: %3d",rr,cc,cx,cx1,span).print();
+
+                                continue measurement;
+                            }
+                        }
+
+                        Bounds cb = c.getBoundsVector();
+
+                        colwidths[cc] = Math.max(colwidths[cc],(cs+cb.width));
+                        rowheights[rr] = Math.max(rowheights[rr],(cs+cb.height));
+
+                        if (c instanceof Table.Col.Span){
+
+                            int s = ((Table.Col.Span)c).getTableColSpan();
+                            if (1 < s){
+                                span += (s-1);
+                            }
+                        }
                     }
                 }
 
@@ -141,19 +187,22 @@ public class TableSmall
 
                             tableWidth += dx;
                         }
-                        cx = ((rr*cols)+cc);
 
-                        if (this.has(cx)){
+                        Component c;
+                        cx = (((rr)*cols)+(cc));
+                        cx1 = index[cx];
 
-                            Component c = this.get(cx);
-                            Bounds cb = c.getBoundsVector();
-                            c.setBoundsVector(new TableCell(rr,cc,xx,yy,cb.width,cb.height));
-                            c.relocated();
-
-                            xx += dx;
-                        }
+                        if (cx1 > cx && this.has(cx1))
+                            c = this.get(cx1);
                         else
                             break definition;
+
+
+                        Bounds cb = c.getBoundsVector();
+                        c.setBoundsVector(new Table.Cell(rr,cc,xx,yy,cb.width,cb.height));
+                        c.relocated();
+
+                        xx += dx;
                     }
                     xx = cs;
                     yy += dy;
@@ -214,10 +263,6 @@ public class TableSmall
         this.setCols( (Integer)thisModel.getValue("cols",Integer.class));
 
         this.setCellSpacing( thisModel.getValue("cellspacing",Float.class));
-
-        Component.Tools.DecodeComponents(this,thisModel);
-
-        this.modified();
 
         return true;
     }
