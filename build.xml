@@ -212,14 +212,14 @@
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
-    <echo message="Main-Class: xmpp.Frame"/>
+    <echo message="Main-Class: platform.Frame"/>
     <echo message="Class-Path: ${lib.path.manifest}"/>
 
     <delete file="${existing.xmpp.jar}"/>
 
     <jar jarfile="${target.xmpp.jar}" basedir="${bin}" >
       <manifest>
-        <attribute name="Main-Class" value="xmpp.Frame"/>
+        <attribute name="Main-Class" value="platform.Frame"/>
         <attribute name="Class-Path" value="${lib.path.manifest}"/>
       </manifest>
     </jar>
