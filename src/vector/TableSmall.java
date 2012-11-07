@@ -110,6 +110,8 @@ public class TableSmall
                  */
                 int span = 0;
 
+                //final String instance = Integer.toHexString(System.identityHashCode(this)).toUpperCase();
+
                 measurement:
                 for (rr = 0; rr < rows; rr++){
 
@@ -124,12 +126,12 @@ public class TableSmall
 
                             if (this.has(cx)){
 
-                                new DebugTrace(1,"+ rr: %3d, cc: %3d, cx: %3d",rr,cc,cx).print();
+                                //DebugTrace.out.printf("[%8s] + rr: %3d, cc: %3d, cx: %3d%n",instance,rr,cc,cx);
 
                                 c = this.get(cx);
                             }
                             else {
-                                new DebugTrace(1,"- rr: %3d, cc: %3d, cx: %3d",rr,cc,cx).print();
+                                //DebugTrace.out.printf("[%8s] - rr: %3d, cc: %3d, cx: %3d%n",instance,rr,cc,cx);
 
                                 break measurement;
                             }
@@ -139,7 +141,7 @@ public class TableSmall
 
                             if (cx1 > cx && this.has(cx1)){
 
-                                new DebugTrace(1,"+ rr: %3d, cc: %3d, cx: %3dd, cx1: %3d, span: %3d",rr,cc,cx,cx1,span).print();
+                                //DebugTrace.out.printf("[%8s] + rr: %3d, cc: %3d, cx: %3dd, cx1: %3d, span: %3d%n",instance,rr,cc,cx,cx1,span);
 
                                 index[cx1] = cx1; //
 
@@ -147,7 +149,7 @@ public class TableSmall
                                 cx = cx1;
                             }
                             else {
-                                new DebugTrace(1,"- rr: %3d, cc: %3d, cx: %3dd, cx1: %3d, span: %3d",rr,cc,cx,cx1,span).print();
+                                //DebugTrace.out.printf("[%8s] - rr: %3d, cc: %3d, cx: %3dd, cx1: %3d, span: %3d%n",instance,rr,cc,cx,cx1,span);
 
                                 continue measurement;
                             }
@@ -192,15 +194,18 @@ public class TableSmall
                         cx = (((rr)*cols)+(cc));
                         cx1 = index[cx];
 
-                        if (cx1 > cx && this.has(cx1))
+                        if (cx1 >= cx && this.has(cx1))
                             c = this.get(cx1);
                         else
                             break definition;
 
 
-                        Bounds cb = c.getBoundsVector();
-                        c.setBoundsVector(new Table.Cell(rr,cc,xx,yy,cb.width,cb.height));
+                        final Bounds cb = c.getBoundsVector();
+                        final Table.Cell cell = new Table.Cell(rr,cc,xx,yy,cb.width,cb.height);
+                        c.setBoundsVector(cell);
                         c.relocated();
+
+                        //DebugTrace.out.printf("[%8s] > rr: %3d, cc: %3d, cx: %3d, cx1: %3d, cell: %s%n",instance,rr,cc,cx,cx1,cell);
 
                         xx += dx;
                     }

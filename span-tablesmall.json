@@ -1,0 +1,118 @@
+{
+    "background": "#FFFFFF",
+    "components": [
+        {
+            "class": "vector.TableSmall",
+            "cellspacing": 4.0,
+            "bounds": "100,100,100,100",
+            "background": "#E0FFFFFF",
+            "components": [
+                {
+                    "class": "vector.Border",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
+                },
+                {
+                    "class": "vector.Text",
+                    "font": "monospaced-24",
+                    "fixed": true,
+                    "text": "Server"
+                },
+                {
+                    "class": "vector.TextEdit",
+                    "font": "monospaced-24",
+                    "fixed": true,
+                    "border": {
+                        "color": "#000000",
+                        "color-over": "#AF0000",
+                        "style": "round",
+                        "arc":  16.0,
+                        "stroke":{
+                            "line-width": 2.0
+                        },
+                        "stroke-over":{
+                            "line-width": 4.0
+                        }
+                    }
+                },
+                {
+                    "class": "vector.Text",
+                    "font": "monospaced-24",
+                    "fixed": true,
+                    "text": "Logon"
+                },
+                {
+                    "class": "vector.TextEdit",
+                    "font": "monospaced-24",
+                    "fixed": true,
+                    "border": {
+                        "color": "#000000",
+                        "color-over": "#AF0000",
+                        "style": "round",
+                        "arc":  16.0,
+                        "stroke":{
+                            "line-width": 2.0
+                        },
+                        "stroke-over":{
+                            "line-width": 4.0
+                        }
+                    }
+                },
+                {
+                    "class": "vector.Text",
+                    "font": "monospaced-24",
+                    "fixed": true,
+                    "text": "License"
+                },
+                {
+                    "class": "vector.TextEdit",
+                    "font": "monospaced-24",
+                    "fixed": true,
+                    "border": {
+                        "color": "#000000",
+                        "color-over": "#AF0000",
+                        "style": "round",
+                        "arc":  16.0,
+                        "stroke":{
+                            "line-width": 2.0
+                        },
+                        "stroke-over":{
+                            "line-width": 4.0
+                        }
+                    }
+                },
+                {
+                    "class": "vector.Text",
+                    "font": "monospaced-24",
+                    "fixed": true,
+                    "text": "Gateway"
+                },
+                {
+                    "class": "vector.TextEdit",
+                    "font": "monospaced-24",
+                    "fixed": true,
+                    "border": {
+                        "color": "#000000",
+                        "color-over": "#AF0000",
+                        "style": "round",
+                        "arc":  16.0,
+                        "stroke":{
+                            "line-width": 2.0
+                        },
+                        "stroke-over":{
+                            "line-width": 4.0
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
