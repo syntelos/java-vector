@@ -13,6 +13,9 @@
   <property name="fonview.src" value="fonview/src"/>
   <property name="xmpp.src" value="xmpp/src"/>
 
+  <property name="llg.dir" value="llg"/>
+  <property name="llg.src" value="${llg.dir}/src"/>
+
   <property name="compiler.source" value="1.5"/>
   <property name="compiler.target" value="1.5"/>
   <property name="compiler.debug" value="true"/>
@@ -35,7 +38,8 @@
     <antcall target="demo"/>
     <antcall target="geda"/>
     <antcall target="fonview"/>
-    <antcall target="xmpp"/>
+    <!-- antcall target="xmpp"/ -->
+    <!-- antcall target="llg"/ -->
   </target>
 
   <target name="awt" if="vector.awt.update" depends="awt-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.awt.update'.">
@@ -200,6 +204,7 @@
     </javac>
   </target>
 
+
   <target name="xmpp" if="vector.xmpp.update" depends="xmpp-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.xmpp.update'.">
 
     <do-update src="${target.xmpp.jar}" tgt="${vector.xmpp.update}" />
@@ -244,6 +249,95 @@
       </classpath>
     </javac>
   </target>
+
+
+  <target name="jogl" if="vector.jogl.update" depends="jogl-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.jogl.update'.">
+
+    <do-update src="${target.jogl.jar}" tgt="${vector.jogl.update}" />
+  </target>
+
+  <target name="jogl-jar" depends="jogl-compile" description="Package jogl jar, clean bin.  Depends on the target jar.">
+
+    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+      <arg value="${target.awt.jar}"/>
+      <arg value="${target.vector.jar}"/>
+      <arg value="${toString:lib.path}"/>
+    </java>
+    <echo message="Main-Class: platform.Frame"/>
+    <echo message="Class-Path: ${lib.path.manifest}"/>
+
+    <delete file="${existing.jogl.jar}"/>
+
+    <jar jarfile="${target.jogl.jar}" basedir="${bin}" >
+      <manifest>
+        <attribute name="Main-Class" value="platform.Frame"/>
+        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+      </manifest>
+    </jar>
+
+    <delete dir="${bin}"/>
+  </target>
+
+  <target name="jogl-compile" depends="version">
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+    <copy todir="${bin}">
+      <fileset dir="${jogl.src}" includes="**/*.properties"/>
+      <fileset dir="${jogl.src}" includes="**/*.txt"/>
+      <fileset dir="${jogl.src}" includes="**/*.xml"/>
+    </copy>
+    <javac srcdir="${jogl.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${existing.awt.jar}"/>
+        <pathelement path="${lib.path}"/>
+      </classpath>
+    </javac>
+  </target>
+
+
+  <target name="llg" depends="llg-compile" description="Package llg jar, clean bin.  Depends on the target jar.">
+
+    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+      <arg value="${target.awt.jar}"/>
+      <arg value="${target.vector.jar}"/>
+      <arg value="${toString:lib.path}"/>
+    </java>
+    <echo message="Main-Class: llg.Fullscreen"/>
+    <echo message="Class-Path: ${lib.path.manifest}"/>
+
+    <delete file="${existing.llg.jar}"/>
+
+    <jar jarfile="${target.llg.jar}" basedir="${bin}" >
+      <manifest>
+        <attribute name="Main-Class" value="llg.Fullscreen"/>
+        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+      </manifest>
+    </jar>
+
+    <delete dir="${bin}"/>
+  </target>
+
+  <target name="llg-compile" depends="version">
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+    <copy todir="${bin}/fonts">
+      <fileset dir="${llg.dir}/fonts" includes="**/futural.jhf,**/markers.jhf"/>
+    </copy>
+    <copy todir="${bin}/models">
+      <fileset dir="${llg.dir}/models" includes="**/*.emf"/>
+    </copy>
+    <javac srcdir="${llg.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${existing.awt.jar}"/>
+        <pathelement path="${lib.path}"/>
+      </classpath>
+    </javac>
+  </target>
+
 
   <target name="update" if="vector.update" depends="jar" description="Build and copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.update'.">
 
@@ -298,6 +392,8 @@
     <property name="target.geda.jar" value="${dst}/${ant.project.name}-geda-${this.version}.jar"/>
     <property name="target.fonview.jar" value="${dst}/${ant.project.name}-fonview-${this.version}.jar"/>
     <property name="target.xmpp.jar" value="${dst}/${ant.project.name}-xmpp-${this.version}.jar"/>
+    <property name="target.jogl.jar" value="${dst}/${ant.project.name}-jogl-${this.version}.jar"/>
+    <property name="target.llg.jar" value="${dst}/${ant.project.name}-llg-${this.version}.jar"/>
 
     <java outputproperty="existing.vector.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
       <arg value="${ant.project.name}"/>
@@ -316,6 +412,12 @@
     </java>
     <java outputproperty="existing.xmpp.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
       <arg value="${ant.project.name}-xmpp"/>
+    </java>
+    <java outputproperty="existing.jogl.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
+      <arg value="${ant.project.name}-jogl"/>
+    </java>
+    <java outputproperty="existing.llg.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
+      <arg value="${ant.project.name}-llg"/>
     </java>
 
   </target>

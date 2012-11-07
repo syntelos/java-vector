@@ -18,6 +18,8 @@
  */
 package vector;
 
+import vector.gl.GL;
+
 import platform.Color;
 import platform.Font;
 import platform.Shape;
@@ -32,6 +34,12 @@ import platform.geom.Point;
  * <p> This interface will be evolving into the AWT and Android
  * versions of <b>vector</b>.  For the moment, this package is
  * primarily AWT oriented. </p>
+ * 
+ * <h3>GL</h3>
+ * 
+ * <p> Vector integration with GL is foreseen as an equivalent API
+ * with no advantage over this API.  That is, when GL is present the
+ * Context implementation should employ it.
  */
 public interface Context {
     /**
@@ -50,7 +58,7 @@ public interface Context {
      * java.lang.UnsupportedOperationException} or {@link
      * java.lang.RuntimeException}.
      */
-    public Object getGL();
+    public GL getGL();
     /**
      * @return Graphics context nesting depth
      */

@@ -134,7 +134,7 @@ public class Context
     public boolean hasGL(){
         return false;
     }
-    public Object getGL(){
+    public vector.gl.GL getGL(){
         throw new UnsupportedOperationException();
     }
     public boolean isTracing(){
