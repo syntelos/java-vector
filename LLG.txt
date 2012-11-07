@@ -1,5 +1,6 @@
 
 Game, lunar lander
 
-  TODO
+  To be done: rewrite from AWT to vector for performance.
+
 
