@@ -1048,6 +1048,15 @@ public interface Component
         }
 
 
+        public int count(){
+            return this.count;
+        }
+        public boolean has(int idx){
+            return Component.Tools.Has(this.list,idx);
+        }
+        public C get(int idx){
+            return (C)Component.Tools.Get(this.list,idx);
+        }
         public Component[] list(){
             if (0 == this.count)
                 return null;

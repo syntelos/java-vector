@@ -64,7 +64,7 @@ public class TextLayout
 
     protected final Padding padding = new Padding();
 
-    protected boolean wrap, debug;
+    protected boolean wrap;
 
 
     public TextLayout(){
@@ -79,7 +79,6 @@ public class TextLayout
         this.font = Font.Default;
         this.padding.set(this.font);
         this.wrap = false;
-        this.debug = false;
     }
     @Override
     public void resized(){
@@ -161,30 +160,6 @@ public class TextLayout
         else
             return this;
     }
-    /**
-     * Resize to size of children
-     */
-    public final boolean isDebug(){
-        return this.debug;
-    }
-    public final Boolean getDebug(){
-        if (this.debug)
-            return Boolean.TRUE;
-        else
-            return Boolean.FALSE;
-    }
-    public final Container setDebug(boolean debug){
-
-        this.debug = debug;
-
-        return this;
-    }
-    public final Container setDebug(Boolean debug){
-        if (null != debug)
-            return this.setDebug(debug.booleanValue());
-        else
-            return this;
-    }
 
     public ObjectJson toJson(){
         ObjectJson thisModel =  super.toJson();
@@ -192,7 +167,6 @@ public class TextLayout
         thisModel.setValue("font", this.getFont());
         thisModel.setValue("padding", this.getPadding());
         thisModel.setValue("wrap",this.getWrap());
-        thisModel.setValue("debug",this.getDebug());
 
         return thisModel;
     }
@@ -203,7 +177,6 @@ public class TextLayout
         this.setFont( (Font)thisModel.getValue("font",Font.class));
         this.setPadding( (Padding)thisModel.getValue("padding",Padding.class));
         this.setWrap( (Boolean)thisModel.getValue("wrap"));
-        this.setDebug( (Boolean)thisModel.getValue("debug"));
 
         this.parse( (String)thisModel.getValue("text"));
 
@@ -243,7 +216,7 @@ public class TextLayout
                 child.setText(sp.toString());
                 child.setFixed(true);
 
-                if (this.debug){
+                if (this.isDebug()){
                     Border debug = new Border();
 
                     child.setBorder(debug);
@@ -267,7 +240,7 @@ public class TextLayout
             child.setText(tok);
             child.setFixed(true);
 
-            if (this.debug){
+            if (this.isDebug()){
                 Border debug = new Border();
 
                 child.setBorder(debug);

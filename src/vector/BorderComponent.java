@@ -27,6 +27,10 @@ import json.Json;
 import json.ObjectJson;
 
 /**
+ * This class is a single child container for {@link Border}.  It has
+ * more interactivity than {@link Border}, as well as independent
+ * background features.
+ * 
  * A component with a border and a background can work independently
  * (see {@link #fixed}), or for its parent (container).  Therefore any
  * {@link Container} is bordered by adding Border, while some
@@ -188,7 +192,9 @@ public class BorderComponent
             final Transform restore = g.getTransform();
             try {
                 if (null != this.border){
-
+                    /*
+                     * With border
+                     */
                     this.transformFrom(g);
 
                     if (this.mouseIn && null != this.backgroundOver){
@@ -220,8 +226,15 @@ public class BorderComponent
                         cg.dispose();
                     }
                 }
-                else if (null != this.background){
-                    g.setColor(this.background);
+                else {
+                    /*
+                     * Without border
+                     */
+                    if (this.mouseIn && null != this.backgroundOver)
+                        g.setColor(this.backgroundOver);
+                    else
+                        g.setColor(this.background);
+
                     g.fill(this.getBoundsVector());
                 }
             }

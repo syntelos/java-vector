@@ -86,7 +86,10 @@ public class TableSmall
     }
     public void layout(){
 
-        final int count = this.count();
+        final Component.Iterator cit = this.listContent(Component.class);
+
+        final int count = cit.count();
+
         if (0 < count){
             final int cols = this.cols;
             if (0 < cols){
@@ -110,7 +113,12 @@ public class TableSmall
                  */
                 int span = 0;
 
-                //final String instance = Integer.toHexString(System.identityHashCode(this)).toUpperCase();
+                final String instance;
+                if (this.isDebug())
+                    instance = Integer.toHexString(System.identityHashCode(this)).toUpperCase();
+                else
+                    instance = null;
+
 
                 measurement:
                 for (rr = 0; rr < rows; rr++){
@@ -124,14 +132,16 @@ public class TableSmall
 
                             index[cx] = cx; //
 
-                            if (this.has(cx)){
+                            if (cit.has(cx)){
 
-                                //DebugTrace.out.printf("[%8s] + rr: %3d, cc: %3d, cx: %3d%n",instance,rr,cc,cx);
+                                if (this.isDebug())
+                                    DebugTrace.out.printf("[%8s] + rr: %3d, cc: %3d, cx: %3d%n",instance,rr,cc,cx);
 
-                                c = this.get(cx);
+                                c = cit.get(cx);
                             }
                             else {
-                                //DebugTrace.out.printf("[%8s] - rr: %3d, cc: %3d, cx: %3d%n",instance,rr,cc,cx);
+                                if (this.isDebug())
+                                    DebugTrace.out.printf("[%8s] - rr: %3d, cc: %3d, cx: %3d%n",instance,rr,cc,cx);
 
                                 break measurement;
                             }
@@ -141,15 +151,17 @@ public class TableSmall
 
                             if (cx1 > cx && this.has(cx1)){
 
-                                //DebugTrace.out.printf("[%8s] + rr: %3d, cc: %3d, cx: %3dd, cx1: %3d, span: %3d%n",instance,rr,cc,cx,cx1,span);
+                                if (this.isDebug())
+                                    DebugTrace.out.printf("[%8s] + rr: %3d, cc: %3d, cx: %3d, cx1: %3d, span: %3d%n",instance,rr,cc,cx,cx1,span);
 
                                 index[cx1] = cx1; //
 
-                                c = this.get(cx1);
+                                c = cit.get(cx1);
                                 cx = cx1;
                             }
                             else {
-                                //DebugTrace.out.printf("[%8s] - rr: %3d, cc: %3d, cx: %3dd, cx1: %3d, span: %3d%n",instance,rr,cc,cx,cx1,span);
+                                if (this.isDebug())
+                                    DebugTrace.out.printf("[%8s] - rr: %3d, cc: %3d, cx: %3d, cx1: %3d, span: %3d%n",instance,rr,cc,cx,cx1,span);
 
                                 continue measurement;
                             }
@@ -194,8 +206,8 @@ public class TableSmall
                         cx = (((rr)*cols)+(cc));
                         cx1 = index[cx];
 
-                        if (cx1 >= cx && this.has(cx1))
-                            c = this.get(cx1);
+                        if (cx1 >= cx && cit.has(cx1))
+                            c = cit.get(cx1);
                         else
                             break definition;
 
@@ -205,7 +217,8 @@ public class TableSmall
                         c.setBoundsVector(cell);
                         c.relocated();
 
-                        //DebugTrace.out.printf("[%8s] > rr: %3d, cc: %3d, cx: %3d, cx1: %3d, cell: %s%n",instance,rr,cc,cx,cx1,cell);
+                        if (this.isDebug())
+                            DebugTrace.out.printf("[%8s] > rr: %3d, cc: %3d, cx: %3d, cx1: %3d, cell: %s%n",instance,rr,cc,cx,cx1,cell);
 
                         xx += dx;
                     }

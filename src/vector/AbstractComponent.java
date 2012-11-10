@@ -43,6 +43,8 @@ public abstract class AbstractComponent
 
     protected final Bounds bounds = new Bounds();
 
+    protected Boolean debug;
+
 
     public AbstractComponent(){
         super();
@@ -84,6 +86,7 @@ public abstract class AbstractComponent
     public void destroy(){
 
         this.parent = null;
+        this.debug = null;
     }
     /**
      * Overriding this method should call this method via
@@ -110,6 +113,19 @@ public abstract class AbstractComponent
     public final <T extends Component> T getParentVector(){
 
         return (T)this.parent;
+    }
+    public final boolean isDebug(){
+        return (null != this.debug && this.debug.booleanValue());
+    }
+    public final boolean hasDebug(){
+        return (null != this.debug);
+    }
+    public final Boolean getDebug(){
+        return this.debug;
+    }
+    public final Component setDebug(Boolean debug){
+        this.debug = debug;
+        return this;
     }
     public final Bounds getParentBounds(){
 
@@ -431,6 +447,10 @@ public abstract class AbstractComponent
         thisModel.setValue("transform",this.transform);
         thisModel.setValue("bounds",this.getBoundsVector());
 
+        if (this.hasDebug()){
+            thisModel.setValue("debug",this.getDebug());
+        }
+
         return thisModel;
     }
     public boolean fromJson(Json thisModel){
@@ -440,6 +460,8 @@ public abstract class AbstractComponent
         this.setTransformLocal( thisModel.getValue("transform",Transform.class));
 
         this.setBoundsVectorForScale( thisModel.getValue("bounds",Bounds.class));
+
+        this.setDebug( (Boolean)thisModel.getValue("debug"));
         /*
          * If we assert that the abstract class does not have a
          * coherent state, subclasses may employ the transform and

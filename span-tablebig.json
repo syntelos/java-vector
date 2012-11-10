@@ -5,6 +5,7 @@
             "class": "vector.TableBig",
             "cellspacing": 2.0,
             "parent": true,
+            "debug" : true,
             "components": [
 
                 {

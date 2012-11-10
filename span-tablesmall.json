@@ -6,19 +6,14 @@
             "cellspacing": 4.0,
             "bounds": "100,100,100,100",
             "background": "#E0FFFFFF",
+            "debug" : true,
             "components": [
                 {
-                    "class": "vector.Border",
-                    "color": "#000000",
-                    "color-over": "#AF0000",
-                    "style": "round",
-                    "arc":  16.0,
-                    "stroke":{
-                        "line-width": 2.0
-                    },
-                    "stroke-over":{
-                        "line-width": 4.0
-                    }
+                    "class": "vector.Text",
+                    "font": "monospaced-24",
+                    "fixed": true,
+                    "col-span": 2,
+                    "text": "Span two columns"
                 },
                 {
                     "class": "vector.Text",

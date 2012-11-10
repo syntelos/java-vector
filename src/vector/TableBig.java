@@ -67,7 +67,10 @@ public class TableBig
     }
     public void layout(){
 
-        final int count = this.count();
+        final Component.Iterator cit = this.listContent(Component.class);
+
+        final int count = cit.count();
+
         if (0 < count){
             final Bounds bounds = this.getBoundsVector();
             if (!bounds.isEmpty()){
@@ -100,6 +103,12 @@ public class TableBig
                  */
                 int span = 0;
 
+                final String instance;
+                if (this.isDebug())
+                    instance = Integer.toHexString(System.identityHashCode(this)).toUpperCase();
+                else
+                    instance = null;
+
                 layout:
                 for (rr = 0; rr < this.rows; rr++){
 
@@ -109,27 +118,50 @@ public class TableBig
 
                         cx = ((rr*this.cols)+cc);
                         if (0 == span){
+                            cx1 = cx;
 
-                            if (this.has(cx))
-                                c = this.get(cx);
-                            else
+                            if (cit.has(cx)){
+
+                                if (this.isDebug())
+                                    DebugTrace.out.printf("[%8s] + rr: %3d, cc: %3d, cx: %3d%n",instance,rr,cc,cx);
+
+                                c = cit.get(cx);
+                            }
+                            else {
+                                if (this.isDebug())
+                                    DebugTrace.out.printf("[%8s] - rr: %3d, cc: %3d, cx: %3d%n",instance,rr,cc,cx);
+
                                 break layout;
+                            }
                         }
                         else {
                             cx1 = (((rr)*cols)+(cc-span));
 
-                            if (cx1 > cx && this.has(cx1)){
+                            if (cx1 > cx && cit.has(cx1)){
 
-                                c = this.get(cx);
-                                cx = cx1;
+                                if (this.isDebug())
+                                    DebugTrace.out.printf("[%8s] + rr: %3d, cc: %3d, cx: %3d, cx1: %3d, span: %3d%n",instance,rr,cc,cx,cx1,span);
+
+                                c = cit.get(cx);
                             }
-                            else
+                            else {
+                                if (this.isDebug())
+                                    DebugTrace.out.printf("[%8s] - rr: %3d, cc: %3d, cx: %3d, cx1: %3d, span: %3d%n",instance,rr,cc,cx,cx1,span);
+
                                 continue layout;
+                            }
                         }
 
 
-                        c.setBoundsVector(new Table.Cell(rr,cc,xx,yy,this.cellWidth,this.cellHeight));
+                        final Table.Cell cell = new Table.Cell(rr,cc,xx,yy,this.cellWidth,this.cellHeight);
+
+                        c.setBoundsVector(cell);
                         c.resized();
+
+
+                        if (this.isDebug())
+                            DebugTrace.out.printf("[%8s] > rr: %3d, cc: %3d, cx: %3d, cx1: %3d, cell: %s%n",instance,rr,cc,cx,cx1,cell);
+
 
                         xx += dx;
 
@@ -140,6 +172,7 @@ public class TableBig
                                 span += (s-1);
                             }
                         }
+                        cx = cx1;
                     }
 
                     xx = x0;

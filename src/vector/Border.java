@@ -25,7 +25,7 @@ import json.Json;
 import json.ObjectJson;
 
 /**
- * Border for parent.
+ * Simple border with {@link platform.Shape Shape}.
  */
 public class Border
     extends AbstractComponent

@@ -3,6 +3,7 @@
 if [ -n "${1}" ]&&[ -f "${1}" ]
 then
     definition="${1}"
+    shift
 
     jarfdemo=$(ls vector-demo-*.jar | tail -n 1 )
     if [ -n "${jarfdemo}" ]&&[ -f "${jarfdemo}" ]
@@ -12,7 +13,7 @@ then
   Running '${definition}'...
 
 EOF
-        if java -jar ${jarfdemo} ${definition}
+        if java $* -jar ${jarfdemo} ${definition}
         then
             exit 0
         else

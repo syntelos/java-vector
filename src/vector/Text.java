@@ -45,7 +45,8 @@ public class Text
     extends BorderComponent
     implements CharSequence,
                Component.Margin,
-               Component.Layout.Text
+               Component.Layout.Text,
+               Table.Col.Span
 {
 
     protected Font font;
