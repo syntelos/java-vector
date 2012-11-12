@@ -93,14 +93,13 @@ public class TableSmall
         if (0 < count){
             final int cols = this.cols;
             if (0 < cols){
-                final int rows = (int)Math.ceil((float)count/(float)cols);
 
-                final Table.Cell[] index = new Table.Cell[rows*cols];
+                final Table.Cell[] index = new Table.Cell[count];
 
                 final double cs = this.cellSpacing;
 
-                final double[] colwidths = new double[cols];
-                final double[] rowheights = new double[rows];
+                final double[] colwidths = new double[count];
+                final double[] rowheights = new double[count];
 
                 Arrays.fill(colwidths,0.0);
                 Arrays.fill(rowheights,0.0);
@@ -124,7 +123,7 @@ public class TableSmall
                 Component c = null;
 
                 measurement:
-                for (rr = 0; rr < rows; rr++){
+                for (rr = 0; ; rr++){
 
                     for (cc = 0; cc < cols; cc++){
 
@@ -148,19 +147,27 @@ public class TableSmall
                         else {
                             cx1 = (((rr)*cols)+(cc-span));
 
-                            if (cx1 > cx && this.has(cx1)){
+                            if (cit.has(cx1)){
 
-                                debug = '*';
+                                if (cx1 > cx){
 
-                                c = cit.get(cx1);
+                                    debug = '*';
+
+                                    c = cit.get(cx1);
+                                }
+                                else {
+                                    debug = '/';
+
+                                    if (this.isDebug())
+                                        DebugTrace.out.printf("[%8s] %c rr: %3d, cc: %3d, cx: %3d, cx1: %3d | %s%n",instance,debug,rr,cc,cx,cx1,index[cx1]);
+
+                                    continue measurement;
+                                }
                             }
                             else {
-                                debug = '/';
+                                debug = '|';
 
-                                if (this.isDebug())
-                                    DebugTrace.out.printf("[%8s] %c rr: %3d, cc: %3d, cx: %3d, cx1: %3d | %s%n",instance,debug,rr,cc,cx,cx1,index[cx1]);
-
-                                continue measurement;
+                                break measurement;
                             }
                         }
 
@@ -184,6 +191,8 @@ public class TableSmall
                         else
                             index[cx1] = new Table.Cell(rr,cc,cx1);
 
+                        index[cx1].setFrame(cb);
+
                         if (this.isDebug())
                             DebugTrace.out.printf("[%8s] %c rr: %3d, cc: %3d, cx: %3d, cx1: %3d | %s%n",instance,debug,rr,cc,cx,cx1,index[cx1]);
 
@@ -191,6 +200,12 @@ public class TableSmall
                             cx = cx1;
                     }
                 }
+
+                final int rows = rr;
+
+                if (this.isDebug())
+                    DebugTrace.out.printf("[%8s] count: %3d, rows: %3d, cols: %3d, index: %3d %n",instance,count,rows,cols,index.length);
+
 
                 span = 0;
                 c = null;
@@ -245,7 +260,7 @@ public class TableSmall
 
                             cx1 = (((rr)*cols)+(cc-span));
 
-                            if (cx1 > cx && this.has(cx1)){
+                            if (cx1 > cx && cit.has(cx1)){
 
                                 c = cit.get(cx1);
 

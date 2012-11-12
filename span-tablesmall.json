@@ -4,107 +4,270 @@
         {
             "class": "vector.TableSmall",
             "cellspacing": 4.0,
-            "bounds": "100,100,100,100",
+            "bounds": "20,25,0,0",
             "background": "#E0FFFFFF",
-            "debug" : true,
+            "debug" : false,
             "components": [
                 {
-                    "class": "vector.Text",
-                    "font": "monospaced-24",
-                    "fixed": true,
+                    "class": "vector.Border",
                     "col-span": 2,
-                    "text": "Span two columns"
-                },
-                {
-                    "class": "vector.Text",
-                    "font": "monospaced-24",
-                    "fixed": true,
-                    "text": "Server"
-                },
-                {
-                    "class": "vector.TextEdit",
-                    "font": "monospaced-24",
-                    "fixed": true,
-                    "border": {
-                        "color": "#000000",
-                        "color-over": "#AF0000",
-                        "style": "round",
-                        "arc":  16.0,
-                        "stroke":{
-                            "line-width": 2.0
-                        },
-                        "stroke-over":{
-                            "line-width": 4.0
-                        }
+                    "fixed" : true,
+                    "bounds": "0,0,100,10",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
                     }
                 },
                 {
-                    "class": "vector.Text",
-                    "font": "monospaced-24",
-                    "fixed": true,
-                    "text": "Logon"
-                },
-                {
-                    "class": "vector.TextEdit",
-                    "font": "monospaced-24",
-                    "fixed": true,
-                    "border": {
-                        "color": "#000000",
-                        "color-over": "#AF0000",
-                        "style": "round",
-                        "arc":  16.0,
-                        "stroke":{
-                            "line-width": 2.0
-                        },
-                        "stroke-over":{
-                            "line-width": 4.0
-                        }
+                    "class": "vector.Border",
+                    "fixed" : true,
+                    "bounds": "0,0,100,25",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
                     }
                 },
                 {
-                    "class": "vector.Text",
-                    "font": "monospaced-24",
-                    "fixed": true,
-                    "text": "License"
-                },
+                    "class": "vector.Border",
+                    "fixed" : true,
+                    "bounds": "0,0,100,25",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
+                }
+            ]
+        },
+        {
+            "class": "vector.TableSmall",
+            "cellspacing": 4.0,
+            "bounds": "250,25,0,0",
+            "background": "#E0FFFFFF",
+            "debug" : false,
+            "components": [
                 {
-                    "class": "vector.TextEdit",
-                    "font": "monospaced-24",
-                    "fixed": true,
-                    "border": {
-                        "color": "#000000",
-                        "color-over": "#AF0000",
-                        "style": "round",
-                        "arc":  16.0,
-                        "stroke":{
-                            "line-width": 2.0
-                        },
-                        "stroke-over":{
-                            "line-width": 4.0
-                        }
+                    "class": "vector.Border",
+                    "fixed" : true,
+                    "bounds": "0,0,100,25",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
                     }
                 },
                 {
-                    "class": "vector.Text",
-                    "font": "monospaced-24",
-                    "fixed": true,
-                    "text": "Gateway"
+                    "class": "vector.Border",
+                    "fixed" : true,
+                    "bounds": "0,0,100,25",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
                 },
                 {
-                    "class": "vector.TextEdit",
-                    "font": "monospaced-24",
-                    "fixed": true,
-                    "border": {
-                        "color": "#000000",
-                        "color-over": "#AF0000",
-                        "style": "round",
-                        "arc":  16.0,
-                        "stroke":{
-                            "line-width": 2.0
-                        },
-                        "stroke-over":{
-                            "line-width": 4.0
-                        }
+                    "class": "vector.Border",
+                    "col-span": 2,
+                    "fixed" : true,
+                    "bounds": "0,0,100,10",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
+                },
+                {
+                    "class": "vector.Border",
+                    "fixed" : true,
+                    "bounds": "0,0,100,25",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
+                },
+                {
+                    "class": "vector.Border",
+                    "fixed" : true,
+                    "bounds": "0,0,100,25",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
+                }
+            ]
+        },
+        {
+            "class": "vector.TableSmall",
+            "cellspacing": 4.0,
+            "bounds": "480,25,0,0",
+            "background": "#E0FFFFFF",
+            "debug" : false,
+            "components": [
+                {
+                    "class": "vector.Border",
+                    "col-span": 2,
+                    "fixed" : true,
+                    "bounds": "0,0,100,10",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
+                },
+                {
+                    "class": "vector.Border",
+                    "fixed" : true,
+                    "bounds": "0,0,100,25",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
+                },
+                {
+                    "class": "vector.Border",
+                    "fixed" : true,
+                    "bounds": "0,0,100,25",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
+                },
+                {
+                    "class": "vector.Border",
+                    "fixed" : true,
+                    "bounds": "0,0,100,25",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
+                },
+                {
+                    "class": "vector.Border",
+                    "fixed" : true,
+                    "bounds": "0,0,100,25",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
+                },
+                {
+                    "class": "vector.Border",
+                    "col-span" : 2,
+                    "fixed" : true,
+                    "bounds": "0,0,100,10",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
+                },
+                {
+                    "class": "vector.Border",
+                    "fixed" : true,
+                    "bounds": "0,0,100,25",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
+                    }
+                },
+                {
+                    "class": "vector.Border",
+                    "fixed" : true,
+                    "bounds": "0,0,100,25",
+                    "color": "#000000",
+                    "color-over": "#AF0000",
+                    "style": "round",
+                    "arc":  16.0,
+                    "stroke":{
+                        "line-width": 2.0
+                    },
+                    "stroke-over":{
+                        "line-width": 4.0
                     }
                 }
             ]

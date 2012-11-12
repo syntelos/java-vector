@@ -71,7 +71,7 @@ public class Text
 
     private float[] localPositions;
 
-    private Integer colSpan;
+    protected Integer colSpan;
 
 
     public Text(){

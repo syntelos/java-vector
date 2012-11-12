@@ -29,7 +29,8 @@ import json.ObjectJson;
  */
 public class Border
     extends AbstractComponent
-    implements Component.Layout, 
+    implements Component.Layout,
+               Table.Col.Span,
                java.lang.Cloneable
 {
     public enum Style {
@@ -61,6 +62,8 @@ public class Border
     protected boolean fill, fixed;
     protected float arc;
     protected Stroke stroke, strokeOver;
+    protected Integer colSpan;
+
     protected Shape shape;
 
 
@@ -88,11 +91,18 @@ public class Border
         this.backgroundOver = null;
         this.stroke = null;
         this.strokeOver = null;
+        this.colSpan = null;
         this.shape = null;
     }
     @Override
     public void resized(){
         super.resized();
+
+        this.layout();
+    }
+    @Override
+    public void relocated(){
+        super.relocated();
 
         this.layout();
     }
@@ -302,6 +312,22 @@ public class Border
 
         return this;
     }
+    public final int getTableColSpan(){
+        if (null != this.colSpan)
+            return this.colSpan.intValue();
+        else
+            return 0;
+    }
+    public final boolean hasTableColSpan(){
+
+        return (null != this.colSpan);
+    }
+    public final Border setTableColSpan(Integer value){
+
+        this.colSpan = value;
+        return this;
+    }
+
     public final Shape getShape(){
 
         return this.shape;
@@ -416,6 +442,10 @@ public class Border
         thisModel.setValue("stroke",this.getStroke());
         thisModel.setValue("stroke-over",this.getStrokeOver());
 
+        if (this.hasTableColSpan()){
+            thisModel.setValue("col-span",this.getTableColSpan());
+        }
+
         return thisModel;
     }
     public boolean fromJson(Json thisModel){
@@ -432,6 +462,7 @@ public class Border
         this.setArc( (Number)thisModel.getValue("arc"));
         this.setStroke( (Stroke)thisModel.getValue("stroke",Stroke.class));
         this.setStrokeOver( (Stroke)thisModel.getValue("stroke-over",Stroke.class));
+        this.setTableColSpan( (Integer)thisModel.getValue("col-span",Integer.class));
 
         return true;
     }
