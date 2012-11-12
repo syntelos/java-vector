@@ -95,7 +95,7 @@ public class TableSmall
             if (0 < cols){
                 final int rows = (int)Math.ceil((float)count/(float)cols);
 
-                final int[] index = new int[rows*cols];
+                final Table.Cell[] index = new Table.Cell[rows*cols];
 
                 final double cs = this.cellSpacing;
 
@@ -119,29 +119,28 @@ public class TableSmall
                 else
                     instance = null;
 
+                char debug = ' ';
+
+                Component c = null;
 
                 measurement:
                 for (rr = 0; rr < rows; rr++){
 
                     for (cc = 0; cc < cols; cc++){
 
-                        Component c;
-
                         if (0 == span){
                             cx = (((rr)*cols)+(cc));
 
-                            index[cx] = cx; //
+                            cx1 = cx;
 
                             if (cit.has(cx)){
 
-                                if (this.isDebug())
-                                    DebugTrace.out.printf("[%8s] + rr: %3d, cc: %3d, cx: %3d%n",instance,rr,cc,cx);
+                                debug = '+';
 
                                 c = cit.get(cx);
                             }
                             else {
-                                if (this.isDebug())
-                                    DebugTrace.out.printf("[%8s] - rr: %3d, cc: %3d, cx: %3d%n",instance,rr,cc,cx);
+                                debug = '-';
 
                                 break measurement;
                             }
@@ -151,17 +150,15 @@ public class TableSmall
 
                             if (cx1 > cx && this.has(cx1)){
 
-                                if (this.isDebug())
-                                    DebugTrace.out.printf("[%8s] + rr: %3d, cc: %3d, cx: %3d, cx1: %3d, span: %3d%n",instance,rr,cc,cx,cx1,span);
-
-                                index[cx1] = cx1; //
+                                debug = '*';
 
                                 c = cit.get(cx1);
-                                cx = cx1;
                             }
                             else {
+                                debug = '/';
+
                                 if (this.isDebug())
-                                    DebugTrace.out.printf("[%8s] - rr: %3d, cc: %3d, cx: %3d, cx1: %3d, span: %3d%n",instance,rr,cc,cx,cx1,span);
+                                    DebugTrace.out.printf("[%8s] %c rr: %3d, cc: %3d, cx: %3d, cx1: %3d | %s%n",instance,debug,rr,cc,cx,cx1,index[cx1]);
 
                                 continue measurement;
                             }
@@ -176,12 +173,29 @@ public class TableSmall
 
                             int s = ((Table.Col.Span)c).getTableColSpan();
                             if (1 < s){
+
                                 span += (s-1);
+
+                                index[cx1] = new Table.Cell(rr,cc,s,cx1);
                             }
+                            else
+                                index[cx1] = new Table.Cell(rr,cc,cx1);
                         }
+                        else
+                            index[cx1] = new Table.Cell(rr,cc,cx1);
+
+                        if (this.isDebug())
+                            DebugTrace.out.printf("[%8s] %c rr: %3d, cc: %3d, cx: %3d, cx1: %3d | %s%n",instance,debug,rr,cc,cx,cx1,index[cx1]);
+
+                        if ('*' == debug)
+                            cx = cx1;
                     }
                 }
 
+                span = 0;
+                c = null;
+
+                Table.Cell cell = null;
 
                 double dx, dy, xx = cs, yy = cs;
 
@@ -202,23 +216,64 @@ public class TableSmall
                             tableWidth += dx;
                         }
 
-                        Component c;
-                        cx = (((rr)*cols)+(cc));
-                        cx1 = index[cx];
 
-                        if (cx1 >= cx && cit.has(cx1))
-                            c = cit.get(cx1);
-                        else
-                            break definition;
+                        if (0 == span){
+                            cx = (((rr)*cols)+(cc));
 
+                            cx1 = cx;
 
-                        final Bounds cb = c.getBoundsVector();
-                        final Table.Cell cell = new Table.Cell(rr,cc,xx,yy,cb.width,cb.height);
-                        c.setBoundsVector(cell);
-                        c.relocated();
+                            if (cit.has(cx)){
 
-                        if (this.isDebug())
-                            DebugTrace.out.printf("[%8s] > rr: %3d, cc: %3d, cx: %3d, cx1: %3d, cell: %s%n",instance,rr,cc,cx,cx1,cell);
+                                c = cit.get(cx);
+
+                                cell = index[cx1];
+
+                                cell.setFrame(xx,yy,dx,dy);
+
+                                c.setBoundsVector(cell);
+                                c.relocated();
+
+                                span += cell.spanCol;
+
+                                if (this.isDebug())
+                                    DebugTrace.out.printf("[%8s] S rr: %3d, cc: %3d, s: %3d, cx: %3d, cx1: %3d | %s%n",instance,rr,cc,span,cx,cx1,cell);
+                            }
+                            else
+                                break definition;
+                        }
+                        else {
+
+                            cx1 = (((rr)*cols)+(cc-span));
+
+                            if (cx1 > cx && this.has(cx1)){
+
+                                c = cit.get(cx1);
+
+                                cx = cx1;
+
+                                cell = index[cx1];
+
+                                cell.setFrame(xx,yy,dx,dy);
+
+                                c.setBoundsVector(cell);
+                                c.relocated();
+
+                                span += cell.spanCol;
+
+                                if (this.isDebug())
+                                    DebugTrace.out.printf("[%8s] T rr: %3d, cc: %3d, s: %3d, cx: %3d, cx1: %3d | %s%n",instance,rr,cc,span,cx,cx1,cell);
+                            }
+                            else {
+
+                                cell.width += dx;
+
+                                c.setBoundsVector(cell);
+                                c.relocated();
+
+                                if (this.isDebug())
+                                    DebugTrace.out.printf("[%8s] U rr: %3d, cc: %3d, s: %3d, cx: %3d, cx1: %3d | %s%n",instance,rr,cc,span,cx,cx1,cell);
+                            }
+                        }
 
                         xx += dx;
                     }

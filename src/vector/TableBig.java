@@ -153,7 +153,7 @@ public class TableBig
                         }
 
 
-                        final Table.Cell cell = new Table.Cell(rr,cc,xx,yy,this.cellWidth,this.cellHeight);
+                        final Table.Cell cell = new Table.Cell(rr,cc,1,cx1,xx,yy,this.cellWidth,this.cellHeight);
 
                         c.setBoundsVector(cell);
                         c.resized();

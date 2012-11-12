@@ -55,17 +55,73 @@ public interface Table {
          * Counting from zero, inclusive
          */
         public final int row, col;
+        /**
+         * Span minus one: zero for single column; one for
+         * <code>"col-span": 2</code>.
+         */
+        public final int spanCol;
+        /**
+         * Component list index
+         */
+        public final int start;
 
 
-        public Cell(int row, int col, double x, double y, double w, double h){
+        public Cell(int row, int col, int sc, int ix, double x, double y, double w, double h){
             super(x,y,w,h);
             this.row = row;
             this.col = col;
+            this.spanCol = (sc-1);
+            this.start = ix;
         }
-        public Cell(int row, int col, double x, double y, float w, float h){
+        public Cell(int row, int col, int sc, int ix, double x, double y, float w, float h){
             super((float)x,(float)y,w,h);
             this.row = row;
             this.col = col;
+            this.spanCol = (sc-1);
+            this.start = ix;
+        }
+        /**
+         * @param row Row index from zero
+         * @param col Column index from zero
+         * @param sc Value of property <code>"col-span"</code> will
+         * have one subtracted
+         */
+        public Cell(int row, int col, int sc, int ix){
+            super();
+            this.row = row;
+            this.col = col;
+            this.spanCol = (sc-1);
+            this.start = ix;
+        }
+        public Cell(int row, int col, int ix){
+            this(row,col,1,ix);
+        }
+
+
+        public void setFrame(double x, double y, double dx, double dy){
+
+            this.x = (float)x;
+            this.y = (float)y;
+            this.width = (float)dx;
+            this.height = (float)dy;
+        }
+
+        public String toString(){
+            StringBuilder string = new StringBuilder();
+            string.append("cell: ");
+            string.append(this.start);
+            string.append(", col-span: ");
+            string.append(this.spanCol);
+            string.append(", x: ");
+            string.append(this.x);
+            string.append(", y: ");
+            string.append(this.y);
+            string.append(", w: ");
+            string.append(this.width);
+            string.append(", h: ");
+            string.append(this.height);
+
+            return string.toString();
         }
     }
 
