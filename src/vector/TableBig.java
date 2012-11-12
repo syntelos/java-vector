@@ -95,13 +95,16 @@ public class TableBig
 
                 double xx = x0, yy = x0;
 
-                int  rr, cc = 0, cx, cx1;
+                int  rr, cc = 0, cx = 0, cx1;
 
                 /*
                  * spans are applied in sequence order to iterate over
                  * a sparse index set
                  */
                 int span = 0;
+
+                Table.Cell cell = null;
+                Component c = null;
 
                 final String instance;
                 if (this.isDebug())
@@ -114,22 +117,33 @@ public class TableBig
 
                     for (cc = 0; cc < this.cols; cc++){
 
-                        Component c;
-
-                        cx = ((rr*this.cols)+cc);
                         if (0 == span){
+                            cx = ((rr*this.cols)+cc);
+
                             cx1 = cx;
 
                             if (cit.has(cx)){
 
-                                if (this.isDebug())
-                                    DebugTrace.out.printf("[%8s] + rr: %3d, cc: %3d, cx: %3d%n",instance,rr,cc,cx);
-
                                 c = cit.get(cx);
+
+                                int s = 1;
+                                if (c instanceof Table.Col.Span){
+
+                                    s = ((Table.Col.Span)c).getTableColSpan();
+                                    if (1 < s){
+                                        span += (s-1);
+                                    }
+                                    else
+                                        s = 1;
+                                }
+
+                                cell = new Table.Cell(rr,cc,s,cx1,xx,yy,this.cellWidth,this.cellHeight);
+
+                                c.setBoundsVector(cell);
+                                c.resized();
+
                             }
                             else {
-                                if (this.isDebug())
-                                    DebugTrace.out.printf("[%8s] - rr: %3d, cc: %3d, cx: %3d%n",instance,rr,cc,cx);
 
                                 break layout;
                             }
@@ -137,42 +151,48 @@ public class TableBig
                         else {
                             cx1 = (((rr)*cols)+(cc-span));
 
-                            if (cx1 > cx && cit.has(cx1)){
+                            if (cit.has(cx1)){
 
-                                if (this.isDebug())
-                                    DebugTrace.out.printf("[%8s] + rr: %3d, cc: %3d, cx: %3d, cx1: %3d, span: %3d%n",instance,rr,cc,cx,cx1,span);
+                                if (cx1 > cx){
 
-                                c = cit.get(cx);
+                                    c = cit.get(cx1);
+
+                                    cx = cx1;
+
+                                    int s = 1;
+                                    if (c instanceof Table.Col.Span){
+
+                                        s = ((Table.Col.Span)c).getTableColSpan();
+                                        if (1 < s){
+                                            span += (s-1);
+                                        }
+                                        else
+                                            s = 1;
+                                    }
+
+                                    cell = new Table.Cell(rr,cc,s,cx1,xx,yy,this.cellWidth,this.cellHeight);
+
+                                    c.setBoundsVector(cell);
+                                    c.resized();
+
+                                }
+                                else {
+
+                                    cell.width += this.cellWidth;
+
+                                    c.setBoundsVector(cell);
+                                    c.resized();
+                                }
                             }
                             else {
-                                if (this.isDebug())
-                                    DebugTrace.out.printf("[%8s] - rr: %3d, cc: %3d, cx: %3d, cx1: %3d, span: %3d%n",instance,rr,cc,cx,cx1,span);
 
-                                continue layout;
+                                break layout;
                             }
                         }
 
-
-                        final Table.Cell cell = new Table.Cell(rr,cc,1,cx1,xx,yy,this.cellWidth,this.cellHeight);
-
-                        c.setBoundsVector(cell);
-                        c.resized();
-
-
-                        if (this.isDebug())
-                            DebugTrace.out.printf("[%8s] > rr: %3d, cc: %3d, cx: %3d, cx1: %3d, cell: %s%n",instance,rr,cc,cx,cx1,cell);
 
 
                         xx += dx;
-
-                        if (c instanceof Table.Col.Span){
-
-                            int s = ((Table.Col.Span)c).getTableColSpan();
-                            if (1 < s){
-                                span += (s-1);
-                            }
-                        }
-                        cx = cx1;
                     }
 
                     xx = x0;

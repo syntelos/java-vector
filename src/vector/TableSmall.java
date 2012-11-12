@@ -158,9 +158,6 @@ public class TableSmall
                                 else {
                                     debug = '/';
 
-                                    if (this.isDebug())
-                                        DebugTrace.out.printf("[%8s] %c rr: %3d, cc: %3d, cx: %3d, cx1: %3d | %s%n",instance,debug,rr,cc,cx,cx1,index[cx1]);
-
                                     continue measurement;
                                 }
                             }
@@ -193,8 +190,6 @@ public class TableSmall
 
                         index[cx1].setFrame(cb);
 
-                        if (this.isDebug())
-                            DebugTrace.out.printf("[%8s] %c rr: %3d, cc: %3d, cx: %3d, cx1: %3d | %s%n",instance,debug,rr,cc,cx,cx1,index[cx1]);
 
                         if ('*' == debug)
                             cx = cx1;
@@ -202,9 +197,6 @@ public class TableSmall
                 }
 
                 final int rows = rr;
-
-                if (this.isDebug())
-                    DebugTrace.out.printf("[%8s] count: %3d, rows: %3d, cols: %3d, index: %3d %n",instance,count,rows,cols,index.length);
 
 
                 span = 0;
@@ -231,7 +223,6 @@ public class TableSmall
                             tableWidth += dx;
                         }
 
-
                         if (0 == span){
                             cx = (((rr)*cols)+(cc));
 
@@ -249,9 +240,6 @@ public class TableSmall
                                 c.relocated();
 
                                 span += cell.spanCol;
-
-                                if (this.isDebug())
-                                    DebugTrace.out.printf("[%8s] S rr: %3d, cc: %3d, s: %3d, cx: %3d, cx1: %3d | %s%n",instance,rr,cc,span,cx,cx1,cell);
                             }
                             else
                                 break definition;
@@ -274,9 +262,6 @@ public class TableSmall
                                 c.relocated();
 
                                 span += cell.spanCol;
-
-                                if (this.isDebug())
-                                    DebugTrace.out.printf("[%8s] T rr: %3d, cc: %3d, s: %3d, cx: %3d, cx1: %3d | %s%n",instance,rr,cc,span,cx,cx1,cell);
                             }
                             else {
 
@@ -284,9 +269,6 @@ public class TableSmall
 
                                 c.setBoundsVector(cell);
                                 c.relocated();
-
-                                if (this.isDebug())
-                                    DebugTrace.out.printf("[%8s] U rr: %3d, cc: %3d, s: %3d, cx: %3d, cx1: %3d | %s%n",instance,rr,cc,span,cx,cx1,cell);
                             }
                         }
 

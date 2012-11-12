@@ -6,7 +6,6 @@
             "cellspacing": 4.0,
             "bounds": "20,25,0,0",
             "background": "#E0FFFFFF",
-            "debug" : false,
             "components": [
                 {
                     "class": "vector.Border",
@@ -61,7 +60,6 @@
             "cellspacing": 4.0,
             "bounds": "250,25,0,0",
             "background": "#E0FFFFFF",
-            "debug" : false,
             "components": [
                 {
                     "class": "vector.Border",
@@ -146,7 +144,6 @@
             "cellspacing": 4.0,
             "bounds": "480,25,0,0",
             "background": "#E0FFFFFF",
-            "debug" : false,
             "components": [
                 {
                     "class": "vector.Border",
