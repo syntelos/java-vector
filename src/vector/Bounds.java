@@ -55,6 +55,19 @@ public class Bounds
             switch (strtok.countTokens()){
             case 0:
                 break;
+            case 2:
+                try {
+
+                    final float w = java.lang.Float.parseFloat(strtok.nextToken());
+
+                    final float h = java.lang.Float.parseFloat(strtok.nextToken());
+
+                    this.setFrame(0,0,w,h);
+                }
+                catch (RuntimeException exc){
+                    throw new IllegalArgumentException(string,exc);
+                }
+                break;
             case 4:
                 try {
                     final float x = java.lang.Float.parseFloat(strtok.nextToken());
