@@ -276,6 +276,7 @@ public class Logon
 
         Preferences.SetLogon(this.logon.getText());
         Preferences.SetPassword(this.password.getText());
+        Preferences.SetTo(this.to.getText());
         Preferences.SetResource(this.resource.getText());
 
         XThread.Save();
