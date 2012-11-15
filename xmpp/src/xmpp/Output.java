@@ -218,7 +218,7 @@ public class Output
 
             this.setBoundsVector(thisBounds);
 
-            float xx = 0f;
+            float xx = 4f;
             float yy = thisBounds.height;
 
 
@@ -237,7 +237,7 @@ public class Output
             }
         }
         {
-            inputBounds.x = 0f;
+            inputBounds.x = 4f;
             inputBounds.y = (thisBounds.y+thisBounds.height+4f);
             inputBounds.width = parentBounds.width;
 

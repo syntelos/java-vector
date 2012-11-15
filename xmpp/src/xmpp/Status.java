@@ -100,8 +100,9 @@ public class Status
         Bounds b = this.getBoundsVector();
         Bounds p = this.getParentVector().getBoundsVector();
 
-        b.x = (p.width*0.75f);
         b.y = 16f;
+        b.x = (p.width-b.width-20f);
+
         this.setBoundsVector(b);
 
         Border border = this.getBorder();
