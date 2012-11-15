@@ -13,6 +13,8 @@ function download_style {
     case "${1}" in
         lib/lxl-*)
             echo "eager";;
+        lib/path-*)
+            echo "eager";;
         lib/json-*)
             echo "eager";;
         xmpp/lib/*)
@@ -22,9 +24,9 @@ function download_style {
     esac
 }
 
-libs=$(ls lib/*.jar xmpp/lib/*.jar | tr '\n' ' ')
+tgt=demo/xmpp.jnlp
 
-if [ -n "${libs}" ]
+if libs=$(ls lib/*.jar xmpp/lib/*.jar | tr '\n' ' ') &&[ -n "${libs}" ]
 then
     jar_xmpp=$(ls vector-xmpp-[0-9]*.[0-9]*.[0-9]*.jar | tail -n 1 )
     jar_awt=$(ls vector-awt-[0-9]*.[0-9]*.[0-9]*.jar | tail -n 1 )
@@ -36,11 +38,8 @@ then
 Main ${jar_xmpp} ${jar_awt} ${jar_core}
 Lib ${libs}
 EOF
-        for src in xmpp/*.json
-        do
-            name=$(basename ${src} .json)
-            tgt=demo/${name}.jnlp
-            cat<<EOF>${tgt}
+
+        cat<<EOF>${tgt}
 <?xml version="1.0" encoding="utf-8"?>
 <jnlp
      spec="1.5+"
@@ -59,29 +58,26 @@ EOF
     <jar href="${jar_core}" download="eager"/>
     <jar href="${jar_xmpp}" download="eager"/>
 EOF
-            for libf in ${libs}
-            do
-                cat<<EOF>>${tgt}
+        for libf in ${libs}
+        do
+            cat<<EOF>>${tgt}
     <jar href="${libf}" download="$(download_style ${libf})" />
 EOF
-            done
-            cat<<EOF>>${tgt}
+        done
+        cat<<EOF>>${tgt}
   </resources>
 
-  <application-desc main-class="xmpp.Frame">
-    <argument>${codebase}/${src}</argument>
-  </application-desc>
+  <application-desc main-class="xmpp.Frame" />
+
 </jnlp>
 EOF
-            #
-            if ${use_git}
-            then
-                git add ${tgt}
-            fi
-            #
-            ls -l ${tgt}
-
-        done
+        #
+        if ${use_git}
+        then
+            git add ${tgt}
+        fi
+        #
+        ls -l ${tgt}
         #
         exit 0
         #

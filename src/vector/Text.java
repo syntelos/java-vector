@@ -134,6 +134,17 @@ public class Text
 
         super.modified();
     }
+    @Override
+    public void relocated(){
+
+        this.vector = null;
+        this.shape = null;
+        this.localPositions = null;
+
+        this.layout();
+
+        super.relocated();
+    }
     public Order queryLayout(){
         if (this.fixed)
             return Order.Content;

@@ -13,6 +13,8 @@ function download_style {
     case "${1}" in
         lib/lxl-*)
             echo "eager";;
+        lib/path-*)
+            echo "eager";;
         lib/json-*)
             echo "eager";;
         *)

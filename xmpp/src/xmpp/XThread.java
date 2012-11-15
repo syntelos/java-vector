@@ -39,6 +39,11 @@ public final class XThread
                org.jivesoftware.smack.filter.PacketFilter,
                org.jivesoftware.smack.PacketListener
 {
+    public final static boolean Debug;
+    static {
+        final String conf = System.getProperty("xmpp.XThread.Debug");
+        Debug = (null != conf && "true".equalsIgnoreCase(conf));
+    }
     /**
      *
      */
@@ -72,9 +77,13 @@ public final class XThread
      */
     public final static XThread Instance = new XThread();
 
-    public final static void Save(){
+    public final static void Connect(){
 
-        Instance.save();
+        Instance.connect();
+    }
+    public final static void Disconnect(){
+
+        Instance.disconnect();
     }
     public final static void Send(String m){
 
@@ -105,21 +114,6 @@ public final class XThread
     }
 
 
-    public void save(){
-
-        this.disconnect();
-
-        this.id = Preferences.GetThread();
-        this.host = Preferences.GetHost();
-        this.port = Preferences.GetPort();
-
-        this.logon = Preferences.GetLogon();
-        this.password = Preferences.GetPassword();
-        this.to = Preferences.GetTo();
-        this.resource = Preferences.GetResource();
-
-        this.connect();
-    }
     public boolean send(String m){
 
         if (null != this.connection){
@@ -158,13 +152,24 @@ public final class XThread
 
         this.disconnect();
 
+        this.id = Preferences.GetThread();
+        this.host = Preferences.GetHost();
+        this.port = Preferences.GetPort();
+
+        this.logon = Preferences.GetLogon();
+        this.password = Preferences.GetPassword();
+        this.to = Preferences.GetTo();
+        this.resource = Preferences.GetResource();
+
         if (this.isReady()){
+            Output.Instance.headline("XThread Connect");
 
             this.connection = this.createConnection();
         }
     }
     public void disconnect(){
         if (null != this.connection){
+            Output.Instance.headline("XThread Disconnect");
             try {
                 this.connection.disconnect();
             }
@@ -195,36 +200,47 @@ public final class XThread
     }
     public boolean accept(Packet pk){
 
-        return (pk instanceof Message);
+        return true;
     }
     public void processPacket(Packet pk){
-        Message xm = (Message)pk;
 
-        switch(xm.getType()){
-        case normal:
-        case chat:
-        case groupchat:
-            this.receive(xm);
-            break;
-        case headline:
-            this.headline(xm);
-            break;
-        case error:
-            this.error(xm);
-            break;
-        default:
-            throw new IllegalStateException(xm.getType().name());
+        if (pk instanceof Message){
+            Message xm = (Message)pk;
+
+            switch(xm.getType()){
+            case normal:
+            case chat:
+            case groupchat:
+                this.receive(xm);
+                break;
+            case headline:
+                this.headline(xm);
+                break;
+            case error:
+                this.error(xm);
+                break;
+            default:
+                Output.Instance.headline("XThread process(message: %s)",xm.getType().name());
+                break;
+            }
         }
+        else if (pk instanceof Presence){
+            Presence xp = (Presence)pk;
+
+            this.update(xp);
+        }
+        else
+            Output.Instance.headline("XThread process(class: %s)",pk.getClass().getName());
+    }
+    protected void update(Presence p){
+
+        Output.Instance.update(p);
     }
     protected void receive(Message m){
-
-        System.err.printf("XThread receive(%s)%n",m.getBody());
 
         Output.Instance.receive(m);
     }
     protected void headline(Message m){
-
-        System.err.printf("XThread headline(%s)%n",m.getBody());
 
         Output.Instance.headline(m);
     }
@@ -234,53 +250,51 @@ public final class XThread
         switch(et){
         case WAIT:
 
-            System.err.printf("XThread error(WAIT(DELAY))%n");
+            Output.Instance.error("XThread error(WAIT(DELAY))");
 
             this.state = State.Delay;
 
             break;
         case CANCEL:
 
-            System.err.printf("XThread error(CANCEL(CANCEL))%n");
+            Output.Instance.error("XThread error(CANCEL(CANCEL))");
 
             this.state = State.Cancel;
             break;
         case MODIFY:
 
-            System.err.printf("XThread error(MODIFY(%s))%n",this.state.name());
+            Output.Instance.error("XThread error(MODIFY(%s))",this.state.name());
 
             break;
         case AUTH:
 
-            System.err.printf("XThread error(AUTH(Cancel))%n");
+            Output.Instance.error("XThread error(AUTH(Cancel))");
 
             this.state = State.Cancel;
             break;
         case CONTINUE:
 
-            System.err.printf("XThread error(CONTINUE(%s))%n",this.state.name());
+            Output.Instance.error("XThread error(CONTINUE(%s))",this.state.name());
 
             break;
         default:
 
-            System.err.printf("XThread error(UNKNOWN('%s',%s))%n",et.name(),this.state.name());
+            Output.Instance.error("XThread error(UNKNOWN(%s,%s))",et.name(),this.state.name());
             break;
         }
-
-        Output.Instance.error(m);
     }
     public boolean isReady(){
         return (null != this.logon && null != this.password);
     }
     protected XMPPConnection createConnection(){
         try {
-            System.err.printf("XThread Connect(host: '%s', port: '%d')%n",this.host,this.port);
+            Output.Instance.headline("XThread Connect(host: %s, port: %d, debug: %b)",this.host,this.port,Debug);
 
             final ConnectionConfiguration config = new ConnectionConfiguration(this.host,this.port);
 
             config.setRosterLoadedAtLogin(false);
 
-            config.setDebuggerEnabled(false);
+            config.setDebuggerEnabled(XThread.Debug);
 
             SASLAuthentication.supportSASLMechanism("PLAIN", 0);
 
@@ -288,7 +302,7 @@ public final class XThread
 
             connection.connect();
 
-            System.err.printf("XThread Login(logon: '%s', resource: '%s')%n",this.logon, this.resource);
+            Output.Instance.headline("XThread Login(logon: %s, resource: %s)",this.logon, this.resource);
 
             connection.login(this.logon, this.password, this.resource);
             connection.sendPacket(new Presence(Presence.Type.available));

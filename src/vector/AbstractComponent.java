@@ -404,7 +404,7 @@ public abstract class AbstractComponent
             return this;
         }
         else
-            throw new IllegalStateException();
+            throw new IllegalStateException("Orphan missing root container");
     }
     public Component outputOverlay(){
         Component root = this.getRootContainer();
@@ -413,7 +413,7 @@ public abstract class AbstractComponent
             return this;
         }
         else
-            throw new IllegalStateException();
+            throw new IllegalStateException("Orphan missing root container");
     }
     public Component outputOverlayAnimate(long period){
         Component root = this.getRootContainer();
@@ -422,7 +422,7 @@ public abstract class AbstractComponent
             return this;
         }
         else
-            throw new IllegalStateException();
+            throw new IllegalStateException("Orphan missing root container");
     }
     public final Point transformFromParent(Point point){
 

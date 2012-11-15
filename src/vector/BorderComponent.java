@@ -73,6 +73,15 @@ public class BorderComponent
         }
     }
     @Override
+    public void relocated(){
+        super.relocated();
+
+        Border border = this.border;
+        if (null != border){
+            border.relocated();
+        }
+    }
+    @Override
     public void modified(){
         super.modified();
 

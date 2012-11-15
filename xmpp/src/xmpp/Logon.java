@@ -88,6 +88,17 @@ public class Logon
             input.setCellSpacing(4f);
             input.setBoundsVector(new Bounds(4,4,4,4));
             /*
+             * Headline
+             */
+            final Label titleLabel = new Label();
+            {
+                input.add(titleLabel);
+                Configure(titleLabel);
+                titleLabel.setText("XMPP");
+                titleLabel.setTableColSpan(2);
+                titleLabel.setFont(platform.Font.decode("monospaced-bold-36"));
+            }
+            /*
              * Conversational thread identifier
              */
             final Label idLabel = new Label();
@@ -243,7 +254,7 @@ public class Logon
                 {
                     buttons.add(accept);
                     Configure(accept);
-                    accept.setText("Accept");
+                    accept.setText("Connect");
                     accept.setEnumClass(AcceptCancel.class);
                     accept.setEnumValue(AcceptCancel.Accept);
 
@@ -258,7 +269,7 @@ public class Logon
                 {
                     buttons.add(cancel);
                     Configure(cancel);
-                    cancel.setText("Cancel");
+                    cancel.setText("Disconnect");
                     cancel.setEnumClass(AcceptCancel.class);
                     cancel.setEnumValue(AcceptCancel.Cancel);
 
@@ -269,7 +280,7 @@ public class Logon
             }
         }
     }
-    public void save(){
+    public void connect(){
         Preferences.SetThread(this.id.getText());
         Preferences.SetHost(this.host.getText());
         Preferences.SetPort(this.port.getText());
@@ -279,18 +290,46 @@ public class Logon
         Preferences.SetTo(this.to.getText());
         Preferences.SetResource(this.resource.getText());
 
-        XThread.Save();
+        XThread.Connect();
+    }
+    public void disconnect(){
+        Preferences.SetThread(this.id.getText());
+        Preferences.SetHost(this.host.getText());
+        Preferences.SetPort(this.port.getText());
+
+        Preferences.SetLogon(this.logon.getText());
+        Preferences.SetPassword(this.password.getText());
+        Preferences.SetTo(this.to.getText());
+        Preferences.SetResource(this.resource.getText());
+
+        XThread.Disconnect();
     }
     public boolean input(Event e){
         if (super.input(e)){
 
             switch(e.getType()){
 
-            case Action:
+            case Action:{
+                /*
+                 * In this case the Dialog has been orphaned after
+                 * super.input(e)
+                 */
+                final Event.NamedAction<AcceptCancel> action = (Event.NamedAction<AcceptCancel>)e;
+                switch(action.getValue()){
 
-                this.save();
+                case Accept:
+                    this.connect();
+                    break;
 
+                case Cancel:
+                    this.disconnect();
+                    break;
+
+                default:
+                    throw new IllegalStateException(action.getValue().name());
+                }
                 break;
+            }
             default:
                 break;
             }

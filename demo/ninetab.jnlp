@@ -19,6 +19,7 @@
     <jar href="lib/joda-time-2.0.jar" download="lazy" />
     <jar href="lib/json-2.1.1.jar" download="eager" />
     <jar href="lib/lxl-1.0.6.jar" download="eager" />
+    <jar href="lib/path-1.0.1.jar" download="eager" />
   </resources>
 
   <application-desc main-class="platform.Frame">

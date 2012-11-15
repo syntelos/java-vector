@@ -19,6 +19,7 @@
 package xmpp;
 
 import org.jivesoftware.smack.packet.Message;
+import org.jivesoftware.smack.packet.Presence;
 
 import vector.Border;
 import vector.Bounds;
@@ -50,18 +51,21 @@ public class Output
 
     @Override
     public void modified(){
+
         super.modified();
 
         this.layout();
     }
     @Override
     public void relocated(){
+
         super.relocated();
 
-        //this.layout()!
+        this.layout();
     }
     @Override
     public void resized(){
+
         super.resized();
 
         this.layout();
@@ -97,6 +101,13 @@ public class Output
             }
         }
     }
+    public Output update(Presence p){
+        final String from = p.getFrom();
+        final String type = p.getType().name();
+        final String mode = p.getMode().name();
+
+        return this.headline("%s %s %s",from,type,mode);
+    }
     public Output receive(Message m){
 
         final Label label = new Label();
@@ -111,11 +122,19 @@ public class Output
             Logon.Configure(border);
         }
 
-        return this.scrollToLast();
+        this.modified();
+
+        this.outputScene();
+
+        return this;
     }
     public Output headline(Message m){
 
         return this.headline(m.getBody());
+    }
+    public Output headline(String fmt, Object... args){
+
+        return this.headline(String.format(fmt,args));
     }
     public Output headline(String m){
 
@@ -131,11 +150,19 @@ public class Output
             Logon.Configure(border);
         }
 
-        return this.scrollToLast();
+        this.modified();
+
+        this.outputScene();
+
+        return this;
     }
     public Output error(Message m){
 
         return this.error(m.getBody());
+    }
+    public Output error(String fmt, Object... args){
+
+        return this.error(String.format(fmt,args));
     }
     public Output error(String m){
 
@@ -151,9 +178,9 @@ public class Output
             Logon.Configure(border);
         }
 
-        return this.scrollToLast();
-    }
-    protected Output scrollToLast(){
+        this.modified();
+
+        this.outputScene();
 
         return this;
     }
@@ -196,6 +223,5 @@ public class Output
 
             input.setBoundsVector(inputBounds);
         }
-        this.relocated();
     }
 }

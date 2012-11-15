@@ -68,6 +68,16 @@ public class Dialog<E extends Enum<E>>
 
                     this.drop(this);
 
+                    /*
+                     * Can't do 
+                     *     this.drop(this)
+                     * and then
+                     *     this.outputScene()
+                     * because this has just been orphaned.
+                     * 
+                     * Another component must look at the event and
+                     * ask for output.
+                     */
                     return true;
                 }
                 else

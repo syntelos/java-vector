@@ -62,6 +62,14 @@ public class Input
         else {
             switch(e.getType()){
 
+            case Action:
+                /*
+                 * Logon 
+                 */
+                this.outputScene();
+
+                return true;
+
             case KeyUp:
                 if (this.mouseIn){
                     final Event.Key k = (Event.Key)e;
