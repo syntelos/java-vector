@@ -67,7 +67,7 @@ public class Status
         text.setFont(Status.Font);
         text.setFixed(true);
         text.setCols(40);
-        text.setColor(BG);
+        text.setColor(FG);
         text.setColorOver(OK);
 
         return text;
@@ -211,6 +211,7 @@ public class Status
         case away:
         case xa:
         case dnd:
+        default:
             label.setColor(NG);
             label.setColorOver(NG);
             border.setColor(NG);
