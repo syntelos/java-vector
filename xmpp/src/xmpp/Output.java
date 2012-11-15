@@ -227,7 +227,7 @@ public class Output
             for (Component c: cit){
 
                 Bounds cb = c.getBoundsVector();
-                yy -= cb.height;
+                yy -= (cb.height+4f);
 
                 cb.x = xx;
                 cb.y = yy;
