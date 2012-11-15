@@ -35,7 +35,7 @@ public class XAddress
 
     public final static class Default {
 
-        public final static String Host = "chat.google.com";
+        public final static String Host = "talk.l.google.com";
 
         public final static String Resource = "Vector";
 
