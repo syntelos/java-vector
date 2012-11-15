@@ -157,6 +157,8 @@ public final class XThread
             Output.Instance.headline("XThread Connect");
 
             this.connection = this.createConnection();
+
+            Status.Instance.up();
         }
     }
     public void disconnect(){
@@ -168,6 +170,7 @@ public final class XThread
             }
             finally {
                 this.connection = null;
+                Status.Instance.down();
             }
         }
     }

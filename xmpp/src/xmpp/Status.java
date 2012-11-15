@@ -88,8 +88,8 @@ public class Status
 
         Border border = new Border();
         this.add(border);
-        border.setColor(OK);
-        border.setColorOver(NG);
+        border.setColor(NG);
+        border.setColorOver(OK);
         border.setStyle(Border.Style.ROUND);
         border.setStroke(new Stroke(2f));
     }
@@ -146,6 +146,28 @@ public class Status
                 return label;
         }
         return null;
+    }
+    public Status up(){
+
+        Border border = this.getBorder();
+        if (null != border){
+            border.setColor(OK);
+            border.setColorOver(NG);
+        }
+
+        this.outputScene();
+        return this;
+    }
+    public Status down(){
+
+        Border border = this.getBorder();
+        if (null != border){
+            border.setColor(NG);
+            border.setColorOver(OK);
+        }
+
+        this.outputScene();
+        return this;
     }
     public Status clear(){
 
