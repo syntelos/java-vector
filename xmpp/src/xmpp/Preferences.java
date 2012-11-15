@@ -132,11 +132,181 @@ public class Preferences
         }
     }
 
-    private java.util.prefs.Preferences storage;
+    public final static class TemporaryStorage
+        extends java.util.prefs.Preferences
+    {
+
+        private final java.util.Map<String,Object> storage = new java.util.HashMap<String,Object>();
+
+
+        public TemporaryStorage(){
+            super();
+        }
+
+
+        public void put(String key, String value){
+            this.storage.put(key,value);
+        }
+        public String get(String key, String def){
+            Object value = this.storage.get(key);
+            if (null == value)
+                return def;
+            else
+                return (String)value;
+        }
+        public void remove(String key){
+            this.storage.remove(key);
+        }
+        public void clear() throws BackingStoreException {
+            this.storage.clear();
+        }
+        public void putInt(String key, int value){
+            this.storage.put(key, value);
+        }
+        public int getInt(String key, int def){
+            Object value = this.storage.get(key);
+            if (null == value)
+                return def;
+            else
+                return ((Number)value).intValue();
+        }
+        public void putLong(String key, long value){
+            this.storage.put(key, value);
+        }
+        public long getLong(String key, long def){
+            Object value = this.storage.get(key);
+            if (null == value)
+                return def;
+            else
+                return ((Number)value).longValue();
+        }
+        public void putBoolean(String key, boolean value){
+            this.storage.put(key, value);
+        }
+        public boolean getBoolean(String key, boolean def){
+            Object value = this.storage.get(key);
+            if (null == value)
+                return def;
+            else
+                return ((Boolean)value).booleanValue();
+        }
+        public void putFloat(String key, float value){
+            this.storage.put(key, value);
+        }
+        public float getFloat(String key, float def){
+            Object value = this.storage.get(key);
+            if (null == value)
+                return def;
+            else
+                return ((Number)value).floatValue();
+        }
+        public void putDouble(String key, double value){
+            this.storage.put(key, value);
+        }
+        public double getDouble(String key, double def){
+            Object value = this.storage.get(key);
+            if (null == value)
+                return def;
+            else
+                return ((Number)value).doubleValue();
+        }
+        public void putByteArray(String key, byte[] value){
+            this.storage.put(key, value);
+        }
+        public byte[] getByteArray(String key, byte[] def){
+            Object value = this.storage.get(key);
+            if (null == value)
+                return def;
+            else
+                return (byte[])value;
+        }
+        public String[] keys()
+            throws BackingStoreException
+        {
+            return (String[])this.storage.keySet().toArray(new String[]{});
+        }
+        public String[] childrenNames()
+            throws BackingStoreException
+        {
+            throw new UnsupportedOperationException();
+        }
+        public java.util.prefs.Preferences parent(){
+            throw new UnsupportedOperationException();
+        }
+        public java.util.prefs.Preferences node(String pathName){
+            throw new UnsupportedOperationException();
+        }
+        public boolean nodeExists(String pathName)
+            throws BackingStoreException
+        {
+            throw new UnsupportedOperationException();
+        }
+        public void removeNode()
+            throws BackingStoreException
+        {
+            throw new UnsupportedOperationException();
+        }
+        public String name(){
+            throw new UnsupportedOperationException();
+        }
+        public String absolutePath(){
+            throw new UnsupportedOperationException();
+        }
+        public boolean isUserNode(){
+            throw new UnsupportedOperationException();
+        }
+        public String toString(){
+            throw new UnsupportedOperationException();
+        }
+        public void flush()
+            throws BackingStoreException
+        {
+            throw new UnsupportedOperationException();
+        }
+        public void sync()
+            throws BackingStoreException
+        {
+            throw new UnsupportedOperationException();
+        }
+        public void addPreferenceChangeListener(PreferenceChangeListener pcl){
+            throw new UnsupportedOperationException();
+        }
+        public void removePreferenceChangeListener(PreferenceChangeListener pcl){
+            throw new UnsupportedOperationException();
+        }
+        public void addNodeChangeListener(NodeChangeListener ncl){
+            throw new UnsupportedOperationException();
+        }
+        public void removeNodeChangeListener(NodeChangeListener ncl){
+            throw new UnsupportedOperationException();
+        }
+        public void exportNode(OutputStream os)
+            throws IOException, BackingStoreException
+        {
+            throw new UnsupportedOperationException();
+        }
+        public void exportSubtree(OutputStream os)
+            throws IOException, BackingStoreException
+        {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+
+    private final java.util.prefs.Preferences storage;
+
 
     public Preferences(){
         super();
-        this.storage = java.util.prefs.Preferences.userNodeForPackage(Preferences.class);
+        java.util.prefs.Preferences storage;
+        try {
+            storage = java.util.prefs.Preferences.userNodeForPackage(Preferences.class);
+        }
+        catch (SecurityException sec){
+
+            storage = new Preferences.TemporaryStorage();
+        }
+        this.storage = storage;
     }
 
 
@@ -196,66 +366,66 @@ public class Preferences
     public String[] childrenNames()
         throws BackingStoreException
     {
-        return this.storage.childrenNames();
+        throw new UnsupportedOperationException();
     }
     public java.util.prefs.Preferences parent(){
-        return this.storage.parent();
+        throw new UnsupportedOperationException();
     }
     public java.util.prefs.Preferences node(String pathName){
-        return this.storage.node(pathName);
+        throw new UnsupportedOperationException();
     }
     public boolean nodeExists(String pathName)
         throws BackingStoreException
     {
-        return this.storage.nodeExists(pathName);
+        throw new UnsupportedOperationException();
     }
     public void removeNode()
         throws BackingStoreException
     {
-        this.storage.removeNode();
+        throw new UnsupportedOperationException();
     }
     public String name(){
-        return this.storage.name();
+        throw new UnsupportedOperationException();
     }
     public String absolutePath(){
-        return this.storage.absolutePath();
+        throw new UnsupportedOperationException();
     }
     public boolean isUserNode(){
-        return this.storage.isUserNode();
+        throw new UnsupportedOperationException();
     }
     public String toString(){
-        return this.storage.toString();
+        throw new UnsupportedOperationException();
     }
     public void flush()
         throws BackingStoreException
     {
-        this.storage.flush();
+        throw new UnsupportedOperationException();
     }
     public void sync()
         throws BackingStoreException
     {
-        this.storage.sync();
+        throw new UnsupportedOperationException();
     }
     public void addPreferenceChangeListener(PreferenceChangeListener pcl){
-        this.storage.addPreferenceChangeListener(pcl);
+        throw new UnsupportedOperationException();
     }
     public void removePreferenceChangeListener(PreferenceChangeListener pcl){
-        this.storage.removePreferenceChangeListener(pcl);
+        throw new UnsupportedOperationException();
     }
     public void addNodeChangeListener(NodeChangeListener ncl){
-        this.storage.addNodeChangeListener(ncl);
+        throw new UnsupportedOperationException();
     }
     public void removeNodeChangeListener(NodeChangeListener ncl){
-        this.storage.removeNodeChangeListener(ncl);
+        throw new UnsupportedOperationException();
     }
     public void exportNode(OutputStream os)
-    throws IOException, BackingStoreException
+        throws IOException, BackingStoreException
     {
-        this.storage.exportNode(os);
+        throw new UnsupportedOperationException();
     }
     public void exportSubtree(OutputStream os)
-    throws IOException, BackingStoreException
+        throws IOException, BackingStoreException
     {
-        this.storage.exportSubtree(os);
+        throw new UnsupportedOperationException();
     }
 }
