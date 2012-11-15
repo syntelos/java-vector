@@ -1,5 +1,12 @@
 
 XMPP chat demo
 
-Status funny broken
 
+Status
+
+  Funny but broken
+
+Bugs
+
+ * Unable to disconnect in alternative user?
+ * Message send produces XMPP error cancel
