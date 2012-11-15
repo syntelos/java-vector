@@ -228,8 +228,8 @@ public interface Table {
 
                     Bounds cb = c.getBoundsVector();
 
-                    colwidths[cc] = Math.max(colwidths[cc],(cs+cb.width));
-                    rowheights[rr] = Math.max(rowheights[rr],(cs+cb.height));
+                    this.colwidths[cc] = Math.max(this.colwidths[cc],(cs+cb.width));
+                    this.rowheights[rr] = Math.max(this.rowheights[rr],(cs+cb.height));
 
                     if (c instanceof Table.Col.Span){
 

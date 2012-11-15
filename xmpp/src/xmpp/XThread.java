@@ -61,17 +61,7 @@ public final class XThread
          */
         Delay;
     }
-    /**
-     * 
-     */
-    public interface Consumer {
 
-        public Consumer receive(Message xm);
-
-        public Consumer headline(Message xm);
-
-        public Consumer error(Message xm);
-    }
     /**
      * Persistent channel
      */
@@ -170,6 +160,7 @@ public final class XThread
     public void disconnect(){
         if (null != this.connection){
             Output.Instance.headline("XThread Disconnect");
+            Status.Instance.clear();
             try {
                 this.connection.disconnect();
             }
@@ -234,7 +225,7 @@ public final class XThread
     }
     protected void update(Presence p){
 
-        Output.Instance.update(p);
+        Status.Instance.update(p);
     }
     protected void receive(Message m){
 

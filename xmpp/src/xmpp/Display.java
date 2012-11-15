@@ -46,6 +46,10 @@ public class Display
         {
             this.add(input);
         }
+        final Status status = Status.Instance;
+        {
+            this.add(status);
+        }
         final Logon logon = new Logon();
         {
             this.add(logon);
@@ -75,9 +79,15 @@ public class Display
         else
             return null;
     }
-    public Logon getLogon(){
+    public Status getStatus(){
         if (this.has(2))
-            return (Logon)this.get(2);
+            return (Status)this.get(2);
+        else
+            return null;
+    }
+    public Logon getLogon(){
+        if (this.has(3))
+            return (Logon)this.get(3);
         else
             return null;
     }
@@ -86,8 +96,15 @@ public class Display
         if (null == logon){
             logon = new Logon();
             this.add(logon);
-            this.modified();
+
         }
+        else {
+            this.drop(logon);
+        }
+        this.modified();
+
+        this.outputScene();
+
         return logon;
     }
 }

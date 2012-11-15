@@ -39,7 +39,6 @@ import platform.Color;
  */
 public class Output
     extends vector.Container
-    implements XThread.Consumer
 {
     public final static Output Instance = new Output();
     
@@ -101,13 +100,6 @@ public class Output
             }
         }
     }
-    public Output update(Presence p){
-        final String from = p.getFrom();
-        final String type = p.getType().name();
-        final String mode = p.getMode().name();
-
-        return this.headline("%s %s %s",from,type,mode);
-    }
     public Output receive(Message m){
 
         final Label label = new Label();
@@ -120,6 +112,7 @@ public class Output
             Border border = new Border();
             label.setBorder(border);
             Logon.Configure(border);
+            border.setColor(Color.blue);
         }
 
         this.modified();
@@ -148,6 +141,7 @@ public class Output
             Border border = new Border();
             label.setBorder(border);
             Logon.Configure(border);
+            border.setColor(Color.green);
         }
 
         this.modified();
@@ -176,6 +170,7 @@ public class Output
             Border border = new Border();
             label.setBorder(border);
             Logon.Configure(border);
+            border.setColor(Color.red);
         }
 
         this.modified();
@@ -218,7 +213,7 @@ public class Output
         }
         {
             inputBounds.x = 0f;
-            inputBounds.y = (thisBounds.x+thisBounds.height+16f);
+            inputBounds.y = (thisBounds.y+thisBounds.height+4f);
             inputBounds.width = parentBounds.width;
 
             input.setBoundsVector(inputBounds);
