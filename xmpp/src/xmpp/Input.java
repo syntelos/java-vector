@@ -47,9 +47,19 @@ public class Input
 
         String m = this.getText();
 
-        this.setText(null);
+        if (null != m){
+            m = m.trim();
+            if (0 < m.length()){
 
-        this.modified();
+                this.setText(null);
+
+                XThread.Send(m);
+
+                this.modified();
+
+                this.outputScene();
+            }
+        }
     }
     public void logon(){
 

@@ -105,7 +105,7 @@ public class Logon
             {
                 input.add(idLabel);
                 Configure(idLabel);
-                idLabel.setText("Thread");
+                idLabel.setText("Session");
             }
             this.id = new TextEdit();
             {

@@ -116,6 +116,8 @@ public final class XThread
 
             this.connection.sendPacket(message);
 
+            Output.Instance.send(message);
+
             return true;
         }
         return false;

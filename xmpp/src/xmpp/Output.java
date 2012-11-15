@@ -100,13 +100,38 @@ public class Output
             }
         }
     }
+    public Output send(Message m){
+
+        final Label label = new Label();
+        {
+            final String string = String.format("%s: %s",m.getFrom(),m.getBody());
+
+            this.add(label);
+            Logon.Configure(label);
+            label.setText(string);
+            label.setColor(Color.black);
+
+            Border border = new Border();
+            label.setBorder(border);
+            Logon.Configure(border);
+            border.setColor(Color.black);
+        }
+
+        this.modified();
+
+        this.outputScene();
+
+        return this;
+    }
     public Output receive(Message m){
 
         final Label label = new Label();
         {
+            final String string = String.format("%s: %s",m.getFrom(),m.getBody());
+
             this.add(label);
             Logon.Configure(label);
-            label.setText(m.getBody());
+            label.setText(string);
             label.setColor(Color.blue);
 
             Border border = new Border();
