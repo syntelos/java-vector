@@ -46,7 +46,7 @@ EOF
  codebase="${codebase}"
      href="${tgt}">
   <information>
-    <title>Vector Xmpp Demo '${name}'</title>
+    <title>Vector Demo XMPP Chat</title>
     <vendor>The DigiVac Company</vendor>
     <homepage href="http://www.digivac.com/"/>
     <description>Vector scalable graphical user interfaces demo</description>

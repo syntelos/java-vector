@@ -4,7 +4,7 @@
  codebase="http://java-vector.googlecode.com/git"
      href="demo/xmpp.jnlp">
   <information>
-    <title>Vector Xmpp Demo ''</title>
+    <title>Vector Demo XMPP Chat</title>
     <vendor>The DigiVac Company</vendor>
     <homepage href="http://www.digivac.com/"/>
     <description>Vector scalable graphical user interfaces demo</description>
@@ -19,7 +19,7 @@
     <jar href="lib/joda-time-2.0.jar" download="lazy" />
     <jar href="lib/json-2.1.1.jar" download="eager" />
     <jar href="lib/lxl-1.0.6.jar" download="eager" />
-    <jar href="lib/path-1.0.1.jar" download="lazy" />
+    <jar href="lib/path-1.0.1.jar" download="eager" />
     <jar href="xmpp/lib/activation-1.1.1.jar" download="eager" />
     <jar href="xmpp/lib/smack-3.3.0.jar" download="eager" />
   </resources>
