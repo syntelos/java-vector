@@ -5,6 +5,7 @@ import java.util.StringTokenizer;
 public class LibPathManifest {
 
 
+    public final static String UserDir = System.getProperty("user.dir");
 
 
     public static void main(String[] argv){
@@ -29,13 +30,20 @@ public class LibPathManifest {
     }
 
     public final static String Rel(String dirpath){
+
+        if (dirpath.startsWith(UserDir)){
+
+            dirpath = dirpath.substring(UserDir.length());
+        }
+
         dirpath = dirpath.replace('\\','/');
-        int idx0 = dirpath.lastIndexOf("/lib/");
-        if (-1 < idx0)
-            return dirpath.substring(idx0+1);
-        else if (dirpath.startsWith("./"))
-            return dirpath.substring(2);
-        else
-            return dirpath;
+
+        if (dirpath.startsWith("./"))
+            dirpath = dirpath.substring(2);
+
+        while ('/' == dirpath.charAt(0))
+            dirpath = dirpath.substring(1);
+
+        return dirpath;
     }
 }

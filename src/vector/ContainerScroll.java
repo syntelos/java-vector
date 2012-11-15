@@ -168,11 +168,9 @@ public class ContainerScroll
     }
     public void layout(){
 
-        this.setBoundsVectorInit(this.getParentVector());
-
         ContainerScrollPosition hor = null, ver = null;
         {
-            final ContainerScrollPosition[] p = listContainerScrollPosition();
+            final ContainerScrollPosition[] p = this.listContainerScrollPosition();
             if (null != p){
                 switch(p.length){
                 case 1:{

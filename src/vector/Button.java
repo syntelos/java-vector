@@ -128,6 +128,13 @@ public class Button<E extends Enum<E>>
     public final Enum<E> getEnumValue(){
         return this.enumValue;
     }
+    public final Button setEnumValue(Enum<E> value){
+
+        if (null != value)
+            this.enumValue = value;
+
+        return this;
+    }
     public final String getEnumValueName(){
         if (null != this.enumValue)
             return this.enumValue.name();
@@ -135,10 +142,8 @@ public class Button<E extends Enum<E>>
             return null;
     }
     public final Button setEnumValueName(String name){
-        if (null != this.enumValueOf){
-            this.enumValue = Component.Tools.EnumValueOf(this.enumValueOf,name);
-        }
-        return this;
+        final Enum<E> value = Component.Tools.EnumValueOf(this.enumValueOf,name);
+        return this.setEnumValue(value);
     }
 
     public ObjectJson toJson(){

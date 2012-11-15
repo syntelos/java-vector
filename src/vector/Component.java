@@ -989,20 +989,24 @@ public interface Component
             }
         }
         public final static <T extends Enum<T>> Enum<T> EnumValueOf(Method m, String name){
-            try {
-                return (Enum<T>)m.invoke(null,name);
-            }
-            catch (IllegalAccessException interr){
+            if (null != m && null != name){
+                try {
+                    return (Enum<T>)m.invoke(null,name);
+                }
+                catch (IllegalAccessException interr){
 
-                throw new IllegalArgumentException(m.getDeclaringClass().getName(),interr);
+                    throw new IllegalArgumentException(m.getDeclaringClass().getName(),interr);
+                }
+                catch (java.lang.reflect.InvocationTargetException arg){
+                    Throwable t = arg.getCause();
+                    if (t instanceof RuntimeException)
+                        throw (RuntimeException)t;
+                    else
+                        throw new IllegalArgumentException(name,t);
+                }
             }
-            catch (java.lang.reflect.InvocationTargetException arg){
-                Throwable t = arg.getCause();
-                if (t instanceof RuntimeException)
-                    throw (RuntimeException)t;
-                else
-                    throw new IllegalArgumentException(name,t);
-            }
+            else
+                return null;
         }
     }
 
@@ -1048,6 +1052,16 @@ public interface Component
         }
 
 
+        public Iterator reverse(){
+            int head = 0, tail = (this.count-1);
+            final int term = (tail>>1);
+            for ( ; term < tail; head++,tail--){
+                Component t = this.list[head];
+                this.list[head] = this.list[tail];
+                this.list[tail] = t;
+            }
+            return this;
+        }
         public int count(){
             return this.count;
         }

@@ -697,6 +697,8 @@ public interface Event {
 
             public Enum<P> getEnumValue();
 
+            public Producer setEnumValue(Enum<P> value);
+
             public String getEnumValueName();
 
             public Producer setEnumValueName(String name);

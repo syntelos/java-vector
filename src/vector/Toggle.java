@@ -601,6 +601,13 @@ public abstract class Toggle<E extends Enum<E>>
     public final Enum<E> getEnumValue(){
         return this.enumValue;
     }
+    public final Toggle setEnumValue(Enum<E> value){
+
+        if (null != value)
+            this.enumValue = value;
+
+        return this;
+    }
     public final String getEnumValueName(){
         if (null != this.enumValue)
             return this.enumValue.name();
@@ -608,10 +615,8 @@ public abstract class Toggle<E extends Enum<E>>
             return null;
     }
     public final Toggle setEnumValueName(String name){
-        if (null != this.enumValueOf){
-            this.enumValue = Component.Tools.EnumValueOf(this.enumValueOf,name);
-        }
-        return this;
+        final Enum<E> value = Component.Tools.EnumValueOf(this.enumValueOf,name);
+        return this.setEnumValue(value);
     }
     protected Shape getShape(){
         Shape shape = this.shape;

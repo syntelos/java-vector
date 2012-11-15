@@ -11,8 +11,8 @@
   <property name="demo.src" value="demo/src"/>
   <property name="geda.src" value="geda/src"/>
   <property name="fonview.src" value="fonview/src"/>
-  <property name="xmpp.src" value="xmpp/src"/>
-
+  <property name="xmpp.dir" value="xmpp"/>
+  <property name="xmpp.src" value="${xmpp.dir}/src"/>
   <property name="llg.dir" value="llg"/>
   <property name="llg.src" value="${llg.dir}/src"/>
 
@@ -38,7 +38,7 @@
     <antcall target="demo"/>
     <antcall target="geda"/>
     <antcall target="fonview"/>
-    <!-- antcall target="xmpp"/ -->
+    <antcall target="xmpp"/>
     <!-- antcall target="llg"/ -->
   </target>
 
@@ -49,19 +49,19 @@
 
   <target name="awt-jar" depends="awt-compile" description="Package awt jar, clean bin.">
 
-    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
+    <java outputproperty="awt.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
     <echo message="Main-Class: platform.Frame"/>
-    <echo message="Class-Path: ${lib.path.manifest}"/>
+    <echo message="Class-Path: ${awt.lib.path.manifest}"/>
 
     <delete file="${existing.awt.jar}"/>
 
     <jar jarfile="${target.awt.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="platform.Frame"/>
-        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${awt.lib.path.manifest}"/>
       </manifest>
     </jar>
 
@@ -76,10 +76,10 @@
       <fileset dir="${awt.src}" includes="**/*.txt"/>
       <fileset dir="${awt.src}" includes="**/*.xml"/>
     </copy>
-    <javac srcdir="${awt.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+    <javac includeAntRuntime="false" srcdir="${awt.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
-        <pathelement path="${lib.path}"/>
+        <path refid="lib.path"/>
         <pathelement location="${existing.vector.jar}"/>
       </classpath>
     </javac>
@@ -87,20 +87,20 @@
 
   <target name="demo" depends="demo-compile" description="Package demo jar, clean bin.  Depends on the target jar.">
 
-    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="demo.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
     <echo message="Main-Class: platform.Frame"/>
-    <echo message="Class-Path: ${lib.path.manifest}"/>
+    <echo message="Class-Path: ${demo.lib.path.manifest}"/>
 
     <delete file="${existing.demo.jar}"/>
 
     <jar jarfile="${target.demo.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="platform.Frame"/>
-        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${demo.lib.path.manifest}"/>
       </manifest>
     </jar>
 
@@ -115,10 +115,10 @@
       <fileset dir="${demo.src}" includes="**/*.txt"/>
       <fileset dir="${demo.src}" includes="**/*.xml"/>
     </copy>
-    <javac srcdir="${demo.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+    <javac includeAntRuntime="false" srcdir="${demo.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
-        <pathelement path="${lib.path}"/>
+        <path refid="lib.path"/>
         <pathelement location="${existing.vector.jar}"/>
       </classpath>
     </javac>
@@ -126,20 +126,20 @@
 
   <target name="geda" depends="geda-compile" description="Package geda jar, clean bin.  Depends on the target jar.">
 
-    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="geda.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
     <echo message="Main-Class: geda.Frame"/>
-    <echo message="Class-Path: ${lib.path.manifest}"/>
+    <echo message="Class-Path: ${geda.lib.path.manifest}"/>
 
     <delete file="${existing.geda.jar}"/>
 
     <jar jarfile="${target.geda.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="geda.Frame"/>
-        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${geda.lib.path.manifest}"/>
       </manifest>
     </jar>
 
@@ -154,32 +154,32 @@
       <fileset dir="${geda.src}" includes="**/*.txt"/>
       <fileset dir="${geda.src}" includes="**/*.xml"/>
     </copy>
-    <javac srcdir="${geda.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+    <javac includeAntRuntime="false" srcdir="${geda.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
         <pathelement location="${existing.awt.jar}"/>
-        <pathelement path="${lib.path}"/>
+        <path refid="lib.path"/>
       </classpath>
     </javac>
   </target>
 
   <target name="fonview" depends="fonview-compile" description="Package fonview jar, clean bin.  Depends on the target jar.">
 
-    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="fonview.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
     <echo message="Main-Class: fonview.Frame"/>
-    <echo message="Class-Path: ${lib.path.manifest}"/>
+    <echo message="Class-Path: ${fonview.lib.path.manifest}"/>
 
     <delete file="${existing.fonview.jar}"/>
 
     <jar jarfile="${target.fonview.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="fonview.Frame"/>
-        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${fonview.lib.path.manifest}"/>
       </manifest>
     </jar>
 
@@ -194,12 +194,12 @@
       <fileset dir="${fonview.src}" includes="**/*.txt"/>
       <fileset dir="${fonview.src}" includes="**/*.xml"/>
     </copy>
-    <javac srcdir="${fonview.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+    <javac includeAntRuntime="false" srcdir="${fonview.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
         <pathelement location="${existing.awt.jar}"/>
-        <pathelement path="${lib.path}"/>
+        <path refid="lib.path"/>
       </classpath>
     </javac>
   </target>
@@ -212,20 +212,14 @@
 
   <target name="xmpp-jar" depends="xmpp-compile" description="Package xmpp jar, clean bin.  Depends on the target jar.">
 
-    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
-      <arg value="${target.awt.jar}"/>
-      <arg value="${target.vector.jar}"/>
-      <arg value="${toString:lib.path}"/>
-    </java>
-    <echo message="Main-Class: platform.Frame"/>
-    <echo message="Class-Path: ${lib.path.manifest}"/>
+    <echo message="Main-Class: xmpp.Frame"/>
 
     <delete file="${existing.xmpp.jar}"/>
 
     <jar jarfile="${target.xmpp.jar}" basedir="${bin}" >
       <manifest>
-        <attribute name="Main-Class" value="platform.Frame"/>
-        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+        <attribute name="Main-Class" value="xmpp.Frame"/>
+        <attribute name="Class-Path" value="${xmpp.lib.path.manifest}"/>
       </manifest>
     </jar>
 
@@ -233,6 +227,22 @@
   </target>
 
   <target name="xmpp-compile" depends="version">
+
+    <path id="xmpp.lib.path">
+
+      <fileset dir="${xmpp.dir}/lib">
+        <include name="**/*.jar" />
+      </fileset>
+    </path>
+    <java outputproperty="xmpp.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+      <arg value="${target.awt.jar}"/>
+      <arg value="${target.vector.jar}"/>
+      <arg value="${toString:lib.path}"/>
+      <arg value="${toString:xmpp.lib.path}"/>
+    </java>
+
+    <echo message="Class-Path: ${xmpp.lib.path.manifest}"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -240,12 +250,13 @@
       <fileset dir="${xmpp.src}" includes="**/*.txt"/>
       <fileset dir="${xmpp.src}" includes="**/*.xml"/>
     </copy>
-    <javac srcdir="${xmpp.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+    <javac includeAntRuntime="false" srcdir="${xmpp.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
         <pathelement location="${existing.awt.jar}"/>
-        <pathelement path="${lib.path}"/>
+        <path refid="lib.path"/>
+        <path refid="xmpp.lib.path"/>
       </classpath>
     </javac>
   </target>
@@ -286,12 +297,12 @@
       <fileset dir="${jogl.src}" includes="**/*.txt"/>
       <fileset dir="${jogl.src}" includes="**/*.xml"/>
     </copy>
-    <javac srcdir="${jogl.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+    <javac includeAntRuntime="false" srcdir="${jogl.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
         <pathelement location="${existing.awt.jar}"/>
-        <pathelement path="${lib.path}"/>
+        <path refid="lib.path"/>
       </classpath>
     </javac>
   </target>
@@ -328,12 +339,12 @@
     <copy todir="${bin}/models">
       <fileset dir="${llg.dir}/models" includes="**/*.emf"/>
     </copy>
-    <javac srcdir="${llg.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+    <javac includeAntRuntime="false" srcdir="${llg.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
         <pathelement location="${existing.awt.jar}"/>
-        <pathelement path="${lib.path}"/>
+        <path refid="lib.path"/>
       </classpath>
     </javac>
   </target>
@@ -371,10 +382,10 @@
       <fileset dir="${src}" includes="**/*.txt"/>
       <fileset dir="${src}" includes="**/*.xml"/>
     </copy>
-    <javac srcdir="${src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+    <javac includeAntRuntime="false" srcdir="${src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            classpathref="lib.path" source="${compiler.source}" target="${compiler.target}">
       <classpath>
-        <pathelement path="${lib.path}"/>
+        <path refid="lib.path"/>
         <pathelement location="${existing.awt.jar}"/>
       </classpath>
     </javac>

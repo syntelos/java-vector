@@ -132,6 +132,13 @@ public class ColorPalette<E extends Enum<E>>
     public final Enum<E> getEnumValue(){
         return this.enumValue;
     }
+    public final ColorPalette setEnumValue(Enum<E> value){
+
+        if (null != value)
+            this.enumValue = value;
+
+        return this;
+    }
     public final String getEnumValueName(){
         if (null != this.enumValue)
             return this.enumValue.name();
@@ -139,10 +146,8 @@ public class ColorPalette<E extends Enum<E>>
             return null;
     }
     public final ColorPalette setEnumValueName(String name){
-        if (null != this.enumValueOf){
-            this.enumValue = Component.Tools.EnumValueOf(this.enumValueOf,name);
-        }
-        return this;
+        final Enum<E> value = Component.Tools.EnumValueOf(this.enumValueOf,name);
+        return this.setEnumValue(value);
     }
     @Override
     public ColorPalette outputScene(Context g){

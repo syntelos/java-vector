@@ -130,6 +130,9 @@ public class Stroke
     public Stroke(float lineWidth, Color color){
         this(lineWidth,Cap.Default,Join.Default,10.0f,null,1.0f,color);
     }
+    public Stroke(float lineWidth){
+        this(lineWidth,Cap.Default,Join.Default,10.0f,null,1.0f,null);
+    }
 
 
     public final boolean hasColor(){
