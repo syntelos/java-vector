@@ -79,15 +79,28 @@ public final class XThread
 
         Instance.send(m);
     }
+    public final static void Select(XAddress to){
+
+        Instance.select(to);
+    }
+    public final static void Contact(XAddress to){
+
+        Instance.contact(to);
+    }
 
 
+    /*
+     * These fields only change value on (connect)
+     */
     protected String id, host, password, resource;
 
-    protected String logon;
+    protected XAddress logon;
 
     protected int port;
-
-    protected String to;
+    /*
+     * This field is protected from entering state (NULL) after (NOT NULL)
+     */
+    protected XAddress to;
 
     private volatile XMPPConnection connection;
 
@@ -95,6 +108,7 @@ public final class XThread
 
     private volatile Message.Type messageType = Message.Type.chat;
 
+    private volatile XAddress contact;
 
     /**
      * 
@@ -106,9 +120,11 @@ public final class XThread
 
     public boolean send(String m){
 
-        if (null != this.connection){
+        if (null != this.connection && null != this.to){
 
-            Message message = new Message(this.to.toString(), this.messageType);
+            final String to = this.to.full;
+
+            Message message = new Message(to, this.messageType);
             message.setFrom(this.connection.getUser());
             message.setThread(this.id);
             message.setBody(m);
@@ -140,18 +156,38 @@ public final class XThread
     public boolean isEncrypted(){
         return (null != this.connection && this.connection.isSecureConnection());
     }
+    public void select(XAddress to){
+        if (null != to){
+
+            Output.Instance.headline("XThread Select(%s)",to.identifier);
+
+            this.to = to;
+
+            Preferences.SetTo(to);
+        }
+    }
+    public void contact(XAddress to){
+        if (null != to){
+
+            Output.Instance.headline("XThread Contact(%s)",to.identifier);
+
+            this.contact = to;
+
+            //Preferences.SetTo(to);
+        }
+    }
     public void connect(){
 
         this.disconnect();
 
-        this.id = Preferences.GetThread();
+        this.id = Preferences.GetSession();
         this.host = Preferences.GetHost();
         this.port = Preferences.GetPort();
 
-        this.logon = Preferences.GetLogon();
+        this.logon = Preferences.ComposeLogon();
         this.password = Preferences.GetPassword();
-        this.to = Preferences.GetTo();
-        this.resource = Preferences.GetResource();
+        this.to = Preferences.ComposeTo();
+        this.resource = Preferences.ComposeResource();
 
         if (this.isReady()){
             Output.Instance.headline("XThread Connect");
@@ -246,36 +282,36 @@ public final class XThread
         switch(et){
         case WAIT:
 
-            Output.Instance.error("XThread error(WAIT(DELAY))");
+            Output.Instance.error("XThread error(WAIT:Delay)");
 
             this.state = State.Delay;
 
             break;
         case CANCEL:
 
-            Output.Instance.error("XThread error(CANCEL(CANCEL))");
+            Output.Instance.error("XThread error(CANCEL:Cancel)");
 
             this.state = State.Cancel;
             break;
         case MODIFY:
 
-            Output.Instance.error("XThread error(MODIFY(%s))",this.state.name());
+            Output.Instance.error("XThread error(MODIFY:%s)",this.state.name());
 
             break;
         case AUTH:
 
-            Output.Instance.error("XThread error(AUTH(Cancel))");
+            Output.Instance.error("XThread error(AUTH:Cancel)");
 
             this.state = State.Cancel;
             break;
         case CONTINUE:
 
-            Output.Instance.error("XThread error(CONTINUE(%s))",this.state.name());
+            Output.Instance.error("XThread error(CONTINUE:%s)",this.state.name());
 
             break;
         default:
 
-            Output.Instance.error("XThread error(UNKNOWN(%s,%s))",et.name(),this.state.name());
+            Output.Instance.error("XThread error(UNKNOWN(%s:%s))",et.name(),this.state.name());
             break;
         }
     }
@@ -298,9 +334,12 @@ public final class XThread
 
             connection.connect();
 
-            Output.Instance.headline("XThread Login(logon: %s, resource: %s)",this.logon, this.resource);
+            final String logon = this.logon.logon;
 
-            connection.login(this.logon, this.password, this.resource);
+
+            Output.Instance.headline("XThread Login(logon: %s, resource: %s)",logon, this.resource);
+
+            connection.login(logon, this.password, this.resource);
             connection.sendPacket(new Presence(Presence.Type.available));
 
             connection.addPacketListener(this,this);

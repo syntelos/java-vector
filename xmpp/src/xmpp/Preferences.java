@@ -30,22 +30,34 @@ import java.util.prefs.PreferenceChangeListener;
 
 /**
  * Desktop preferences 
+ * 
+ * <h3>Security</h3>
+ * 
+ * <p> Persistent desktop preferences require desktop database
+ * read/write access rights.  These rights are available when the
+ * executable JAR is executed locally.  From Web Start JNLP, all jar
+ * files must be signed and access requirements declared (in JNLP).
+ * </p>
+ * 
+ * <p> When access is denied, instances of this class will substitute
+ * temporary storage that is not persistent to the client
+ * desktop. </p>
  */
 public class Preferences
     extends java.util.prefs.Preferences
 {
     public final static Preferences Instance = new Preferences();
 
-    public final static String Thread = "Thread";
+    public final static String Session = "Session";
 
-    public final static String GetThread(){
-        return Instance.get(Thread,StringUtils.randomString(6));
+    public final static String GetSession(){
+        return Instance.get(Session,StringUtils.randomString(6));
     }
-    public final static void SetThread(String m){
+    public final static void SetSession(String m){
         if (null != m){
             m = m.trim();
             if (0 < m.length())
-                Instance.put(Thread,m);
+                Instance.put(Session,m);
         }
     }
 
@@ -80,6 +92,9 @@ public class Preferences
     public final static String GetResource(){
         return Instance.get(Resource,XAddress.Default.Resource);
     }
+    public final static String ComposeResource(){
+        return (Preferences.GetResource()+'.'+Preferences.GetSession());
+    }
     public final static void SetResource(String m){
         if (null != m){
             m = m.trim();
@@ -94,6 +109,10 @@ public class Preferences
 
         return Instance.get(Logon,null);
     }
+    public final static XAddress ComposeLogon(){
+
+        return new XAddress.From();
+    }
     public final static void SetLogon(String m){
         if (null != m){
             Instance.put(Logon,m);
@@ -106,9 +125,26 @@ public class Preferences
 
         return Instance.get(To,null);
     }
+    public final static String GetToIdentifier(){
+        try {
+            return (new XAddress.To()).identifier;
+        }
+        catch (IllegalArgumentException notFound){
+            return null;
+        }
+    }
+    public final static XAddress ComposeTo(){
+
+        return new XAddress.To();
+    }
     public final static void SetTo(String m){
         if (null != m){
             Instance.put(To,m);
+        }
+    }
+    public final static void SetTo(XAddress m){
+        if (null != m){
+            Instance.put(To,m.full);
         }
     }
 

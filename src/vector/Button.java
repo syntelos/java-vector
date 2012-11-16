@@ -79,7 +79,7 @@ public class Button<E extends Enum<E>>
                             root.input(action);
                         }
                         else
-                            throw new IllegalStateException();
+                            throw new IllegalStateException("Orphan");
                     }
 
                     return true;

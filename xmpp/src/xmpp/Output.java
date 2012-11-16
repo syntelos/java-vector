@@ -102,9 +102,13 @@ public class Output
     }
     public Output send(Message m){
 
+        final String from = (new XAddress.From(m)).identifier;
+
+        final String body = m.getBody();
+
         final Label label = new Label();
         {
-            final String string = String.format("%s: %s",m.getFrom(),m.getBody());
+            final String string = String.format("%s: %s",from,body);
 
             this.add(label);
             Logon.Configure(label);
@@ -125,9 +129,13 @@ public class Output
     }
     public Output receive(Message m){
 
+        final String from = (new XAddress.From(m)).identifier;
+
+        final String body = m.getBody();
+
         final Label label = new Label();
         {
-            final String string = String.format("%s: %s",m.getFrom(),m.getBody());
+            final String string = String.format("%s: %s",from,body);
 
             this.add(label);
             Logon.Configure(label);
@@ -148,7 +156,11 @@ public class Output
     }
     public Output headline(Message m){
 
-        return this.headline(m.getBody());
+        final String from = (new XAddress.From(m)).identifier;
+
+        final String body = m.getBody();
+
+        return this.headline("%s: %s",from,body);
     }
     public Output headline(String fmt, Object... args){
 
@@ -177,7 +189,11 @@ public class Output
     }
     public Output error(Message m){
 
-        return this.error(m.getBody());
+        final String from = (new XAddress.From(m)).identifier;
+
+        final String body = m.getBody();
+
+        return this.error("%s: %s",from,body);
     }
     public Output error(String fmt, Object... args){
 

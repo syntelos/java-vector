@@ -18,7 +18,6 @@
  */
 package xmpp;
 
-import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 
 import vector.Border;
@@ -26,7 +25,6 @@ import vector.Bounds;
 import vector.Button;
 import vector.Component;
 import vector.Event;
-import vector.Label;
 import vector.Padding;
 import vector.Stroke;
 import vector.TableSmall;
@@ -42,35 +40,130 @@ public class Status
 {
     public final static platform.Font Font = platform.Font.decode("monospaced-12");
 
-    public final static Color BG = Color.white.opacity(0.5f);
+    public final static Color BG = Color.gray.opacity(0.5f);
+    public final static Color IG = Color.white.opacity(0.5f);
     public final static Color FG = Color.black.opacity(0.5f);
     public final static Color OK = Color.green.opacity(0.5f);
+    public final static Color AY = Color.yellow.opacity(0.5f);
+    public final static Color ST = Color.blue.opacity(0.5f);
     public final static Color NG = Color.red.opacity(0.5f);
 
-
+    /**
+     * 
+     */
     public final static Status Instance = new Status();
-    
-    public final static Border Configure(Border border){
 
-        border.setBackground(BG);
-        border.setColor(FG);
-        border.setColorOver(OK);
-        border.setStyle(Border.Style.ROUND);
-        border.setArc(10.0);
-        border.setStroke(new Stroke(1f));
-        border.setStrokeOver(new Stroke(2f));
+    public final static void Select(XAddress to){
 
-        return border;
+        Instance.select(to);
     }
-    public final static vector.Text Configure(vector.Text text){
+    public final static void Select(String to){
 
-        text.setFont(Status.Font);
-        text.setFixed(true);
-        text.setCols(40);
-        text.setColor(FG);
-        text.setColorOver(OK);
+        Instance.select(new XAddress(to));
+    }
+    
+    /**
+     * 
+     */
+    public static class Label
+        extends vector.Button
+    {
 
-        return text;
+        public final XAddress address;
+
+        private Presence.Mode mode;
+
+
+        public Label(XAddress address){
+            super();
+            if (null != address)
+                this.address = address;
+            else
+                throw new IllegalArgumentException();
+        }
+
+
+        public void init(){
+            super.init();
+
+            this.setEnumClass(Actor.class);
+            this.setEnumValue(Actor.Select);
+            this.setFont(Status.Font);
+            this.setFixed(true);
+            this.setCols(40);
+            this.setColor(FG);
+            this.setColorOver(FG);
+            this.setText(address.identifier);
+
+            Border border = new Border();
+            this.setBorder(border);
+
+            border.setColor(FG);
+            border.setColorOver(FG);
+            border.setStyle(Border.Style.ROUND);
+            border.setArc(6.0);
+            border.setStroke(new Stroke(1f));
+            border.setStrokeOver(new Stroke(2f));
+        }
+        public boolean equals(XAddress addr){
+            return this.address.identifier.equals(addr.identifier);
+        }
+        public boolean hasMode(){
+            return (null != this.mode);
+        }
+        public Presence.Mode getMode(){
+            return this.mode;
+        }
+        public void update(Presence p){
+            Border border = this.getBorder();
+
+            this.mode = p.getMode();
+
+            switch(this.mode){
+            case chat:
+                this.setColor(ST);
+                this.setColorOver(ST);
+                border.setColor(ST);
+                border.setColorOver(ST);
+                break;
+            case available:
+                this.setColor(OK);
+                this.setColorOver(OK);
+                border.setColor(OK);
+                border.setColorOver(OK);
+                break;
+            case away:
+            case xa:
+                this.setColor(AY);
+                this.setColorOver(AY);
+                border.setColor(AY);
+                border.setColorOver(AY);
+                break;
+            case dnd:
+            default:
+                this.setColor(NG);
+                this.setColorOver(NG);
+                border.setColor(NG);
+                border.setColorOver(NG);
+                break;
+            }
+        }
+        public boolean input(Event e){
+            if (super.input(e)){
+                switch(e.getType()){
+                case MouseUp:
+                    if (this.mouseIn){
+
+                        Status.Select(this.address);
+
+                        return true;
+                    }
+                default:
+                    break;
+                }
+            }
+            return false;
+        }
     }
 
 
@@ -86,12 +179,16 @@ public class Status
         this.setCols(1);
         this.setCellSpacing(2f);
 
-        Border border = new Border();
-        this.add(border);
-        border.setColor(NG);
-        border.setColorOver(OK);
-        border.setStyle(Border.Style.ROUND);
-        border.setStroke(new Stroke(2f));
+        final Border border = new Border();
+        {
+            this.add(border);
+            border.setBackground(BG);
+            border.setColor(OK);
+            border.setColorOver(OK);
+            border.setStyle(Border.Style.ROUND);
+            border.setStroke(new Stroke(2f));
+            border.setStrokeOver(new Stroke(4f));
+        }
     }
     public void layout(){
 
@@ -139,11 +236,11 @@ public class Status
             }
         }
     }
-    public Label search(String text){
+    public Label search(XAddress addr){
 
         for (Label label: this.listContent(Label.class)){
 
-            if (text.equals(label.getText()))
+            if (label.equals(addr))
                 return label;
         }
         return null;
@@ -153,7 +250,7 @@ public class Status
         Border border = this.getBorder();
         if (null != border){
             border.setColor(OK);
-            border.setColorOver(NG);
+            border.setColorOver(OK);
         }
 
         this.outputScene();
@@ -164,7 +261,7 @@ public class Status
         Border border = this.getBorder();
         if (null != border){
             border.setColor(NG);
-            border.setColorOver(OK);
+            border.setColorOver(NG);
         }
 
         this.outputScene();
@@ -182,48 +279,36 @@ public class Status
         return this;
     }
     public Status update(Presence p){
-        final String from = p.getFrom();
+
+        final XAddress from = new XAddress.From(p);
 
         Label label = this.search(from);
 
         if (null == label){
-            label = new Label();
-            {
-                this.add(label);
-                Status.Configure(label);
-                label.setText(from);
+            label = new Label(from);
 
-                Border border = new Border();
-                label.setBorder(border);
-                Status.Configure(border);
-            }
+            this.add(label);
         }
 
-        Border border = label.getBorder();
-
-        switch(p.getMode()){
-        case chat:
-        case available:
-            label.setColor(OK);
-            label.setColorOver(OK);
-            border.setColor(OK);
-            border.setColorOver(OK);
-            break;
-        case away:
-        case xa:
-        case dnd:
-        default:
-            label.setColor(NG);
-            label.setColorOver(NG);
-            border.setColor(NG);
-            border.setColorOver(NG);
-            break;
-        }
+        label.update(p);
 
         this.modified();
 
         this.outputScene();
 
+        return this;
+    }
+    public Status select(XAddress addr){
+
+        Label known = this.search(addr);
+        if (null != known){
+
+            XThread.Select(known.address);
+        }
+        else {
+
+            XThread.Contact(addr);
+        }
         return this;
     }
 }

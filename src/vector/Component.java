@@ -361,7 +361,7 @@ public interface Component
     public Component outputOverlay();
     /**
      * Recurse up the scene graph to remove the argument from its
-     * parent, and delete.
+     * parent, and destroy.
      * @return Requested removal performed successfully
      */
     public boolean drop(Component c);
@@ -546,9 +546,28 @@ public interface Component
          * the argument.
          */
         public <C extends Component> C addUnique(C comp);
-
+        /**
+         * The container remove operation shall not destroy the
+         * removed component.  
+         * 
+         * A forgotten and undestroyed component may not garbage
+         * collect when container or demi-container (border component)
+         * cyclic references exist in a removed scene graph subtree.
+         * The cyclic reference in this case is between: the component
+         * parent, and parent child or children fields.
+         * 
+         * @return Component not destroyed
+         */
         public <C extends Component> C remove(C comp);
-
+        /**
+         * The container remove operation shall not destroy the
+         * removed component.  
+         * 
+         * Note that the Component drop operation will destroy the
+         * removed component.
+         * 
+         * @return Component not destroyed
+         */
         public <C extends Component> C remove(int idx);
         /**
          * Iterable example

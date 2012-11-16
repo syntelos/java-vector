@@ -74,7 +74,7 @@ public class Logon
     public void init(){
         super.init();
 
-        this.setEnumClass(AcceptCancel.class);
+        this.setEnumClass(Actor.class);
         this.setContent(true);
         this.setBoundsVector(new Bounds(100,100,100,100));
 
@@ -111,7 +111,7 @@ public class Logon
             {
                 input.add(this.id);
                 Configure(this.id);
-                this.id.setText(Preferences.GetThread());
+                this.id.setText(Preferences.GetSession());
 
                 border = new Border();
                 this.id.setBorder(border);
@@ -169,7 +169,7 @@ public class Logon
                 input.add(this.to);
                 Configure(this.to);
                 if (null != this.to)
-                    this.to.setText(Preferences.GetTo());
+                    this.to.setText(Preferences.GetToIdentifier());
 
                 border = new Border();
                 this.to.setBorder(border);
@@ -255,8 +255,8 @@ public class Logon
                     buttons.add(accept);
                     Configure(accept);
                     accept.setText("Connect");
-                    accept.setEnumClass(AcceptCancel.class);
-                    accept.setEnumValue(AcceptCancel.Accept);
+                    accept.setEnumClass(Actor.class);
+                    accept.setEnumValue(Actor.Connect);
 
                     border = new Border();
                     accept.setBorder(border);
@@ -270,8 +270,8 @@ public class Logon
                     buttons.add(cancel);
                     Configure(cancel);
                     cancel.setText("Disconnect");
-                    cancel.setEnumClass(AcceptCancel.class);
-                    cancel.setEnumValue(AcceptCancel.Cancel);
+                    cancel.setEnumClass(Actor.class);
+                    cancel.setEnumValue(Actor.Disconnect);
 
                     border = new Border();
                     cancel.setBorder(border);
@@ -281,25 +281,29 @@ public class Logon
         }
     }
     public void connect(){
-        Preferences.SetThread(this.id.getText());
+        Preferences.SetSession(this.id.getText());
         Preferences.SetHost(this.host.getText());
         Preferences.SetPort(this.port.getText());
 
         Preferences.SetLogon(this.logon.getText());
         Preferences.SetPassword(this.password.getText());
-        Preferences.SetTo(this.to.getText());
+
+        Status.Select(this.to.getText());
+
         Preferences.SetResource(this.resource.getText());
 
         XThread.Connect();
     }
     public void disconnect(){
-        Preferences.SetThread(this.id.getText());
+        Preferences.SetSession(this.id.getText());
         Preferences.SetHost(this.host.getText());
         Preferences.SetPort(this.port.getText());
 
         Preferences.SetLogon(this.logon.getText());
         Preferences.SetPassword(this.password.getText());
-        Preferences.SetTo(this.to.getText());
+
+        Status.Select(this.to.getText());
+
         Preferences.SetResource(this.resource.getText());
 
         XThread.Disconnect();
@@ -314,19 +318,33 @@ public class Logon
                  * In this case the Dialog has been orphaned after
                  * super.input(e)
                  */
-                final Event.NamedAction<AcceptCancel> action = (Event.NamedAction<AcceptCancel>)e;
+                final Event.NamedAction<Actor> action = (Event.NamedAction<Actor>)e;
                 switch(action.getValue()){
 
-                case Accept:
-                    this.connect();
-                    break;
+                case Connect:
 
-                case Cancel:
+                    this.connect();
+
+                    return true;
+
+                case Disconnect:
+
                     this.disconnect();
-                    break;
+
+                    return true;
+
+                case Select:
+
+                    this.to.setText(Preferences.GetToIdentifier());
+
+                    this.modified();
+
+                    this.outputScene();
+
+                    return true;
 
                 default:
-                    throw new IllegalStateException(action.getValue().name());
+                    break;
                 }
                 break;
             }

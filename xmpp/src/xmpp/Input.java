@@ -72,14 +72,26 @@ public class Input
         else {
             switch(e.getType()){
 
-            case Action:
-                /*
-                 * Logon 
-                 */
-                this.outputScene();
-
-                return true;
-
+            case Action:{
+                final Event.NamedAction<Actor> action = (Event.NamedAction<Actor>)e;
+                switch(action.getValue()){
+                case Connect:
+                case Disconnect:
+                    /*
+                     * Logon 
+                     */
+                    this.outputScene();
+                    return true;
+                case Select:
+                    /*
+                     * Status [see Status/Label(input)]
+                     */
+                    return true;
+                default:
+                    break;
+                }
+                return false;
+            }
             case KeyUp:
                 if (this.mouseIn){
                     final Event.Key k = (Event.Key)e;

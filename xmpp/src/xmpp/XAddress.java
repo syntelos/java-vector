@@ -18,6 +18,8 @@
  */
 package xmpp;
 
+import org.jivesoftware.smack.packet.Packet;
+
 /**
  * An XMPP address is a messaging network reference
  * <pre>
@@ -77,6 +79,32 @@ public class XAddress
             super(input,Require.Full);
         }
     }
+    /**
+     * 
+     */
+    public static class From
+        extends XAddress.Full
+    {
+        public From(){
+            super(Preferences.GetLogon()+'/'+Preferences.ComposeResource());
+        }
+        public From(Packet m){
+            super(m.getFrom());
+        }
+    }
+    /**
+     * 
+     */
+    public static class To
+        extends XAddress.Logon
+    {
+        public To(){
+            super(Preferences.GetTo());
+        }
+        public To(Packet m){
+            super(m.getTo());
+        }
+    }
 
 
     public final String identifier, host, resource, logon, full;
@@ -115,8 +143,8 @@ public class XAddress
                      * identifier
                      */
                     this.identifier = parts[0];
-                    this.host = XAddress.Default.Host;
-                    this.resource = XAddress.Default.Resource;
+                    this.host = Preferences.GetHost();
+                    this.resource = Preferences.ComposeResource();
                     break;
                 }
                 break;
@@ -130,7 +158,7 @@ public class XAddress
                      */
                     this.identifier = parts[0];
                     this.host = parts[1];
-                    this.resource = XAddress.Default.Resource;
+                    this.resource = Preferences.ComposeResource();
                     break;
                 }
                 break;
