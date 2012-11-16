@@ -54,12 +54,12 @@ public class Status
     public final static Status Instance = new Status();
 
     public final static void Select(XAddress to){
-
-        Instance.select(to);
+        if (null != to)
+            Instance.select(to);
     }
     public final static void Select(String to){
-
-        Instance.select(new XAddress(to));
+        if (null != to && 0 < to.length())
+            Instance.select(new XAddress.Identifier(to));
     }
     
     /**
@@ -69,12 +69,12 @@ public class Status
         extends vector.Button
     {
 
-        public final XAddress address;
+        public final XAddress.Full address;
 
         private Presence.Mode mode;
 
 
-        public Label(XAddress address){
+        public Label(XAddress.Full address){
             super();
             if (null != address)
                 this.address = address;
@@ -148,6 +148,9 @@ public class Status
                 break;
             }
         }
+        protected Label buttonInputAction(){
+            return this;
+        }
         public boolean input(Event e){
             if (super.input(e)){
                 switch(e.getType()){
@@ -155,6 +158,10 @@ public class Status
                     if (this.mouseIn){
 
                         Status.Select(this.address);
+
+                        Event.NamedAction<Actor> dup = new platform.event.NamedAction(Actor.Select);
+
+                        this.getRootContainer().input(dup);
 
                         return true;
                     }
@@ -280,7 +287,7 @@ public class Status
     }
     public Status update(Presence p){
 
-        final XAddress from = new XAddress.From(p);
+        final XAddress.Full from = new XAddress.From(p);
 
         Label label = this.search(from);
 

@@ -308,7 +308,16 @@ public class Logon
 
         XThread.Disconnect();
     }
+    public void select(){
+
+        this.to.setText(Preferences.GetToIdentifier());
+
+        this.modified();
+
+        this.outputScene();
+    }
     public boolean input(Event e){
+
         if (super.input(e)){
 
             switch(e.getType()){
@@ -319,7 +328,12 @@ public class Logon
                  * super.input(e)
                  */
                 final Event.NamedAction<Actor> action = (Event.NamedAction<Actor>)e;
-                switch(action.getValue()){
+
+                final Actor actor = action.getValue();
+
+                Output.Instance.headline("Logon(input: T, actor: %s)",actor);
+
+                switch(actor){
 
                 case Connect:
 
@@ -335,11 +349,7 @@ public class Logon
 
                 case Select:
 
-                    this.to.setText(Preferences.GetToIdentifier());
-
-                    this.modified();
-
-                    this.outputScene();
+                    this.select();
 
                     return true;
 
@@ -353,7 +363,30 @@ public class Logon
             }
             return true;
         }
-        else
+        else {
+            switch(e.getType()){
+
+            case Action:{
+
+                final Event.NamedAction<Actor> action = (Event.NamedAction<Actor>)e;
+
+                switch(action.getValue()){
+
+                case Select:
+
+                    this.select();
+
+                    return true;
+
+                default:
+                    break;
+                }
+                break;
+            }
+            default:
+                break;
+            }
             return false;
+        }
     }
 }

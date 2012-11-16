@@ -60,6 +60,30 @@ public class Button<E extends Enum<E>>
         this.enumValueOf = null;
         this.enumValue = null;
     }
+    /**
+     * Instances of this class call this method from this input event.
+     * 
+     * This method produces an action event when the enum value is not
+     * null.  In this case, the production of the action event will
+     * occur before subclass programming executes.  
+     * 
+     * Subclasses that need to do something before the action event is
+     * produced must overrride this method to do nothing, and then
+     * subsequently produce the action event.
+     */
+    protected Button buttonInputAction(){
+        if (null != this.enumValue){
+            final Component root = this.getRootContainer();
+            if (null != root){
+                NamedAction action = new NamedAction(this.enumValue);
+
+                root.input(action);
+            }
+            else
+                throw new IllegalStateException("Orphan");
+        }
+        return this;
+    }
     public boolean input(Event e){
         if (super.input(e))
             return true;
@@ -69,18 +93,7 @@ public class Button<E extends Enum<E>>
             case MouseUp:
                 if (this.mouseIn){
 
-                    if (null != this.enumValue){
-
-                        final Component root = this.getRootContainer();
-                        if (null != root){
-
-                            NamedAction action = new NamedAction(this.enumValue);
-
-                            root.input(action);
-                        }
-                        else
-                            throw new IllegalStateException("Orphan");
-                    }
+                    this.buttonInputAction();
 
                     return true;
                 }

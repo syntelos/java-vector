@@ -79,6 +79,10 @@ public final class XThread
 
         Instance.send(m);
     }
+    public final static void Status(XAddress.Full to){
+
+        Instance.status(to);
+    }
     public final static void Select(XAddress to){
 
         Instance.select(to);
@@ -100,7 +104,7 @@ public final class XThread
     /*
      * This field is protected from entering state (NULL) after (NOT NULL)
      */
-    protected XAddress to;
+    private volatile XAddress to;
 
     private volatile XMPPConnection connection;
 
@@ -155,6 +159,23 @@ public final class XThread
     }
     public boolean isEncrypted(){
         return (null != this.connection && this.connection.isSecureConnection());
+    }
+    public void status(XAddress.Full to){
+
+        if (null != this.to && this.to.equals(to)){
+
+            Output.Instance.headline("XThread Status(%s)",to.identifier);
+
+            this.to = to;
+        }
+        else if (null != this.contact && this.contact.equals(to)){
+
+            Output.Instance.headline("XThread Contacted(%s)",to.identifier);
+
+            this.contact = null;
+
+            this.to = to;
+        }
     }
     public void select(XAddress to){
         if (null != to){

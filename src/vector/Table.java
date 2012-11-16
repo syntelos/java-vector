@@ -228,8 +228,8 @@ public interface Table {
 
                     Bounds cb = c.getBoundsVector();
 
-                    this.colwidths[cc] = Math.max(this.colwidths[cc],(cs+cb.width));
-                    this.rowheights[rr] = Math.max(this.rowheights[rr],(cs+cb.height));
+                    this.colwidths[cc] = Math.max(this.colwidths[cc],cb.width);
+                    this.rowheights[rr] = Math.max(this.rowheights[rr],cb.height);
 
                     if (c instanceof Table.Col.Span){
 
@@ -269,7 +269,7 @@ public interface Table {
 
             Table.Cell cell = null;
 
-            float dx, dy, xx = this.cs, yy = this.cs;
+            float dx, dy, dw, dh, xx = this.cs, yy = this.cs;
 
             this.width = (2f*this.cs);
             this.height = this.width;
@@ -278,15 +278,17 @@ public interface Table {
             for (rr = 0; rr < this.rows; rr++){
 
                 dy = rowheights[rr];
-                this.height += dy;
+                dh = (dy+this.cs);
+                this.height += dh;
 
                 for (cc = 0; cc < this.cols; cc++){
 
                     dx = this.colwidths[cc];
+                    dw = (dx+this.cs);
 
                     if (0 == rr){
 
-                        this.width += dx;
+                        this.width += dw;
                     }
 
                     if (0 == spanCols){
@@ -329,10 +331,10 @@ public interface Table {
                         }
                     }
 
-                    xx += dx;
+                    xx += dw;
                 }
                 xx = cs;
-                yy += dy;
+                yy += dh;
             }
             return this;
         }
