@@ -122,9 +122,9 @@ public class XAddress
      * Disallow substrings 
      * 
      * @param string A part or whole XMPP address
-     * @param full Input requirement
+     * @param require Input requirement
      */
-    public XAddress(String string, XAddress.Require full){
+    public XAddress(String string, XAddress.Require require){
         super();
         String[] parts = XAddress.Scan(string);
         if (null == parts)
@@ -134,7 +134,7 @@ public class XAddress
              */
             switch(parts.length){
             case 1:
-                switch (full){
+                switch (require){
                 case Logon:
                 case Full:
                     throw new IllegalArgumentException(string);
@@ -149,7 +149,7 @@ public class XAddress
                 }
                 break;
             case 2:
-                switch (full){
+                switch (require){
                 case Full:
                     throw new IllegalArgumentException(string);
                 default:
@@ -192,13 +192,11 @@ public class XAddress
 
     public boolean isHostDefault(){
 
-        return ((Default.Host == this.host)||
-                this.host.equalsIgnoreCase(Default.Host));
+        return Preferences.IsHostDefault(this.host);
     }
     public boolean isNotHostDefault(){
 
-        return ((Default.Host != this.host)&&
-                (!this.host.equalsIgnoreCase(Default.Host)));
+        return (!this.isHostDefault());
     }
     public char charAt(int idx){
         return this.full.charAt(idx);
@@ -218,16 +216,30 @@ public class XAddress
     public boolean equals(Object that){
         if (this == that)
             return true;
+        else if (that instanceof XAddress)
+            return this.equals( (XAddress)that);
+        else if (this.isHostDefault())
+            return this.identifier.equals(that);
+        else
+            return this.logon.equals(that);
+    }
+    public boolean equals(XAddress that){
+        if (this == that)
+            return true;
         else if (null == that)
             return false;
+        else if (this.isHostDefault() || that.isHostDefault())
+            return this.identifier.equals(that.identifier);
         else
-            return this.full.equals(that.toString());
+            return this.logon.equals(that.logon);
     }
     public int compareTo(XAddress that){
         if (this == that)
             return 0;
+        else if (this.isHostDefault() || that.isHostDefault())
+            return this.identifier.compareTo(that.identifier);
         else
-            return this.full.compareTo(that.full);
+            return this.logon.compareTo(that.logon);
     }
 
 

@@ -63,15 +63,34 @@ public class Preferences
 
     public final static String Host = "Host";
 
+    private volatile static String HostValue ;
+
     public final static String GetHost(){
-        return Instance.get(Host,XAddress.Default.Host);
+        return (Preferences.HostValue = Instance.get(Host,XAddress.Default.Host));
     }
     public final static void SetHost(String m){
         if (null != m){
             m = m.trim();
-            if (0 < m.length())
+            if (0 < m.length()){
+                Preferences.HostValue = m;
                 Instance.put(Host,m);
+            }
         }
+    }
+    public final static boolean IsHostDefault(String host){
+        if (null == Preferences.HostValue){
+            Preferences.HostValue = GetHost();
+        }
+
+        final String defaultHostStatic = XAddress.Default.Host;
+
+        final String defaultHostUser = Preferences.HostValue;
+
+        if (defaultHostStatic.equals(defaultHostUser))
+            return (defaultHostStatic.equals(host));
+        else
+            return (defaultHostStatic.equals(host)||
+                    defaultHostUser.equals(host));
     }
 
     public final static String Password = "Password";
@@ -128,6 +147,14 @@ public class Preferences
     public final static String GetToIdentifier(){
         try {
             return (new XAddress.To()).identifier;
+        }
+        catch (IllegalArgumentException notFound){
+            return null;
+        }
+    }
+    public final static String GetToLogon(){
+        try {
+            return (new XAddress.To()).logon;
         }
         catch (IllegalArgumentException notFound){
             return null;

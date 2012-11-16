@@ -169,7 +169,7 @@ public class Logon
                 input.add(this.to);
                 Configure(this.to);
                 if (null != this.to)
-                    this.to.setText(Preferences.GetToIdentifier());
+                    this.to.setText(Preferences.GetToLogon());
 
                 border = new Border();
                 this.to.setBorder(border);
@@ -310,7 +310,7 @@ public class Logon
     }
     public void select(){
 
-        this.to.setText(Preferences.GetToIdentifier());
+        this.to.setText(Preferences.GetToLogon());
 
         this.modified();
 
@@ -329,11 +329,7 @@ public class Logon
                  */
                 final Event.NamedAction<Actor> action = (Event.NamedAction<Actor>)e;
 
-                final Actor actor = action.getValue();
-
-                Output.Instance.headline("Logon(input: T, actor: %s)",actor);
-
-                switch(actor){
+                switch(action.getValue()){
 
                 case Connect:
 

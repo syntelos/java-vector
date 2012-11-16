@@ -23,10 +23,16 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.SASLAuthentication;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.packet.Authentication;
+import org.jivesoftware.smack.packet.Bind;
+import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
 import static org.jivesoftware.smack.packet.Message.Type.*;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
+import org.jivesoftware.smack.packet.Registration;
+import org.jivesoftware.smack.packet.RosterPacket;
+import org.jivesoftware.smack.packet.Session;
 import org.jivesoftware.smack.packet.XMPPError;
 import static org.jivesoftware.smack.packet.XMPPError.Type.*;
 
@@ -122,26 +128,6 @@ public final class XThread
     }
 
 
-    public boolean send(String m){
-
-        if (null != this.connection && null != this.to){
-
-            final String to = this.to.full;
-
-            Message message = new Message(to, this.messageType);
-            message.setFrom(this.connection.getUser());
-            message.setThread(this.id);
-            message.setBody(m);
-
-
-            this.connection.sendPacket(message);
-
-            Output.Instance.send(message);
-
-            return true;
-        }
-        return false;
-    }
     public boolean isStateCancel(){
         return (State.Cancel == this.state);
     }
@@ -184,6 +170,8 @@ public final class XThread
 
             this.to = to;
 
+            this.contact = null;
+
             Preferences.SetTo(to);
         }
     }
@@ -196,6 +184,36 @@ public final class XThread
 
             //Preferences.SetTo(to);
         }
+    }
+    public boolean send(String m){
+
+        if (null != this.connection && null != this.to){
+
+            if (null == this.contact){
+
+                final String to = this.to.full;
+
+                Message message = new Message(to, this.messageType);
+                message.setFrom(this.connection.getUser());
+                message.setThread(this.id);
+                message.setBody(m);
+
+
+                this.connection.sendPacket(message);
+
+                Output.Instance.send(message);
+
+                return true;
+            }
+            else
+                Output.Instance.error("Send dropped for pending contact");
+        }
+        else if (null == this.connection)
+            Output.Instance.error("Send dropped for missing connection");
+        else
+            Output.Instance.error("Send dropped for missing contact");
+
+        return false;
     }
     public void connect(){
 
@@ -282,6 +300,9 @@ public final class XThread
 
             this.update(xp);
         }
+        else if (pk instanceof Bind){
+
+        }
         else
             Output.Instance.headline("XThread process(class: %s)",pk.getClass().getName());
     }
@@ -341,7 +362,6 @@ public final class XThread
     }
     protected XMPPConnection createConnection(){
         try {
-            Output.Instance.headline("XThread Connect(host: %s, port: %d, debug: %b)",this.host,this.port,Debug);
 
             final ConnectionConfiguration config = new ConnectionConfiguration(this.host,this.port);
 
@@ -357,11 +377,7 @@ public final class XThread
 
             final String logon = this.logon.logon;
 
-
-            Output.Instance.headline("XThread Login(logon: %s, resource: %s)",logon, this.resource);
-
             connection.login(logon, this.password, this.resource);
-            connection.sendPacket(new Presence(Presence.Type.available));
 
             connection.addPacketListener(this,this);
 

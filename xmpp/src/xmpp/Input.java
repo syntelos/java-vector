@@ -48,16 +48,28 @@ public class Input
         String m = this.getText();
 
         if (null != m){
-            m = m.trim();
-            if (0 < m.length()){
+
+            At.Command input = new At.Command(m);
+
+            switch (input.at){
+
+            case Identifier:
+            case Logon:
+
+                Status.Select(input.address);
+
+            case Tail:
 
                 this.setText(null);
 
-                XThread.Send(m);
+                XThread.Send(input.tail);
 
                 this.modified();
 
                 this.outputScene();
+
+            default:
+                break;
             }
         }
     }
@@ -67,8 +79,10 @@ public class Input
         parent.logon();
     }
     public boolean input(Event e){
-        if (super.input(e))
+        if (super.input(e)){
+
             return true;
+        }
         else {
             switch(e.getType()){
 
@@ -82,11 +96,7 @@ public class Input
                      */
                     this.outputScene();
                     return true;
-                case Select:
-                    /*
-                     * Status [see Status/Label(input)]
-                     */
-                    return true;
+
                 default:
                     break;
                 }

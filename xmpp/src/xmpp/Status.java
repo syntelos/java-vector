@@ -41,7 +41,6 @@ public class Status
     public final static platform.Font Font = platform.Font.decode("monospaced-12");
 
     public final static Color BG = Color.gray.opacity(0.5f);
-    public final static Color IG = Color.white.opacity(0.5f);
     public final static Color FG = Color.black.opacity(0.5f);
     public final static Color OK = Color.green.opacity(0.5f);
     public final static Color AY = Color.yellow.opacity(0.5f);
@@ -69,12 +68,12 @@ public class Status
         extends vector.Button
     {
 
-        public final XAddress.Full address;
+        private XAddress address;
 
         private Presence.Mode mode;
 
 
-        public Label(XAddress.Full address){
+        public Label(XAddress address){
             super();
             if (null != address)
                 this.address = address;
@@ -93,7 +92,7 @@ public class Status
             this.setCols(40);
             this.setColor(FG);
             this.setColorOver(FG);
-            this.setText(address.identifier);
+            this.setText(this.address.logon);
 
             Border border = new Border();
             this.setBorder(border);
@@ -106,7 +105,7 @@ public class Status
             border.setStrokeOver(new Stroke(2f));
         }
         public boolean equals(XAddress addr){
-            return this.address.identifier.equals(addr.identifier);
+            return this.address.equals(addr);
         }
         public boolean hasMode(){
             return (null != this.mode);
