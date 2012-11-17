@@ -37,6 +37,9 @@ public class Input
         super.init();
 
         Logon.Configure(this);
+
+        this.setCols(60);
+
         Border border = new Border();
         {
             this.setBorder(border);

@@ -18,37 +18,21 @@
  */
 package xmpp;
 
-public class Frame
-    extends platform.Frame
+public class Shutdown
+    extends Thread
 {
 
-    public Frame(){
-        super();
+    public Shutdown(){
+        super("xmpp.Shutdown");
     }
 
-
-    @Override
-    public Display createDisplay(){
-
-        return new Display();
-    }
-    public Frame modified(){
-
-        this.display.modified();
-
-        return this;
-    }
-
-
-    public static void main(String[] argv){
+    public void run(){
         try {
-            Runtime.getRuntime().addShutdownHook(new Shutdown());
+            XThread.Disconnect();
         }
         catch (Exception exc){
             exc.printStackTrace();
         }
-
-        (new Frame()).modified();
     }
 
 }

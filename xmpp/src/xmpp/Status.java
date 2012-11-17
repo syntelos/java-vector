@@ -38,7 +38,7 @@ import platform.Color;
 public class Status
     extends vector.TableSmall
 {
-    public final static platform.Font Font = platform.Font.decode("monospaced-12");
+    public final static platform.Font Font = platform.Font.decode("monospaced-16");
 
     public final static Color BG = Color.gray.opacity(0.5f);
     public final static Color FG = Color.black.opacity(0.5f);

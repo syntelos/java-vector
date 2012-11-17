@@ -353,11 +353,19 @@ public class XAddress
                 final char[] cary = string.toCharArray();
                 final int carlen = cary.length;
                 if (0 < carlen){
+
                     for (int cc = (carlen-1); -1 < cc; cc--){
 
-                        if (IsNotHex(cary[cc])){
+                        char ch = cary[cc];
 
-                            final int end = (cc + 1);
+                        if (IsNotHex(ch)){
+
+                            final int end;
+
+                            if (5 == cc && 'i' == ch && 'a' == cary[0] && 'n' == cary[1])
+                                end = (cc + 2);
+                            else
+                                end = (cc + 1);
 
                             return new String[]{
                                 string.substring(0,end),
