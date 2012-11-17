@@ -18,6 +18,7 @@
  */
 package xmpp;
 
+import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 
 import vector.Border;
@@ -113,7 +114,19 @@ public class Status
         public Presence.Mode getMode(){
             return this.mode;
         }
+        public void receive(XAddress from){
+
+            this.address = from;
+
+            this.setColor(OK);
+            this.setColorOver(OK);
+            border.setColor(OK);
+            border.setColorOver(OK);
+        }
         public void update(Presence p){
+
+            this.address = new XAddress.From(p);
+
             Border border = this.getBorder();
 
             this.mode = p.getMode();
@@ -246,6 +259,34 @@ public class Status
 
         while (this.has(1))
             this.remove(1);
+
+        this.modified();
+
+        this.outputScene();
+
+        return this;
+    }
+    public Status receive(Message m){
+
+        final XAddress.Full from = new XAddress.From(m);
+        Label label = this.search(from);
+
+        switch(m.getType()){
+        case normal:
+        case groupchat:
+        case chat:
+            if (null == label){
+                label = new Label(from);
+
+                this.add(label);
+            }
+
+            label.receive(from);
+
+            break;
+        default:
+            break;
+        }
 
         this.modified();
 

@@ -195,7 +195,9 @@ public final class XThread
 
         this.logon = Preferences.ComposeLogon();
         this.password = Preferences.GetPassword();
-        this.to = Preferences.ComposeTo();
+
+        this.select(Preferences.ComposeTo());
+
         this.resource = Preferences.ComposeResource();
 
         if (this.isReady()){
@@ -386,6 +388,8 @@ public final class XThread
 
     }
     protected void receive(Message m){
+
+        Status.Instance.receive(m);
 
         Output.Instance.receive(m);
     }

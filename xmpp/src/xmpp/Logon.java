@@ -229,8 +229,12 @@ public class Logon
 
         Preferences.SetLogon(this.logon.getText());
         Preferences.SetPassword(this.password.getText());
-
-        XThread.Connect();
+        try {
+            XThread.Connect();
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
     }
     public void disconnect(){
 
