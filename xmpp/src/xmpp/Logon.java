@@ -62,7 +62,7 @@ public class Logon
     }
 
 
-    private TextEdit id, host, password, resource, logon, to, port;
+    private TextEdit host, port, logon, password;
 
 
     public Logon(){
@@ -97,25 +97,6 @@ public class Logon
                 titleLabel.setText("XMPP");
                 titleLabel.setTableColSpan(2);
                 titleLabel.setFont(platform.Font.decode("monospaced-bold-36"));
-            }
-            /*
-             * Conversational thread identifier
-             */
-            final Label idLabel = new Label();
-            {
-                input.add(idLabel);
-                Configure(idLabel);
-                idLabel.setText("Session");
-            }
-            this.id = new TextEdit();
-            {
-                input.add(this.id);
-                Configure(this.id);
-                this.id.setText(Preferences.GetSession());
-
-                border = new Border();
-                this.id.setBorder(border);
-                Configure(border);
             }
             /*
              * Service host
@@ -156,26 +137,6 @@ public class Logon
                 Configure(border);
             }
             /*
-             * To (email)
-             */
-            final Label toLabel = new Label();
-            {
-                input.add(toLabel);
-                Configure(toLabel);
-                toLabel.setText("To");
-            }
-            this.to = new TextEdit();
-            {
-                input.add(this.to);
-                Configure(this.to);
-                if (null != this.to)
-                    this.to.setText(Preferences.GetToLogon());
-
-                border = new Border();
-                this.to.setBorder(border);
-                Configure(border);
-            }
-            /*
              * Logon (email)
              */
             final Label logonLabel = new Label();
@@ -212,25 +173,6 @@ public class Logon
 
                 border = new Border();
                 this.password.setBorder(border);
-                Configure(border);
-            }
-            /*
-             * Resource
-             */
-            final Label resourceLabel = new Label();
-            {
-                input.add(resourceLabel);
-                Configure(resourceLabel);
-                resourceLabel.setText("Resource");
-            }
-            this.resource = new TextEdit();
-            {
-                input.add(this.resource);
-                Configure(this.resource);
-                this.resource.setText(Preferences.GetResource());
-
-                border = new Border();
-                this.resource.setBorder(border);
                 Configure(border);
             }
             /*
@@ -281,40 +223,24 @@ public class Logon
         }
     }
     public void connect(){
-        Preferences.SetSession(this.id.getText());
+
         Preferences.SetHost(this.host.getText());
         Preferences.SetPort(this.port.getText());
 
         Preferences.SetLogon(this.logon.getText());
         Preferences.SetPassword(this.password.getText());
-
-        Status.Select(this.to.getText());
-
-        Preferences.SetResource(this.resource.getText());
 
         XThread.Connect();
     }
     public void disconnect(){
-        Preferences.SetSession(this.id.getText());
+
         Preferences.SetHost(this.host.getText());
         Preferences.SetPort(this.port.getText());
 
         Preferences.SetLogon(this.logon.getText());
         Preferences.SetPassword(this.password.getText());
 
-        Status.Select(this.to.getText());
-
-        Preferences.SetResource(this.resource.getText());
-
         XThread.Disconnect();
-    }
-    public void select(){
-
-        this.to.setText(Preferences.GetToLogon());
-
-        this.modified();
-
-        this.outputScene();
     }
     public boolean input(Event e){
 
@@ -343,12 +269,6 @@ public class Logon
 
                     return true;
 
-                case Select:
-
-                    this.select();
-
-                    return true;
-
                 default:
                     break;
                 }
@@ -360,28 +280,6 @@ public class Logon
             return true;
         }
         else {
-            switch(e.getType()){
-
-            case Action:{
-
-                final Event.NamedAction<Actor> action = (Event.NamedAction<Actor>)e;
-
-                switch(action.getValue()){
-
-                case Select:
-
-                    this.select();
-
-                    return true;
-
-                default:
-                    break;
-                }
-                break;
-            }
-            default:
-                break;
-            }
             return false;
         }
     }

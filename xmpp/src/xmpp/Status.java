@@ -33,7 +33,7 @@ import vector.TextEdit;
 import platform.Color;
 
 /**
- * 
+ * Status of connection and contacts
  */
 public class Status
     extends vector.TableSmall
@@ -92,7 +92,7 @@ public class Status
             this.setCols(40);
             this.setColor(FG);
             this.setColorOver(FG);
-            this.setText(this.address.logon);
+            this.setText(this.address.logon+'/'+this.address.resourceKind);
 
             Border border = new Border();
             this.setBorder(border);
@@ -290,13 +290,30 @@ public class Status
 
         Label label = this.search(from);
 
-        if (null == label){
-            label = new Label(from);
+        switch(p.getType()){
+        case available:
+        case unavailable:
+        case subscribe:
+            if (null == label){
+                label = new Label(from);
 
-            this.add(label);
+                this.add(label);
+            }
+
+            label.update(p);
+            break;
+        case unsubscribe:
+        case unsubscribed:
+            if (null != label){
+                label = this.remove(label);
+                if (null != label){
+                    label.destroy();
+                }
+            }
+            break;
+        default:
+            break;
         }
-
-        label.update(p);
 
         this.modified();
 

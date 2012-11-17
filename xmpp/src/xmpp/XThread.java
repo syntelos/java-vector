@@ -27,14 +27,12 @@ import org.jivesoftware.smack.packet.Authentication;
 import org.jivesoftware.smack.packet.Bind;
 import org.jivesoftware.smack.packet.IQ;
 import org.jivesoftware.smack.packet.Message;
-import static org.jivesoftware.smack.packet.Message.Type.*;
 import org.jivesoftware.smack.packet.Packet;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.packet.Registration;
 import org.jivesoftware.smack.packet.RosterPacket;
 import org.jivesoftware.smack.packet.Session;
 import org.jivesoftware.smack.packet.XMPPError;
-import static org.jivesoftware.smack.packet.XMPPError.Type.*;
 
 /**
  * Persistent single channel XMPP conversation
@@ -53,19 +51,64 @@ public final class XThread
     /**
      *
      */
-    public enum State {
-        /**
-         * 
-         */
-        Cancel,
-        /**
-         * 
-         */
-        Run,
-        /**
-         * 
-         */
-        Delay;
+    public static class State
+        extends Object
+    {
+
+        public interface Process {
+
+            public enum Contact
+                implements Process
+            {
+                Request, Response, Cancel;
+
+
+
+                public State response(State s, Packet p){
+                    Contact contact = (Contact)s.p;
+
+                    return null;
+                }
+            }
+            public enum Resource
+                implements Process
+            {
+                Current, Vacate, Define;
+
+
+
+                public State response(State s, Packet p){
+                    Resource resource = (Resource)s.p;
+
+                    return null;
+                }
+            }
+
+
+            public State response(State s, Packet p);
+        }
+
+
+        public final Process p;
+
+        public final XAddress a;
+
+
+        public State(Process p, XAddress a){
+            super();
+            if (null != p){
+                this.p = p;
+                this.a = a;
+            }
+            else
+                throw new IllegalArgumentException();
+        }
+
+
+        public State response(Packet p){
+
+            return this.p.response(this,p);
+        }
     }
 
     /**
@@ -114,11 +157,9 @@ public final class XThread
 
     private volatile XMPPConnection connection;
 
-    private volatile State state = State.Run;
+    private volatile State state;
 
     private volatile Message.Type messageType = Message.Type.chat;
-
-    private volatile XAddress contact;
 
     /**
      * 
@@ -128,15 +169,6 @@ public final class XThread
     }
 
 
-    public boolean isStateCancel(){
-        return (State.Cancel == this.state);
-    }
-    public boolean isStateRun(){
-        return (State.Run == this.state);
-    }
-    public boolean isStateDelay(){
-        return (State.Delay == this.state);
-    }
     public boolean isConnected(){
         return (null != this.connection && this.connection.isConnected());
     }
@@ -154,14 +186,6 @@ public final class XThread
 
             this.to = to;
         }
-        else if (null != this.contact && this.contact.equals(to)){
-
-            Output.Instance.headline("XThread Contacted(%s)",to.identifier);
-
-            this.contact = null;
-
-            this.to = to;
-        }
     }
     public void select(XAddress to){
         if (null != to){
@@ -170,49 +194,60 @@ public final class XThread
 
             this.to = to;
 
-            this.contact = null;
-
             Preferences.SetTo(to);
         }
     }
     public void contact(XAddress to){
-        if (null != to){
+        if (null != this.logon && null != to){
 
-            Output.Instance.headline("XThread Contact(%s)",to.identifier);
+            if (null != this.to){
+                if (to.equals(this.to))
+                    return;
+                else
+                    this.to = null;
+            }
 
-            this.contact = to;
+            Presence q = new Presence(Presence.Type.subscribe);
 
-            //Preferences.SetTo(to);
+            q.setMode(Presence.Mode.available);
+
+            q.setFrom(this.connection.getUser());
+
+            q.setTo(to.logon);
+
+            this.connection.sendPacket(q);
+
+            Output.Instance.send(q);
         }
     }
     public boolean send(String m){
 
-        if (null != this.connection && null != this.to){
+        if (null != m){
+            m = m.trim();
+            if (0 < m.length()){
 
-            if (null == this.contact){
+                if (null != this.connection && null != this.to){
 
-                final String to = this.to.full;
+                    final String to = this.to.full;
 
-                Message message = new Message(to, this.messageType);
-                message.setFrom(this.connection.getUser());
-                message.setThread(this.id);
-                message.setBody(m);
+                    Message message = new Message(to, this.messageType);
+                    message.setFrom(this.connection.getUser());
+                    message.setBody(m);
 
 
-                this.connection.sendPacket(message);
+                    this.connection.sendPacket(message);
 
-                Output.Instance.send(message);
+                    Output.Instance.send(message);
 
-                return true;
+                    return true;
+
+                }
+                else if (null == this.connection)
+                    Output.Instance.error("Send dropped for missing connection");
+                else
+                    Output.Instance.error("Send dropped for missing contact");
             }
-            else
-                Output.Instance.error("Send dropped for pending contact");
         }
-        else if (null == this.connection)
-            Output.Instance.error("Send dropped for missing connection");
-        else
-            Output.Instance.error("Send dropped for missing contact");
-
         return false;
     }
     public void connect(){
@@ -238,35 +273,16 @@ public final class XThread
     }
     public void disconnect(){
         if (null != this.connection){
-            Output.Instance.headline("XThread Disconnect");
+            Output.Instance.error("XThread Disconnect");
             Status.Instance.clear();
             try {
                 this.connection.disconnect();
             }
             finally {
                 this.connection = null;
+                this.state = null;
                 Status.Instance.down();
             }
-        }
-    }
-    public boolean ready() throws XMPPException {
-
-        switch(this.state){
-        case Cancel:
-
-            this.connect();
-            this.state = State.Run;
-            return true;
-
-        case Run:
-            return true;
-
-        case Delay:
-            this.state = State.Run;
-            return true;
-
-        default:
-            throw new IllegalStateException(this.state.name());
         }
     }
     public boolean accept(Packet pk){
@@ -291,7 +307,7 @@ public final class XThread
                 this.error(xm);
                 break;
             default:
-                Output.Instance.headline("XThread process(message: %s)",xm.getType().name());
+                Output.Instance.error("XThread process(type: %s)",xm.getType().name());
                 break;
             }
         }
@@ -301,14 +317,138 @@ public final class XThread
             this.update(xp);
         }
         else if (pk instanceof Bind){
+            Bind xb = (Bind)pk;
 
+            final String resource = xb.getResource();
+
+            final String jid = xb.getJid();
+
+            if (null != jid){
+
+                if (null != resource){
+                    Output.Instance.error("XThread bind(resource: %s, jid: %s)",resource,jid);
+
+                }
+                else {
+                    Output.Instance.error("XThread bind(jid: %s)",jid);
+
+                }
+            }
+            else if (null != resource){
+                Output.Instance.error("XThread bind(resource: %s)",resource);
+
+            }
+        }
+        else if (pk instanceof Registration){
+            Registration xr = (Registration)pk;
+
+            final StringBuilder registration = new StringBuilder();
+            final java.util.Map<String,String> attributes = xr.getAttributes();
+            if (null != attributes){
+                boolean once = true;
+                for (String key : attributes.keySet()){
+                    String value = attributes.get(key);
+                    if (once)
+                        once = false;
+                    else
+                        registration.append(", ");
+
+                    registration.append(key);
+                    registration.append(": ");
+                    registration.append(value);
+                }
+            }
+
+            Output.Instance.error("XThread registration(%s)",registration);
+        }
+        else if (pk instanceof RosterPacket){
+            RosterPacket xr = (RosterPacket)pk;
+
+            final StringBuilder roster = new StringBuilder();
+            final java.util.Collection<RosterPacket.Item> items = xr.getRosterItems();
+            if (null != items){
+                boolean once = true;
+                for (RosterPacket.Item item : items){
+
+                    String user = item.getUser();
+                    String name = item.getName();
+                    RosterPacket.ItemType type = item.getItemType();
+                    RosterPacket.ItemStatus status = item.getItemStatus();
+                    java.util.Set<String> groups = item.getGroupNames();
+
+                    if (once)
+                        once = false;
+                    else
+                        roster.append("; ");
+
+                    roster.append("name: ");
+                    roster.append(name);
+                    roster.append(", user: ");
+                    roster.append(user);
+                    roster.append(", type: ");
+                    roster.append(type);
+                    roster.append(", status: ");
+                    roster.append(status);
+                    if (null != groups && (!groups.isEmpty())){
+                        roster.append(", groups { ");
+                        boolean grouping = true;
+                        for (String group : groups){
+                            if (grouping)
+                                grouping = false;
+                            else
+                                roster.append(", ");
+
+                            roster.append(group);
+                        }
+                        roster.append("}");
+                    }
+                }
+            }
+
+            Output.Instance.error("XThread roster(%s)",roster);
+        }
+        else if (pk instanceof Session){
+
+            Output.Instance.error("XThread session()");
         }
         else
-            Output.Instance.headline("XThread process(class: %s)",pk.getClass().getName());
+            Output.Instance.error("XThread process(class: %s)",pk.getClass().getName());
     }
     protected void update(Presence p){
 
-        Status.Instance.update(p);
+        switch(p.getType()){
+
+        case available:
+        case unavailable:
+
+            Status.Instance.update(p);
+            break;
+
+        case subscribe:
+
+            Status.Instance.update(p);
+            Output.Instance.receive(p);
+
+            if (null == this.to){
+                this.to = new XAddress.From(p);
+            }
+            break;
+
+        case unsubscribe:
+        case unsubscribed:
+
+            Status.Instance.update(p);
+            break;
+
+        case error:
+
+            Output.Instance.error("XThread error(%s)",(new XAddress.From(p)));
+            break;
+
+        default:
+            break;
+        }
+
     }
     protected void receive(Message m){
 
@@ -324,36 +464,32 @@ public final class XThread
         switch(et){
         case WAIT:
 
-            Output.Instance.error("XThread error(WAIT:Delay)");
-
-            this.state = State.Delay;
+            Output.Instance.error("XThread error(WAIT)");
 
             break;
         case CANCEL:
 
-            Output.Instance.error("XThread error(CANCEL:Cancel)");
+            Output.Instance.error("XThread error(CANCEL)");
 
-            this.state = State.Cancel;
             break;
         case MODIFY:
 
-            Output.Instance.error("XThread error(MODIFY:%s)",this.state.name());
+            Output.Instance.error("XThread error(MODIFY)");
 
             break;
         case AUTH:
 
-            Output.Instance.error("XThread error(AUTH:Cancel)");
+            Output.Instance.error("XThread error(AUTH)");
 
-            this.state = State.Cancel;
             break;
         case CONTINUE:
 
-            Output.Instance.error("XThread error(CONTINUE:%s)",this.state.name());
+            Output.Instance.error("XThread error(CONTINUE)");
 
             break;
         default:
 
-            Output.Instance.error("XThread error(UNKNOWN(%s:%s))",et.name(),this.state.name());
+            Output.Instance.error("XThread error(%s)",et.name());
             break;
         }
     }
@@ -380,8 +516,6 @@ public final class XThread
             connection.login(logon, this.password, this.resource);
 
             connection.addPacketListener(this,this);
-
-            this.state = State.Run;
 
             return connection;
         }

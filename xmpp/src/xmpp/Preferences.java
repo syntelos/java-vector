@@ -56,8 +56,10 @@ public class Preferences
     public final static void SetSession(String m){
         if (null != m){
             m = m.trim();
-            if (0 < m.length())
+            if (0 < m.length()){
+                Preferences.ResourceValue = null;
                 Instance.put(Session,m);
+            }
         }
     }
 
@@ -108,18 +110,29 @@ public class Preferences
 
     public final static String Resource = "Resource";
 
+    private volatile static String ResourceValue ;
+
     public final static String GetResource(){
         return Instance.get(Resource,XAddress.Default.Resource);
     }
     public final static String ComposeResource(){
-        return (Preferences.GetResource()+'.'+Preferences.GetSession());
+        return (Preferences.ResourceValue = (Preferences.GetResource()+'.'+Preferences.GetSession()));
     }
     public final static void SetResource(String m){
         if (null != m){
             m = m.trim();
-            if (0 < m.length())
+            if (0 < m.length()){
+                Preferences.ResourceValue = null;
                 Instance.put(Resource,m);
+            }
         }
+    }
+    public final static boolean IsResourceDefault(String resource){
+        if (null == Preferences.ResourceValue){
+            Preferences.ResourceValue = ComposeResource();
+        }
+
+        return (Preferences.ResourceValue.equals(resource));
     }
 
     public final static String Logon = "Logon";

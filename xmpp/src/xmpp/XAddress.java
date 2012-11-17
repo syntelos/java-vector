@@ -109,6 +109,8 @@ public class XAddress
 
     public final String identifier, host, resource, logon, full;
 
+    public final String resourceKind, resourceSession;
+
 
     /**
      * Accept substrings
@@ -145,6 +147,8 @@ public class XAddress
                     this.identifier = parts[0];
                     this.host = Preferences.GetHost();
                     this.resource = Preferences.ComposeResource();
+                    this.resourceKind = Preferences.GetResource();
+                    this.resourceSession = Preferences.GetSession();
                     break;
                 }
                 break;
@@ -159,6 +163,8 @@ public class XAddress
                     this.identifier = parts[0];
                     this.host = parts[1];
                     this.resource = Preferences.ComposeResource();
+                    this.resourceKind = Preferences.GetResource();
+                    this.resourceSession = Preferences.GetSession();
                     break;
                 }
                 break;
@@ -169,6 +175,15 @@ public class XAddress
                 this.identifier = parts[0];
                 this.host = parts[1];
                 this.resource = parts[2];
+                String[] components = Resource(this.resource);
+                if (null != components){
+                    this.resourceKind = components[0];
+                    this.resourceSession = components[1];
+                }
+                else {
+                    this.resourceKind = this.resource;
+                    this.resourceSession = this.resource;
+                }
                 break;
             default:
                 throw new IllegalStateException();
@@ -198,6 +213,14 @@ public class XAddress
 
         return (!this.isHostDefault());
     }
+    public boolean isResourceDefault(){
+
+        return Preferences.IsResourceDefault(this.resource);
+    }
+    public boolean isNotResourceDefault(){
+
+        return (!this.isResourceDefault());
+    }
     public char charAt(int idx){
         return this.full.charAt(idx);
     }
@@ -217,29 +240,46 @@ public class XAddress
         if (this == that)
             return true;
         else if (that instanceof XAddress)
+
             return this.equals( (XAddress)that);
-        else if (this.isHostDefault())
-            return this.identifier.equals(that);
+
+        else if (this.isResourceDefault()){
+
+            if (this.isHostDefault())
+                return this.identifier.equals(that);
+            else
+                return this.logon.equals(that);
+        }
         else
-            return this.logon.equals(that);
+            return this.full.equals(that);
     }
     public boolean equals(XAddress that){
         if (this == that)
             return true;
         else if (null == that)
             return false;
-        else if (this.isHostDefault() || that.isHostDefault())
-            return this.identifier.equals(that.identifier);
+        else if (this.isResourceDefault() || that.isResourceDefault()){
+
+            if (this.isHostDefault() || that.isHostDefault())
+                return this.identifier.equals(that.identifier);
+            else
+                return this.logon.equals(that.logon);
+        }
         else
-            return this.logon.equals(that.logon);
+            return this.full.equals(that.full);
     }
     public int compareTo(XAddress that){
         if (this == that)
             return 0;
-        else if (this.isHostDefault() || that.isHostDefault())
-            return this.identifier.compareTo(that.identifier);
+        else if (this.isResourceDefault() || that.isResourceDefault()){
+
+            if (this.isHostDefault() || that.isHostDefault())
+                return this.identifier.compareTo(that.identifier);
+            else
+                return this.logon.compareTo(that.logon);
+        }
         else
-            return this.logon.compareTo(that.logon);
+            return this.full.compareTo(that.full);
     }
 
 
@@ -299,5 +339,45 @@ public class XAddress
             else
                 return null;
         }
+    }
+    public final static String[] Resource(String string){
+        if (null != string){
+            final int dot = string.lastIndexOf('.');
+            if (0 < dot){
+                return new String[]{
+                    string.substring(0,dot),
+                    string.substring(dot+1)
+                };
+            }
+            else {
+                final char[] cary = string.toCharArray();
+                final int carlen = cary.length;
+                if (0 < carlen){
+                    for (int cc = (carlen-1); -1 < cc; cc--){
+
+                        if (IsNotHex(cary[cc])){
+
+                            final int end = (cc + 1);
+
+                            return new String[]{
+                                string.substring(0,end),
+                                string.substring(end)
+                            };
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    public final static boolean IsNotHex(char ch){
+        if ('a' <= ch && 'f' >= ch)
+            return false;
+        else if ('A' <= ch && 'F' >= ch)
+            return false;
+        else if ('0' <= ch && '9' >= ch)
+            return false;
+        else
+            return true;
     }
 }

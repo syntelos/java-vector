@@ -127,6 +127,33 @@ public class Output
 
         return this;
     }
+    public Output send(Presence p){
+
+        final String from = (new XAddress.From(p)).identifier;
+
+        final String to = (new XAddress.To(p)).logon;
+
+        final Label label = new Label();
+        {
+            final String string = String.format("%s> %s",from,to);
+
+            this.add(label);
+            Logon.Configure(label);
+            label.setText(string);
+            label.setColor(Color.gray);
+
+            Border border = new Border();
+            label.setBorder(border);
+            Logon.Configure(border);
+            border.setColor(Color.gray);
+        }
+
+        this.modified();
+
+        this.outputScene();
+
+        return this;
+    }
     public Output receive(Message m){
 
         final String from = (new XAddress.From(m)).identifier;
@@ -146,6 +173,34 @@ public class Output
             label.setBorder(border);
             Logon.Configure(border);
             border.setColor(Color.blue);
+        }
+
+        this.modified();
+
+        this.outputScene();
+
+        return this;
+    }
+    public Output receive(Presence p){
+
+        final String from = (new XAddress.From(p)).logon;
+
+        final String to = (new XAddress.To(p)).identifier;
+
+
+        final Label label = new Label();
+        {
+            final String string = String.format("%s> %s",from,to);
+
+            this.add(label);
+            Logon.Configure(label);
+            label.setText(string);
+            label.setColor(Color.gray);
+
+            Border border = new Border();
+            label.setBorder(border);
+            Logon.Configure(border);
+            border.setColor(Color.gray);
         }
 
         this.modified();
