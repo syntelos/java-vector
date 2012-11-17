@@ -34,41 +34,18 @@
     </fileset>
   </path>
 
+
+
   <target name="all" description="Rebuild all jars">
     <antcall target="update"/>
     <antcall target="awt"/>
     <antcall target="demo"/>
     <antcall target="geda"/>
     <antcall target="fonview"/>
-    <antcall target="xmpp"/>
+    <antcall target="xmpp-sign"/>
     <!-- antcall target="llg"/ -->
   </target>
 
-  <target name="sign" depends="version">
-
-    <property file="signing.properties"/>
-
-    <fail unless="sign.keystore">
-      Missing property "sign.keystore" in "signing.properties" 
-    </fail>
-    <fail unless="sign.alias">
-      Missing property "sign.alias" in "signing.properties" 
-    </fail>
-    <fail unless="sign.storepass">
-      Missing property "sign.storepass" in "signing.properties" 
-    </fail>
-    <fail unless="sign.keypass">
-      Missing property "sign.keypass" in "signing.properties" 
-    </fail>
-
-
-    <signjar jar="${target.vector.jar}" keystore="${sign.keystore}" alias="${sign.alias}" storepass="${sign.storepass}" keypass="${sign.keypass}" />
-
-    <signjar jar="${target.awt.jar}" keystore="${sign.keystore}" alias="${sign.alias}" storepass="${sign.storepass}" keypass="${sign.keypass}" />
-
-    <signjar jar="${target.xmpp.jar}" keystore="${sign.keystore}" alias="${sign.alias}" storepass="${sign.storepass}" keypass="${sign.keypass}" />
-
-  </target>
 
   <target name="awt" if="vector.awt.update" depends="awt-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.awt.update'.">
 
@@ -77,10 +54,6 @@
 
   <target name="awt-jar" depends="awt-compile" description="Package awt jar, clean bin.">
 
-    <java outputproperty="awt.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
-      <arg value="${target.vector.jar}"/>
-      <arg value="${toString:lib.path}"/>
-    </java>
     <echo message="Main-Class: platform.Frame"/>
     <echo message="Class-Path: ${awt.lib.path.manifest}"/>
 
@@ -96,7 +69,7 @@
     <delete dir="${bin}"/>
   </target>
 
-  <target name="awt-compile" depends="version">
+  <target name="awt-compile" depends="awt-version">
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -113,13 +86,17 @@
     </javac>
   </target>
 
-  <target name="demo" depends="demo-compile" description="Package demo jar, clean bin.  Depends on the target jar.">
+  <target name="awt-version" depends="version">
 
-    <java outputproperty="demo.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
-      <arg value="${target.awt.jar}"/>
+    <java outputproperty="awt.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
+  </target>
+
+
+  <target name="demo" depends="demo-compile" description="Package demo jar, clean bin.  Depends on the target jar.">
+
     <echo message="Main-Class: platform.Frame"/>
     <echo message="Class-Path: ${demo.lib.path.manifest}"/>
 
@@ -135,7 +112,7 @@
     <delete dir="${bin}"/>
   </target>
 
-  <target name="demo-compile" depends="version">
+  <target name="demo-compile" depends="demo-version">
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -152,13 +129,18 @@
     </javac>
   </target>
 
-  <target name="geda" depends="geda-compile" description="Package geda jar, clean bin.  Depends on the target jar.">
+  <target name="demo-version" depends="version">
 
-    <java outputproperty="geda.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="demo.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
+  </target>
+
+
+  <target name="geda" depends="geda-compile" description="Package geda jar, clean bin.  Depends on the target jar.">
+
     <echo message="Main-Class: geda.Frame"/>
     <echo message="Class-Path: ${geda.lib.path.manifest}"/>
 
@@ -174,7 +156,7 @@
     <delete dir="${bin}"/>
   </target>
 
-  <target name="geda-compile" depends="version">
+  <target name="geda-compile" depends="geda-version">
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -192,13 +174,18 @@
     </javac>
   </target>
 
-  <target name="fonview" depends="fonview-compile" description="Package fonview jar, clean bin.  Depends on the target jar.">
+  <target name="geda-version" depends="version">
 
-    <java outputproperty="fonview.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="geda.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
+  </target>
+
+
+  <target name="fonview" depends="fonview-compile" description="Package fonview jar, clean bin.  Depends on the target jar.">
+
     <echo message="Main-Class: fonview.Frame"/>
     <echo message="Class-Path: ${fonview.lib.path.manifest}"/>
 
@@ -214,7 +201,7 @@
     <delete dir="${bin}"/>
   </target>
 
-  <target name="fonview-compile" depends="version">
+  <target name="fonview-compile" depends="fonview-version">
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -232,7 +219,45 @@
     </javac>
   </target>
 
+  <target name="fonview-version" depends="version">
 
+    <java outputproperty="fonview.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+      <arg value="${target.awt.jar}"/>
+      <arg value="${target.vector.jar}"/>
+      <arg value="${toString:lib.path}"/>
+    </java>
+  </target>
+
+
+  <target name="xmpp-sign" depends="xmpp-jar" description="Sign jars required by xmpp.jnlp">
+
+    <property file="signing.properties"/>
+
+    <fail unless="sign.keystore">
+      Missing property "sign.keystore" in "signing.properties" 
+    </fail>
+    <fail unless="sign.alias">
+      Missing property "sign.alias" in "signing.properties" 
+    </fail>
+    <fail unless="sign.storepass">
+      Missing property "sign.storepass" in "signing.properties" 
+    </fail>
+    <fail unless="sign.keypass">
+      Missing property "sign.keypass" in "signing.properties" 
+    </fail>
+
+    <signjar keystore="${sign.keystore}" alias="${sign.alias}" storepass="${sign.storepass}" keypass="${sign.keypass}">
+
+      <path>
+        <pathelement location="${target.awt.jar}"/>
+        <pathelement location="${target.vector.jar}"/>
+        <pathelement location="${target.xmpp.jar}"/>
+        <path refid="lib.path" />
+        <path refid="xmpp.lib.path" />
+      </path>
+    </signjar>
+
+  </target>
   <target name="xmpp" if="vector.xmpp.update" depends="xmpp-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.xmpp.update'.">
 
     <do-update src="${target.xmpp.jar}" tgt="${vector.xmpp.update}" />
@@ -254,20 +279,7 @@
     <delete dir="${bin}"/>
   </target>
 
-  <target name="xmpp-compile" depends="version">
-
-    <path id="xmpp.lib.path">
-
-      <fileset dir="${xmpp.dir}/lib">
-        <include name="**/*.jar" />
-      </fileset>
-    </path>
-    <java outputproperty="xmpp.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
-      <arg value="${target.awt.jar}"/>
-      <arg value="${target.vector.jar}"/>
-      <arg value="${toString:lib.path}"/>
-      <arg value="${toString:xmpp.lib.path}"/>
-    </java>
+  <target name="xmpp-compile" depends="xmpp-version">
 
     <echo message="Class-Path: ${xmpp.lib.path.manifest}"/>
 
@@ -289,6 +301,22 @@
     </javac>
   </target>
 
+  <target name="xmpp-version" depends="version">
+
+    <path id="xmpp.lib.path">
+
+      <fileset dir="${xmpp.dir}/lib">
+        <include name="**/*.jar" />
+      </fileset>
+    </path>
+
+    <java outputproperty="xmpp.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+      <arg value="${target.awt.jar}"/>
+      <arg value="${target.vector.jar}"/>
+      <arg value="${toString:lib.path}"/>
+      <arg value="${toString:xmpp.lib.path}"/>
+    </java>
+  </target>
 
   <target name="jogl" if="vector.jogl.update" depends="jogl-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.jogl.update'.">
 
@@ -297,27 +325,22 @@
 
   <target name="jogl-jar" depends="jogl-compile" description="Package jogl jar, clean bin.  Depends on the target jar.">
 
-    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
-      <arg value="${target.awt.jar}"/>
-      <arg value="${target.vector.jar}"/>
-      <arg value="${toString:lib.path}"/>
-    </java>
     <echo message="Main-Class: platform.Frame"/>
-    <echo message="Class-Path: ${lib.path.manifest}"/>
+    <echo message="Class-Path: ${jogl.lib.path.manifest}"/>
 
     <delete file="${existing.jogl.jar}"/>
 
     <jar jarfile="${target.jogl.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="platform.Frame"/>
-        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${jogl.lib.path.manifest}"/>
       </manifest>
     </jar>
 
     <delete dir="${bin}"/>
   </target>
 
-  <target name="jogl-compile" depends="version">
+  <target name="jogl-compile" depends="jogl-version">
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -335,30 +358,35 @@
     </javac>
   </target>
 
+  <target name="jogl-version" depends="version">
 
-  <target name="llg" depends="llg-compile" description="Package llg jar, clean bin.  Depends on the target jar.">
-
-    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="jogl.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
+  </target>
+
+
+
+  <target name="llg" depends="llg-compile" description="Package llg jar, clean bin.  Depends on the target jar.">
+
     <echo message="Main-Class: llg.Fullscreen"/>
-    <echo message="Class-Path: ${lib.path.manifest}"/>
+    <echo message="Class-Path: ${llg.lib.path.manifest}"/>
 
     <delete file="${existing.llg.jar}"/>
 
     <jar jarfile="${target.llg.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="llg.Fullscreen"/>
-        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${llg.lib.path.manifest}"/>
       </manifest>
     </jar>
 
     <delete dir="${bin}"/>
   </target>
 
-  <target name="llg-compile" depends="version">
+  <target name="llg-compile" depends="llg-version">
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}/fonts">
@@ -377,6 +405,16 @@
     </javac>
   </target>
 
+  <target name="llg-version" depends="version">
+
+    <java outputproperty="llg.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+      <arg value="${target.awt.jar}"/>
+      <arg value="${target.vector.jar}"/>
+      <arg value="${toString:lib.path}"/>
+    </java>
+  </target>
+
+
 
   <target name="update" if="vector.update" depends="jar" description="Build and copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.update'.">
 
@@ -385,24 +423,20 @@
 
   <target name="jar" depends="compile" description="Package bin to target jar, clean bin.">
 
-    <java outputproperty="lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
-      <arg value="${target.awt.jar}"/>
-      <arg value="${toString:lib.path}"/>
-    </java>
     <echo message="Main-Class: platform.Frame"/>
-    <echo message="Class-Path: ${lib.path.manifest}"/>
+    <echo message="Class-Path: ${vector.lib.path.manifest}"/>
 
     <delete file="${existing.vector.jar}"/>
     <jar jarfile="${target.vector.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="platform.Frame"/>
-        <attribute name="Class-Path" value="${lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${vector.lib.path.manifest}"/>
       </manifest>
     </jar>
     <delete dir="${bin}"/>
   </target>
 
-  <target name="compile" depends="version" description="Compile src to bin">
+  <target name="compile" depends="vector-version" description="Compile src to bin">
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -418,6 +452,15 @@
       </classpath>
     </javac>
   </target>
+
+  <target name="vector-version" depends="version">
+
+    <java outputproperty="vector.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+      <arg value="${target.awt.jar}"/>
+      <arg value="${toString:lib.path}"/>
+    </java>
+  </target>
+
 
   <target name="clean" description="Delete products">
     <delete dir="${bin}"/>
