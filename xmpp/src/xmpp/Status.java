@@ -189,8 +189,8 @@ public class Status
         {
             this.add(border);
             border.setBackground(BG);
-            border.setColor(OK);
-            border.setColorOver(OK);
+            border.setColor(NG);
+            border.setColorOver(NG);
             border.setStyle(Border.Style.ROUND);
             border.setStroke(new Stroke(2f));
             border.setStrokeOver(new Stroke(4f));
@@ -210,37 +210,6 @@ public class Status
 
         Border border = this.getBorder();
         border.layout();
-    }
-    public void logon(){
-
-        final Display parent = this.getParentVector();
-        parent.logon();
-    }
-    @Override
-    public boolean input(Event e){
-        if (super.input(e))
-            return true;
-        else {
-            switch(e.getType()){
-
-            case KeyUp:
-                if (this.mouseIn){
-                    final Event.Key k = (Event.Key)e;
-
-                    switch (k.getCode()){
-
-                    case ESCAPE:
-
-                        this.logon();
-
-                        return true;
-                    }
-                }
-                return false;
-            default:
-                return false;
-            }
-        }
     }
     public Label search(XAddress addr){
 

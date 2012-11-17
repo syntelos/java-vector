@@ -48,68 +48,6 @@ public final class XThread
         final String conf = System.getProperty("xmpp.XThread.Debug");
         Debug = (null != conf && "true".equalsIgnoreCase(conf));
     }
-    /**
-     *
-     */
-    public static class State
-        extends Object
-    {
-
-        public interface Process {
-
-            public enum Contact
-                implements Process
-            {
-                Request, Response, Cancel;
-
-
-
-                public State response(State s, Packet p){
-                    Contact contact = (Contact)s.p;
-
-                    return null;
-                }
-            }
-            public enum Resource
-                implements Process
-            {
-                Current, Vacate, Define;
-
-
-
-                public State response(State s, Packet p){
-                    Resource resource = (Resource)s.p;
-
-                    return null;
-                }
-            }
-
-
-            public State response(State s, Packet p);
-        }
-
-
-        public final Process p;
-
-        public final XAddress a;
-
-
-        public State(Process p, XAddress a){
-            super();
-            if (null != p){
-                this.p = p;
-                this.a = a;
-            }
-            else
-                throw new IllegalArgumentException();
-        }
-
-
-        public State response(Packet p){
-
-            return this.p.response(this,p);
-        }
-    }
 
     /**
      * Persistent channel
@@ -150,16 +88,13 @@ public final class XThread
     protected XAddress logon;
 
     protected int port;
-    /*
-     * This field is protected from entering state (NULL) after (NOT NULL)
-     */
+
     private volatile XAddress to;
 
     private volatile XMPPConnection connection;
 
-    private volatile State state;
-
     private volatile Message.Type messageType = Message.Type.chat;
+
 
     /**
      * 
@@ -280,7 +215,7 @@ public final class XThread
             }
             finally {
                 this.connection = null;
-                this.state = null;
+
                 Status.Instance.down();
             }
         }
