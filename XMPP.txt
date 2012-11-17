@@ -1,12 +1,25 @@
 
 XMPP chat demo
 
+Usage
+
+ After logon, known contacts are displayed in a list.  Clicking one selects a chat contact.
+
+ To chat with anyone in the contacts list, alternatively type
+
+  @name: message
+
+ To select the first contact found by identifier or logon, and send the message.
+
+ This also works more informally as
+
+  @name message
+
 
 Status
 
-  Funny but broken
+  Incomplete: subscription broken
 
 Bugs
 
- * Unable to disconnect in alternative user?
- * Message send produces XMPP error cancel
+ * Subscription process incomplete
