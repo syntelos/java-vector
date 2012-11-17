@@ -25,6 +25,8 @@
   <property file="${user.home}/update.properties"/>
   <import file="ant/build.in.update.xml"/>
 
+
+
   <path id="lib.path">
 
     <fileset dir="${lib}">
@@ -40,6 +42,32 @@
     <antcall target="fonview"/>
     <antcall target="xmpp"/>
     <!-- antcall target="llg"/ -->
+  </target>
+
+  <target name="sign" depends="version">
+
+    <property file="signing.properties"/>
+
+    <fail unless="sign.keystore">
+      Missing property "sign.keystore" in "signing.properties" 
+    </fail>
+    <fail unless="sign.alias">
+      Missing property "sign.alias" in "signing.properties" 
+    </fail>
+    <fail unless="sign.storepass">
+      Missing property "sign.storepass" in "signing.properties" 
+    </fail>
+    <fail unless="sign.keypass">
+      Missing property "sign.keypass" in "signing.properties" 
+    </fail>
+
+
+    <signjar jar="${target.jar}" keystore="${sign.keystore}" alias="${sign.alias}" storepass="${sign.storepass}" keypass="${sign.keypass}" />
+
+    <signjar jar="${target.awt.jar}" keystore="${sign.keystore}" alias="${sign.alias}" storepass="${sign.storepass}" keypass="${sign.keypass}" />
+
+    <signjar jar="${target.xmpp.jar}" keystore="${sign.keystore}" alias="${sign.alias}" storepass="${sign.storepass}" keypass="${sign.keypass}" />
+
   </target>
 
   <target name="awt" if="vector.awt.update" depends="awt-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.awt.update'.">

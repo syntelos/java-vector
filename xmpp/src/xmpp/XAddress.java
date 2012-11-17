@@ -243,15 +243,10 @@ public class XAddress
 
             return this.equals( (XAddress)that);
 
-        else if (this.isResourceDefault()){
-
-            if (this.isHostDefault())
-                return this.identifier.equals(that);
-            else
-                return this.logon.equals(that);
-        }
+        else if (this.isHostDefault())
+            return this.identifier.equals(that);
         else
-            return this.full.equals(that);
+            return this.logon.equals(that);
     }
     public boolean equals(XAddress that){
         if (this == that)
@@ -265,8 +260,12 @@ public class XAddress
             else
                 return this.logon.equals(that.logon);
         }
+        else if (this.logon.equals(that.logon)){
+
+            return this.resourceKind.equals(that.resourceKind);
+        }
         else
-            return this.full.equals(that.full);
+            return false;
     }
     public int compareTo(XAddress that){
         if (this == that)
@@ -278,8 +277,9 @@ public class XAddress
             else
                 return this.logon.compareTo(that.logon);
         }
-        else
+        else {
             return this.full.compareTo(that.full);
+        }
     }
 
 

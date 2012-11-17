@@ -15,10 +15,15 @@ Usage
 
   @name message
 
+ Pressing 'ESC' raises and lowers the connection dialog.
+
 
 Status
 
-  Incomplete: subscription broken
+  1-1 Messaging: complete
+
+  Subscription: incomplete
+
 
 Bugs
 
