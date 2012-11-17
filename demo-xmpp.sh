@@ -51,6 +51,9 @@ EOF
     <homepage href="http://www.digivac.com/"/>
     <description>Vector scalable graphical user interfaces demo</description>
   </information>
+  <security>
+    <all-permissions/>
+  </security>
   <resources>
     <j2se version="1.6+"/>
 
