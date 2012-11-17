@@ -62,7 +62,7 @@
     </fail>
 
 
-    <signjar jar="${target.jar}" keystore="${sign.keystore}" alias="${sign.alias}" storepass="${sign.storepass}" keypass="${sign.keypass}" />
+    <signjar jar="${target.vector.jar}" keystore="${sign.keystore}" alias="${sign.alias}" storepass="${sign.storepass}" keypass="${sign.keypass}" />
 
     <signjar jar="${target.awt.jar}" keystore="${sign.keystore}" alias="${sign.alias}" storepass="${sign.storepass}" keypass="${sign.keypass}" />
 
