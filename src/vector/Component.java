@@ -290,10 +290,6 @@ public interface Component
      * <code>bounds</code>", above.
      */
     public Component setBoundsVector(Bounds bounds);
-    /**
-     * Called by 'fromJson' to set bounds vector
-     */
-    public Component setBoundsVectorForScale(Bounds in);
 
     public boolean contains(int x, int y);
 

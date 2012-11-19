@@ -1,5 +1,6 @@
 {
     "background": "#FFFFFF",
+    "bounds": "(0,0,1280,800)",
     "components": [
         {
             "class": "vector.ContainerScroll",

@@ -1,5 +1,6 @@
 {
     "background": "#000000",
+    "bounds": "(0,0,1280,800)",
     "components": [
         {
             "class": "vector.TableBig",

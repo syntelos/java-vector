@@ -1,10 +1,11 @@
 {
-  "background": "#FFFFFF",
-  "components": [
-    {
-      "class": "vector.Text",
-      "color": "#000000",
-      "text": "فارسی"
-    }
-  ]
+    "background": "#FFFFFF",
+    "bounds": "(0,0,1280,800)",
+    "components": [
+        {
+            "class": "vector.Text",
+            "color": "#000000",
+            "text": "فارسی"
+        }
+    ]
 }

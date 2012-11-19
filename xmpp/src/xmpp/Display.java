@@ -54,6 +54,7 @@ public class Display
         {
             this.add(logon);
         }
+        this.setBoundsVector(new vector.Bounds(0,0,1280,800));
     }
     @Override
     public void modified(){

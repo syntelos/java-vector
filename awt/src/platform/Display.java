@@ -219,12 +219,6 @@ public class Display
         }
         return this;
     }
-    public Component setBoundsVectorForScale(Bounds bounds){
-
-        this.setBoundsVector(bounds);
-
-        return this;
-    }
     public final boolean contains(float x, float y){
         return super.contains( (int)x, (int)y);
     }
@@ -796,7 +790,7 @@ public class Display
         this.init( (Boolean)thisModel.getValue("init"));
 
         this.setTransformLocal( thisModel.getValue("transform",Transform.class));
-        this.setBoundsVectorForScale( thisModel.getValue("bounds",Bounds.class));
+        this.setBoundsVector( thisModel.getValue("bounds",Bounds.class));
         this.setBackground( thisModel.getValue("background",Color.class));
         this.setBufferOverlay( (Boolean)thisModel.getValue("buffer-overlay"));
 

@@ -186,16 +186,6 @@ public abstract class AbstractComponent
         return this;
     }
     /**
-     * Called by {@link #fromJson}
-     */
-    public Component setBoundsVectorForScale(Bounds bounds){
-        if (null != bounds){
-
-            this.setBoundsVector(bounds);
-        }
-        return this;
-    }
-    /**
      * Dimensions of component for resizing to the parent with
      * component origin (0,0).  The component location is changed to
      * (0,0).
@@ -459,7 +449,7 @@ public abstract class AbstractComponent
 
         this.setTransformLocal( thisModel.getValue("transform",Transform.class));
 
-        this.setBoundsVectorForScale( thisModel.getValue("bounds",Bounds.class));
+        this.setBoundsVector( thisModel.getValue("bounds",Bounds.class));
 
         this.setDebug( (Boolean)thisModel.getValue("debug"));
         /*
