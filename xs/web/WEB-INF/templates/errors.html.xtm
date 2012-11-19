@@ -1,82 +1,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <title>{{=hostname}} / Error</title>
-    <link rel="icon" href="/icons/favicon.ico" />
-    <link rel="prefetch" href="/decor/corners-4-in-59x57.png" />
-    <link rel="prefetch" href="/decor/corners-bl-32.png" />
-    <link rel="prefetch" href="/decor/corners-bl-in-8.png" />
-    <link rel="prefetch" href="/decor/corners-br-32.png" />
-    <link rel="prefetch" href="/decor/corners-br-in-8.png" />
-    <link rel="prefetch" href="/decor/corners-tl-32.png" />
-    <link rel="prefetch" href="/decor/corners-tl-in-8.png" />
-    <link rel="prefetch" href="/decor/corners-tr-32.png" />
-    <link rel="prefetch" href="/decor/corners-tr-in-8.png" />
-    <link rel="prefetch" href="/icons/fullscreen-32x32.png" />
-    <link rel="prefetch" href="/icons/launch-16x16.png" />
-    <link rel="prefetch" href="/icons/settings-16x16.png" />
-    <link rel="prefetch" href="/icons/system-16x16.png" />
-    <link rel="prefetch" href="/icons/web-16x16.png" />
-    <link rel="stylesheet" type="text/css" href="/top.css" />
-    <link rel="stylesheet" type="text/css" href="/decor.css" />
+    <title>Vector XS Error</title>
+    <style type="text/css">
+      body {
+        background-color: #FFF;
+        font-family: sans-serif;
+      }
+      h1, p, pre {
+        color: #000;
+        margin-left: 40px;
+      }
+      h1 {
+        margin-top: 120px;
+      }
+      pre {
+        border: 1px solid #000;
+      }
+    </style>
   </head>
   <body>
-{{>div.logon.html}}
     {{#error}}
-      <div class="editor">
-        <table class="decor">
-          <tr class="decor lg to">
-            <td class="decor lg tl"> &nbsp;
-            </td>
-            <td class="decor lg tc"> &nbsp;
-            </td>
-            <td class="decor lg tr"> &nbsp;
-            </td>
-          </tr>
-          <tr class="decor lg mi">
-            <td class="decor lg le"> &nbsp;
-            </td>
-            <td class="editor">
-              <table class="decor">
-                <tr class="decor s8 to">
-                  <td class="decor s8 tl in"> </td>
-                  <td class="decor s8 tc in"> </td>
-                  <td class="decor s8 tr in"> </td>
-                </tr>
-                <tr class="decor s8 mi">
-                  <td class="decor s8 le in"> </td>
-                  <td class="decor s8 mi in dtank">
-
-                    <h1 class="errors"> {{=error_status}}</h1>
-                    <p class="errors"> {{=error_message}}
-                    </p>
-                    <pre class="errors">
-                      {{=error_exception}}
-                    </pre>
-                  </td>
-                  <td class="decor s8 ri in"> </td>
-                </tr>
-                <tr class="decor s8 bo">
-                  <td class="decor s8 bl in"> </td>
-                  <td class="decor s8 bc in"> </td>
-                  <td class="decor s8 br in"> </td>
-                </tr>
-              </table>
-            </td>
-            <td class="decor lg ri"> &nbsp;
-            </td>
-          </tr>
-          <tr class="decor lg bo">
-            <td class="decor lg bl"> &nbsp;
-            </td>
-            <td class="decor lg bc"> &nbsp;
-            </td>
-            <td class="decor lg br"> &nbsp;
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
+    <h1>{{=error_status}}</h1>
+    <p> {{=error_message}} </p>
+    <pre>{{=error_exception}}</pre>
     {{/error}}
-{{>div.copyrights.html}}
   </body>
 </html>

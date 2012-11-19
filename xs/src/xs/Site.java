@@ -17,3 +17,60 @@
  * <http://www.gnu.org/licenses/>.
  */
 package xs;
+
+import gap.*;
+import gap.data.*;
+import gap.util.*;
+
+import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.blobstore.*;
+import com.google.appengine.api.xmpp.*;
+
+import java.io.IOException;
+import java.util.Date;
+import javax.servlet.ServletException;
+
+/**
+ * Deliver pages and interpret invite API
+ */
+public class Site
+    extends gap.service.Servlet
+{
+    private XMPPService xs;
+
+
+    public Site(){
+        super();
+    }
+
+
+    protected final XMPPService getXMPPService(){
+        if (null == this.xs)
+            this.xs = XMPPServiceFactory.getXMPPService();
+
+        return xs;
+    }
+    protected void doPost(Request req, Response rep)
+        throws ServletException, IOException
+    {
+        req.setViewerDisabled();
+        if ("invite".equals(req.getSource())){
+            try {
+                final XAddress address = new XAddress.Logon(req.getParameter("address"));
+
+                final JID jid = address.toJID();
+
+                if (null != jid){
+
+                    final XMPPService xs = this.getXMPPService();
+
+                    xs.sendInvitation(jid,Version.From);
+                }
+            }
+            catch (RuntimeException exc){
+            }
+        }
+        rep.sendRedirect("/index.html");
+    }
+
+}

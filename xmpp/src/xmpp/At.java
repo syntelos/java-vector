@@ -82,11 +82,12 @@ public enum At {
                         for (int cc = 0; cc < count; cc++){
                             String tok = tokens[cc];
                             if (1 == tok.length()){
+                                char ch = tok.charAt(0);
 
                                 if (null != tail)
                                     tail += tok;
                                 else if (inHead){
-                                    switch(tok.charAt(0)){
+                                    switch(ch){
                                     case ' ':
                                     case ':':
                                         inHead = false;
@@ -96,21 +97,13 @@ public enum At {
                                         break;
                                     }
                                 }
+                                else if ('@' == ch && 0 == cc)
+                                    inHead = true;
                                 else {
-                                    switch(tok.charAt(0)){
-                                    case '@':
-                                        inHead = (0 == cc);
-                                        break;
-                                    case ' ':
-                                    case ':':
-                                        break;
-                                    default:
-                                        tail = tok;
 
-                                        at = At.Tail;
+                                    tail = tok;
 
-                                        break;
-                                    }
+                                    at = At.Tail;
                                 }
                             }
                             else if (inHead){

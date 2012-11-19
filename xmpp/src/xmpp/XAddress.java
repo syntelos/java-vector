@@ -364,6 +364,8 @@ public class XAddress
 
                             if (5 == cc && 'i' == ch && 'a' == cary[0] && 'n' == cary[1])
                                 end = (cc + 2);
+                            else if (4 == cc && 'n' == ch && 'i' == cary[0] && 'P' == cary[1])
+                                end = (cc + 2);
                             else
                                 end = (cc + 1);
 

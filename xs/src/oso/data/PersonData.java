@@ -40,7 +40,7 @@ import javax.annotation.Generated;
  *
  * @see Person
  */
-@Generated(value={"gap.service.OD","BeanData.java"},date="2012-11-18T12:30:23.886Z")
+@Generated(value={"gap.service.OD","BeanData.java"},date="2012-11-19T05:53:59.544Z")
 public abstract class PersonData
     extends gap.data.BigTable
     implements DataInheritance<Person>
@@ -403,7 +403,9 @@ public abstract class PersonData
         InheritFromKey("inheritFromKey",Type.Primitive),
         Key("key",Type.Primitive),
         Id("id",Type.Primitive),
-        LogonId("logonId",Type.Primitive);
+        LogonId("logonId",Type.Primitive),
+        Resource("resource",Type.Primitive),
+        Available("available",Type.Primitive);
 
         private final static lxl.Map<String,Field> FieldName = new lxl.Map<String,Field>();
         public static final String[] AllNames;
@@ -459,6 +461,10 @@ public abstract class PersonData
                 return instance.getId();
             case LogonId:
                 return instance.getLogonId(mayInherit);
+            case Resource:
+                return instance.getResource(mayInherit);
+            case Available:
+                return instance.getAvailable(mayInherit);
             default:
                 throw new IllegalArgumentException(field.toString()+" in Person");
             }
@@ -478,6 +484,10 @@ public abstract class PersonData
                 return instance.setId(gap.Objects.StringFromObject(value));
             case LogonId:
                 return instance.setLogonId(gap.Objects.StringFromObject(value));
+            case Resource:
+                return instance.setResource(gap.Objects.StringFromObject(value));
+            case Available:
+                return instance.setAvailable(gap.Objects.BooleanFromObject(value));
             default:
                 throw new IllegalArgumentException(field.toString()+" in Person");
             }
@@ -497,6 +507,10 @@ public abstract class PersonData
                 return instance.getId();
             case LogonId:
                 return instance.getLogonId(MayNotInherit);
+            case Resource:
+                return instance.getResource(MayNotInherit);
+            case Available:
+                return instance.getAvailable(MayNotInherit);
             default:
                 throw new IllegalArgumentException(field.toString()+" in Person");
             }
@@ -519,6 +533,12 @@ public abstract class PersonData
                 return;
             case LogonId:
                 instance.setLogonId( (String)value);
+                return;
+            case Resource:
+                instance.setResource( (String)value);
+                return;
+            case Available:
+                instance.setAvailable( (Boolean)value);
                 return;
             default:
                 throw new IllegalArgumentException(field.toString()+" in Person");
@@ -630,6 +650,8 @@ public abstract class PersonData
 
 
     private String logonId;
+    private String resource;
+    private Boolean available;
 
 
 
@@ -659,6 +681,8 @@ public abstract class PersonData
     public void destroy(){
         this.inheritFrom = null;
         this.logonId = null;
+        this.resource = null;
+        this.available = null;
     }
     public final String getId(){
 
@@ -753,6 +777,102 @@ public abstract class PersonData
         else
             return false;
     }
+    public final boolean hasResource(boolean mayInherit){
+        return (null != this.getResource(mayInherit));
+    }
+    public final boolean hasNotResource(boolean mayInherit){
+        return (null == this.getResource(mayInherit));
+    }
+    public final boolean dropResource(){
+        if (null != this.resource){
+            this.fieldStatistics().markDirty(Person.Field.Resource);
+            this.resource = null;
+            return true;
+        }
+        else
+            return false;
+    }
+    public final String getResource(){
+        return this.getResource(Notation.MayInherit);
+    }
+    public final String getResource(boolean mayInherit){
+        if (mayInherit){
+            String resource = this.resource;
+            if (null == resource && this.hasInheritFrom()){
+                Person inheritFrom = this.getInheritFrom();
+                return inheritFrom.getResource(Notation.MayInherit);
+            }
+            return resource;
+        }
+        else
+            return this.resource;
+    }
+    public final boolean setResource(String resource, boolean withInheritance){
+        if (IsNotEqual(this.resource,this.getResource(withInheritance))){
+            this.fieldStatistics().markDirty(Person.Field.Resource);
+            this.resource = resource;
+            return true;
+        }
+        else
+            return false;
+    }
+    public final boolean setResource(String resource){
+        if (IsNotEqual(this.resource,resource)){
+            this.fieldStatistics().markDirty(Person.Field.Resource);
+            this.resource = resource;
+            return true;
+        }
+        else
+            return false;
+    }
+    public final boolean hasAvailable(boolean mayInherit){
+        return (null != this.getAvailable(mayInherit));
+    }
+    public final boolean hasNotAvailable(boolean mayInherit){
+        return (null == this.getAvailable(mayInherit));
+    }
+    public final boolean dropAvailable(){
+        if (null != this.available){
+            this.fieldStatistics().markDirty(Person.Field.Available);
+            this.available = null;
+            return true;
+        }
+        else
+            return false;
+    }
+    public final Boolean getAvailable(){
+        return this.getAvailable(Notation.MayInherit);
+    }
+    public final Boolean getAvailable(boolean mayInherit){
+        if (mayInherit){
+            Boolean available = this.available;
+            if (null == available && this.hasInheritFrom()){
+                Person inheritFrom = this.getInheritFrom();
+                return inheritFrom.getAvailable(Notation.MayInherit);
+            }
+            return available;
+        }
+        else
+            return this.available;
+    }
+    public final boolean setAvailable(Boolean available, boolean withInheritance){
+        if (IsNotEqual(this.available,this.getAvailable(withInheritance))){
+            this.fieldStatistics().markDirty(Person.Field.Available);
+            this.available = available;
+            return true;
+        }
+        else
+            return false;
+    }
+    public final boolean setAvailable(Boolean available){
+        if (IsNotEqual(this.available,available)){
+            this.fieldStatistics().markDirty(Person.Field.Available);
+            this.available = available;
+            return true;
+        }
+        else
+            return false;
+    }
     public Json toJsonLogonId(){
         String logonId = this.getLogonId();
         return Json.Wrap( logonId);
@@ -762,6 +882,26 @@ public abstract class PersonData
             return false;
         else 
             return this.setLogonId((String)json.getValue(String.class));
+    }
+    public Json toJsonResource(){
+        String resource = this.getResource();
+        return Json.Wrap( resource);
+    }
+    public boolean fromJsonResource(Json json){
+        if (null == json)
+            return false;
+        else 
+            return this.setResource((String)json.getValue(String.class));
+    }
+    public Json toJsonAvailable(){
+        Boolean available = this.getAvailable();
+        return Json.Wrap( available);
+    }
+    public boolean fromJsonAvailable(Json json){
+        if (null == json)
+            return false;
+        else 
+            return this.setAvailable((Boolean)json.getValue(Boolean.class));
     }
     /*
      * Data binding supports
@@ -787,14 +927,46 @@ public abstract class PersonData
         Json logonId = this.toJsonLogonId();
         if (null != logonId)
             json.set("logonId",logonId);
+        Json resource = this.toJsonResource();
+        if (null != resource)
+            json.set("resource",resource);
+        Json available = this.toJsonAvailable();
+        if (null != available)
+            json.set("available",available);
         return json;
     }
     public boolean fromJson(Json json){
         boolean modified = false;
+        modified = (this.fromJsonResource(json.at("resource")) || modified);
+        modified = (this.fromJsonAvailable(json.at("available")) || modified);
         return modified;
     }
     public boolean updateFrom(Request req) throws ValidationError {
         boolean change = false;
+        String resourceRequest = req.getParameter("resource");
+        if (null != resourceRequest && 0 < resourceRequest.length()){
+            try {
+                String resource = resourceRequest;
+                if (this.setResource(resource)){
+                    change = true;
+                }
+            }
+            catch (RuntimeException exc){
+                throw new ValidationError(ClassName,"resource",resourceRequest,exc);
+            }
+        }
+        String availableRequest = req.getParameter("available");
+        if (null != availableRequest && 0 < availableRequest.length()){
+            try {
+                Boolean available = gap.Strings.BooleanFromString(availableRequest);
+                if (this.setAvailable(available)){
+                    change = true;
+                }
+            }
+            catch (RuntimeException exc){
+                throw new ValidationError(ClassName,"available",availableRequest,exc);
+            }
+        }
         return change;
     }
     public final boolean updateFrom(BigTable proto){
@@ -803,6 +975,14 @@ public abstract class PersonData
     public final boolean updateFrom(Person proto){
         boolean mayInherit = (!this.hasInheritFromKey());
         boolean change = false;
+        String resource = proto.getResource(mayInherit);
+        if (null != resource && this.setResource(resource)){
+            change = true;
+        }
+        Boolean available = proto.getAvailable(mayInherit);
+        if (null != available && this.setAvailable(available)){
+            change = true;
+        }
         return change;
     }
     public java.io.Serializable valueStorage(gap.data.Field field){
@@ -831,6 +1011,14 @@ public abstract class PersonData
     public final Person markDirty(java.io.Serializable instance){
         if (instance == this.logonId){
             gap.data.Field field = Person.Field.LogonId;
+            return this.markDirty(field);
+        }
+        else if (instance == this.resource){
+            gap.data.Field field = Person.Field.Resource;
+            return this.markDirty(field);
+        }
+        else if (instance == this.available){
+            gap.data.Field field = Person.Field.Available;
             return this.markDirty(field);
         }
         else if (null != instance)
@@ -880,6 +1068,24 @@ public abstract class PersonData
                      */
                     return this.hasLogonId(true);
                 }
+            case Resource:
+                if (name.has(1))
+                    throw new IllegalStateException(field.name());
+                else {
+                    /*
+                     * Synthesize section for Field (EXISTS)
+                     */
+                    return this.hasResource(true);
+                }
+            case Available:
+                if (name.has(1))
+                    throw new IllegalStateException(field.name());
+                else {
+                    /*
+                     * Synthesize section for Boolean (EXISTS && TRUE)
+                     */
+                    return (this.hasAvailable(true) && this.getAvailable(true));
+                }
             default:
                 break;
             }
@@ -900,6 +1106,16 @@ public abstract class PersonData
                     throw new IllegalStateException(field.name());
                 else
                     return this.getLogonId(true);
+            case Resource:
+                if (name.has(1))
+                    throw new IllegalStateException(field.name());
+                else
+                    return this.getResource(true);
+            case Available:
+                if (name.has(1))
+                    throw new IllegalStateException(field.name());
+                else
+                    return gap.Strings.BooleanToString(this.getAvailable(true));
             default:
                 break;
             }
@@ -914,6 +1130,10 @@ public abstract class PersonData
                 case Id:
                     throw new UnsupportedOperationException(field.name());
                 case LogonId:
+                    throw new IllegalStateException(field.name());
+                case Resource:
+                    throw new IllegalStateException(field.name());
+                case Available:
                     throw new IllegalStateException(field.name());
                 default:
                     throw new IllegalStateException(field.name());
@@ -931,6 +1151,10 @@ public abstract class PersonData
         if (null != field){
             switch (field){
             case LogonId:
+                return null;
+            case Resource:
+                return null;
+            case Available:
                 return null;
             default:
                 throw new IllegalStateException(field.name());

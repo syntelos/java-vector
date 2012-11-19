@@ -300,11 +300,15 @@ public class Output
                 Bounds cb = c.getBoundsVector();
                 yy -= (cb.height+4f);
 
-                cb.x = xx;
-                cb.y = yy;
-                cb.width = thisBounds.width;
+                if (0f < yy){
+                    cb.x = xx;
+                    cb.y = yy;
+                    cb.width = thisBounds.width;
 
-                c.setBoundsVector(cb);
+                    c.setBoundsVector(cb);
+                }
+                else
+                    this.remove(c);
             }
         }
         {

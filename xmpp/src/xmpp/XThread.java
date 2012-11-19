@@ -389,8 +389,13 @@ public final class XThread
     }
     protected void receive(Message m){
 
-        Status.Instance.receive(m);
-
+        if (null != this.connection){
+            final String sender = this.connection.getUser();
+            final String from = m.getFrom();
+            if (!from.equals(sender)){
+                Status.Instance.receive(m);
+            }
+        }
         Output.Instance.receive(m);
     }
     protected void headline(Message m){

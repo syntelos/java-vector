@@ -168,14 +168,18 @@ public class Status
                 switch(e.getType()){
                 case MouseUp:
                     if (this.mouseIn){
+                        try {
+                            Status.Select(this.address);
 
-                        Status.Select(this.address);
+                            Event.NamedAction<Actor> dup = new platform.event.NamedAction(Actor.Select);
 
-                        Event.NamedAction<Actor> dup = new platform.event.NamedAction(Actor.Select);
+                            this.getRootContainer().input(dup);
 
-                        this.getRootContainer().input(dup);
-
-                        return true;
+                            return true;
+                        }
+                        catch (IllegalArgumentException exc){
+                            exc.printStackTrace();
+                        }
                     }
                 default:
                     break;
@@ -337,11 +341,14 @@ public class Status
         if (null != known){
 
             XThread.Select(known.address);
+            return this;
         }
-        else {
+        else if (addr.isNotHostDefault()){
 
             XThread.Contact(addr);
+            return this;
         }
-        return this;
+        else
+            throw new IllegalArgumentException(addr.identifier);
     }
 }

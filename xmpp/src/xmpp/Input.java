@@ -58,8 +58,21 @@ public class Input
 
             case Identifier:
             case Logon:
+                try {
+                    Status.Select(input.address);
+                }
+                catch (IllegalArgumentException nlogon){
 
-                Status.Select(input.address);
+                    this.setText(null);
+
+                    XThread.Send(input.source);
+
+                    this.modified();
+
+                    this.outputScene();
+
+                    return;
+                }
 
             case Tail:
 

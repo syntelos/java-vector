@@ -1,49 +1,15 @@
-<!-- Indices written at Wed, 22 Feb 2012 19:21:51 UTC -->
+<!-- Indices written at Mon, 19 Nov 2012 06:08:54 UTC -->
 
 <datastore-indexes>
 
-    <!-- Used 13 times in query history -->
-    <datastore-index kind="Download" ancestor="true" source="auto">
-        <property name="name" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 14 times in query history -->
+    <!-- Used 3 times in query history -->
     <datastore-index kind="Template" ancestor="true" source="auto">
         <property name="name" direction="asc"/>
     </datastore-index>
 
-    <!-- Used 102 times in query history -->
+    <!-- Used 4 times in query history -->
     <datastore-index kind="TemplateNode" ancestor="true" source="auto">
         <property name="offset" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="Person" ancestor="true" source="auto">
-        <property name="logonId" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 3 times in query history -->
-    <datastore-index kind="Customer" ancestor="true" source="auto">
-        <property name="name" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="Subscription" ancestor="false" source="auto">
-        <property name="source" direction="asc"/>
-        <property name="target" direction="asc"/>
-        <property name="identifier" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 3 times in query history -->
-    <datastore-index kind="Customer" ancestor="false" source="auto">
-        <property name="license" direction="asc"/>
-        <property name="name" direction="asc"/>
-    </datastore-index>
-
-    <!-- Used 8 times in query history -->
-    <datastore-index kind="Customer" ancestor="false" source="auto">
-        <property name="vendor" direction="asc"/>
-        <property name="license" direction="desc"/>
     </datastore-index>
 
 </datastore-indexes>
