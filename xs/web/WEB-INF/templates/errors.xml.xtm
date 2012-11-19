@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<errors xmlns="http://www.digivac.net/">{{#error}}
+ <status>{{=error_status}}</status>
+ <type>{{=error_type}}</type>
+ <message>{{=error_message}}</message>
+ <uri>{{=error_uri}}</uri>
+ <exception>{{=error_exception}}</exception>
+ <contact_html>{{>contact.html}}</contact_html>
+ {{/error}}
+</errors>

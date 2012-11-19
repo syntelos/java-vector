@@ -1,0 +1,13 @@
+package gap.hapax;
+path /templates;
+
+class Template version 4
+    implements gap.data.LastModified
+    implements gap.data.HasName
+{
+
+    *unique String name;
+    Long lastModified;
+    Text templateSourceHapax;
+    List.Short<TemplateNode> templateTargetHapax;
+}

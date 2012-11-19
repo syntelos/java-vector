@@ -1,0 +1,175 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>{{=hostname}} / Home</title>
+    <link rel="icon" href="/icons/favicon.ico" />
+    <link rel="prefetch" href="/images/digivac-white-530x128.png">
+    <link rel="prefetch" href="/decor/corners-4-in-59x57.png" />
+    <link rel="prefetch" href="/decor/corners-bl-32.png" />
+    <link rel="prefetch" href="/decor/corners-bl-in-8.png" />
+    <link rel="prefetch" href="/decor/corners-br-32.png" />
+    <link rel="prefetch" href="/decor/corners-br-in-8.png" />
+    <link rel="prefetch" href="/decor/corners-tl-32.png" />
+    <link rel="prefetch" href="/decor/corners-tl-in-8.png" />
+    <link rel="prefetch" href="/decor/corners-tr-32.png" />
+    <link rel="prefetch" href="/decor/corners-tr-in-8.png" />
+    <link rel="prefetch" href="/icons/fullscreen-32x32.png" />
+    <link rel="prefetch" href="/icons/launch-16x16.png" />
+    <link rel="prefetch" href="/icons/settings-16x16.png" />
+    <link rel="prefetch" href="/icons/system-16x16.png" />
+    <link rel="prefetch" href="/icons/web-16x16.png" />
+    <link rel="stylesheet" type="text/css" href="/top.css" />
+    <link rel="stylesheet" type="text/css" href="/cli.css" />
+    <link rel="stylesheet" type="text/css" href="/decor.css" />
+  </head>
+  <body>
+{{>div.logon.html}}{{#isMember}}
+      <div class="terminal">
+        <table class="decor">
+          <tr class="decor lg to">
+            <td class="decor lg tl"> &nbsp; </td>
+            <td class="decor lg tc"> &nbsp; </td>
+            <td class="decor lg corner"> &nbsp; </td>
+          </tr>
+          <tr class="decor lg mi">
+            <td class="decor lg le"> &nbsp; </td>
+            <td class="decor lg mi">
+              {{>cli.template}}
+            </td>
+            <td class="decor lg ri"> &nbsp; </td>
+          </tr>
+          <tr class="decor lg bo">
+            <td class="decor lg bl"> &nbsp; </td>
+            <td class="decor lg bc"> &nbsp; </td>
+            <td class="decor lg br"> &nbsp; </td>
+          </tr>
+        </table>
+      </div>
+      <div class="dot background">
+        <table class="decor lg">
+          <tr class="decor lg to">
+            <td class="decor lg corner"> &nbsp; </td>
+            <td class="decor lg tc"> &nbsp; </td>
+            <td class="decor lg tr"> &nbsp; </td>
+          </tr>
+          <tr class="decor lg mi">
+            <td class="decor lg le"> &nbsp; </td>
+            <td class="decor lg mi"> &nbsp; </td>
+            <td class="decor lg ri"> &nbsp; </td>
+          </tr>
+          <tr class="decor lg bo">
+            <td class="decor lg corner"> &nbsp; </td>
+            <td class="decor lg bc"> &nbsp; </td>
+            <td class="decor lg br"> &nbsp; </td>
+          </tr>
+          <tr class="decor lg bo">
+            <td class="decor lg tl in"> &nbsp; </td>
+            <td class="decor lg mi in"> &nbsp; </td>
+            <td class="decor lg corner in"> &nbsp; </td>
+          </tr>
+        </table>
+      </div>
+      <div class="dot button">
+        <a href="/channel/server"><img src="/icons/fullscreen-32x32.png" width="32" height="32" border="0" title="Fullscreen" alt="Fullscreen"/></a>
+      </div>
+      <div class="dot encore">
+        <table class="decor lg">
+          <tr class="decor lg to">
+            <td class="decor lg tl"> &nbsp; </td>
+            <td class="decor lg tc"> &nbsp; </td>
+            <td class="decor lg tr"> &nbsp; </td>
+          </tr>
+          <tr class="decor lg mi">
+            <td class="decor lg le"> &nbsp; </td>
+            <td class="decor lg mi">
+              <table class="decor third">
+                <tr class="decor s8 to">
+                  <td class="decor s8 tl in"> </td>
+                  <td class="decor s8 tc in"> </td>
+                  <td class="decor s8 tr in"> </td>
+                </tr>
+                <tr class="decor s8 mi">
+                  <td class="decor s8 le in"> </td>
+                  <td class="decor s8 mi in">
+                    <div class="tools">
+                      <h2 class="tools">Server</h2>
+                      <ul class="tools">
+                        <li class="launch"><a href="/servers/jnlp">Launch</a></li>
+                        <li class="settings"><a href="/servers/">Configure</a></li>
+                      </ul>
+                    </div>
+                  </td>
+                  <td class="decor s8 ri in"> </td>
+                </tr>
+                <tr class="decor s8 bo">
+                  <td class="decor s8 bl in"> </td>
+                  <td class="decor s8 bc in"> </td>
+                  <td class="decor s8 br in"> </td>
+                </tr>
+              </table>
+              <br />
+              <table class="decor third">
+                <tr class="decor s8 to">
+                  <td class="decor s8 tl in"> </td>
+                  <td class="decor s8 tc in"> </td>
+                  <td class="decor s8 tr in"> </td>
+                </tr>
+                <tr class="decor s8 mi">
+                  <td class="decor s8 le in"> </td>
+                  <td class="decor s8 mi in">
+                    <div class="tools">
+                      <h2 class="tools">Client</h2>
+                      <ul class="tools">
+                        <li class="launch"><a href="/clients/jnlp">Launch</a></li>
+                        <li class="settings"><a href="/clients/">Configure</a></li>
+                      </ul>
+                    </div>
+                  </td>
+                  <td class="decor s8 ri in"> </td>
+                </tr>
+                <tr class="decor s8 bo">
+                  <td class="decor s8 bl in">  </td>
+                  <td class="decor s8 bc in"> </td>
+                  <td class="decor s8 br in">  </td>
+                </tr>
+              </table>
+              <br />
+              <table class="decor third">
+                <tr class="decor s8 to">
+                  <td class="decor s8 tl in"> </td>
+                  <td class="decor s8 tc in"> </td>
+                  <td class="decor s8 tr in"> </td>
+                </tr>
+                <tr class="decor s8 mi">
+                  <td class="decor s8 le in"> </td>
+                  <td class="decor s8 mi in">
+                    <div class="tools">
+                      <h2 class="tools">Console</h2>
+                      <ul class="tools">
+                        <li class="launch"><a href="/consoles/jnlp">Launch</a></li>
+                        <li class="settings"><a href="/consoles/">Configure</a></li>
+                      </ul>
+                    </div>
+                  </td>
+                  <td class="decor s8 ri in"> </td>
+                </tr>
+                <tr class="decor s8 bo">
+                  <td class="decor s8 bl in"> </td>
+                  <td class="decor s8 bc in"> </td>
+                  <td class="decor s8 br in"> </td>
+                </tr>
+              </table>
+            </td>
+            <td class="decor lg ri"> &nbsp; </td>
+          </tr>
+          <tr class="decor lg bo">
+            <td class="decor lg bl"> &nbsp; </td>
+            <td class="decor lg bc"> &nbsp; </td>
+            <td class="decor lg br"> &nbsp; </td>
+          </tr>
+        </table>
+      </div>{{/isMember}}{{#isNotMember}}
+{{>div.contact.html}}
+{{/isNotMember}}
+{{>div.copyrights.html}}
+  </body>
+</html>

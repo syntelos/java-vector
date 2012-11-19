@@ -1,0 +1,53 @@
+//                      -*-java-*-
+package oso.data;
+path /people;
+import digi.as.Customer;
+import digi.as.Server;
+import digi.as.Console;
+import digi.as.Client;
+import digi.as.Presence;
+import digi.as.Subscription;
+
+class Person 
+    version 7
+{
+    /*
+     * Email
+     */
+    *unique String logonId;
+    String nameLast;
+    String nameMiddle;
+    String nameFirst;
+    String title;
+    PhoneNumber telephone;
+    /*
+     * One of Messenger or Channel or None
+     * @see digi.as.Presence
+     */
+    *enum Presence presence;
+    /*
+     * Person without Customer is unusable except for editing.
+     * Customer Person creates a Person at Customer
+     * Vendor Person creates a Person At Customer
+     */
+    Customer customer;
+    /*
+     * Product configuration for this user (logon reference via server
+     * id)
+     */
+    Server serverUser;
+    /*
+     * Product configuration specific to this user (long reference via
+     * user logonId)
+     */
+    Console consoleUser;
+    /*
+     * Product configuration specific to this user (long reference via
+     * user logonId)
+     */
+    Client clientUser;
+    /*
+     * Target Person
+     */
+    List.Long<Subscription> subscriptions;
+}

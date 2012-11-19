@@ -1,0 +1,10 @@
+{
+ "name": "errors"{{#error}},
+ "status": "{{=error_status}}",
+ "type": "{{=error_type}}",
+ "message": "{{=error_message_json}}",
+ "uri": "{{=error_uri}}",
+ "exception": "{{=error_exception_json}}"
+ "contact_html": "{{>contact.html}}"
+ {{/error}}
+}

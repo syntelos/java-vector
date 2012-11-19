@@ -1,0 +1,3 @@
+
+XMPP demo server vector-xs.appspot.com
+

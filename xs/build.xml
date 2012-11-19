@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="vector-xs" default="write">
+  <tstamp/>
+  <property name="compiler.source" value="1.6"/>
+  <property name="compiler.target" value="1.6"/>
+  <property name="compiler.optimize" value="false"/>
+  <property name="compiler.debug" value="true"/>
+  <property name="compiler.deprecation" value="false"/>
+
+  <property name="src" value="src"/>
+  <property name="ver.src" value="ver/src"/>
+  <property name="ver.web" value="ver/web"/>
+  <property name="web" value="web"/>
+  <property name="out" value="war"/>
+  <property name="out.webinf" value="${out}/WEB-INF"/>
+  <property name="out.bin" value="${out.webinf}/classes"/>
+  <property name="out.lib" value="${out.webinf}/lib"/>
+  <property name="out.src" value="${out.webinf}/src"/>
+  <property name="out.odl" value="${out}/odl"/>
+  <property name="lib" value="lib"/>
+  <property name="doc" value="doc"/>
+  <property name="odl" value="odl"/>
+
+  <!-- 
+     - Application
+    -->
+  <property file="project.application"/>
+
+  <fail unless="project.application" message="Unrecognized configuration, missing 'project.application'."/>
+
+  <import file="ant/build.in.java.xml"/>
+  <import file="ant/build.in.odl.xml"/>
+  <import file="ant/build.in.version.xml"/>
+
+  <!-- 
+     - G.App Engine
+    -->
+  <property name="appengine.sdk" value="appengine-java-sdk"/>
+  <property file="${appengine.sdk}/current.properties" />
+  <property name="appengine.sdk.home" value="${appengine.sdk}/${appengine.sdk.version}"/>
+  <import file="${appengine.sdk.home}/config/user/ant-macros.xml" />
+
+
+  <path id="lib.path">
+    <pathelement path="${out.bin}" />
+    <fileset dir="${lib}">
+      <include name="**/*.jar" />
+    </fileset>
+    <fileset dir="${appengine.sdk.home}/lib/shared">
+      <include name="**/*.jar" />
+    </fileset>
+    <fileset dir="${appengine.sdk.home}/lib/user">
+      <include name="**/*.jar" />
+    </fileset>
+    <fileset dir="${appengine.sdk.home}/lib/impl">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
+
+  <path id="odl.path">
+    <fileset dir="ant">
+      <include name="**/gap-data-odlc-*.jar" />
+    </fileset>
+    <fileset dir="${lib}">
+      <include name="**/*.jar" />
+    </fileset>
+    <fileset dir="${appengine.sdk.home}/lib/user">
+      <include name="**/*.jar" />
+    </fileset>
+  </path>
+
+  <target name="init" description="">
+    <mkdir dir="${out.lib}"/>
+    <copy todir="${out.lib}" flatten="true">
+
+      <fileset dir="${lib}">
+        <include name="**/*.jar" />
+      </fileset>
+      <fileset dir="${appengine.sdk.home}/lib/user">
+        <include name="**/*.jar" />
+        <exclude name="**/orm/**"/>
+      </fileset>
+    </copy>
+
+  </target>
+
+
+  <target name="srv" depends="write" description="Starts http server on port 8888.">
+    <dev_appserver war="${out}" port="8888" address="0.0.0.0"/>
+  </target>
+
+  <target name="run" depends="write" description="Starts local debug http server on port 8888 with jpda on port 9999.">
+    <dev_appserver war="${out}" port="8888" address="0.0.0.0">
+      <options>
+        <arg value="--jvm_flag=-Xdebug"/>
+        <arg value="--jvm_flag=-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=9999"/>
+      </options>
+    </dev_appserver>
+  </target>
+
+  <target name="debug" depends="write" description="Starts local debug http server, suspended, on port 8888 with jpda on port 9999.">
+    <dev_appserver war="${out}" port="8888" address="0.0.0.0">
+      <options>
+        <arg value="--jvm_flag=-Xdebug"/>
+        <arg value="--jvm_flag=-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=9999"/>
+      </options>
+    </dev_appserver>
+  </target>
+
+  <target name="odl" description="Generate ODL products">
+
+    <odl-write classpathref="odl.path"/>
+  </target>
+
+  <target name="clean" description="Delete all products: 'out', 'jar', etc..">
+
+    <clean bin="${out}" this="."/>
+  </target>
+
+  <target name="clean_build" description="Delete classes, then compile, then package.">
+
+    <flush dir="${out.bin}" type="class"/>
+
+    <antcall target="write"/>
+  </target>
+
+  <target name="write" depends="compile,version" description="Compile application into directory 'war'.">
+
+    <!-- enhance_war war="${out}" / -->
+
+    <copy todir="${out}" overwrite="true">
+      <filterset>
+        <filter token="ProjectTarget"        value="${project.application}"/>
+        <filter token="VersionName"          value="${ant.project.name}"/>
+        <filter token="VersionMajor"         value="${version.major}"/>
+        <filter token="VersionMinor"         value="${version.minor}"/>
+        <filter token="VersionBuild"         value="${version.build}"/>
+      </filterset>
+      <fileset dir="${ver.web}">
+        <include name="**/*.css"/>
+        <include name="**/*.html"/>
+        <include name="**/*.js"/>
+        <include name="**/*.properties"/>
+        <include name="**/*.txt"/>
+        <include name="**/*.xml"/>
+        <include name="**/*.xtm"/>
+      </fileset>
+    </copy>
+
+    <copy todir="${out}">
+
+      <fileset dir="${web}">
+        <include name="**/*.css" />
+        <include name="**/*.gif" />
+        <include name="**/*.html" />
+        <include name="**/*.ico" />
+        <include name="**/*.jar" />
+        <include name="**/*.jpg" />
+        <include name="**/*.js" />
+        <include name="**/*.png" />
+        <include name="**/*.properties"/>
+        <include name="**/*.txt" />
+        <include name="**/*.xml" />
+        <include name="**/*.xtm" />
+      </fileset>
+    </copy>
+    <copy todir="${out.bin}">
+
+      <fileset dir="${src}">
+        <include name="**/*.xml" />
+        <include name="**/*.properties" />
+      </fileset>
+    </copy>
+
+    <copy todir="${out.odl}">
+      <fileset dir="${odl}">
+        <include name="**/*.odl" />
+      </fileset>
+    </copy>
+  </target>
+
+
+
+  <target name="compile" depends="version,init" description="Compile code from 'src' to bin.">
+
+    <compile src="${src}" ver="${ver.src}" bin="${out.bin}" classpath.id="lib.path"/>
+
+  </target>
+
+  <target name="version" description="Report current project version.">
+    <version/>
+  </target>
+
+  <target name="build" description="Increment project version build number.">
+    <version-build/>
+    <version/>
+  </target>
+
+  <target name="major" description="Increment project version major number.">
+    <version-major/>
+    <version/>
+  </target>
+
+  <target name="minor" description="Increment project version minor number.">
+    <version-minor/>
+    <version/>
+  </target>
+
+  <target name="update" depends="write" description="Application upload.">
+    <!-- delete file="war/WEB-INF/appengine-generated/local_db.bin"/ -->
+    <appcfg action="update" war="${out}" />
+  </target>
+
+  <target name="update_indexes" depends="write" description="Datastore index configuration upload.">
+    <appcfg action="update_indexes" war="${out}" />
+  </target>
+
+  <target name="rollback" depends="write" description="Roll back interrupted update.">
+    <appcfg action="rollback" war="${out}" />
+  </target>
+
+  <target name="request_logs" description="Download log data.">
+    <appcfg action="request_logs" war="${out}">
+      <options>
+        <arg value="--num_days=1"/>
+      </options>
+      <args>
+        <arg value="logs.txt"/>
+      </args>
+    </appcfg>
+  </target>
+
+  <target name="recycle">
+
+    <antcall target="clean"/>
+
+    <antcall target="run"/>
+  </target>
+
+</project>

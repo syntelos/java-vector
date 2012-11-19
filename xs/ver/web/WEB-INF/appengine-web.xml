@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+  <application>@ProjectTarget@</application>
+  <version>@VersionMajor@-@VersionMinor@-@VersionBuild@</version>
+  <sessions-enabled>true</sessions-enabled>
+  <warmup-requests-enabled>true</warmup-requests-enabled>
+  <threadsafe>true</threadsafe>
+  <inbound-services>
+    <service>xmpp_message</service>
+    <service>xmpp_presence</service>
+    <service>xmpp_subscribe</service>
+  </inbound-services>
+  <system-properties>
+  </system-properties>
+</appengine-web-app>
