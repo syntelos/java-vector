@@ -57,7 +57,7 @@ public class Preferences
         if (null != m){
             m = m.trim();
             if (0 < m.length()){
-                Preferences.ResourceValue = null;
+
                 Instance.put(Session,m);
             }
         }
@@ -68,31 +68,16 @@ public class Preferences
     private volatile static String HostValue ;
 
     public final static String GetHost(){
-        return (Preferences.HostValue = Instance.get(Host,XAddress.Default.Host));
+        return Instance.get(Host,XAddress.Default.Host);
     }
     public final static void SetHost(String m){
         if (null != m){
             m = m.trim();
             if (0 < m.length()){
-                Preferences.HostValue = m;
+
                 Instance.put(Host,m);
             }
         }
-    }
-    public final static boolean IsHostDefault(String host){
-        if (null == Preferences.HostValue){
-            Preferences.HostValue = GetHost();
-        }
-
-        final String defaultHostStatic = XAddress.Default.Host;
-
-        final String defaultHostUser = Preferences.HostValue;
-
-        if (defaultHostStatic.equals(defaultHostUser))
-            return (defaultHostStatic.equals(host));
-        else
-            return (defaultHostStatic.equals(host)||
-                    defaultHostUser.equals(host));
     }
 
     public final static String Password = "Password";
@@ -110,29 +95,20 @@ public class Preferences
 
     public final static String Resource = "Resource";
 
-    private volatile static String ResourceValue ;
-
     public final static String GetResource(){
         return Instance.get(Resource,XAddress.Default.Resource);
     }
     public final static String ComposeResource(){
-        return (Preferences.ResourceValue = (Preferences.GetResource()+'.'+Preferences.GetSession()));
+        return (Preferences.GetResource()+'.'+Preferences.GetSession());
     }
     public final static void SetResource(String m){
         if (null != m){
             m = m.trim();
             if (0 < m.length()){
-                Preferences.ResourceValue = null;
+
                 Instance.put(Resource,m);
             }
         }
-    }
-    public final static boolean IsResourceDefault(String resource){
-        if (null == Preferences.ResourceValue){
-            Preferences.ResourceValue = ComposeResource();
-        }
-
-        return (Preferences.ResourceValue.equals(resource));
     }
 
     public final static String Logon = "Logon";

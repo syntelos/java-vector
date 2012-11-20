@@ -25,6 +25,7 @@
     <jar href="lib/path-1.0.1.jar" download="eager" />
     <jar href="xmpp/lib/activation-1.1.1.jar" download="eager" />
     <jar href="xmpp/lib/smack-3.3.0.jar" download="eager" />
+    <jar href="xmpp/lib/xma-1.0.1.jar" download="eager" />
   </resources>
 
   <application-desc main-class="xmpp.Frame" />
