@@ -30,6 +30,9 @@ import json.Hex;
 public class Color
     extends java.awt.Color
 {
+    public static Color decode(String value){
+        return new Color(value);
+    }
     /*
      * Subclass overrides
      */

@@ -40,10 +40,60 @@ import platform.Color;
 public class Output
     extends vector.Container
 {
-    public final static Output Instance = new Output();
+
+    protected static Output Instance;
+    /**
+     * Persistent channel
+     */
+    public static Output Instance(){
+        if (null == Instance){
+            Instance = new Output();
+        }
+        return Instance;
+    }
+    public static Output Send(Message m){
+
+        return Instance().send(m);
+    }
+    public static Output Send(Presence p){
+
+        return Instance().send(p);
+    }
+    public static Output Receive(Message m){
+
+        return Instance().receive(m);
+    }
+    public static Output Receive(Presence p){
+
+        return Instance().receive(p);
+    }
+    public static Output Headline(Message m){
+
+        return Instance().headline(m);
+    }
+    public static Output Headline(String fmt, Object... args){
+
+        return Instance().headline(fmt,args);
+    }
+    public static Output Headline(String m){
+
+        return Instance().headline(m);
+    }
+    public static Output Error(Message m){
+
+        return Instance().error(m);
+    }
+    public static Output Error(String fmt, Object... args){
+
+        return Instance().error(fmt,args);
+    }
+    public static Output Error(String m){
+
+        return Instance().error(m);
+    }
     
 
-    private Output(){
+    protected Output(){
         super();
     }
 
@@ -111,14 +161,17 @@ public class Output
             final String string = String.format("%s: %s",from,body);
 
             this.add(label);
+
+            final Color fg = Style.FG();
+
             Logon.Configure(label);
             label.setText(string);
-            label.setColor(Color.black);
+            label.setColor(fg);
 
             Border border = new Border();
             label.setBorder(border);
             Logon.Configure(border);
-            border.setColor(Color.black);
+            border.setColor(fg);
         }
 
         this.modified();
@@ -138,14 +191,17 @@ public class Output
             final String string = String.format("%s> %s",from,to);
 
             this.add(label);
+
+            final Color fg = Style.FG();
+
             Logon.Configure(label);
             label.setText(string);
-            label.setColor(Color.gray);
+            label.setColor(fg);
 
             Border border = new Border();
             label.setBorder(border);
             Logon.Configure(border);
-            border.setColor(Color.gray);
+            border.setColor(fg);
         }
 
         this.modified();
@@ -165,14 +221,17 @@ public class Output
             final String string = String.format("%s: %s",from,body);
 
             this.add(label);
+
+            final Color st = Style.ST();
+
             Logon.Configure(label);
             label.setText(string);
-            label.setColor(Color.blue);
+            label.setColor(st);
 
             Border border = new Border();
             label.setBorder(border);
             Logon.Configure(border);
-            border.setColor(Color.blue);
+            border.setColor(st);
         }
 
         this.modified();
@@ -193,14 +252,17 @@ public class Output
             final String string = String.format("%s> %s",from,to);
 
             this.add(label);
+
+            final Color bgd = Style.BGD();
+
             Logon.Configure(label);
             label.setText(string);
-            label.setColor(Color.gray);
+            label.setColor(bgd);
 
             Border border = new Border();
             label.setBorder(border);
             Logon.Configure(border);
-            border.setColor(Color.gray);
+            border.setColor(bgd);
         }
 
         this.modified();

@@ -46,36 +46,45 @@ import java.util.prefs.PreferenceChangeListener;
 public class Preferences
     extends java.util.prefs.Preferences
 {
-    public final static Preferences Instance = new Preferences();
+
+    protected static Preferences Instance;
+    /**
+     * Persistent channel
+     */
+    public static Preferences Instance(){
+        if (null == Instance){
+            Instance = new Preferences();
+        }
+        return Instance;
+    }
+
 
     public final static String Session = "Session";
 
     public final static String GetSession(){
-        return Instance.get(Session,StringUtils.randomString(6));
+        return Instance().get(Session,StringUtils.randomString(6));
     }
     public final static void SetSession(String m){
         if (null != m){
             m = m.trim();
             if (0 < m.length()){
 
-                Instance.put(Session,m);
+                Instance().put(Session,m);
             }
         }
     }
 
     public final static String Host = "Host";
 
-    private volatile static String HostValue ;
-
     public final static String GetHost(){
-        return Instance.get(Host,XAddress.Default.Host);
+        return Instance().get(Host,XAddress.Default.Host);
     }
     public final static void SetHost(String m){
         if (null != m){
             m = m.trim();
             if (0 < m.length()){
 
-                Instance.put(Host,m);
+                Instance().put(Host,m);
             }
         }
     }
@@ -83,20 +92,20 @@ public class Preferences
     public final static String Password = "Password";
 
     public final static String GetPassword(){
-        return Instance.get(Password,null);
+        return Instance().get(Password,null);
     }
     public final static void SetPassword(String m){
         if (null != m){
             m = m.trim();
             if (0 < m.length())
-                Instance.put(Password,m);
+                Instance().put(Password,m);
         }
     }
 
     public final static String Resource = "Resource";
 
     public final static String GetResource(){
-        return Instance.get(Resource,XAddress.Default.Resource);
+        return Instance().get(Resource,XAddress.Default.Resource);
     }
     public final static String ComposeResource(){
         return (Preferences.GetResource()+'.'+Preferences.GetSession());
@@ -106,7 +115,7 @@ public class Preferences
             m = m.trim();
             if (0 < m.length()){
 
-                Instance.put(Resource,m);
+                Instance().put(Resource,m);
             }
         }
     }
@@ -115,7 +124,7 @@ public class Preferences
 
     public final static String GetLogon(){
 
-        return Instance.get(Logon,null);
+        return Instance().get(Logon,null);
     }
     public final static XAddress ComposeLogon(){
 
@@ -123,7 +132,7 @@ public class Preferences
     }
     public final static void SetLogon(String m){
         if (null != m){
-            Instance.put(Logon,m);
+            Instance().put(Logon,m);
         }
     }
 
@@ -131,7 +140,7 @@ public class Preferences
 
     public final static String GetTo(){
 
-        return Instance.get(To,null);
+        return Instance().get(To,null);
     }
     public final static String GetToIdentifier(){
         try {
@@ -155,23 +164,23 @@ public class Preferences
     }
     public final static void SetTo(String m){
         if (null != m){
-            Instance.put(To,m);
+            Instance().put(To,m);
         }
     }
     public final static void SetTo(XAddress m){
         if (null != m){
-            Instance.put(To,m.full);
+            Instance().put(To,m.full);
         }
     }
 
     public final static String Port = "Port";
 
     public final static int GetPort(){
-        return Instance.getInt(Port,XAddress.Default.Port);
+        return Instance().getInt(Port,XAddress.Default.Port);
     }
     public final static void SetPort(int m){
         if (0 < m){
-            Instance.putInt(Port,m);
+            Instance().putInt(Port,m);
         }
     }
     public final static void SetPort(String m){
@@ -183,12 +192,14 @@ public class Preferences
             }
         }
     }
-
-    public final static class TemporaryStorage
+    /**
+     * Instances of this class are backed by a hash map.
+     */
+    public static class TemporaryStorage
         extends java.util.prefs.Preferences
     {
 
-        private final java.util.Map<String,Object> storage = new java.util.HashMap<String,Object>();
+        protected final java.util.Map<String,Object> storage = new java.util.HashMap<String,Object>();
 
 
         public TemporaryStorage(){
@@ -345,20 +356,30 @@ public class Preferences
     }
 
 
-    private final java.util.prefs.Preferences storage;
+    protected final java.util.prefs.Preferences storage;
 
 
-    public Preferences(){
+    protected Preferences(){
+        this(Preferences.class);
+    }
+    protected Preferences(Class clas){
         super();
         java.util.prefs.Preferences storage;
         try {
-            storage = java.util.prefs.Preferences.userNodeForPackage(Preferences.class);
+            storage = java.util.prefs.Preferences.userNodeForPackage(clas);
         }
         catch (SecurityException sec){
 
             storage = new Preferences.TemporaryStorage();
         }
         this.storage = storage;
+    }
+    protected Preferences(java.util.prefs.Preferences storage){
+        super();
+        if (null == storage)
+            this.storage = new Preferences.TemporaryStorage();
+        else
+            this.storage = storage;
     }
 
 

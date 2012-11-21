@@ -28,21 +28,30 @@ import vector.Stroke;
 import vector.TableSmall;
 import vector.TextEdit;
 
-import platform.Color;
-
 /**
  * Hard coded XMPP information dialog.
  */
 public class Logon
     extends vector.Dialog
 {
-    public final static platform.Font Font = platform.Font.decode("monospaced-24");
+
+    protected static Logon Instance;
+    /**
+     * Persistent channel
+     */
+    public static Logon Instance(){
+        if (null == Instance){
+            Instance = new Logon();
+        }
+        return Instance;
+    }
+
 
     public final static Border Configure(Border border){
 
-        border.setBackground(Color.white);
-        border.setColor(Color.black);
-        border.setColorOver(Color.red);
+        border.setBackground(Style.BGD(0.5f));
+        border.setColor(Style.FG());
+        border.setColorOver(Style.NG());
         border.setStyle(Border.Style.ROUND);
         border.setArc(16.0);
         border.setStroke(new Stroke(2f));
@@ -52,20 +61,20 @@ public class Logon
     }
     public final static vector.Text Configure(vector.Text text){
 
-        text.setFont(Logon.Font);
+        text.setFont(Style.FontLarge());
         text.setFixed(true);
         text.setCols(40);
-        text.setColor(Color.black);
-        text.setColorOver(Color.red);
+        text.setColor(Style.FG());
+        text.setColorOver(Style.NG());
 
         return text;
     }
 
 
-    private TextEdit host, port, logon, password;
+    protected TextEdit host, port, logon, password;
 
 
-    public Logon(){
+    protected Logon(){
         super();
     }
 
@@ -96,7 +105,7 @@ public class Logon
                 Configure(titleLabel);
                 titleLabel.setText("XMPP");
                 titleLabel.setTableColSpan(2);
-                titleLabel.setFont(platform.Font.decode("monospaced-bold-36"));
+                titleLabel.setFont(Style.FontTitle());
             }
             /*
              * Service host
@@ -221,6 +230,15 @@ public class Logon
                 }
             }
         }
+    }
+    @Override
+    public void destroy(){
+        super.destroy();
+
+        // this.host = null
+        // this.port = null
+        // this.logon = null
+        // this.password = null
     }
     public void connect(){
 

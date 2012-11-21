@@ -39,28 +39,47 @@ import platform.Color;
 public class Status
     extends vector.TableSmall
 {
-    public final static platform.Font Font = platform.Font.decode("monospaced-16");
 
-    public final static Color BG = Color.gray.opacity(0.5f);
-    public final static Color FG = Color.black.opacity(0.5f);
-    public final static Color OK = Color.green.opacity(0.5f);
-    public final static Color AY = Color.yellow.opacity(0.5f);
-    public final static Color ST = Color.blue.opacity(0.5f);
-    public final static Color NG = Color.red.opacity(0.5f);
 
+    protected static Status Instance;
     /**
-     * 
+     * Persistent channel
      */
-    public final static Status Instance = new Status();
+    public static Status Instance(){
+        if (null == Instance){
+            Instance = new Status();
+        }
+        return Instance;
+    }
 
-    public final static void Select(XAddress to){
+    public static Status Select(XAddress to){
         if (null != to)
-            Instance.select(to);
+            return Instance().select(to);
+        else
+            return Instance();
     }
-    public final static void Select(String to){
+    public static Status Select(String to){
         if (null != to && 0 < to.length())
-            Instance.select(new XAddress.Identifier(to));
+            return Instance().select(new XAddress.Identifier(to));
+        else
+            return Instance();
     }
+    public static Status Up(){
+        return Instance().up();
+    }
+    public static Status Down(){
+        return Instance().down();
+    }
+    public static Status Clear(){
+        return Instance().clear();
+    }
+    public static Status Receive(Message m){
+        return Instance().receive(m);
+    }
+    public static Status Update(Presence p){
+        return Instance().update(p);
+    }
+
     
     /**
      * 
@@ -69,9 +88,9 @@ public class Status
         extends vector.Button
     {
 
-        private XAddress address;
+        protected XAddress address;
 
-        private Presence.Mode mode;
+        protected Presence.Mode mode;
 
 
         public Label(XAddress address){
@@ -83,23 +102,30 @@ public class Status
         }
 
 
+        @Override
         public void init(){
             super.init();
 
+            final Color bgd = Style.BGD(0.3f);
+            final Color fg1 = Style.FG();
+
             this.setEnumClass(Actor.class);
             this.setEnumValue(Actor.Select);
-            this.setFont(Status.Font);
+            this.setFont(Style.FontSmall());
             this.setFixed(true);
             this.setCols(40);
-            this.setColor(FG);
-            this.setColorOver(FG);
+            this.setColor(fg1);
+            this.setColorOver(fg1);
             this.setText(this.address.logon+'/'+this.address.resourceKind);
 
             Border border = new Border();
             this.setBorder(border);
 
-            border.setColor(FG);
-            border.setColorOver(FG);
+            final Color fg2 = Style.FG(0.5f);
+
+            border.setBackground(bgd);
+            border.setColor(fg2);
+            border.setColorOver(fg2);
             border.setStyle(Border.Style.ROUND);
             border.setArc(6.0);
             border.setStroke(new Stroke(1f));
@@ -118,10 +144,12 @@ public class Status
 
             this.address = from;
 
-            this.setColor(OK);
-            this.setColorOver(OK);
-            border.setColor(OK);
-            border.setColorOver(OK);
+            final Color ok = Style.OK(0.5f);
+
+            this.setColor(ok);
+            this.setColorOver(ok);
+            border.setColor(ok);
+            border.setColorOver(ok);
         }
         public void update(Presence p){
 
@@ -131,34 +159,28 @@ public class Status
 
             this.mode = p.getMode();
 
+            final Color color;
+
             switch(this.mode){
             case chat:
-                this.setColor(ST);
-                this.setColorOver(ST);
-                border.setColor(ST);
-                border.setColorOver(ST);
+                color = Style.ST(0.5f);
                 break;
             case available:
-                this.setColor(OK);
-                this.setColorOver(OK);
-                border.setColor(OK);
-                border.setColorOver(OK);
+                color = Style.OK(0.5f);
                 break;
             case away:
             case xa:
-                this.setColor(AY);
-                this.setColorOver(AY);
-                border.setColor(AY);
-                border.setColorOver(AY);
+                color = Style.AY(0.5f);
                 break;
             case dnd:
             default:
-                this.setColor(NG);
-                this.setColorOver(NG);
-                border.setColor(NG);
-                border.setColorOver(NG);
+                color = Style.NG(0.5f);
                 break;
             }
+            this.setColor(color);
+            this.setColorOver(color);
+            border.setColor(color);
+            border.setColorOver(color);
         }
         protected Label buttonInputAction(){
             return this;
@@ -190,7 +212,7 @@ public class Status
     }
 
 
-    private Status(){
+    protected Status(){
         super();
     }
 
@@ -205,9 +227,13 @@ public class Status
         final Border border = new Border();
         {
             this.add(border);
-            border.setBackground(BG);
-            border.setColor(NG);
-            border.setColorOver(NG);
+
+            final Color bgd = Style.BGD(0.4f);
+            final Color ng = Style.NG(0.5f);
+
+            border.setBackground(bgd);
+            border.setColor(ng);
+            border.setColorOver(ng);
             border.setStyle(Border.Style.ROUND);
             border.setStroke(new Stroke(2f));
             border.setStrokeOver(new Stroke(4f));
@@ -241,8 +267,11 @@ public class Status
 
         Border border = this.getBorder();
         if (null != border){
-            border.setColor(OK);
-            border.setColorOver(OK);
+
+            final Color ok = Style.OK(0.5f);
+
+            border.setColor(ok);
+            border.setColorOver(ok);
         }
 
         this.outputScene();
@@ -252,8 +281,11 @@ public class Status
 
         Border border = this.getBorder();
         if (null != border){
-            border.setColor(NG);
-            border.setColorOver(NG);
+
+            final Color ng = Style.NG(0.5f);
+
+            border.setColor(ng);
+            border.setColorOver(ng);
         }
 
         this.outputScene();
@@ -337,18 +369,30 @@ public class Status
     }
     public Status select(XAddress addr){
 
-        Label known = this.search(addr);
-        if (null != known){
+        if (null != addr){
 
-            XThread.Select(known.address);
-            return this;
-        }
-        else if (addr.isNotHostDefault()){
+            Label known = this.search(addr);
+            if (null != known){
+                try {
+                    XThread.Select(known.address);
+                }
+                catch (RuntimeException exc){
 
-            XThread.Contact(addr);
-            return this;
+                    //exc.printStackTrace()
+                }
+            }
+            else if (null != addr.logon){
+                try {
+                    XThread.Contact(addr);
+                }
+                catch (RuntimeException exc){
+
+                    //exc.printStackTrace()
+                }
+            }
+            else
+                throw new IllegalArgumentException(addr.identifier);
         }
-        else
-            throw new IllegalArgumentException(addr.identifier);
+        return this;
     }
 }

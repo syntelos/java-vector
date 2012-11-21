@@ -45,6 +45,9 @@ public class Image
         if (null != url){
             this.source = url;
             this.nativeImage = TK.createImage(url);
+            /*
+             * bg load to original size
+             */
             TK.prepareImage(this.nativeImage,-1,-1,null);
         }
         else

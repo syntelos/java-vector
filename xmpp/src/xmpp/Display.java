@@ -36,21 +36,21 @@ public class Display
     public void init(){
         super.init();
 
-        this.setBackground(Color.white);
+        this.setBackground(Style.BG());
 
-        final Output output = Output.Instance;
+        final Output output = Output.Instance();
         {
             this.add(output);
         }
-        final Input input = new Input();
+        final Input input = Input.Instance();
         {
             this.add(input);
         }
-        final Status status = Status.Instance;
+        final Status status = Status.Instance();
         {
             this.add(status);
         }
-        final Logon logon = new Logon();
+        final Logon logon = Logon.Instance();
         {
             this.add(logon);
         }
@@ -95,7 +95,7 @@ public class Display
     public Logon logon(){
         Logon logon = this.getLogon();
         if (null == logon){
-            logon = new Logon();
+            logon = Logon.Instance();
             this.add(logon);
 
         }

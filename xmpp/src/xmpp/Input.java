@@ -28,7 +28,19 @@ public class Input
     extends vector.TextEdit
 {
 
-    public Input(){
+    protected static Input Instance;
+    /**
+     * Persistent channel
+     */
+    public static Input Instance(){
+        if (null == Instance){
+            Instance = new Input();
+        }
+        return Instance;
+    }
+
+
+    protected Input(){
         super();
     }
 

@@ -35,7 +35,7 @@
   </path>
 
 
-
+  <available property="available.signing.properties" file="signing.properties"/>
 
   <target name="all" description="Rebuild all jars">
     <antcall target="update"/>
@@ -230,7 +230,7 @@
   </target>
 
 
-  <target name="xmpp-sign" depends="xmpp" description="Sign jars required by xmpp.jnlp">
+  <target name="xmpp-sign" if="available.signing.properties" depends="xmpp" description="Sign jars required by xmpp.jnlp">
 
     <property file="signing.properties"/>
 

@@ -37,7 +37,7 @@ import org.jivesoftware.smack.packet.XMPPError;
 /**
  * Persistent single channel XMPP conversation
  */
-public final class XThread
+public class XThread
     extends Object
     implements CharSequence, Comparable<XThread>,
                org.jivesoftware.smack.filter.PacketFilter,
@@ -49,34 +49,41 @@ public final class XThread
         Debug = (null != conf && "true".equalsIgnoreCase(conf));
     }
 
+
+    protected static XThread Instance;
     /**
      * Persistent channel
      */
-    public final static XThread Instance = new XThread();
+    public static XThread Instance(){
+        if (null == Instance){
+            Instance = new XThread();
+        }
+        return Instance;
+    }
 
     public final static void Connect(){
 
-        Instance.connect();
+        Instance().connect();
     }
     public final static void Disconnect(){
 
-        Instance.disconnect();
+        Instance().disconnect();
     }
     public final static void Send(String m){
 
-        Instance.send(m);
+        Instance().send(m);
     }
     public final static void Status(XAddress.Full to){
 
-        Instance.status(to);
+        Instance().status(to);
     }
     public final static void Select(XAddress to){
 
-        Instance.select(to);
+        Instance().select(to);
     }
     public final static void Contact(XAddress to){
 
-        Instance.contact(to);
+        Instance().contact(to);
     }
 
 
@@ -89,17 +96,17 @@ public final class XThread
 
     protected int port;
 
-    private volatile XAddress to;
+    protected volatile XAddress to;
 
-    private volatile XMPPConnection connection;
+    protected volatile XMPPConnection connection;
 
-    private volatile Message.Type messageType = Message.Type.chat;
+    protected volatile Message.Type messageType = Message.Type.chat;
 
 
     /**
      * 
      */
-    private XThread(){
+    protected XThread(){
         super();
     }
 
@@ -117,7 +124,7 @@ public final class XThread
 
         if (null != this.to && this.to.equals(to)){
 
-            Output.Instance.headline("XThread Status(%s)",to.identifier);
+            Output.Headline("Status(%s)",to.identifier);
 
             this.to = to;
         }
@@ -125,7 +132,7 @@ public final class XThread
     public void select(XAddress to){
         if (null != to){
 
-            Output.Instance.headline("XThread Select(%s)",to.identifier);
+            Output.Headline("Select(%s)",to.identifier);
 
             this.to = to;
 
@@ -152,7 +159,7 @@ public final class XThread
 
             this.connection.sendPacket(q);
 
-            Output.Instance.send(q);
+            Output.Send(q);
         }
     }
     public boolean send(String m){
@@ -172,15 +179,15 @@ public final class XThread
 
                     this.connection.sendPacket(message);
 
-                    Output.Instance.send(message);
+                    Output.Send(message);
 
                     return true;
 
                 }
                 else if (null == this.connection)
-                    Output.Instance.error("Send dropped for missing connection");
+                    Output.Error("Send dropped for missing connection");
                 else
-                    Output.Instance.error("Send dropped for missing contact");
+                    Output.Error("Send dropped for missing contact");
             }
         }
         return false;
@@ -201,24 +208,24 @@ public final class XThread
         this.resource = Preferences.ComposeResource();
 
         if (this.isReady()){
-            Output.Instance.headline("XThread Connect");
+            Output.Headline("Connect");
 
             this.connection = this.createConnection();
 
-            Status.Instance.up();
+            Status.Up().outputScene();
         }
     }
     public void disconnect(){
         if (null != this.connection){
-            Output.Instance.error("XThread Disconnect");
-            Status.Instance.clear();
+            Output.Error("Disconnect");
+            Status.Clear();
             try {
                 this.connection.disconnect();
             }
             finally {
                 this.connection = null;
 
-                Status.Instance.down();
+                Status.Down().outputScene();
             }
         }
     }
@@ -244,7 +251,7 @@ public final class XThread
                 this.error(xm);
                 break;
             default:
-                Output.Instance.error("XThread process(type: %s)",xm.getType().name());
+                Output.Error("process(type: %s)",xm.getType().name());
                 break;
             }
         }
@@ -263,16 +270,16 @@ public final class XThread
             if (null != jid){
 
                 if (null != resource){
-                    Output.Instance.error("XThread bind(resource: %s, jid: %s)",resource,jid);
+                    Output.Error("bind(resource: %s, jid: %s)",resource,jid);
 
                 }
                 else {
-                    Output.Instance.error("XThread bind(jid: %s)",jid);
+                    Output.Error("bind(jid: %s)",jid);
 
                 }
             }
             else if (null != resource){
-                Output.Instance.error("XThread bind(resource: %s)",resource);
+                Output.Error("bind(resource: %s)",resource);
 
             }
         }
@@ -296,7 +303,7 @@ public final class XThread
                 }
             }
 
-            Output.Instance.error("XThread registration(%s)",registration);
+            Output.Error("registration(%s)",registration);
         }
         else if (pk instanceof RosterPacket){
             RosterPacket xr = (RosterPacket)pk;
@@ -342,14 +349,14 @@ public final class XThread
                 }
             }
 
-            Output.Instance.error("XThread roster(%s)",roster);
+            Output.Error("roster(%s)",roster);
         }
         else if (pk instanceof Session){
 
-            Output.Instance.error("XThread session()");
+            Output.Error("session()");
         }
         else
-            Output.Instance.error("XThread process(class: %s)",pk.getClass().getName());
+            Output.Error("process(class: %s)",pk.getClass().getName());
     }
     protected void update(Presence p){
 
@@ -358,13 +365,13 @@ public final class XThread
         case available:
         case unavailable:
 
-            Status.Instance.update(p);
+            Status.Update(p);
             break;
 
         case subscribe:
 
-            Status.Instance.update(p);
-            Output.Instance.receive(p);
+            Status.Update(p);
+            Output.Receive(p);
 
             if (null == this.to){
                 this.to = new XAddress.From(p);
@@ -374,12 +381,12 @@ public final class XThread
         case unsubscribe:
         case unsubscribed:
 
-            Status.Instance.update(p);
+            Status.Update(p);
             break;
 
         case error:
 
-            Output.Instance.error("XThread error(%s)",(new XAddress.From(p)));
+            Output.Error("error(%s)",(new XAddress.From(p)));
             break;
 
         default:
@@ -393,14 +400,14 @@ public final class XThread
             final String sender = this.connection.getUser();
             final String from = m.getFrom();
             if (!from.equals(sender)){
-                Status.Instance.receive(m);
+                Status.Receive(m);
             }
         }
-        Output.Instance.receive(m);
+        Output.Receive(m);
     }
     protected void headline(Message m){
 
-        Output.Instance.headline(m);
+        Output.Headline(m);
     }
     protected void error(Message m){
 
@@ -408,32 +415,32 @@ public final class XThread
         switch(et){
         case WAIT:
 
-            Output.Instance.error("XThread error(WAIT)");
+            Output.Error("error(WAIT)");
 
             break;
         case CANCEL:
 
-            Output.Instance.error("XThread error(CANCEL)");
+            Output.Error("error(CANCEL)");
 
             break;
         case MODIFY:
 
-            Output.Instance.error("XThread error(MODIFY)");
+            Output.Error("error(MODIFY)");
 
             break;
         case AUTH:
 
-            Output.Instance.error("XThread error(AUTH)");
+            Output.Error("error(AUTH)");
 
             break;
         case CONTINUE:
 
-            Output.Instance.error("XThread error(CONTINUE)");
+            Output.Error("error(CONTINUE)");
 
             break;
         default:
 
-            Output.Instance.error("XThread error(%s)",et.name());
+            Output.Error("error(%s)",et.name());
             break;
         }
     }
