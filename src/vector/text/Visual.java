@@ -343,7 +343,7 @@ public class Visual
      * @param string New string, not empty
      * @return True
      */
-    protected final boolean set(char[] string){
+    protected boolean set(char[] string){
         if (null == string){
             this.logical = null;
             this.visual = null;

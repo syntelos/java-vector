@@ -204,6 +204,12 @@ public class Container
         }
         this.modified();
     }
+    public <C extends Container> C clearContent(){
+
+        this.components = Component.Tools.ClearContent(this.components);
+
+        return (C)this;
+    }
     /**
      * @return Geometric union of "content" children and (0,0) origin
      */

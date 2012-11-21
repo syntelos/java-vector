@@ -906,6 +906,37 @@ public interface Component
             }
             return new Component.Iterator<C>(list,clas);
         }
+        public static boolean IsLayoutContent(Component c){
+
+            if (c instanceof Component.Layout)
+
+                return (Component.Layout.Order.Content == ((Component.Layout)c).queryLayout());
+            else 
+                return true;
+        }
+        public static Component[] ClearContent(Component[] components){
+
+            for (int cc = (Component.Tools.Count(components)-1); -1 < cc; cc--){
+
+                Component c = components[cc];
+
+                if (c instanceof Component.Layout){
+
+                    if (Component.Layout.Order.Content == ((Component.Layout)c).queryLayout()){
+
+                        components = Component.Tools.Remove(components,cc);
+
+                        c.destroy();
+                    }
+                }
+                else {
+                    components = Component.Tools.Remove(components,cc);
+
+                    c.destroy();
+                }
+            }
+            return components;
+        }
         /**
          * While the argument JSON components list matches the
          * instance classes found in an existing components list, this

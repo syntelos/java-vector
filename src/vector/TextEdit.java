@@ -53,7 +53,7 @@ public class TextEdit
         if (this.string instanceof Editor)
             ((Editor)this.string).end();
         else
-            this.string = new Editor(this.home);
+            this.string = this.createEditor(this.home,null);
     }
     @Override
     public void destroy(){
@@ -62,14 +62,18 @@ public class TextEdit
         this.home = null;
         this.blink = null;
     }
+    public Editor createEditor(Home home, String text){
+
+        if (null != text && 0 < text.length())
+            return new Editor(this.home,text);
+        else
+            return new Editor(this.home);
+    }
     @Override
     public TextEdit setText(String text){
 
-        if (null != text && 0 < text.length())
 
-            this.string = new Editor(this.home,text);
-        else
-            this.string = new Editor(this.home);
+        this.string = this.createEditor(this.home,text);
 
         return this;
     }

@@ -289,11 +289,15 @@ public class Text
 
         return this.toString();
     }
+    public Visual createVisual(String text){
+
+        return new Visual(text);
+    }
     public vector.Text setText(String text){
 
         if (null != text && 0 < text.length()){
 
-            this.string = new Visual(text);
+            this.string = this.createVisual(text);
 
             this.cols = text.length();
 

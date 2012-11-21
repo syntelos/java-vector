@@ -92,7 +92,7 @@ public class XMPP
 
             personFrom.save();
 
-            xs.sendPresence(from.toJID(),PresenceType.AVAILABLE,PresenceShow.CHAT,"occupied",Version.From);
+            XMPP.Occupied(from,xs);
         }
     }
     protected static void Unsubscribe(XAddress from, XMPPService xs){

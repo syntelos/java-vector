@@ -369,8 +369,10 @@ public class Output
 
                     c.setBoundsVector(cb);
                 }
-                else
+                else {
                     this.remove(c);
+                    c.destroy();
+                }
             }
         }
         {

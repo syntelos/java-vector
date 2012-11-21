@@ -252,27 +252,31 @@ public class DebugTrace
             else {
                 Stack[] thisStack = this.compile();
                 Stack[] thatStack = that.compile();
-                int thisTail = (thisStack.length-1);//[NPE:3]
-                int thatTail = (thatStack.length-1);
-                int ascent = 0;
-                while (-1 < thisTail && -1 < thatTail){
-
-                    if (0 == thisStack[thisTail].compareTo(thatStack[thatTail])){
-                        ascent += 1;
-                        thisTail -= 1;
-                        thatTail -= 1;
-                    }
-                    else
-                        break;
-                }
-                /*
-                 * Two identical traces are necessarily disjoint:
-                 * temporal coincindence
-                 */
-                if (thisTail == thatTail && ascent == thisStack.length)
+                if (null == thisStack || null == thatStack)
                     return 0;
-                else
-                    return ascent;
+                else {
+                    int thisTail = (thisStack.length-1);//[NPE:3]
+                    int thatTail = (thatStack.length-1);
+                    int ascent = 0;
+                    while (-1 < thisTail && -1 < thatTail){
+
+                        if (0 == thisStack[thisTail].compareTo(thatStack[thatTail])){
+                            ascent += 1;
+                            thisTail -= 1;
+                            thatTail -= 1;
+                        }
+                        else
+                            break;
+                    }
+                    /*
+                     * Two identical traces are necessarily disjoint:
+                     * temporal coincindence
+                     */
+                    if (thisTail == thatTail && ascent == thisStack.length)
+                        return 0;
+                    else
+                        return ascent;
+                }
             }
         }
         public String toString(){
@@ -322,6 +326,11 @@ public class DebugTrace
         super(m);
         this.message = m;
         this.indent = indent;
+    }
+    public DebugTrace(){
+        super();
+        this.message = "";
+        this.indent = -1;
     }
 
 

@@ -24,6 +24,7 @@ import vector.Button;
 import vector.Component;
 import vector.Event;
 import vector.Label;
+import vector.Password;
 import vector.Stroke;
 import vector.TableSmall;
 import vector.TextEdit;
@@ -174,7 +175,7 @@ public class Logon
                 Configure(passwordLabel);
                 passwordLabel.setText("Password");
             }
-            this.password = new TextEdit();
+            this.password = new Password();
             {
                 input.add(this.password);
                 Configure(this.password);
