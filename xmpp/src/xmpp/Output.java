@@ -91,6 +91,10 @@ public class Output
 
         return Instance().error(m);
     }
+    public static Output Clear(){
+
+        return Instance().clear();
+    }
     
 
     protected Output(){
@@ -382,5 +386,11 @@ public class Output
 
             input.setBoundsVector(inputBounds);
         }
+    }
+    public Output clear(){
+
+        this.clearContent();
+
+        return this;
     }
 }

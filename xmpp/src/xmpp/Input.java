@@ -68,6 +68,19 @@ public class Input
 
             switch (input.at){
 
+            case Clear:
+                {
+                    this.setText(null);
+
+                    Output.Clear();
+
+                    this.modified();
+
+                    this.outputScene();
+
+                    return;
+                }
+
             case Identifier:
             case Logon:
                 try {

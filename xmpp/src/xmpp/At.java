@@ -35,6 +35,7 @@ import java.util.StringTokenizer;
  * More typical input is a message without a contact prefix.
  */
 public enum At {
+    Clear,
     Identifier,
     Logon,
     Tail,
@@ -126,14 +127,23 @@ public enum At {
                     }
 
                     if (null != head){
-                        try {
-                            addr = new XAddress(head);
-                            if (addr.isHostDefault())
-                                at = At.Identifier;
-                            else
-                                at = At.Logon;
+
+                        if ("clear".equalsIgnoreCase(head)){
+
+                            addr = null;
+
+                            at = At.Clear;
                         }
-                        catch (RuntimeException exc){
+                        else {
+                            try {
+                                addr = new XAddress(head);
+                                if (addr.isHostDefault())
+                                    at = At.Identifier;
+                                else
+                                    at = At.Logon;
+                            }
+                            catch (RuntimeException exc){
+                            }
                         }
                     }
                 }
