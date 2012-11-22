@@ -254,27 +254,23 @@ public class VersionTag
             if (HaveGit){
                 if (Debug)
                     System.err.println("Using git and subversion.  Using Debug (Dry Run).");
-                else
-                    System.err.println("Using git and subversion.");
+
             }
             else {
                 if (Debug)
                     System.err.println("Using subversion but not git.  Using Debug (Dry Run).");
-                else
-                    System.err.println("Using subversion but not git.");
+
             }
         }
         else if (HaveGit){
             if (Debug)
                 System.err.println("Using git but not subversion.  Using Debug (Dry Run).");
-            else
-                System.err.println("Using git but not subversion.");
+
         }
         else {
             if (Debug)
                 System.err.println("Not using either of subversion or git.  Using Debug (Dry Run).");
-            else
-                System.err.println("Not using either of subversion or git.");
+
         }
     }
 
