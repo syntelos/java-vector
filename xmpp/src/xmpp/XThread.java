@@ -202,9 +202,11 @@ public class XThread
 
         this.logon = Preferences.ComposeLogon();
         this.password = Preferences.GetPassword();
-
-        this.select(Preferences.ComposeTo());
-
+        try {
+            this.select(Preferences.ComposeTo());
+        }
+        catch (RuntimeException optimistic){
+        }
         this.resource = Preferences.ComposeResource();
 
         if (this.isReady()){
