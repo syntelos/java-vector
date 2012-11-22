@@ -44,7 +44,7 @@ public class VersionTag
     public static void usage(){
         System.err.println("Usage");
         System.err.println();
-        System.err.println("  VersionTag (open|close) [build.properties]");
+        System.err.println("  VersionTag (open|close) [build.version]");
         System.err.println();
         System.err.println("Description");
         System.err.println();
@@ -62,7 +62,7 @@ public class VersionTag
                 properties = argv[1];
             }
             else {
-                properties = "${user.dir}/build.properties";
+                properties = "${user.dir}/build.version";
             }
 
             PropertySource(properties);
