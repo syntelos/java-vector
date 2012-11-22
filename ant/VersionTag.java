@@ -52,13 +52,13 @@ public class VersionTag
         System.err.println();
     }
     public static void main(String[] argv){
-        if (0 <= argv.length){
+        if (0 < argv.length){
 
             final String prefix = argv[0];
 
             final String properties;
 
-            if (1 <= argv.length){
+            if (1 < argv.length){
                 properties = argv[1];
             }
             else {
