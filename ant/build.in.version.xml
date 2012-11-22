@@ -1,5 +1,14 @@
 <project name="build-version">
 
+  <macrodef name="version-tag">
+    <attribute name="prefix"/>
+    <sequential>
+      <java classname="VersionTag" classpath="ant" fork="true" failonerror="true">
+        <arg value="@{prefix}"/>
+      </java>
+    </sequential>
+  </macrodef>
+
   <macrodef name="version">
     <sequential>
       <property file="build.version" />
@@ -21,28 +30,34 @@
 
   <macrodef name="version-minor">
     <sequential>
+      <version-tag prefix="close"/>
       <propertyfile file="build.version">
         <entry key="version.minor" type="int" operation="+" value="1"/>
         <entry key="version.build" type="int" value="0"/>
       </propertyfile>
+      <version-tag prefix="open"/>
     </sequential>
   </macrodef>
 
   <macrodef name="version-major">
     <sequential>
+      <version-tag prefix="close"/>
       <propertyfile file="build.version">
         <entry key="version.major" type="int" operation="+" value="1"/>
         <entry key="version.minor" type="int" value="0"/>
         <entry key="version.build" type="int" value="0"/>
       </propertyfile>
+      <version-tag prefix="open"/>
     </sequential>
   </macrodef>
 
   <macrodef name="version-build">
     <sequential>
+      <version-tag prefix="close"/>
       <propertyfile file="build.version">
         <entry key="version.build" type="int" operation="+" value="1"/>
       </propertyfile>
+      <version-tag prefix="open"/>
     </sequential>
   </macrodef>
 
