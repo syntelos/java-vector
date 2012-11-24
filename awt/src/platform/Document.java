@@ -47,13 +47,13 @@ public class Document
     public Document(URL root){
         super();
 
-        final String file = root.getFile();
+        String url = root.toExternalForm();
 
-        if (null != file && -1 < file.indexOf('.')){
+        final int index = url.lastIndexOf('/');
 
-            String url = root.toExternalForm();
+        final int test = url.indexOf(":/");
 
-            final int index = (url.length()-file.length()-1);
+        if (-1 < test && (test+1) < index){
 
             url = url.substring(0,index);
             try {

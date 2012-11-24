@@ -350,12 +350,16 @@ public class Output
         {
             thisBounds.x = 0f;
             thisBounds.y = 0f;
-            thisBounds.height = (parentBounds.height-inputBounds.height-16f);
+            if (inputBounds.isEmpty())
+                thisBounds.height = (parentBounds.height-46f);
+            else
+                thisBounds.height = (parentBounds.height-inputBounds.height-16f);
+
             thisBounds.width = parentBounds.width;
 
             this.setBoundsVector(thisBounds);
 
-            float xx = 4f;
+            final float xx = 4f;
             float yy = thisBounds.height;
 
 

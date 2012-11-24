@@ -69,8 +69,6 @@ public class Frame
 
         this.pack();
         this.show();
-
-        this.display.init();
     }
 
 
@@ -78,6 +76,14 @@ public class Frame
     public Display createDisplay(){
 
         return new Display();
+    }
+    public void init(){
+
+        Display display = this.display;
+        if (null != display){
+
+            display.init();
+        }
     }
     public void destroy(){
 
@@ -176,7 +182,11 @@ public class Frame
 
     public static void main(String[] argv){
 
-        if ((new Frame()).eval(argv))
+        final Frame frame = new Frame();
+
+        frame.init();
+
+        if (frame.eval(argv))
             return;
         else
             System.exit(1);

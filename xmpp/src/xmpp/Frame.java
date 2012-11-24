@@ -47,8 +47,20 @@ public class Frame
         catch (Exception exc){
             exc.printStackTrace();
         }
+        try {
+            final Frame frame = new Frame();
 
-        (new Frame()).modified();
+            frame.init();
+
+            if (frame.eval(argv))
+                return;
+            else
+                frame.modified();
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+            System.exit(1);
+        }
     }
 
 }

@@ -42,7 +42,11 @@ public class Frame
 
     public static void main(String[] argv){
 
-        if ((new Frame()).eval(argv))
+        final Frame frame = new Frame();
+
+        frame.init();
+
+        if (frame.eval(argv))
             return;
         else
             System.exit(1);
