@@ -42,3 +42,10 @@ Sun Oct 21 18:23:46 EDT 2012
   necessarily useful for application programming (excepting Context,
   Event, GlyphVector and Image).  Most programming employs platform
   types directly.
+
+Fri Nov 23 20:48:27 EST 2012
+
+* Added SVG Path
+
+  SVG path works for trivial examples
+
