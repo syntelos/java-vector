@@ -533,6 +533,12 @@ public class Container
         return this;
     }
 
+    public final boolean isEmpty(){
+        return (null == this.components);
+    }
+    public final boolean isNotEmpty(){
+        return (null != this.components);
+    }
     public final Component.Iterator iterator(){
         return new Component.Iterator(this.components);
     }

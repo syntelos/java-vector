@@ -22,8 +22,8 @@ import json.Hex;
 
 /**
  * 32 bit alpha-color I/O in <code>'#AARRGGBB'</code> string format.
- * Also accepts <code>'#RRGGBB'</code> string format.  Presently not
- * accepting <code>'#RGB'</code> format.  
+ * Also accepts <code>'#RRGGBB'</code>, <code>'#RGB'</code> and
+ * <code>'#ARGB'</code> string formats.
  * 
  * Unrecognized format produces black color.
  */
@@ -31,7 +31,11 @@ public class Color
     extends java.awt.Color
 {
     public static Color decode(String value){
-        return new Color(value);
+        vector.NamedColors named = vector.NamedColors.For(value);
+        if (null != named)
+            return named.value;
+        else
+            return new Color(value);
     }
     /*
      * Subclass overrides
@@ -62,6 +66,7 @@ public class Color
     public final static Color CYAN       = cyan;
     public final static Color blue 	     = new Color(0, 0, 255);
     public final static Color BLUE       = blue;
+
 
 
     public Color(java.awt.Color color){
@@ -109,6 +114,10 @@ public class Color
             return 0;
         else {
             switch (code.length){
+            case 2:{
+                final int v = (code[0] & 0x0F);
+                return ((v<<4)|(v));
+            }
             case 3:
                 return (code[0] & 0xFF);
             case 4:
@@ -123,6 +132,10 @@ public class Color
             return 0;
         else {
             switch (code.length){
+            case 2:{
+                final int v = ((code[1] & 0xF0)>>4);
+                return ((v<<4)|(v));
+            }
             case 3:
                 return (code[1] & 0xFF);
             case 4:
@@ -137,6 +150,10 @@ public class Color
             return 0;
         else {
             switch (code.length){
+            case 2:{
+                final int v = (code[1] & 0x0F);
+                return ((v<<4)|(v));
+            }
             case 3:
                 return (code[2] & 0xFF);
             case 4:
@@ -151,6 +168,13 @@ public class Color
             return 0;
         else {
             switch (code.length){
+            case 2:{
+                final int v = ((code[0] & 0xF0)>>4);
+                if (0 == v)
+                    return 0xFF;
+                else
+                    return ((v<<4)|(v));
+            }
             case 3:
                 return 0xFF;
             case 4:{
@@ -168,8 +192,17 @@ public class Color
     public final static String Parse(String s){
         if (null == s || 1 > s.length())
             return null;
-        else if ('#' == s.charAt(0))
-            return s.substring(1);
+        else if ('#' == s.charAt(0)){
+
+            s = s.substring(1);
+
+            if (0 != (1 & s.length())){
+
+                return "0"+s;
+            }
+            else
+                return s;
+        }
         else
             return null;
     }

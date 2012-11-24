@@ -51,7 +51,7 @@ public class Bounds
     public Bounds(String string){
         super(0,0,0,0);
         if (null != string){
-            StringTokenizer strtok = new StringTokenizer(string,"][)(,");
+            StringTokenizer strtok = new StringTokenizer(string,"][)(, ");
             switch (strtok.countTokens()){
             case 0:
                 break;

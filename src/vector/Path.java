@@ -33,7 +33,7 @@ import json.ObjectJson;
  * Component consumes and produces W3C SVG Path attribute "d" data.
  */
 public class Path
-    extends AbstractComponent
+    extends BorderComponent
     implements Component.Align2D
 {
 
@@ -489,6 +489,9 @@ public class Path
     }
 
     public Path outputScene(Context g){
+
+        super.outputScene(g);
+
         Shape shape = (Shape)this.path;
         if (null != shape){
             this.getTransformParent().transformFrom(g);
@@ -511,10 +514,7 @@ public class Path
         }
         return this;
     }
-    public Path outputOverlay(Context g){
 
-        return this;
-    }
 
     public ObjectJson toJson(){
         ObjectJson thisModel = (ObjectJson)super.toJson();
@@ -551,7 +551,7 @@ public class Path
 
             if (this.content){
 
-                this.setBoundsVector(((Shape)this.path).getBoundsVector());
+                this.setBoundsVectorInit(((Shape)this.path).getBoundsVector());
             }
 
             if (null != this.align){

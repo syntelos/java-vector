@@ -52,7 +52,7 @@ import java.util.logging.Logger;
 
 public class Display
     extends java.awt.Canvas
-    implements Component.Container,
+    implements vector.Display,
                java.awt.event.KeyListener,
                java.awt.event.MouseListener,
                java.awt.event.MouseMotionListener,
@@ -77,6 +77,8 @@ public class Display
     protected boolean mouseIn;
 
     protected Bounds boundsNative, boundsUser;
+
+    protected Document document;
 
 
     public Display(){
@@ -802,8 +804,18 @@ public class Display
 
         return true;
     }
+    public boolean hasDocumentVector(){
+
+        return (null != this.document);
+    }
+    public Document getDocumentVector(){
+
+        return this.document;
+    }
     public boolean open(File file){
         try {
+            this.document = new Document(file);
+
             FileInputStream fin = new FileInputStream(file);
             try {
                 Reader reader = new Reader();
@@ -827,6 +839,8 @@ public class Display
     }
     public boolean open(URL url){
         try {
+            this.document = new Document(url);
+
             InputStream uin = url.openStream();
             try {
                 Reader reader = new Reader();
