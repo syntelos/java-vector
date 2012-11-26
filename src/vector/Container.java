@@ -59,7 +59,11 @@ import java.util.logging.Logger;
  */
 public class Container
     extends AbstractComponent
-    implements Component.Container, Component.Margin, Component.Layout, Table.Col.Span
+    implements Component.Container, 
+               Component.Margin, 
+               Component.Layout, 
+               Component.Bordered<Border>, 
+               Table.Col.Span
 {
 
     protected final Logger log = Logger.getLogger(this.getClass().getName());
@@ -554,6 +558,17 @@ public class Container
 
         return (C)Component.Tools.Get(this.components,idx);
     }
+    public final <C extends Component> C set(C comp, int idx){
+
+        final Component old = Component.Tools.Set(this.components,comp,idx);
+
+        old.destroy();
+
+        comp.setParentVector(this);
+        comp.init();
+
+        return comp;
+    }
     public final int indexOf(Component comp){
 
         return Component.Tools.IndexOf(this.components,comp);
@@ -642,12 +657,31 @@ public class Container
         else
             return super.drop(c);
     }
-    protected final Border getBorder(){
+    public final Border getBorder(){
         int idx = this.indexOf(Border.class);
         if (-1 < idx)
-            return (Border)this.get(idx);
+            return this.get(idx);
         else
             return null;
+    }
+    public final Component.Bordered setBorder(Border border){
+        int idx = this.indexOf(Border.class);
+        if (-1 < idx)
+            this.set(border,idx);
+        else
+            this.insert(border,0);
+
+        return this;
+    }
+    public final Component.Bordered setBorder(Border border, Json model){
+
+        this.setBorder(border);
+
+        if (null != border){
+
+            border.fromJson(model);
+        }
+        return this;
     }
 
     public ObjectJson toJson(){

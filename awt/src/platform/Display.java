@@ -21,6 +21,7 @@ package platform;
 import vector.Bounds;
 import vector.Component;
 import vector.Event;
+import vector.Viewport;
 
 import platform.event.Repainter;
 import platform.geom.Point;
@@ -182,6 +183,21 @@ public class Display
         else
             return this;
     }
+    protected final <F extends Frame> F getFrame(){
+        java.awt.Component p = super.getParent();
+        java.awt.Component parent = null;
+        while (null != p){
+            parent = p;
+            p = p.getParent();
+        }
+        try {
+            return (F)parent;
+        }
+        catch (ClassCastException exc){
+
+            return null;
+        }
+    }
     public final <T extends Component> T getParentVector(){
 
         return null;
@@ -196,6 +212,29 @@ public class Display
     }
     public final Component setVisibleVector(boolean visible){
         super.setVisible(visible);
+        return this;
+    }
+    public final Viewport getViewport(){
+
+        if (null != this.boundsUser)
+
+            return new Viewport(this.boundsUser);
+
+        else {
+            final java.awt.Rectangle r = this.getBounds();
+
+            return new Viewport(r.width,r.height);
+        }
+    }
+    public final Display setViewport(Viewport.Size size){
+        if (null != size){
+            final Frame frame = this.getFrame();
+            if (null != frame){
+                final Bounds b = Frame.Center(size.get(this.getViewport()));
+
+                frame.setBounds((int)b.x,(int)b.y,(int)b.width,(int)b.height);
+            }
+        }
         return this;
     }
     public final Bounds getBoundsVector(){
@@ -258,6 +297,30 @@ public class Display
      * @return Consumed (at least once)
      */
     public boolean input(Event e){
+
+        boolean action = false;
+
+        /*
+         * Interpret Viewport event
+         */
+        if (Event.Type.Action == e.getType()){
+
+            action = true;
+
+            final Event.NamedAction actor = (Event.NamedAction)e;
+
+            if (actor.isValueClass(Viewport.Size.class)){
+
+                final Event.NamedAction<Viewport.Size> viewport = 
+                    (Event.NamedAction<Viewport.Size>)actor;
+
+                this.setViewport( viewport.getValue());
+            }
+        }
+
+        /*
+         * Dispatch event
+         */
         boolean re = false;
 
         for (Component c: this){
@@ -265,6 +328,14 @@ public class Display
              * Broadcast
              */
             re = (c.input(e) || re);
+        }
+
+        /*
+         * Output scene
+         */
+        if (action || re){
+
+            this.outputScene();
         }
         return re;
     }
@@ -458,6 +529,17 @@ public class Display
 
         return (C)Component.Tools.Get(this.components,idx);
     }
+    public final <C extends Component> C set(C comp, int idx){
+
+        final Component old = Component.Tools.Set(this.components,comp,idx);
+
+        old.destroy();
+
+        comp.setParentVector(this);
+        comp.init();
+
+        return comp;
+    }
     public final int indexOf(Component comp){
 
         return Component.Tools.IndexOf(this.components,comp);
@@ -554,6 +636,39 @@ public class Display
         }
         else
             return false;
+    }
+    public Display show(Component c){
+        if (null != c){
+            int idx = this.indexOf(c.getClass());
+            if (0 > idx){
+                c = this.add(c);
+                this.modified();
+                this.center(c);
+            }
+            else {
+                this.remove(idx).destroy();
+            }
+            this.outputScene();
+        }
+        return this;
+    }
+    public Display center(Component d){
+
+        if (null != d){
+
+            final Bounds c = this.boundsUser;
+
+            if (null != boundsUser){
+
+                final Bounds b = d.getBoundsVector();
+
+                b.x = (c.width/2)-(b.width/2);
+                b.y = (c.height/2)-(b.height/2);
+
+                d.setBoundsVector(b);
+            }
+        }
+        return this;
     }
 
     public void mouseClicked(MouseEvent evt){
@@ -736,6 +851,7 @@ public class Display
         }
     }
     public final void componentResized(ComponentEvent evt){
+
         this.flush();
         {
             java.awt.Rectangle b = super.getBounds();

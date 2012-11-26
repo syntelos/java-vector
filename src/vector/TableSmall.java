@@ -90,6 +90,14 @@ public class TableSmall
 
         this.setBoundsVector(bounds);
 
+        /*
+         * Layout (order parent)
+         */
+        final Border border = this.getBorder();
+        if (null != border){
+
+            border.resized();
+        }
     }
     public final int getCols(){
         return this.cols;

@@ -16,7 +16,7 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package xmpp;
+package vector.dialog;
 
 import platform.Font;
 import platform.Color;
@@ -26,7 +26,16 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
 
-
+/**
+ * Named style properties from classpath resource or URL -- for scene
+ * graph subtree components like those found in this package.
+ * 
+ * <p> Coded subtrees employ the {@link vector.Component#init()
+ * Component init} operator to build.  Those feature sets open in one
+ * degree of freedom with the simple specification of classes of
+ * colors and fonts. </p>
+ * 
+ */
 public class Style
     extends java.lang.Object
 {

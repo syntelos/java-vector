@@ -107,6 +107,12 @@ public class Bounds
     public Bounds(Rectangle r){
         this(r.x,r.y,r.width,r.height);
     }
+    public Bounds(Rectangle r, double factor){
+        this((r.width*factor),(r.height*factor));
+    }
+    public Bounds(double width, double height, double factor){
+        this((width*factor),(height*factor));
+    }
     public Bounds(Shape s){
         this((Rectangle)s.getBoundsVector());
     }

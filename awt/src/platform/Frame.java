@@ -18,6 +18,8 @@
  */
 package platform;
 
+import vector.Bounds;
+
 import json.Json;
 import json.Reader;
 
@@ -41,6 +43,31 @@ public class Frame
     extends javax.swing.JFrame
 {
 
+    protected final static Dimension2D screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+
+    protected final static int width = (int)(((float)screen.getWidth())/2.0f);
+    protected final static int height = (int)(((float)screen.getHeight())/2.0f);
+
+    protected final static int x = (width/2);
+    protected final static int y = (height/2);
+
+
+    public final static Bounds Center(Bounds b){
+
+        if (null != b){
+
+            final float sx = Frame.width;
+            final float sy = Frame.height;
+
+            final float bx = (b.width/2);
+            final float by = (b.height/2);
+
+            b.x = (sx-bx);
+            b.y = (sy-by);
+        }
+        return b;
+    }
+
     protected final Logger log = Logger.getLogger(this.getClass().getName());
 
     protected Display display;
@@ -54,14 +81,9 @@ public class Frame
 
         this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        final Dimension2D screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int)(((float)screen.getWidth())/2.0f);
-        int height = (int)(((float)screen.getHeight())/2.0f);
-        this.setSize(width,height);
-        int x = (width/2);
-        int y = (height/2);
-        this.setLocation(x,y);
-        
+        this.setSize(Frame.width,Frame.height);
+
+        this.setLocation(Frame.x,Frame.y);
 
         this.add((this.display = this.createDisplay()), BorderLayout.CENTER);
 

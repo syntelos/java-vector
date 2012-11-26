@@ -214,7 +214,7 @@ public class XThread
 
             this.connection = this.createConnection();
 
-            Status.Up().outputScene();
+            Status.Up();
         }
     }
     public void disconnect(){
@@ -227,7 +227,7 @@ public class XThread
             finally {
                 this.connection = null;
 
-                Status.Down().outputScene();
+                Status.Down();
             }
         }
     }
@@ -417,32 +417,32 @@ public class XThread
         switch(et){
         case WAIT:
 
-            Output.Error("error(WAIT)");
+            Output.Error("error(WAIT, from: %s)",(new XAddress.From(m)));
 
             break;
         case CANCEL:
 
-            Output.Error("error(CANCEL)");
+            Output.Error("error(CANCEL, from: %s)",(new XAddress.From(m)));
 
             break;
         case MODIFY:
 
-            Output.Error("error(MODIFY)");
+            Output.Error("error(MODIFY, from: %s)",(new XAddress.From(m)));
 
             break;
         case AUTH:
 
-            Output.Error("error(AUTH)");
+            Output.Error("error(AUTH, from: %s)",(new XAddress.From(m)));
 
             break;
         case CONTINUE:
 
-            Output.Error("error(CONTINUE)");
+            Output.Error("error(CONTINUE, from: %s)",(new XAddress.From(m)));
 
             break;
         default:
 
-            Output.Error("error(%s)",et.name());
+            Output.Error("error(name: %s, from: %s)",et.name(),(new XAddress.From(m)));
             break;
         }
     }

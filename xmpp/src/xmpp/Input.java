@@ -21,6 +21,8 @@ package xmpp;
 import vector.Border;
 import vector.Event;
 
+import vector.dialog.Viewport;
+
 /**
  * 
  */
@@ -128,19 +130,24 @@ public class Input
             switch(e.getType()){
 
             case Action:{
-                final Event.NamedAction<Actor> action = (Event.NamedAction<Actor>)e;
-                switch(action.getValue()){
-                case Connect:
-                case Disconnect:
-                    /*
-                     * Logon 
-                     */
-                    this.outputScene();
-                    return true;
+                Event.NamedAction action = (Event.NamedAction)e;
 
-                default:
-                    break;
+                if (action.isValueClass(Actor.class)){
+                    final Event.NamedAction<Actor> actor = (Event.NamedAction<Actor>)e;
+                    switch(actor.getValue()){
+                    case Connect:
+                    case Disconnect:
+                        /*
+                         * Logon 
+                         */
+                        this.outputScene();
+                        return true;
+
+                    default:
+                        break;
+                    }
                 }
+
                 return false;
             }
             case KeyUp:
@@ -163,6 +170,27 @@ public class Input
                     }
                 }
                 return false;
+
+            case MouseUp:{
+
+                /*
+                 * Right click -> menu
+                 */
+                final Event.Mouse m = (Event.Mouse)e;
+
+                if (m.isPoint() && Event.Mouse.Action.Point1 != m.getAction()){
+
+                    Display display = this.getRootContainer();
+
+                    Viewport viewport = new Viewport();
+
+                    display.show(viewport);
+
+                    return true;
+                }
+                else
+                    return false;
+            }
             default:
                 return false;
             }

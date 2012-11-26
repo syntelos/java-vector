@@ -19,31 +19,12 @@
 package vector;
 
 /**
- * Class typically returned by {@link Component#getRootContainer
- * Component getRootContainer}.
+ * An enum implementing this interface presents label strings to
+ * consumers.
  * 
- * @see platform.Display
+ * @see Event$NamedAction
  */
-public interface Display
-    extends Component.Container
-{
+public interface ActionLabel {
 
-    public boolean hasDocumentVector();
-
-    public Document getDocumentVector();
-
-    /**
-     * @return Proportional window sizes
-     */
-    public Viewport getViewport();
-    /**
-     * Resize window
-     */
-    public Display setViewport(Viewport.Size size);
-
-    /**
-     * If add unique by class, then modify, center, and output.
-     * Intended for dialog windows.
-     */
-    public Display show(Component component);
+    public String getActionLabel();
 }

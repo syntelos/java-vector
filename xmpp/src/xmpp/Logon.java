@@ -28,6 +28,7 @@ import vector.Password;
 import vector.Stroke;
 import vector.TableSmall;
 import vector.TextEdit;
+import vector.dialog.Style;
 
 /**
  * Hard coded XMPP information dialog.

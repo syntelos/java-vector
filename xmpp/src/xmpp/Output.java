@@ -31,6 +31,8 @@ import vector.Padding;
 import vector.Stroke;
 import vector.TableSmall;
 import vector.TextEdit;
+import vector.dialog.Style;
+import vector.dialog.Viewport;
 
 import platform.Color;
 
@@ -149,6 +151,27 @@ public class Output
                     }
                 }
                 return false;
+
+            case MouseUp:{
+
+                /*
+                 * Right click -> menu
+                 */
+                final Event.Mouse m = (Event.Mouse)e;
+
+                if (m.isPoint() && Event.Mouse.Action.Point1 != m.getAction()){
+
+                    Display display = this.getRootContainer();
+
+                    Viewport viewport = new Viewport();
+
+                    display.show(viewport);
+
+                    return true;
+                }
+                else
+                    return false;
+            }
             default:
                 return false;
             }

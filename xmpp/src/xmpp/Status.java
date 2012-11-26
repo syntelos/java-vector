@@ -30,6 +30,7 @@ import vector.Padding;
 import vector.Stroke;
 import vector.TableSmall;
 import vector.TextEdit;
+import vector.dialog.Style;
 
 import platform.Color;
 
@@ -188,8 +189,14 @@ public class Status
         public boolean input(Event e){
             if (super.input(e)){
                 switch(e.getType()){
-                case MouseUp:
-                    if (this.mouseIn){
+
+                case MouseUp:{
+
+                    /*
+                     * Right click -> menu
+                     */
+                    final Event.Mouse m = (Event.Mouse)e;
+                    if (this.mouseIn && m.isPoint() && Event.Mouse.Action.Point1 == m.getAction()){
                         try {
                             Status.Select(this.address);
 
@@ -203,6 +210,10 @@ public class Status
                             exc.printStackTrace();
                         }
                     }
+                    else
+                        return false;
+                }
+
                 default:
                     break;
                 }

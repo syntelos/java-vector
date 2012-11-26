@@ -18,6 +18,9 @@
  */
 package xmpp;
 
+import vector.Component;
+import vector.dialog.Style;
+
 import platform.Color;
 
 /**
@@ -87,10 +90,15 @@ public class Display
             return null;
     }
     public Logon getLogon(){
-        if (this.has(3))
-            return (Logon)this.get(3);
-        else
-            return null;
+        int idx = 3;
+        while (this.has(idx)){
+            Component c = this.get(idx);
+            if (c instanceof Logon)
+                return (Logon)c;
+            else
+                idx++;
+        }
+        return null;
     }
     public Logon logon(){
         Logon logon = this.getLogon();

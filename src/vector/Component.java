@@ -498,7 +498,21 @@ public interface Component
             public Whitespace queryLayoutText();
         }
     }
+
+    /**
+     * 
+     */
+    public interface Bordered<B extends Component>
+        extends Component
+    {
 
+        public Bordered setBorder(B border);
+
+        public Bordered setBorder(B border, Json model);
+
+        public B getBorder();
+    }
+
     /**
      * Ordered list of component children.
      * 
@@ -514,6 +528,8 @@ public interface Component
         public boolean has(int idx);
 
         public <C extends Component> C get(int idx);
+
+        public <C extends Component> C set(C comp, int idx);
 
         public int indexOf(Component comp);
 
@@ -664,6 +680,17 @@ public interface Component
         public static Component Get(Component[] components, int idx){
             if (-1 < idx && idx < Count(components))
                 return components[idx];
+            else
+                throw new java.util.NoSuchElementException(String.valueOf(idx));
+        }
+        public static Component Set(Component[] components, Component comp, int idx){
+            if (null != comp && -1 < idx && idx < Count(components)){
+                Component old = components[idx];
+
+                components[idx] = comp;
+
+                return old;
+            }
             else
                 throw new java.util.NoSuchElementException(String.valueOf(idx));
         }
@@ -1049,6 +1076,44 @@ public interface Component
                         throw (RuntimeException)t;
                     else
                         throw new IllegalArgumentException(name,t);
+                }
+            }
+            else
+                return null;
+        }
+
+
+        public final static <T extends Enum<T>> Method ListEnumMethod(Class<Enum<T>> clas){
+            if (null == clas)
+                return null;
+            else {
+                try {
+                    return clas.getMethod("values");
+                }
+                catch (NoSuchMethodException interr){
+                    throw new IllegalStateException(clas.getName(),interr);
+                }
+                catch (SecurityException interr){
+                    throw new IllegalStateException(clas.getName(),interr);
+                }
+            }
+        }
+        public final static <T extends Enum<T>> Enum<T>[] ListEnumOf(Method m){
+            if (null != m){
+                try {
+                    return (Enum<T>[])m.invoke(null);
+                }
+                catch (IllegalAccessException access){
+
+                    throw new IllegalArgumentException(m.getDeclaringClass().getName(),access);
+                }
+                catch (java.lang.reflect.InvocationTargetException invocation){
+
+                    Throwable t = invocation.getCause();
+                    if (t instanceof RuntimeException)
+                        throw (RuntimeException)t;
+                    else
+                        throw new IllegalArgumentException(m.getDeclaringClass().getName(),t);
                 }
             }
             else

@@ -37,13 +37,23 @@
 
   <available property="available.signing.properties" file="signing.properties"/>
 
-  <target name="all" description="Rebuild all jars">
+  <target name="signed" description="Rebuild all jars and sign">
     <antcall target="update"/>
     <antcall target="awt"/>
     <antcall target="demo"/>
     <antcall target="geda"/>
     <antcall target="fonview"/>
     <antcall target="xmpp-sign"/>
+    <!-- antcall target="llg"/ -->
+  </target>
+
+  <target name="unsigned" description="Rebuild all jars">
+    <antcall target="update"/>
+    <antcall target="awt"/>
+    <antcall target="demo"/>
+    <antcall target="geda"/>
+    <antcall target="fonview"/>
+    <antcall target="xmpp"/>
     <!-- antcall target="llg"/ -->
   </target>
 

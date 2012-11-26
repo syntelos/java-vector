@@ -16,34 +16,25 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package vector;
+package vector.dialog;
+
+import vector.Border;
+import vector.Button;
+import vector.Stroke;
 
 /**
- * Class typically returned by {@link Component#getRootContainer
- * Component getRootContainer}.
+ * List of viewport buttons that produce Viewport Size events.  These
+ * events are interpreted by the platform Display.
  * 
- * @see platform.Display
+ * @see Style
  */
-public interface Display
-    extends Component.Container
+public class Viewport
+    extends Menu
 {
 
-    public boolean hasDocumentVector();
 
-    public Document getDocumentVector();
+    public Viewport(){
+        super(vector.Viewport.Size.class);
+    }
 
-    /**
-     * @return Proportional window sizes
-     */
-    public Viewport getViewport();
-    /**
-     * Resize window
-     */
-    public Display setViewport(Viewport.Size size);
-
-    /**
-     * If add unique by class, then modify, center, and output.
-     * Intended for dialog windows.
-     */
-    public Display show(Component component);
 }

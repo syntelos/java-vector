@@ -39,6 +39,7 @@ import json.ObjectJson;
  */
 public class BorderComponent
     extends AbstractComponent
+    implements Component.Bordered<Border>
 {
 
     protected Border border;
@@ -122,8 +123,8 @@ public class BorderComponent
         else
             return this;
     }
-    public final <T extends Border> T getBorder(){
-        return (T)this.border;
+    public final Border getBorder(){
+        return this.border;
     }
     public final BorderComponent setBorder(Border border){
         if (null != this.border){
