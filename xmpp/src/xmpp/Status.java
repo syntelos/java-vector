@@ -158,30 +158,34 @@ public class Status
 
             Border border = this.getBorder();
 
-            this.mode = p.getMode();
+            final Presence.Mode mode = p.getMode();
 
-            final Color color;
+            if (null != mode){
+                this.mode = mode;
 
-            switch(this.mode){
-            case chat:
-                color = Style.ST(0.5f);
-                break;
-            case available:
-                color = Style.OK(0.5f);
-                break;
-            case away:
-            case xa:
-                color = Style.AY(0.5f);
-                break;
-            case dnd:
-            default:
-                color = Style.NG(0.5f);
-                break;
+                final Color color;
+
+                switch(this.mode){
+                case chat:
+                    color = Style.ST(0.5f);
+                    break;
+                case available:
+                    color = Style.OK(0.5f);
+                    break;
+                case away:
+                case xa:
+                    color = Style.AY(0.5f);
+                    break;
+                case dnd:
+                default:
+                    color = Style.NG(0.5f);
+                    break;
+                }
+                this.setColor(color);
+                this.setColorOver(color);
+                border.setColor(color);
+                border.setColorOver(color);
             }
-            this.setColor(color);
-            this.setColorOver(color);
-            border.setColor(color);
-            border.setColorOver(color);
         }
         protected Label buttonInputAction(){
             return this;
@@ -315,7 +319,7 @@ public class Status
     }
     public Status receive(Message m){
 
-        final XAddress.Full from = new XAddress.From(m);
+        final XAddress from = new XAddress.From(m);
         Label label = this.search(from);
 
         switch(m.getType()){
@@ -343,7 +347,7 @@ public class Status
     }
     public Status update(Presence p){
 
-        final XAddress.Full from = new XAddress.From(p);
+        final XAddress from = new XAddress.From(p);
 
         Label label = this.search(from);
 

@@ -85,6 +85,22 @@ public class XThread
 
         Instance().contact(to);
     }
+    public final static void Available(XAddress to){
+
+        Instance().available(to);
+    }
+    public final static void Unavailable(XAddress to){
+
+        Instance().unavailable(to);
+    }
+    public final static void Subscribe(XAddress to){
+
+        Instance().subscribe(to);
+    }
+    public final static void Unsubscribe(XAddress to){
+
+        Instance().unsubscribe(to);
+    }
 
 
     /*
@@ -136,11 +152,13 @@ public class XThread
 
             this.to = to;
 
+            this.subscribe(to);
+
             Preferences.SetTo(to);
         }
     }
     public void contact(XAddress to){
-        if (null != this.logon && null != to){
+        if (null != this.logon && null != to && null != to.logon){
 
             if (null != this.to){
                 if (to.equals(this.to))
@@ -149,9 +167,61 @@ public class XThread
                     this.to = null;
             }
 
+            this.subscribe(to);
+        }
+    }
+    public void available(XAddress to){
+        if (null != this.connection && null != to && null != to.logon){
+
+            Presence q = new Presence(Presence.Type.available);
+
+            q.setMode(Presence.Mode.available);
+
+            q.setFrom(this.connection.getUser());
+
+            q.setTo(to.logon);
+
+            this.connection.sendPacket(q);
+
+            Output.Send(q);
+        }
+    }
+    public void unavailable(XAddress to){
+        if (null != this.connection && null != to && null != to.logon){
+
+            Presence q = new Presence(Presence.Type.unavailable);
+
+            q.setMode(Presence.Mode.available);
+
+            q.setFrom(this.connection.getUser());
+
+            q.setTo(to.logon);
+
+            this.connection.sendPacket(q);
+
+            Output.Send(q);
+        }
+    }
+    public void subscribe(XAddress to){
+        if (null != this.connection && null != to && null != to.logon){
+
             Presence q = new Presence(Presence.Type.subscribe);
 
             q.setMode(Presence.Mode.available);
+
+            q.setFrom(this.connection.getUser());
+
+            q.setTo(to.logon);
+
+            this.connection.sendPacket(q);
+
+            Output.Send(q);
+        }
+    }
+    public void unsubscribe(XAddress to){
+        if (null != this.connection && null != to && null != to.logon){
+
+            Presence q = new Presence(Presence.Type.unsubscribe);
 
             q.setFrom(this.connection.getUser());
 
@@ -202,11 +272,7 @@ public class XThread
 
         this.logon = Preferences.ComposeLogon();
         this.password = Preferences.GetPassword();
-        try {
-            this.select(Preferences.ComposeTo());
-        }
-        catch (RuntimeException optimistic){
-        }
+
         this.resource = Preferences.ComposeResource();
 
         if (this.isReady()){
@@ -215,6 +281,11 @@ public class XThread
             this.connection = this.createConnection();
 
             Status.Up();
+        }
+        try {
+            this.select(Preferences.ComposeTo());
+        }
+        catch (RuntimeException optimistic){
         }
     }
     public void disconnect(){
@@ -236,129 +307,134 @@ public class XThread
         return true;
     }
     public void processPacket(Packet pk){
+        try {
+            if (pk instanceof Message){
+                Message xm = (Message)pk;
 
-        if (pk instanceof Message){
-            Message xm = (Message)pk;
-
-            switch(xm.getType()){
-            case normal:
-            case chat:
-            case groupchat:
-                this.receive(xm);
-                break;
-            case headline:
-                this.headline(xm);
-                break;
-            case error:
-                this.error(xm);
-                break;
-            default:
-                Output.Error("process(type: %s)",xm.getType().name());
-                break;
-            }
-        }
-        else if (pk instanceof Presence){
-            Presence xp = (Presence)pk;
-
-            this.update(xp);
-        }
-        else if (pk instanceof Bind){
-            Bind xb = (Bind)pk;
-
-            final String resource = xb.getResource();
-
-            final String jid = xb.getJid();
-
-            if (null != jid){
-
-                if (null != resource){
-                    Output.Error("bind(resource: %s, jid: %s)",resource,jid);
-
-                }
-                else {
-                    Output.Error("bind(jid: %s)",jid);
-
+                switch(xm.getType()){
+                case normal:
+                case chat:
+                case groupchat:
+                    this.receive(xm);
+                    break;
+                case headline:
+                    this.headline(xm);
+                    break;
+                case error:
+                    this.error(xm);
+                    break;
+                default:
+                    Output.Error("process(type: %s)",xm.getType().name());
+                    break;
                 }
             }
-            else if (null != resource){
-                Output.Error("bind(resource: %s)",resource);
+            else if (pk instanceof Presence){
+                Presence xp = (Presence)pk;
 
+                this.update(xp);
             }
-        }
-        else if (pk instanceof Registration){
-            Registration xr = (Registration)pk;
+            else if (pk instanceof Bind){
+                Bind xb = (Bind)pk;
 
-            final StringBuilder registration = new StringBuilder();
-            final java.util.Map<String,String> attributes = xr.getAttributes();
-            if (null != attributes){
-                boolean once = true;
-                for (String key : attributes.keySet()){
-                    String value = attributes.get(key);
-                    if (once)
-                        once = false;
-                    else
-                        registration.append(", ");
+                final String resource = xb.getResource();
 
-                    registration.append(key);
-                    registration.append(": ");
-                    registration.append(value);
-                }
-            }
+                final String jid = xb.getJid();
 
-            Output.Error("registration(%s)",registration);
-        }
-        else if (pk instanceof RosterPacket){
-            RosterPacket xr = (RosterPacket)pk;
+                if (null != jid){
 
-            final StringBuilder roster = new StringBuilder();
-            final java.util.Collection<RosterPacket.Item> items = xr.getRosterItems();
-            if (null != items){
-                boolean once = true;
-                for (RosterPacket.Item item : items){
+                    if (null != resource){
+                        Output.Error("bind(resource: %s, jid: %s)",resource,jid);
 
-                    String user = item.getUser();
-                    String name = item.getName();
-                    RosterPacket.ItemType type = item.getItemType();
-                    RosterPacket.ItemStatus status = item.getItemStatus();
-                    java.util.Set<String> groups = item.getGroupNames();
+                    }
+                    else {
+                        Output.Error("bind(jid: %s)",jid);
 
-                    if (once)
-                        once = false;
-                    else
-                        roster.append("; ");
-
-                    roster.append("name: ");
-                    roster.append(name);
-                    roster.append(", user: ");
-                    roster.append(user);
-                    roster.append(", type: ");
-                    roster.append(type);
-                    roster.append(", status: ");
-                    roster.append(status);
-                    if (null != groups && (!groups.isEmpty())){
-                        roster.append(", groups { ");
-                        boolean grouping = true;
-                        for (String group : groups){
-                            if (grouping)
-                                grouping = false;
-                            else
-                                roster.append(", ");
-
-                            roster.append(group);
-                        }
-                        roster.append("}");
                     }
                 }
+                else if (null != resource){
+                    Output.Error("bind(resource: %s)",resource);
+
+                }
             }
+            else if (pk instanceof Registration){
+                Registration xr = (Registration)pk;
 
-            Output.Error("roster(%s)",roster);
-        }
-        else if (pk instanceof Session){
+                final StringBuilder registration = new StringBuilder();
+                final java.util.Map<String,String> attributes = xr.getAttributes();
+                if (null != attributes){
+                    boolean once = true;
+                    for (String key : attributes.keySet()){
+                        String value = attributes.get(key);
+                        if (once)
+                            once = false;
+                        else
+                            registration.append(", ");
 
-            Output.Error("session()");
+                        registration.append(key);
+                        registration.append(": ");
+                        registration.append(value);
+                    }
+                }
+
+                Output.Error("registration(%s)",registration);
+            }
+            else if (pk instanceof RosterPacket){
+                RosterPacket xr = (RosterPacket)pk;
+
+                final StringBuilder roster = new StringBuilder();
+                final java.util.Collection<RosterPacket.Item> items = xr.getRosterItems();
+                if (null != items){
+                    boolean once = true;
+                    for (RosterPacket.Item item : items){
+
+                        String user = item.getUser();
+                        String name = item.getName();
+                        RosterPacket.ItemType type = item.getItemType();
+                        RosterPacket.ItemStatus status = item.getItemStatus();
+                        java.util.Set<String> groups = item.getGroupNames();
+
+                        if (once)
+                            once = false;
+                        else
+                            roster.append("; ");
+
+                        roster.append("name: ");
+                        roster.append(name);
+                        roster.append(", user: ");
+                        roster.append(user);
+                        roster.append(", type: ");
+                        roster.append(type);
+                        roster.append(", status: ");
+                        roster.append(status);
+                        if (null != groups && (!groups.isEmpty())){
+                            roster.append(", groups { ");
+                            boolean grouping = true;
+                            for (String group : groups){
+                                if (grouping)
+                                    grouping = false;
+                                else
+                                    roster.append(", ");
+
+                                roster.append(group);
+                            }
+                            roster.append("}");
+                        }
+                    }
+                }
+
+                Output.Error("roster(%s)",roster);
+            }
+            else if (pk instanceof Session){
+
+                Output.Error("session()");
+            }
+            else
+                Output.Error("process(class: %s)",pk.getClass().getName());
         }
-        else
-            Output.Error("process(class: %s)",pk.getClass().getName());
+        catch (Exception exc){
+            Output.Error("error(processing: %s)",pk.getClass().getName());
+            exc.printStackTrace();
+        }
     }
     protected void update(Presence p){
 
@@ -368,22 +444,27 @@ public class XThread
         case unavailable:
 
             Status.Update(p);
+
             break;
 
         case subscribe:
+        case subscribed:{
 
             Status.Update(p);
-            Output.Receive(p);
+
+            final XAddress to = new XAddress.From(p);
 
             if (null == this.to){
-                this.to = new XAddress.From(p);
+                this.to = to;
             }
+            this.available(to);
             break;
-
+        }
         case unsubscribe:
         case unsubscribed:
 
             Status.Update(p);
+
             break;
 
         case error:

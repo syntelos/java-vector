@@ -26,19 +26,10 @@ package platform;
  * @see Offscreen
  */
 public final class Output
-    extends Object
+    extends vector.Output
 {
-    /**
-     * Overlay following Init exclusively
-     */
-    public enum Require {
-        Init, Overlay, Scene;
-    }
-
 
     private Offscreen scene, overlay;
-
-    private Require require = Require.Init;
 
 
     public Output(){
@@ -46,29 +37,6 @@ public final class Output
     }
 
 
-    public void completedScene(){
-
-        this.require = Require.Init;
-    }
-    public void completedOverlay(){
-
-        this.require = Require.Init;
-    }
-    public void requestScene(){
-
-        this.require = Require.Scene;
-    }
-    public void requestOverlay(){
-
-        if (Require.Init == this.require){
-
-            this.require = Require.Overlay;
-        }
-    }
-    public boolean requireOverlay(){
-
-        return (Require.Overlay == this.require);
-    }
     public Offscreen scene(java.awt.Component component){
 
         if (null == this.scene){
@@ -105,6 +73,6 @@ public final class Output
             catch (Exception ignore){
             }
         }
-        this.require = Require.Init;
+        super.flush();
     }
 }

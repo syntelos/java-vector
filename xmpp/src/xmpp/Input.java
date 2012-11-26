@@ -24,7 +24,7 @@ import vector.Event;
 import vector.dialog.Viewport;
 
 /**
- * 
+ * Input text line
  */
 public class Input
     extends vector.TextEdit

@@ -37,7 +37,7 @@ import vector.dialog.Viewport;
 import platform.Color;
 
 /**
- * 
+ * Write text bubbles to main display area.
  */
 public class Output
     extends vector.Container
@@ -96,6 +96,32 @@ public class Output
     public static Output Clear(){
 
         return Instance().clear();
+    }
+
+    /**
+     * Output format strings
+     */
+    public enum Format {
+
+        SendPresence   ("%@s: @%s"),
+        ReceivePresence("@%s: @%s"),
+        SendMessage    ("@%s: %s"),
+        ReceiveMessage ("@%s: %s"),
+        HeadlineMessage("@%s: %s"),
+        ErrorMessage   ("@%s: %s");
+
+
+        public final String string;
+
+
+        private Format(String string){
+            this.string = string;
+        }
+
+
+        public String format(Object... args){
+            return String.format(this.string,args);
+        }
     }
     
 
@@ -185,7 +211,7 @@ public class Output
 
         final Label label = new Label();
         {
-            final String string = String.format("%s: %s",from,body);
+            final String string = Format.SendMessage.format(from,body);
 
             this.add(label);
 
@@ -215,7 +241,7 @@ public class Output
 
         final Label label = new Label();
         {
-            final String string = String.format("%s> %s",from,to);
+            final String string = Format.SendPresence.format(from,to);
 
             this.add(label);
 
@@ -245,7 +271,7 @@ public class Output
 
         final Label label = new Label();
         {
-            final String string = String.format("%s: %s",from,body);
+            final String string = Format.ReceiveMessage.format(from,body);
 
             this.add(label);
 
@@ -276,7 +302,7 @@ public class Output
 
         final Label label = new Label();
         {
-            final String string = String.format("%s> %s",from,to);
+            final String string = Format.ReceivePresence.format(from,to);
 
             this.add(label);
 
@@ -304,7 +330,7 @@ public class Output
 
         final String body = m.getBody();
 
-        return this.headline("%s: %s",from,body);
+        return this.headline(Format.HeadlineMessage.string,from,body);
     }
     public Output headline(String fmt, Object... args){
 
@@ -337,7 +363,7 @@ public class Output
 
         final String body = m.getBody();
 
-        return this.error("%s: %s",from,body);
+        return this.error(Format.ErrorMessage.string,from,body);
     }
     public Output error(String fmt, Object... args){
 

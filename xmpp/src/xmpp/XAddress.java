@@ -74,7 +74,7 @@ public class XAddress
      * 
      */
     public static class From
-        extends XAddress.Full
+        extends XAddress.Logon
     {
         public From(){
             super(Preferences.GetLogon()+'/'+Preferences.ComposeResource());
