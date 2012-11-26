@@ -2,9 +2,9 @@
 <jnlp
      spec="1.5+"
  codebase="http://java-vector.googlecode.com/git"
-     href="demo/track.jnlp">
+     href="demo/svg-sagittarius.jnlp">
   <information>
-    <title>Vector Demo 'track'</title>
+    <title>Vector Demo 'svg-sagittarius'</title>
     <vendor>The DigiVac Company</vendor>
     <homepage href="http://www.digivac.com/"/>
     <description>Vector scalable graphical user interfaces demo</description>
@@ -23,6 +23,6 @@
   </resources>
 
   <application-desc main-class="platform.Frame">
-    <argument>http://java-vector.googlecode.com/git/track.json</argument>
+    <argument>http://java-vector.googlecode.com/git/svg-sagittarius.json</argument>
   </application-desc>
 </jnlp>
