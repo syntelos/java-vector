@@ -95,6 +95,10 @@ public class Frame
 
 
 
+    public Display getDisplay(){
+
+        return this.display;
+    }
     public Display createDisplay(){
 
         return new Display();

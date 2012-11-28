@@ -7,7 +7,7 @@
             "bounds": "[100,100,100,100]",
             "color": "#000000",
             "font": "monospaced-36",
-            "fixed": true,
+            "fixed": false,
             "border": {
                 "color": "#000000",
                 "color-over": "#AF0000",

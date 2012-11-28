@@ -149,6 +149,10 @@ public class Display
 
         this.output.flush();
     }
+    public final boolean hasBackground(){
+
+        return (null != this.background);
+    }
     public final Color getBackground(){
 
         return this.background;
@@ -641,8 +645,13 @@ public class Display
         if (null != c){
             int idx = this.indexOf(c.getClass());
             if (0 > idx){
+
                 c = this.add(c);
+
+                c.setVisibleVector(true);
+
                 this.modified();
+
                 this.center(c);
             }
             else {

@@ -237,6 +237,10 @@ public class Border
         else
             return this;
     }
+    public final boolean hasBackground(){
+
+        return (null != this.background);
+    }
     public final Color getBackground(){
 
         return this.background;

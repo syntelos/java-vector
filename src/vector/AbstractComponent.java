@@ -174,6 +174,10 @@ public abstract class AbstractComponent
         this.visible = visible;
         return this;
     }
+    public boolean toggleVisibility(){
+
+        return (this.visible = (!this.visible));
+    }
     public final Bounds getBoundsVector(){
 
         return this.bounds.clone();

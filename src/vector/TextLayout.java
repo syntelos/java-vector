@@ -29,7 +29,7 @@ import json.ObjectJson;
 import java.util.StringTokenizer;
 
 /**
- * Any number of {@link Component$Layout$Text} components will be
+ * Any number of {@link Component$Layout$TextQuery} components will be
  * relocated for one of two layout styles: wrapped or preformatted
  * (not wrapped).  In the wrapped case, an instance of this class is a
  * paragraph of text.
@@ -50,10 +50,10 @@ import java.util.StringTokenizer;
  * 
  * <h3>Attributed Text</h3>
  * 
- * Group {@link Component$Layout$Text} objects for style,
+ * Group {@link Component$Layout$TextQuery} objects for style,
  * directionality, and character content.  {@link
- * Component$Layout$Text} objects should be composed so that each
- * object contains only one {@link Component$Layout$Text$Whitespace
+ * Component$Layout$TextQuery} objects should be composed so that each
+ * object contains only one {@link Component$Layout$TextQuery$Whitespace
  * kind of character content}.
  */
 public class TextLayout
@@ -262,7 +262,7 @@ public class TextLayout
         if (this.wrap){
             final Bounds bounds = this.getBoundsVector();
 
-            for (Component.Layout.Text text: this.list(Component.Layout.Text.class)){
+            for (Component.Layout.TextQuery text: this.list(Component.Layout.TextQuery.class)){
 
                 text.layout(Component.Layout.Order.Content);
 
@@ -309,7 +309,7 @@ public class TextLayout
         else {
             w = 0; h = 0;
 
-            for (Component.Layout.Text text: this.list(Component.Layout.Text.class)){
+            for (Component.Layout.TextQuery text: this.list(Component.Layout.TextQuery.class)){
 
                 text.layout(Component.Layout.Order.Content);
 
@@ -327,7 +327,7 @@ public class TextLayout
                 text.setBoundsVector(shape);
                 text.relocated();
 
-                final Component.Layout.Text.Whitespace type = text.queryLayoutText();
+                final Component.Layout.TextQuery.Whitespace type = text.queryLayoutText();
 
                 switch(type){
                 case Vertical:

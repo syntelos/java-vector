@@ -18,6 +18,8 @@
  */
 package vector;
 
+import platform.Color;
+
 /**
  * Class typically returned by {@link Component#getRootContainer
  * Component getRootContainer}.
@@ -27,6 +29,15 @@ package vector;
 public interface Display
     extends Component.Container
 {
+
+    public boolean hasBackground();
+
+    public Color getBackground();
+
+    public Display setBackground(Color background);
+
+    public Display setBackground(String code);
+
 
     public boolean hasDocumentVector();
 

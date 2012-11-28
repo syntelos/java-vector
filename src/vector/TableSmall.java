@@ -86,7 +86,7 @@ public class TableSmall
 
         final Table.Layout layout = new Table.Layout(this,this.listContent(Component.class),this.cols,this.cellSpacing);
 
-        final Bounds bounds = layout.relocate();
+        final Bounds bounds = layout.content();
 
         this.setBoundsVector(bounds);
 

@@ -409,7 +409,7 @@ public interface Component
      * from, or is identical to the parent's bounding box.  All other
      * cases are in the "content" category. </p>
      * 
-     * @see Component$Layout$Text
+     * @see Component$Layout$TextQuery
      * @see TextLayout
      */
     public interface Layout
@@ -471,7 +471,7 @@ public interface Component
          * @see Component$Layout
          * @see TextLayout
          */
-        public interface Text
+        public interface TextQuery
             extends Layout
         {
             /**

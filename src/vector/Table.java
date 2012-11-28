@@ -168,10 +168,12 @@ public interface Table {
             }
             this.cs = cs;
 
-            this.index = new Table.Cell[count];
+            final int cellspace = (int)Math.ceil(count*1.5f);
 
-            this.colwidths = new float[count];
-            this.rowheights = new float[count];
+            this.index = new Table.Cell[cellspace];
+
+            this.colwidths = new float[cellspace];
+            this.rowheights = new float[cellspace];
 
             java.util.Arrays.fill(this.colwidths,0f);
             java.util.Arrays.fill(this.rowheights,0f);
@@ -226,25 +228,35 @@ public interface Table {
                         }
                     }
 
-                    Bounds cb = c.getBoundsVector();
-
-                    this.colwidths[cc] = Math.max(this.colwidths[cc],cb.width);
-                    this.rowheights[rr] = Math.max(this.rowheights[rr],cb.height);
+                    final Bounds cb = c.getBoundsVector();
 
                     if (c instanceof Table.Col.Span){
 
-                        int s = ((Table.Col.Span)c).getTableColSpan();
+                        final int s = ((Table.Col.Span)c).getTableColSpan();
                         if (1 < s){
 
                             spanCols += (s-1);
 
                             this.index[cx1] = new Table.Cell(rr,cc,s,cx1,c);
+
+
+                            this.colwidths[cc] = ColW(this.colwidths,cc,cb.width,s,this.cs);
+                            this.rowheights[rr] = RowH(this.rowheights[rr],cb.height);
                         }
-                        else
+                        else {
+
                             this.index[cx1] = new Table.Cell(rr,cc,1,cx1,c);
+
+                            this.colwidths[cc] = ColW(this.colwidths[cc],cb.width);
+                            this.rowheights[rr] = RowH(this.rowheights[rr],cb.height);
+                        }
                     }
-                    else
+                    else {
                         this.index[cx1] = new Table.Cell(rr,cc,1,cx1,c);
+
+                        this.colwidths[cc] = ColW(this.colwidths[cc],cb.width);
+                        this.rowheights[rr] = RowH(this.rowheights[rr],cb.height);
+                    }
 
                     this.index[cx1].setFrame(cb);
                 }
@@ -258,7 +270,7 @@ public interface Table {
          * @return New bounds for caller
          * @see TableSmall
          */
-        public final Bounds relocate(){
+        public final Bounds content(){
 
             int rr, cc, cx = 0, cx1;
             /*
@@ -274,7 +286,7 @@ public interface Table {
             this.width = (2f*this.cs);
             this.height = this.width;
 
-            definition:
+
             for (rr = 0; rr < this.rows; rr++){
 
                 dy = rowheights[rr];
@@ -298,12 +310,17 @@ public interface Table {
 
                         cell = this.index[cx1];
 
-                        cell.setFrame(xx,yy,dx,dy);
+                        if (null != cell){
 
-                        cell.component.setBoundsVector(cell);
-                        cell.component.relocated();
+                            cell.setFrame(xx,yy,dx,dy);
 
-                        spanCols += (cell.spanCol-1);
+                            cell.component.setBoundsVector(cell);
+                            cell.component.relocated();
+
+                            spanCols += (cell.spanCol-1);
+                        }
+                        else
+                            return this;
                     }
                     else {
 
@@ -315,12 +332,16 @@ public interface Table {
 
                             cell = this.index[cx1];
 
-                            cell.setFrame(xx,yy,dx,dy);
+                            if (null != cell){
+                                cell.setFrame(xx,yy,dx,dy);
 
-                            cell.component.setBoundsVector(cell);
-                            cell.component.relocated();
+                                cell.component.setBoundsVector(cell);
+                                cell.component.relocated();
 
-                            spanCols += (cell.spanCol-1);
+                                spanCols += (cell.spanCol-1);
+                            }
+                            else
+                                return this;
                         }
                         else {
 
@@ -342,7 +363,7 @@ public interface Table {
          * Fill a square table
          * @see TableBig
          */
-        public void resized(){
+        public void parent(){
 
             final Bounds bounds = this.parent.getBoundsVector();
 
@@ -360,31 +381,69 @@ public interface Table {
 
             int  rr = 0, cc = 0, cx = 0, cx1;
 
-            for (Table.Cell cell : this.index){
+            final int count = this.index.length;
 
-                if (rr != cell.row){
-                    yy += dy;
-                    rr = cell.row;
-                    xx = x0;
-                    cc = cell.col;
-                }
-                else if (cc != cell.col){
-                    if (0 == cell.col)
+
+            for (int idx = 0; idx < count; idx++){
+
+                Table.Cell cell = this.index[idx];
+
+                if (null != cell){
+
+                    if (rr != cell.row){
+                        yy += dy;
+                        rr = cell.row;
                         xx = x0;
-                    else
-                        xx += (dx*cell.spanCol);
+                        cc = cell.col;
+                    }
+                    else if (cc != cell.col){
+                        if (0 == cell.col)
+                            xx = x0;
+                        else
+                            xx += (dx*cell.spanCol);
 
-                    cc = cell.col;
+                        cc = cell.col;
+                    }
+
+                    Component c = cell.component;
+
+                    cell.setFrame(xx,yy,((cellWidth*cell.spanCol)+(this.cs*(cell.spanCol-1))),cellHeight);
+
+                    cell.component.setBoundsVector(cell);
+
+                    cell.component.resized();
                 }
-
-                Component c = cell.component;
-
-                cell.setFrame(xx,yy,((cellWidth*cell.spanCol)+(this.cs*(cell.spanCol-1))),cellHeight);
-
-                cell.component.setBoundsVector(cell);
-
-                cell.component.resized();
+                else
+                    return;
             }
+        }
+
+        public final static float ColW(float a, float b){
+            return Math.max(a,b);
+        }
+        public final static float ColW(float[] list, int lix, float cw, int span, float cs){
+
+            final int check = lix+span;
+
+            float sum = 0;
+            for (int li = lix; li < check; li++){
+                sum += list[li];
+            }
+
+            sum += (cs * (span-1));
+
+            if (sum < cw){
+
+                float add = (cw-sum)/span;
+
+                for (int li = lix; li < check; li++){
+                    list[li] += add;
+                }
+            }
+            return list[lix];
+        }
+        public final static float RowH(float a, float b){
+            return Math.max(a,b);
         }
     }
 

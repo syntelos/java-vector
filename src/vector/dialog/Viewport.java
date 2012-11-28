@@ -23,13 +23,15 @@ import vector.Button;
 import vector.Stroke;
 
 /**
- * List of viewport buttons that produce Viewport Size events.  These
- * events are interpreted by the platform Display.
+ * Dialog list of viewport buttons that produce {@link
+ * vector.Viewport$Size Viewport Size} events.
+ * 
+ * <p> These events are interpreted by the platform Display. </p>
  * 
  * @see Style
  */
 public class Viewport
-    extends Menu
+    extends Menu<vector.Viewport.Size>
 {
 
 

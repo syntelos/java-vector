@@ -29,4 +29,12 @@ public class Label
         super();
     }
 
+
+    @Override
+    public void init(){
+        super.init();
+
+        this.fixed = true;
+    }
+
 }

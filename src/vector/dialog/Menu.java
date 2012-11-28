@@ -53,9 +53,9 @@ public class Menu<E extends Enum<E>>
     public Menu(){
         super();
     }
-    public Menu(Class<Enum<E>> enumClass){
+    public Menu(Class enumClass){
         super();
-        this.enumClass = enumClass;
+        this.enumClass = (Class<Enum<E>>)enumClass;
     }
 
 
@@ -73,20 +73,22 @@ public class Menu<E extends Enum<E>>
 
         this.build();
     }
+    public final boolean isEnumClassActionLabel(){
+        final Class<Enum<E>> enumClass = this.enumClass;
+
+        return ((null != enumClass)&&
+                (ActionLabel.class.isAssignableFrom(enumClass)));
+    }
     public Menu build(){
         final Enum<E>[] values = this.enumValues();
 
         if (null != values){
 
-            this.style(this);
+            this.outline(this);
 
-            final boolean actionLabel = (ActionLabel.class.isAssignableFrom(this.enumClass));
+            final boolean actionLabel = this.isEnumClassActionLabel();
 
             final int count = values.length;
-
-            final String[] columns = new String[count];
-
-            int colw = 0;
 
             for (int cc = 0; cc < count; cc++){
 
@@ -97,33 +99,49 @@ public class Menu<E extends Enum<E>>
                 else
                     label = values[cc].toString();
 
-                columns[cc] = label;
-
-                colw = Math.max(colw,label.length());
-            }
-
-            for (int cc = 0; cc < count; cc++){
-
                 Button button = new Button();
                 {
                     this.add(button);
 
-                    this.style(button,values[cc],columns[cc],colw);
+                    this.style(button,values[cc],label);
                 }
             }
         }
         return this;
     }
-    public Menu style(Component.Bordered c){
+    /**
+     * Text style
+     */
+    public Menu style(vector.Text c){
 
         if (null != c){
+
+            c.setColor(Style.FG(0.8f));
+            c.setFont(Style.FontLarge());
+            c.setFixed(true);
+        }
+        return this;
+    }
+    /**
+     * Button / TextEdit style calls {@link #style(vector.Text)
+     * style(Text)}.
+     */
+    public Menu outline(Component.Bordered c){
+
+        if (null != c){
+
+            if (c instanceof vector.Text){
+
+                this.style( (vector.Text)c);
+            }
+
             Border border = new Border();
             {
                 c.setBorder(border);
 
                 border.setBackground(Style.BGD(0.5f));
-                border.setColor(Style.FG());
-                border.setColorOver(Style.NG());
+                border.setColor(Style.FG(0.8f));
+                border.setColorOver(Style.NG(0.8f));
                 border.setStyle(Border.Style.ROUND);
                 border.setArc(16.0);
                 border.setStroke(new Stroke(2f));
@@ -135,19 +153,14 @@ public class Menu<E extends Enum<E>>
     /**
      * Apply text, enum, and visual defaults to buttons
      */
-    public Menu style(Button button, Enum<E> value, String label, int columns){
+    public Menu style(Button button, Enum<E> value, String label){
 
-        this.style(button);
-
-        button.setCols(columns);
+        this.outline(button);
 
         button.setEnumClass(this.enumClass);
         button.setEnumValue(value);
 
         button.setText(label);
-
-        button.setColor(Style.FG());
-        button.setFont(Style.FontLarge());
 
         return this;
     }

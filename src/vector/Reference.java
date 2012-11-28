@@ -23,6 +23,8 @@ import json.Json;
 import java.util.StringTokenizer;
 
 /**
+ * <h3>Soft Glue</h3>
+ * 
  * Mutable reference operator works on the {@link Component} + {@link
  * json.Json JSON} tree to dereference values defined in the JSON
  * tree.  

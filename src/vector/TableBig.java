@@ -68,7 +68,7 @@ public class TableBig
         this.rows = layout.rows;
         this.cols = layout.cols;
 
-        layout.resized();
+        layout.parent();
     }
     public float getCellSpacing(){
         return this.cellSpacing;
