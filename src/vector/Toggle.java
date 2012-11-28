@@ -32,8 +32,12 @@ import java.lang.reflect.InvocationTargetException;
 
 
 /**
- * Abstract toggle button operators primarily for subclassing into
- * visual (output) implementations.
+ * Non - text toggle buttons: {@link Toggle$Rollover Rollover}, {@link
+ * Toggle$Check Check} and {@link Toggle$Colour Colour}.
+ * 
+ * @see Toggle$Rollover
+ * @see Toggle$Check
+ * @see Toggle$Colour
  */
 public abstract class Toggle<E extends Enum<E>>
     extends BorderComponent
@@ -365,7 +369,9 @@ public abstract class Toggle<E extends Enum<E>>
         }
     }
     /**
+     * Color palette picker
      * 
+     * @see ColorPalette
      */
     public static class Colour
         extends Toggle

@@ -19,7 +19,7 @@
 package vector;
 
 /**
- * Interfaces for children of {@link TableSmall} and {@link TableBig}.
+ * Interfaces for children of {@link TableSmall} and {@link TableSquare}.
  */
 public interface Table {
     /**
@@ -45,7 +45,7 @@ public interface Table {
     /**
      * Table cell bounds and (row,col) position
      * 
-     * @see TableBig
+     * @see TableSquare
      * @see TableSmall
      */
     public final class Cell
@@ -361,9 +361,9 @@ public interface Table {
         }
         /**
          * Fill a square table
-         * @see TableBig
+         * @see TableSquare
          */
-        public void parent(){
+        public void square(){
 
             final Bounds bounds = this.parent.getBoundsVector();
 

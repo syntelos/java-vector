@@ -2,9 +2,9 @@
 <jnlp
      spec="1.5+"
  codebase="http://java-vector.googlecode.com/git"
-     href="demo/span-tablebig.jnlp">
+     href="demo/span-tablesquare.jnlp">
   <information>
-    <title>Vector Demo 'span-tablebig'</title>
+    <title>Vector Demo 'span-tablesquare'</title>
     <vendor>The DigiVac Company</vendor>
     <homepage href="http://www.digivac.com/"/>
     <description>Vector scalable graphical user interfaces demo</description>
@@ -23,6 +23,6 @@
   </resources>
 
   <application-desc main-class="platform.Frame">
-    <argument>http://java-vector.googlecode.com/git/span-tablebig.json</argument>
+    <argument>http://java-vector.googlecode.com/git/span-tablesquare.json</argument>
   </application-desc>
 </jnlp>

@@ -18,7 +18,7 @@
                     "axis": "vertical"
                 },
                 {
-                    "class": "vector.TableBig",
+                    "class": "vector.TableSquare",
                     "bounds": "(0,0,3000,3000)",
                     "cellspacing": 2.0,
                     "components": [

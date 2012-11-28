@@ -3,7 +3,7 @@
     "bounds": "(0,0,1280,800)",
     "components": [
         {
-            "class": "vector.TableBig",
+            "class": "vector.TableSquare",
             "cellspacing": 2.0,
             "parent": true,
             "components": [

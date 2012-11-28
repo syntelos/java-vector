@@ -22,11 +22,11 @@ import json.Json;
 import json.ObjectJson;
 
 /**
- * {@link TableBig} defines set of equally sized children, changing
+ * {@link TableSquare} defines set of equally sized children, changing
  * both size and location and then calling {@link
  * Component#resized()}.
  */
-public class TableBig
+public class TableSquare
     extends Container
     implements Component.Layout
 {
@@ -36,7 +36,7 @@ public class TableBig
     protected int rows, cols;
 
 
-    public TableBig(){
+    public TableSquare(){
         super();
     }
 
@@ -68,18 +68,18 @@ public class TableBig
         this.rows = layout.rows;
         this.cols = layout.cols;
 
-        layout.parent();
+        layout.square();
     }
     public float getCellSpacing(){
         return this.cellSpacing;
     }
-    public TableBig setCellSpacing(float cellSpacing){
+    public TableSquare setCellSpacing(float cellSpacing){
         if (0.0 <= cellSpacing){
             this.cellSpacing = cellSpacing;
         }
         return this;
     }
-    public TableBig setCellSpacing(Float cellSpacing){
+    public TableSquare setCellSpacing(Float cellSpacing){
         if (null != cellSpacing)
             return this.setCellSpacing(cellSpacing.floatValue());
         else
