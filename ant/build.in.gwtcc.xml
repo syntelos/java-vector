@@ -1,0 +1,71 @@
+<project name="build-gwtcc" default="build-gwtcc-update">
+
+  <macrodef name="do-gwtcc">
+    <attribute name="src"/>
+    <attribute name="tgt"/>
+    <sequential>
+      <java classname="Gwtcc" fork="true" failonerror="true" includeAntRuntime="false">
+
+        <arg value="@{src}"/>
+
+        <arg value="@{tgt}"/>
+
+        <classpath>
+          <pathelement location="ant"/>
+          <fileset dir="ant">
+            <include name="**/gwtcc-*.jar"/>
+          </fileset>
+          <fileset dir="ant/lib">
+            <include name="**/*.jar"/>
+          </fileset>
+        </classpath>
+      </java>
+    </sequential>
+  </macrodef>
+
+
+  <property name="compiler.source" value="1.6"/>
+  <property name="compiler.target" value="1.6"/>
+  <property name="compiler.optimize" value="false"/>
+  <property name="compiler.debug" value="true"/>
+  <property name="compiler.deprecation" value="false"/>
+
+  <property file="${user.home}/update.properties"/>
+
+
+  <target name="build-gwtcc-update" if="build-gwtcc.update" depends="build-gwtcc-compile" description="Copy products to locations defined in '{user.home}/update.properties' name 'build-gwtcc.update'.">
+
+    <java classname="Update" fork="true" failonerror="true">
+
+      <arg value="build.in.gwtcc.xml:Gwtcc.java:Gwtcc.class"/>
+
+      <arg value="${build-gwtcc.update}"/>
+    </java>
+  </target>
+
+  <target name="build-gwtcc-compile">
+
+    <javac srcdir="${user.dir}"
+           optimize="${compiler.optimize}"
+           deprecation="${compiler.deprecation}"
+           debug="${compiler.debug}"
+           source="${compiler.source}"
+           target="${compiler.target}"
+           failonerror="true"
+	   includeAntRuntime="false">
+
+        <classpath>
+
+          <fileset dir="${user.dir}">
+
+            <include name="**/gwtcc-*.jar"/>
+          </fileset>
+          <fileset dir="${user.dir}/lib">
+
+            <include name="**/*.jar"/>
+          </fileset>
+        </classpath>
+    </javac>
+  </target>
+
+</project>
