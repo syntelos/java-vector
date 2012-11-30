@@ -400,10 +400,21 @@ public abstract class Toggle<E extends Enum<E>>
 
             if (null == this.palette){
 
-                final Container parent = this.getParentVector();
-
-                this.palette = parent.addUnique(new ColorPalette());
+                this.palette = new ColorPalette();
             }
+
+            final Container parent = this.getParentVector();
+
+            int idx = parent.indexOf(ColorPalette.class);
+            if (-1 < idx)
+                parent.remove(idx).destroy();
+            else
+                parent.add(this.palette);
+
+            parent.modified();
+
+            parent.outputScene();
+
             return true;
         }
         @Override
@@ -413,30 +424,6 @@ public abstract class Toggle<E extends Enum<E>>
         @Override
         public boolean setLow(){
             return false;
-        }
-        public boolean input(Event e){
-
-            if (super.input(e))
-                return true;
-            else {
-                switch(e.getType()){
-
-                case Action:{
-                    Event.NamedAction action = (Event.NamedAction)e;
-
-                    if (this.mouseIn && action.isValueClass(this.enumClass)){
-
-                        this.palette = null;
-
-                        return true;
-                    }
-                    else
-                        return false;
-                }
-                default:
-                    return false;
-                }
-            }
         }
         @Override
         public Colour outputScene(Context g){
@@ -455,6 +442,33 @@ public abstract class Toggle<E extends Enum<E>>
             this.toggle();
 
             this.outputScene();
+
+            return true;
+        }
+        public ColorPalette getPalette(){
+            return this.palette;
+        }
+        public Colour setPalette(ColorPalette c){
+
+            if (null != c){
+
+                this.palette = c;
+            }
+            return this;
+        }
+        public ObjectJson toJson(){
+
+            ObjectJson thisModel = super.toJson();
+
+            thisModel.setValue("palette", this.getPalette());
+
+            return thisModel;
+        }
+        public boolean fromJson(Json thisModel){
+
+            super.fromJson(thisModel);
+
+            this.setPalette( (ColorPalette)thisModel.getValue("palette",ColorPalette.class));
 
             return true;
         }

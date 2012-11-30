@@ -648,14 +648,27 @@ public class Display
 
                 c = this.add(c);
 
+                if (c instanceof Component.Build.InShow){
+
+                    ((Component.Build.InShow)c).build();
+                }
+
                 c.setVisibleVector(true);
 
                 this.modified();
 
                 this.center(c);
             }
-            else {
+            else if (c.isVisible()){
+
                 this.remove(idx).destroy();
+            }
+            else {
+                c.setVisibleVector(true);
+
+                this.modified();
+
+                this.center(c);
             }
             this.outputScene();
         }

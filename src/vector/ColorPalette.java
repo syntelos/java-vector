@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
  * Fixed swatch panel functions as dialog and button.
  */
 public class ColorPalette<E extends Enum<E>>
-    extends AbstractComponent
+    extends BorderComponent
     implements Event.NamedAction.Producer<E>,
                Event.NamedAction.Consumer<E>
 {

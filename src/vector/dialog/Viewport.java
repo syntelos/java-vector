@@ -39,4 +39,28 @@ public class Viewport
         super(vector.Viewport.Size.class);
     }
 
+
+    public static void main(String[] argv){
+
+        final platform.Frame frame = new platform.Frame();
+
+        frame.init();
+
+        final vector.Display display = frame.getDisplay();
+
+        display.setBackground(Style.BG());
+
+        final Viewport dialog = new Viewport();
+
+        display.show(dialog);
+
+        try {
+            json.Json scene = display.toJson();
+
+            System.out.println(scene);
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+    }
 }

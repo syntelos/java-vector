@@ -39,7 +39,8 @@ import json.ObjectJson;
  */
 public class Menu<E extends Enum<E>>
     extends vector.TableSmall
-    implements Event.NamedAction.Consumer<E>
+    implements Event.NamedAction.Consumer<E>,
+               Component.Build.InShow
 {
 
 
@@ -70,8 +71,6 @@ public class Menu<E extends Enum<E>>
         this.setCols(1);
 
         this.setCellSpacing(4);
-
-        this.build();
     }
     public final boolean isEnumClassActionLabel(){
         final Class<Enum<E>> enumClass = this.enumClass;
@@ -150,13 +149,19 @@ public class Menu<E extends Enum<E>>
         }
         return this;
     }
+    public Menu style(Button button, Enum<E> value){
+
+        return this.style(button,value,value.toString());
+    }
     /**
      * Apply text, enum, and visual defaults to buttons
      */
     public Menu style(Button button, Enum<E> value, String label){
 
         this.outline(button);
-
+        /*
+         * More than style
+         */
         button.setEnumClass(this.enumClass);
         button.setEnumValue(value);
 
