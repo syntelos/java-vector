@@ -1,0 +1,9 @@
+{
+    "bounds": "(0.0,0.0,1280.0,800.0)",
+    "background": "#ffefefef",
+    "components": [
+        {
+            "class": "vector.dialog.Viewport"
+        }
+    ]
+}
