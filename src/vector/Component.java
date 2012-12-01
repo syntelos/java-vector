@@ -1005,7 +1005,12 @@ public interface Component
         public static void DecodeComponents(Component.Container container, Json containerModel){
             List<Json> components = containerModel.getValue("components");
             if (null != components){
+
                 boolean updating = true;
+
+                Boolean init = containerModel.getValue("init",Boolean.class);
+                if (null != init && init.booleanValue())
+                    updating = false;
 
                 final int count = components.size();
                 for (int cc = 0; cc < count; cc++){
@@ -1038,9 +1043,20 @@ public interface Component
                                 try {
                                     Component component = componentClass.newInstance();
 
-                                    container.add(component);
+                                    if (component instanceof Component.Build.InShow &&
+                                        container instanceof Display)
+                                    {
+                                        Display display = (Display)container;
 
-                                    component.fromJson(componentModel);
+                                        Component.Build.InShow show = (Component.Build.InShow)component;
+
+                                        display.show(component);
+                                    }
+                                    else {
+                                        container.add(component);
+
+                                        component.fromJson(componentModel);
+                                    }
                                 }
                                 catch (InstantiationException exc){
 

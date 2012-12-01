@@ -692,7 +692,11 @@ public class Container
         thisModel.setValue("clip",this.getClip());
         thisModel.setValue("scale",this.getScale());
         thisModel.setValue("margin",this.getMargin());
-        thisModel.setValue("components",new ArrayJson(this));
+
+        if (!(this instanceof Component.Build)){
+
+            thisModel.setValue("components",new ArrayJson(this));
+        }
 
         if (this.hasTableColSpan()){
             thisModel.setValue("col-span",this.getTableColSpan());

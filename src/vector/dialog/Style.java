@@ -27,14 +27,24 @@ import java.io.IOException;
 import java.net.URL;
 
 /**
- * Named style properties from classpath resource or URL -- for scene
- * graph subtree components like those found in this package.
+ * Named style properties from classpath resource or URL.
  * 
- * <p> Coded subtrees employ the {@link vector.Component#init()
- * Component init} operator to build.  Those feature sets open in one
- * degree of freedom with the simple specification of classes of
- * colors and fonts. </p>
+ * <h3>Applications</h3>
  * 
+ * <p> Some components may employ Style values from the {@link
+ * vector.Component#init() Component init} or {@link
+ * vector.Component$Build build} operators. </p>
+ * 
+ * <p> The properties file is intended to benefit application
+ * packaging processes.  </p>
+ * 
+ * <h3>Not JSON?</h3>
+ * 
+ * <p> This class is not compatible with JSON operation because it
+ * depends on the properties I/O.  The idea could be applied to a JSON
+ * equivalent attached to the Display segment and employed by the
+ * members of the scene graph to pull values for (e.g. '@')
+ * aliases. </p>
  */
 public class Style
     extends java.lang.Object
@@ -250,6 +260,8 @@ public class Style
                     Color bg, Color bgd, Color fg, Color ok, Color ay, Color st, Color ng)
     {
         super();
+
+
         Font testFont = properties.getFont("fnt.data");
         if (null != testFont)
             this.fontSmall = testFont;
@@ -265,6 +277,7 @@ public class Style
                     throw new IllegalStateException("font.small");
             }
         }
+
         testFont = properties.getFont("fnt.fg");
         if (null != testFont)
             this.fontLarge = testFont;
@@ -300,11 +313,15 @@ public class Style
         Color testColor = properties.getColor("bg");
         if (null != testColor)
             this.bg = testColor;
-        else if (null != bg)
-            this.bg = bg;
-        else
-            throw new IllegalStateException("color.bg");
-
+        else {
+            testColor = properties.getColor("color.bg");
+            if (null != testColor)
+                this.bg = testColor;
+            else if (null != bg)
+                this.bg = bg;
+            else
+                throw new IllegalStateException("color.bg");
+        }
 
         testColor = properties.getColor("bgd");
         if (null != testColor)

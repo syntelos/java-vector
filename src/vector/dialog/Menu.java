@@ -29,13 +29,19 @@ import json.Json;
 import json.ObjectJson;
 
 /**
- * Enumerated list of menu buttons that produce menu events.  These events are
- * interpreted by the user.
+ * Dialog menu for Display show will drop on its action class.
  * 
- * These enums may return their labels via the {@link ActionLabel}
- * interface.
+ * <p> See {@link Viewport} for an example of an enumerated list of
+ * menu buttons that produce enum action events.  Typically these
+ * events are interpreted by a subclass.  In the Viewport case, the
+ * {@link vector.Viewport$Size Viewport Size} actions are interpreted
+ * by the {@link platform.Display platform Display}. </p>
+ * 
+ * <p> Action enums may return their labels via the {@link
+ * ActionLabel} interface. </p>
  * 
  * @see Style
+ * @see vector.Dialog
  */
 public class Menu<E extends Enum<E>>
     extends vector.TableSmall
@@ -197,42 +203,6 @@ public class Menu<E extends Enum<E>>
                     this.actionList = list;
             }
             return list.clone();
-        }
-    }
-    /**
-     * 
-     */
-    public boolean input(Event e){
-        if (super.input(e))
-            return true;
-        else {
-
-            switch(e.getType()){
-            case Action:{
-                Event.NamedAction action = (Event.NamedAction)e;
-
-                if (this.mouseIn && action.isValueClass(this.enumClass)){
-
-                    this.drop(this);
-
-                    /*
-                     * Can't do 
-                     *     this.drop(this)
-                     * and then
-                     *     this.outputScene()
-                     * because this has just been orphaned.
-                     * 
-                     * Another component must look at the event and
-                     * ask for output.
-                     */
-                    return true;
-                }
-                else
-                    return false;
-            }
-            default:
-                return false;
-            }
         }
     }
     public final Class<Enum<E>> getEnumClass(){

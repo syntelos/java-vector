@@ -20,6 +20,7 @@ package vector.dialog;
 
 import vector.Border;
 import vector.Button;
+import vector.Event;
 import vector.Stroke;
 
 /**
@@ -37,6 +38,44 @@ public class Viewport
 
     public Viewport(){
         super(vector.Viewport.Size.class);
+    }
+
+
+    /**
+     * 
+     */
+    public boolean input(Event e){
+        if (super.input(e))
+            return true;
+        else {
+
+            switch(e.getType()){
+            case Action:{
+                Event.NamedAction action = (Event.NamedAction)e;
+
+                if (this.mouseIn && action.isValueClass(this.enumClass)){
+
+                    this.drop(this);
+
+                    /*
+                     * Can't do 
+                     *     this.drop(this)
+                     * and then
+                     *     this.outputScene()
+                     * because this has just been orphaned.
+                     * 
+                     * Display will perform an outputScene for each
+                     * Action event.
+                     */
+                    return true;
+                }
+                else
+                    return false;
+            }
+            default:
+                return false;
+            }
+        }
     }
 
 

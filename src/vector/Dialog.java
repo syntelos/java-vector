@@ -27,10 +27,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Dialog is a {@link Container} that will drop itself from the scene
- * graph when it receives input in its own action enum class.
+ * <p> A dialog should be added to the {@link Display} using the
+ * <code>show</code> method, and may be dropped from the scene graph
+ * with <code>this.drop(this)</code>. </p>
  * 
- * A dialog should be added and removed from the {@link Display}.
+ * @see vector.dialog.Menu
  */
 public class Dialog<E extends Enum<E>>
     extends Container
@@ -75,8 +76,8 @@ public class Dialog<E extends Enum<E>>
                      *     this.outputScene()
                      * because this has just been orphaned.
                      * 
-                     * Another component must look at the event and
-                     * ask for output.
+                     * Display will perform an outputScene for each
+                     * Action event.
                      */
                     return true;
                 }
