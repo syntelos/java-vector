@@ -28,6 +28,7 @@ import platform.Color;
  */
 public class Display
     extends platform.Display
+    implements Terminal
 {
 
     public Display(){

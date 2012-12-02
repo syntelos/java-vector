@@ -153,7 +153,7 @@ public class Output
     }
     public void logon(){
 
-        final Display parent = this.getParentVector();
+        final Terminal parent = this.getParentVector();
         parent.logon();
     }
     @Override
@@ -391,7 +391,7 @@ public class Output
         return this;
     }
     public void layout(){
-        final Display parent = this.getParentVector();
+        final Terminal parent = this.getParentVector();
         final Bounds parentBounds = parent.getBoundsVector();
         final Input input = parent.getInput();
         final Bounds inputBounds = input.getBoundsVector();

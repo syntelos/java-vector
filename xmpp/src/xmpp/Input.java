@@ -118,7 +118,7 @@ public class Input
     }
     public void logon(){
 
-        final Display parent = this.getParentVector();
+        final Terminal parent = this.getParentVector();
         parent.logon();
     }
     public boolean input(Event e){
