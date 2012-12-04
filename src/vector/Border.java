@@ -350,7 +350,7 @@ public class Border
                 if (null != backgroundOver && mouseIn) 
                     g.setColor(backgroundOver);
                 else 
-                    g.setColor(this.background);
+                    g.setColor(background);
 
                 if (null != shape)
                     g.fill(shape);
