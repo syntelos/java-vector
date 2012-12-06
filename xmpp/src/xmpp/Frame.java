@@ -32,12 +32,6 @@ public class Frame
 
         return new Display();
     }
-    public Frame modified(){
-
-        this.display.modified();
-
-        return this;
-    }
 
 
     public static void main(String[] argv){
