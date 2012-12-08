@@ -73,6 +73,10 @@ public class XThread
 
         Instance().send(m);
     }
+    public final static void Send(xma.XAddress a, String m){
+
+        Instance().send(a,m);
+    }
     public final static void Status(XAddress.Full to){
 
         Instance().status(to);
@@ -262,7 +266,7 @@ public class XThread
         }
         return false;
     }
-    public boolean send(XAddress to, String m){
+    public boolean send(xma.XAddress to, String m){
 
         if (null != m){
             m = m.trim();
