@@ -1,0 +1,11 @@
+
+
+* resolve ObjectArray
+** spec for Object[]
+** used as Object
+** check for esidl change
+
+* resolve Constructor
+** merge to compilation unit
+** esidl change
+
