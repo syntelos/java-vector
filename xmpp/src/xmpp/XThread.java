@@ -262,6 +262,33 @@ public class XThread
         }
         return false;
     }
+    public boolean send(XAddress to, String m){
+
+        if (null != m){
+            m = m.trim();
+            if (0 < m.length()){
+
+                if (null != this.connection && null != to){
+
+                    Message message = new Message(to.toString(), this.messageType);
+                    message.setFrom(this.connection.getUser());
+                    message.setBody(m);
+
+                    this.connection.sendPacket(message);
+
+                    Output.Send(message);
+
+                    return true;
+
+                }
+                else if (null == this.connection)
+                    Output.Error("Send dropped for missing connection");
+                else
+                    Output.Error("Send dropped for missing contact");
+            }
+        }
+        return false;
+    }
     public void connect(){
 
         this.disconnect();

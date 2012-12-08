@@ -131,6 +131,17 @@ public class Frame
             display.modified();
         }
     }
+    /**
+     * For subclasses not using Frame eval or Display open
+     */
+    public void outputScene(){
+
+        Display display = this.display;
+        if (null != display){
+
+            display.outputScene();
+        }
+    }
     public final Frame warn(Throwable t, String fmt, Object... args){
 
         this.log.log(Level.WARNING,String.format(fmt,args),t);
