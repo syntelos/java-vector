@@ -3,7 +3,7 @@
 * resolve ObjectArray
 ** spec for Object[]
 ** used as Object
-** check for esidl change
+** review IDL and GWTCC for ESIDL change
 
 * resolve Constructor
 ** merge to compilation unit
