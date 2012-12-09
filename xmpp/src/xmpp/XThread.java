@@ -18,6 +18,8 @@
  */
 package xmpp;
 
+import xma.XAddress;
+
 import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.SASLAuthentication;
@@ -73,11 +75,11 @@ public class XThread
 
         Instance().send(m);
     }
-    public final static void Send(xma.XAddress a, String m){
+    public final static void Send(XAddress a, String m){
 
         Instance().send(a,m);
     }
-    public final static void Status(XAddress.Full to){
+    public final static void Status(XAddress to){
 
         Instance().status(to);
     }
@@ -140,7 +142,7 @@ public class XThread
     public boolean isEncrypted(){
         return (null != this.connection && this.connection.isSecureConnection());
     }
-    public void status(XAddress.Full to){
+    public void status(XAddress to){
 
         if (null != this.to && this.to.equals(to)){
 
@@ -266,7 +268,7 @@ public class XThread
         }
         return false;
     }
-    public boolean send(xma.XAddress to, String m){
+    public boolean send(XAddress to, String m){
 
         if (null != m){
             m = m.trim();
@@ -483,7 +485,7 @@ public class XThread
 
             Status.Update(p);
 
-            final XAddress to = new XAddress.From(p);
+            final XAddress to = new xmpp.XAddress.From(p);
 
             if (null == this.to){
                 this.to = to;
@@ -500,7 +502,7 @@ public class XThread
 
         case error:
 
-            Output.Error("error(%s)",(new XAddress.From(p)));
+            Output.Error("error(%s)",(new xmpp.XAddress.From(p)));
             break;
 
         default:
@@ -529,32 +531,32 @@ public class XThread
         switch(et){
         case WAIT:
 
-            Output.Error("error(WAIT, from: %s)",(new XAddress.From(m)));
+            Output.Error("error(WAIT, from: %s)",(new xmpp.XAddress.From(m)));
 
             break;
         case CANCEL:
 
-            Output.Error("error(CANCEL, from: %s)",(new XAddress.From(m)));
+            Output.Error("error(CANCEL, from: %s)",(new xmpp.XAddress.From(m)));
 
             break;
         case MODIFY:
 
-            Output.Error("error(MODIFY, from: %s)",(new XAddress.From(m)));
+            Output.Error("error(MODIFY, from: %s)",(new xmpp.XAddress.From(m)));
 
             break;
         case AUTH:
 
-            Output.Error("error(AUTH, from: %s)",(new XAddress.From(m)));
+            Output.Error("error(AUTH, from: %s)",(new xmpp.XAddress.From(m)));
 
             break;
         case CONTINUE:
 
-            Output.Error("error(CONTINUE, from: %s)",(new XAddress.From(m)));
+            Output.Error("error(CONTINUE, from: %s)",(new xmpp.XAddress.From(m)));
 
             break;
         default:
 
-            Output.Error("error(name: %s, from: %s)",et.name(),(new XAddress.From(m)));
+            Output.Error("error(name: %s, from: %s)",et.name(),(new xmpp.XAddress.From(m)));
             break;
         }
     }

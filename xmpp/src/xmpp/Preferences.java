@@ -18,6 +18,8 @@
  */
 package xmpp;
 
+import xma.XAddress;
+
 import org.jivesoftware.smack.util.StringUtils;
 
 import java.io.InputStream;
@@ -77,7 +79,7 @@ public class Preferences
     public final static String Host = "Host";
 
     public final static String GetHost(){
-        return Instance().get(Host,XAddress.Default.Host);
+        return Instance().get(Host,xmpp.XAddress.Default.Host);
     }
     public final static void SetHost(String m){
         if (null != m){
@@ -105,7 +107,7 @@ public class Preferences
     public final static String Resource = "Resource";
 
     public final static String GetResource(){
-        return Instance().get(Resource,XAddress.Default.Resource);
+        return Instance().get(Resource,xmpp.XAddress.Default.Resource);
     }
     public final static String ComposeResource(){
         return (Preferences.GetResource()+'.'+Preferences.GetSession());
@@ -128,7 +130,7 @@ public class Preferences
     }
     public final static XAddress ComposeLogon(){
 
-        return new XAddress.From();
+        return new xmpp.XAddress.From();
     }
     public final static void SetLogon(String m){
         if (null != m){
@@ -144,7 +146,7 @@ public class Preferences
     }
     public final static String GetToIdentifier(){
         try {
-            return (new XAddress.To()).identifier;
+            return (new xmpp.XAddress.To()).identifier;
         }
         catch (IllegalArgumentException notFound){
             return null;
@@ -152,7 +154,7 @@ public class Preferences
     }
     public final static String GetToLogon(){
         try {
-            return (new XAddress.To()).logon;
+            return (new xmpp.XAddress.To()).logon;
         }
         catch (IllegalArgumentException notFound){
             return null;
@@ -160,7 +162,7 @@ public class Preferences
     }
     public final static XAddress ComposeTo(){
 
-        return new XAddress.To();
+        return new xmpp.XAddress.To();
     }
     public final static void SetTo(String m){
         if (null != m){
@@ -176,7 +178,7 @@ public class Preferences
     public final static String Port = "Port";
 
     public final static int GetPort(){
-        return Instance().getInt(Port,XAddress.Default.Port);
+        return Instance().getInt(Port,xmpp.XAddress.Default.Port);
     }
     public final static void SetPort(int m){
         if (0 < m){

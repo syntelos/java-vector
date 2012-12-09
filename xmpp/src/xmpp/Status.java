@@ -18,6 +18,8 @@
  */
 package xmpp;
 
+import xma.XAddress;
+
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 
@@ -61,7 +63,7 @@ public class Status
     }
     public static Status Select(String to){
         if (null != to && 0 < to.length())
-            return Instance().select(new XAddress.Identifier(to));
+            return Instance().select(new xmpp.XAddress.Identifier(to));
         else
             return Instance();
     }
@@ -154,7 +156,7 @@ public class Status
         }
         public void update(Presence p){
 
-            this.address = new XAddress.From(p);
+            this.address = new xmpp.XAddress.From(p);
 
             Border border = this.getBorder();
 
@@ -319,7 +321,7 @@ public class Status
     }
     public Status receive(Message m){
 
-        final XAddress from = new XAddress.From(m);
+        final XAddress from = new xmpp.XAddress.From(m);
         Label label = this.search(from);
 
         switch(m.getType()){
@@ -347,7 +349,7 @@ public class Status
     }
     public Status update(Presence p){
 
-        final XAddress from = new XAddress.From(p);
+        final XAddress from = new xmpp.XAddress.From(p);
 
         Label label = this.search(from);
 
