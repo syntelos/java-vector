@@ -1,4 +1,12 @@
 
+Portable pixel programming
+
+  Objective 
+
+    A vector application is portable to the platforms with which it
+    compiles (ant build script).
+
+
   Solution set
 
     A common library of platform adaptation for vector is defined as a
@@ -71,7 +79,7 @@
 
   Planned future platforms
 
-    Android
+    Android, Html5 & WebGL
 
   Possible future platforms
 
