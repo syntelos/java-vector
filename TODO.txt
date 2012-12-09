@@ -1,9 +1,4 @@
 
-* build esidl
-** esidl/src/
-** configure
-** make
-
 * ant esidl
 ** src: html/idl
 ** tgt: html/lib/src

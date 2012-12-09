@@ -1,0 +1,15 @@
+<project name="esidl" default="make">
+
+  <target name="configure">
+
+    <exec executable="configure" />
+
+  </target>
+
+  <target name="make" depends="configure">
+
+    <exec executable="make" />
+
+  </target>
+
+</project>
