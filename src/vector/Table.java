@@ -189,7 +189,7 @@ public interface Table {
             Component c = null;
 
             measurement:
-            for (rr = 0; ; rr++){
+            for (rr = 0; 0 < this.cols; rr++){
 
                 for (cc = 0; cc < this.cols; cc++){
 
