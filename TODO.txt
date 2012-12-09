@@ -1,11 +1,9 @@
 
-* ant esidl
-** src: html/idl
-** tgt: html/lib/src
-
-* ant html
-** see html/TODO.txt
-
 * ant android
 ** for src in $(find awt -type f ); do tgt=$(echo $src | sed 's/awt/android/g'); cat $src > $tgt; done
 
+* ant html
+** ant esidl
+*** src: html/idl
+*** tgt: html/lib/src
+** see html/TODO.txt
