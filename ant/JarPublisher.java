@@ -468,11 +468,16 @@ public class JarPublisher
             if (name.startsWith(this.name) && name.endsWith(".jar")){
 
                 String version = name.substring(index);
-                while ('-' == version.charAt(0))
-                    version = version.substring(1);
+                if (0 < version.length() && '-' == version.charAt(0)){
 
-                final char number = version.charAt(0);
-                return ('0' <= number && '9' >= number);
+                    while (0 < version.length() && '-' == version.charAt(0))
+                        version = version.substring(1);
+
+                    if (0 < version.length()){
+                        final char number = version.charAt(0);
+                        return ('0' <= number && '9' >= number);
+                    }
+                }
             }
         }
         return false;

@@ -8,6 +8,7 @@
   <property name="dst" value="."/>
 
   <property name="awt.src" value="awt/src"/>
+  <property name="android.src" value="android/src"/>
   <property name="demo.src" value="demo/src"/>
   <property name="geda.src" value="geda/src"/>
   <property name="fonview.src" value="fonview/src"/>
@@ -24,6 +25,7 @@
   <import file="ant/build.in.version.xml"/>
   <property file="${user.home}/update.properties"/>
   <import file="ant/build.in.update.xml"/>
+  <import file="ant/build.in.android.xml"/>
 
 
 
@@ -40,6 +42,7 @@
   <target name="signed" description="Rebuild all jars and sign">
     <antcall target="update"/>
     <antcall target="awt"/>
+    <antcall target="android"/>
     <antcall target="demo"/>
     <antcall target="geda"/>
     <antcall target="fonview"/>
@@ -50,6 +53,7 @@
   <target name="unsigned" description="Rebuild all jars">
     <antcall target="update"/>
     <antcall target="awt"/>
+    <antcall target="android"/>
     <antcall target="demo"/>
     <antcall target="geda"/>
     <antcall target="fonview"/>
@@ -104,6 +108,68 @@
       <arg value="${toString:lib.path}"/>
     </java>
   </target>
+
+
+  <target name="android" if="vector.android.update" depends="android-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.android.update'.">
+
+    <do-update src="${target.android.jar}" tgt="${vector.android.update}" />
+  </target>
+
+  <target name="android-jar" depends="android-compile" description="Package android jar, clean bin.">
+
+    <echo message="Main-Class: platform.Frame"/>
+    <echo message="Class-Path: ${android.lib.path.manifest}"/>
+
+    <delete file="${existing.android.jar}"/>
+
+    <jar jarfile="${target.android.jar}" basedir="${bin}" >
+      <manifest>
+        <attribute name="Main-Class" value="platform.Frame"/>
+        <attribute name="Class-Path" value="${android.lib.path.manifest}"/>
+      </manifest>
+    </jar>
+
+    <delete dir="${bin}"/>
+  </target>
+
+  <target name="android-compile" depends="android-version">
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+    <copy todir="${bin}">
+      <fileset dir="${android.src}" includes="**/*.properties"/>
+      <fileset dir="${android.src}" includes="**/*.txt"/>
+      <fileset dir="${android.src}" includes="**/*.xml"/>
+    </copy>
+    <javac includeAntRuntime="false" includeJavaRuntime="false" srcdir="${android.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <bootclasspath>
+        <pathelement location="${android.rt.jar}"/>
+      </bootclasspath>
+      <classpath>
+        <path refid="lib.path"/>
+        <pathelement location="${existing.vector.jar}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="android-version" depends="version">
+
+    <define-android-rt api="10" property="android.rt.jar" />
+
+    <fail message="Failed android.rt.jar">
+      <condition>
+        <not>
+          <isset property="android.rt.jar"/>
+        </not>
+      </condition>
+    </fail>
+
+    <java outputproperty="android.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
+      <arg value="${target.vector.jar}"/>
+      <arg value="${toString:lib.path}"/>
+    </java>
+  </target>
+
 
 
   <target name="demo" depends="demo-compile" description="Package demo jar, clean bin.  Depends on the target jar.">
@@ -481,6 +547,7 @@
     <version/>
     <property name="target.vector.jar" value="${dst}/${ant.project.name}-${this.version}.jar"/>
     <property name="target.awt.jar" value="${dst}/${ant.project.name}-awt-${this.version}.jar"/>
+    <property name="target.android.jar" value="${dst}/${ant.project.name}-android-${this.version}.jar"/>
     <property name="target.demo.jar" value="${dst}/${ant.project.name}-demo-${this.version}.jar"/>
     <property name="target.geda.jar" value="${dst}/${ant.project.name}-geda-${this.version}.jar"/>
     <property name="target.fonview.jar" value="${dst}/${ant.project.name}-fonview-${this.version}.jar"/>
@@ -493,6 +560,9 @@
     </java>
     <java outputproperty="existing.awt.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
       <arg value="${ant.project.name}-awt"/>
+    </java>
+    <java outputproperty="existing.android.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
+      <arg value="${ant.project.name}-android"/>
     </java>
     <java outputproperty="existing.demo.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
       <arg value="${ant.project.name}-demo"/>
@@ -528,17 +598,6 @@
   <target name="minor" description="Increment version minor number and report result.">
     <version-minor/>
     <version/>
-  </target>
-
-  <target name="android-version">
-
-    <java outputproperty="android.lib.path" classpath="${ant}" classname="AndroidLibPath" failonerror="true" fork="true">
-
-      <arg value="10"/>
-    </java>
-
-    <echo message="Android-Lib-Path: ${android.lib.path}"/>
-
   </target>
 
 </project>

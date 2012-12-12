@@ -1,0 +1,56 @@
+<project name="build-android" default="build-android-update">
+
+  <macrodef name="define-android-rt">
+    <attribute name="api"/>
+    <attribute name="property"/>
+    <sequential>
+      <java outputproperty="@{property}" classname="AndroidLibPath" fork="true" failonerror="true">
+
+        <arg value="@{api}"/>
+
+        <classpath>
+          <pathelement location="ant"/>
+        </classpath>
+      </java>
+
+      <echo>         @{property} ${@{property}}
+      </echo>
+
+    </sequential>
+  </macrodef>
+
+
+  <property name="compiler.source" value="1.6"/>
+  <property name="compiler.target" value="1.6"/>
+  <property name="compiler.optimize" value="false"/>
+  <property name="compiler.debug" value="true"/>
+  <property name="compiler.deprecation" value="false"/>
+
+  <property file="${user.home}/update.properties"/>
+
+
+  <target name="build-android-update" if="build-android.update" depends="build-android-compile" description="Copy products to locations defined in '{user.home}/update.properties' name 'build-android.update'.">
+
+    <java classname="Update" fork="true" failonerror="true">
+
+      <arg value="build.in.android.xml:AndroidLibPath.java:AndroidLibPath.class"/>
+
+      <arg value="${build-android.update}"/>
+    </java>
+  </target>
+
+  <target name="build-android-compile">
+
+    <javac srcdir="${user.dir}"
+           optimize="${compiler.optimize}"
+           deprecation="${compiler.deprecation}"
+           debug="${compiler.debug}"
+           source="${compiler.source}"
+           target="${compiler.target}"
+           failonerror="true"
+	   includeAntRuntime="false">
+
+    </javac>
+  </target>
+
+</project>
