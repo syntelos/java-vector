@@ -392,52 +392,54 @@ public class Output
     }
     public void layout(){
         final Terminal parent = this.getParentVector();
-        final Bounds parentBounds = parent.getBoundsVector();
-        final Input input = parent.getInput();
-        final Bounds inputBounds = input.getBoundsVector();
-        final Bounds thisBounds = this.getBoundsVector();
-        {
-            thisBounds.x = 0f;
-            thisBounds.y = 0f;
-            if (inputBounds.isEmpty())
-                thisBounds.height = (parentBounds.height-46f);
-            else
-                thisBounds.height = (parentBounds.height-inputBounds.height-16f);
+        if (null != parent){
+            final Bounds parentBounds = parent.getBoundsVector();
+            final Input input = parent.getInput();
+            final Bounds inputBounds = input.getBoundsVector();
+            final Bounds thisBounds = this.getBoundsVector();
+            {
+                thisBounds.x = 0f;
+                thisBounds.y = 0f;
+                if (inputBounds.isEmpty())
+                    thisBounds.height = (parentBounds.height-46f);
+                else
+                    thisBounds.height = (parentBounds.height-inputBounds.height-16f);
 
-            thisBounds.width = parentBounds.width;
+                thisBounds.width = parentBounds.width;
 
-            this.setBoundsVector(thisBounds);
+                this.setBoundsVector(thisBounds);
 
-            final float xx = 4f;
-            float yy = thisBounds.height;
+                final float xx = 4f;
+                float yy = thisBounds.height;
 
 
-            final Component.Iterator<Component> cit = this.listContent(Component.class).reverse();
+                final Component.Iterator<Component> cit = this.listContent(Component.class).reverse();
 
-            for (Component c: cit){
+                for (Component c: cit){
 
-                Bounds cb = c.getBoundsVector();
-                yy -= (cb.height+4f);
+                    Bounds cb = c.getBoundsVector();
+                    yy -= (cb.height+4f);
 
-                if (0f < yy){
-                    cb.x = xx;
-                    cb.y = yy;
-                    cb.width = thisBounds.width;
+                    if (0f < yy){
+                        cb.x = xx;
+                        cb.y = yy;
+                        cb.width = thisBounds.width;
 
-                    c.setBoundsVector(cb);
-                }
-                else {
-                    this.remove(c);
-                    c.destroy();
+                        c.setBoundsVector(cb);
+                    }
+                    else {
+                        this.remove(c);
+                        c.destroy();
+                    }
                 }
             }
-        }
-        {
-            inputBounds.x = 4f;
-            inputBounds.y = (thisBounds.y+thisBounds.height+4f);
-            inputBounds.width = parentBounds.width;
+            {
+                inputBounds.x = 4f;
+                inputBounds.y = (thisBounds.y+thisBounds.height+4f);
+                inputBounds.width = parentBounds.width;
 
-            input.setBoundsVector(inputBounds);
+                input.setBoundsVector(inputBounds);
+            }
         }
     }
     public Output clear(){

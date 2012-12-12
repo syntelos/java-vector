@@ -261,15 +261,19 @@ public class Status
         super.layout();
 
         Bounds b = this.getBoundsVector();
-        Bounds p = this.getParentVector().getBoundsVector();
 
-        b.y = 16f;
-        b.x = (p.width-b.width-20f);
+        final Component parent = this.getParentVector();
+        if (null != parent){
+            Bounds p = parent.getBoundsVector();
 
-        this.setBoundsVector(b);
+            b.y = 16f;
+            b.x = (p.width-b.width-20f);
 
-        Border border = this.getBorder();
-        border.layout();
+            this.setBoundsVector(b);
+
+            Border border = this.getBorder();
+            border.layout();
+        }
     }
     public Label search(XAddress addr){
 

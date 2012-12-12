@@ -494,21 +494,24 @@ public class Container
     }
     public Container outputScene(Context g){
 
-        if (this.clip)
-            this.clipFrom(g);
-        else
-            this.transformFrom(g);
+        if (this.visible){
 
-        for (Component c: this){
+            if (this.clip)
+                this.clipFrom(g);
+            else
+                this.transformFrom(g);
 
-            if (c.isVisible()){
+            for (Component c: this){
 
-                Context cg = g.create();
-                try {
-                    c.outputScene(cg);
-                }
-                finally {
-                    cg.dispose();
+                if (c.isVisible()){
+
+                    Context cg = g.create();
+                    try {
+                        c.outputScene(cg);
+                    }
+                    finally {
+                        cg.dispose();
+                    }
                 }
             }
         }
@@ -516,21 +519,24 @@ public class Container
     }
     public Container outputOverlay(Context g){
 
-        if (this.clip)
-            this.clipFrom(g);
-        else
-            this.transformFrom(g);
+        if (this.visible){
 
-        for (Component c: this){
+            if (this.clip)
+                this.clipFrom(g);
+            else
+                this.transformFrom(g);
 
-            if (c.isVisible()){
+            for (Component c: this){
 
-                Context cg = g.create();
-                try {
-                    c.outputOverlay(cg);
-                }
-                finally {
-                    cg.dispose();
+                if (c.isVisible()){
+
+                    Context cg = g.create();
+                    try {
+                        c.outputOverlay(cg);
+                    }
+                    finally {
+                        cg.dispose();
+                    }
                 }
             }
         }
