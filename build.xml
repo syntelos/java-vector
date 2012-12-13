@@ -7,6 +7,7 @@
   <property name="lib" value="lib"/>
   <property name="dst" value="."/>
 
+  <property name="platform.src" value="platform/src"/>
   <property name="awt.src" value="awt/src"/>
   <property name="android.src" value="android/src"/>
   <property name="demo.src" value="demo/src"/>
@@ -41,8 +42,9 @@
 
   <target name="signed" description="Rebuild all jars and sign">
     <antcall target="update"/>
+    <antcall target="platform"/>
     <antcall target="awt"/>
-    <antcall target="android"/>
+    <!-- antcall target="android"/ -->
     <antcall target="demo"/>
     <antcall target="geda"/>
     <antcall target="fonview"/>
@@ -52,13 +54,62 @@
 
   <target name="unsigned" description="Rebuild all jars">
     <antcall target="update"/>
+    <antcall target="platform"/>
     <antcall target="awt"/>
-    <antcall target="android"/>
+    <!-- antcall target="android"/ -->
     <antcall target="demo"/>
     <antcall target="geda"/>
     <antcall target="fonview"/>
     <antcall target="xmpp"/>
     <!-- antcall target="llg"/ -->
+  </target>
+
+
+  <target name="platform" if="vector.platform.update" depends="platform-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.platform.update'.">
+
+    <do-update src="${target.platform.jar}" tgt="${vector.platform.update}" />
+  </target>
+
+  <target name="platform-jar" depends="platform-compile" description="Package platform jar, clean bin.">
+
+    <echo message="Main-Class: platform.Frame"/>
+    <echo message="Class-Path: ${platform.lib.path.manifest}"/>
+
+    <delete file="${existing.platform.jar}"/>
+
+    <jar jarfile="${target.platform.jar}" basedir="${bin}" >
+      <manifest>
+        <attribute name="Main-Class" value="platform.Frame"/>
+        <attribute name="Class-Path" value="${platform.lib.path.manifest}"/>
+      </manifest>
+    </jar>
+
+    <delete dir="${bin}"/>
+  </target>
+
+  <target name="platform-compile" depends="platform-version">
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+    <copy todir="${bin}">
+      <fileset dir="${platform.src}" includes="**/*.properties"/>
+      <fileset dir="${platform.src}" includes="**/*.txt"/>
+      <fileset dir="${platform.src}" includes="**/*.xml"/>
+    </copy>
+    <javac includeAntRuntime="false" srcdir="${platform.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <path refid="lib.path"/>
+        <pathelement location="${existing.vector.jar}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="platform-version" depends="version">
+
+    <java outputproperty="platform.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
+      <arg value="${target.vector.jar}"/>
+      <arg value="${toString:lib.path}"/>
+    </java>
   </target>
 
 
@@ -245,7 +296,7 @@
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
-        <pathelement location="${existing.awt.jar}"/>
+        <pathelement location="${existing.platform.jar}"/>
         <path refid="lib.path"/>
       </classpath>
     </javac>
@@ -290,7 +341,7 @@
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
-        <pathelement location="${existing.awt.jar}"/>
+        <pathelement location="${existing.platform.jar}"/>
         <path refid="lib.path"/>
       </classpath>
     </javac>
@@ -371,7 +422,7 @@
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
-        <pathelement location="${existing.awt.jar}"/>
+        <pathelement location="${existing.platform.jar}"/>
         <path refid="lib.path"/>
         <path refid="xmpp.lib.path"/>
       </classpath>
@@ -429,7 +480,7 @@
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
-        <pathelement location="${existing.awt.jar}"/>
+        <pathelement location="${existing.platform.jar}"/>
         <path refid="lib.path"/>
       </classpath>
     </javac>
@@ -476,7 +527,7 @@
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
-        <pathelement location="${existing.awt.jar}"/>
+        <pathelement location="${existing.platform.jar}"/>
         <path refid="lib.path"/>
       </classpath>
     </javac>
@@ -525,7 +576,7 @@
            classpathref="lib.path" source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <path refid="lib.path"/>
-        <pathelement location="${existing.awt.jar}"/>
+        <pathelement location="${existing.platform.jar}"/>
       </classpath>
     </javac>
   </target>
@@ -546,6 +597,7 @@
   <target name="version" description="Report current version.">
     <version/>
     <property name="target.vector.jar" value="${dst}/${ant.project.name}-${this.version}.jar"/>
+    <property name="target.platform.jar" value="${dst}/${ant.project.name}-platform-${this.version}.jar"/>
     <property name="target.awt.jar" value="${dst}/${ant.project.name}-awt-${this.version}.jar"/>
     <property name="target.android.jar" value="${dst}/${ant.project.name}-android-${this.version}.jar"/>
     <property name="target.demo.jar" value="${dst}/${ant.project.name}-demo-${this.version}.jar"/>
@@ -557,6 +609,9 @@
 
     <java outputproperty="existing.vector.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
       <arg value="${ant.project.name}"/>
+    </java>
+    <java outputproperty="existing.platform.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
+      <arg value="${ant.project.name}-platform"/>
     </java>
     <java outputproperty="existing.awt.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
       <arg value="${ant.project.name}-awt"/>
