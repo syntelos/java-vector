@@ -26,7 +26,7 @@ import vector.Bounds;
  * 
  */
 public class Ellipse
-    extends java.awt.geom.Ellipse2D.Float
+    extends Object
     implements vector.geom.Ellipse
 {
 
@@ -34,13 +34,13 @@ public class Ellipse
         super();
     }
     public Ellipse(float x, float y, float w, float h){
-        super(x,y,w,h);
+        super();
     }
 
 
     public Bounds getBoundsVector(){
 
-        return new Bounds(this.x,this.y,this.width,this.height);
+        return null;
     }
     public Path toPath(){
         return new Path(this);

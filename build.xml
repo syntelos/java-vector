@@ -41,8 +41,11 @@
   <available property="available.signing.properties" file="signing.properties"/>
 
   <target name="prove" description="Compile all packages">
+
     <antcall target="vector-jar-prove" inheritRefs="true"/>
-    <antcall target="platform-prove" inheritRefs="true"/>
+
+    <antcall target="platform-jar" inheritRefs="true"/>
+
     <antcall target="awt-prove" inheritRefs="true"/>
 
     <antcall target="android-compile" inheritRefs="true"/>
@@ -55,8 +58,9 @@
   </target>
 
   <target name="signed" description="Rebuild all jars and sign">
+
     <antcall target="vector-update-awt" inheritRefs="true"/>
-    <antcall target="platform" inheritRefs="true"/>
+
     <antcall target="awt" inheritRefs="true"/>
 
     <antcall target="demo-update-awt" inheritRefs="true"/>
@@ -67,8 +71,9 @@
   </target>
 
   <target name="unsigned" description="Rebuild all jars">
+
     <antcall target="vector-update-awt" inheritRefs="true"/>
-    <antcall target="platform" inheritRefs="true"/>
+
     <antcall target="awt" inheritRefs="true"/>
 
     <antcall target="demo-update-awt" inheritRefs="true"/>
@@ -115,14 +120,14 @@
 
   <target name="platform-jar" depends="platform-compile" description="Package platform jar, clean bin.">
 
-    <echo message="Main-Class: platform.Frame"/>
+
     <echo message="Class-Path: ${platform.lib.path.manifest}"/>
 
     <delete file="${existing.platform.jar}"/>
 
     <jar jarfile="${target.platform.jar}" basedir="${bin}" >
       <manifest>
-        <attribute name="Main-Class" value="platform.Frame"/>
+
         <attribute name="Class-Path" value="${platform.lib.path.manifest}"/>
       </manifest>
     </jar>
@@ -133,11 +138,7 @@
   <target name="platform-compile" depends="platform-version">
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
-    <copy todir="${bin}">
-      <fileset dir="${platform.src}" includes="**/*.properties"/>
-      <fileset dir="${platform.src}" includes="**/*.txt"/>
-      <fileset dir="${platform.src}" includes="**/*.xml"/>
-    </copy>
+
     <javac includeAntRuntime="false" srcdir="${platform.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
@@ -160,7 +161,7 @@
     </javac>
   </target>
 
-  <target name="platform-version" depends="version">
+  <target name="platform-version" unless="platform.lib.path.manifest" depends="version">
 
     <java outputproperty="platform.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${target.vector.jar}"/>
@@ -241,14 +242,13 @@
 
   <target name="android-jar" depends="android-compile" description="Package android jar, clean bin.">
 
-    <echo message="Main-Class: platform.Frame"/>
     <echo message="Class-Path: ${android.lib.path.manifest}"/>
 
     <delete file="${existing.android.jar}"/>
 
     <jar jarfile="${target.android.jar}" basedir="${bin}" >
       <manifest>
-        <attribute name="Main-Class" value="platform.Frame"/>
+
         <attribute name="Class-Path" value="${android.lib.path.manifest}"/>
       </manifest>
     </jar>
@@ -268,6 +268,7 @@
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <path refid="lib.path"/>
+        <pathelement location="${target.platform.jar}"/><!-- delete-me when platform is awt-free -->
         <pathelement location="${target.vector.jar}"/>
       </classpath>
       <bootclasspath>

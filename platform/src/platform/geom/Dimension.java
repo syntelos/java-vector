@@ -22,7 +22,7 @@ package platform.geom;
  * 
  */
 public class Dimension
-    extends java.awt.geom.Dimension2D
+    extends Object
     implements vector.geom.Dimension
 {
     public float width, height;
@@ -67,7 +67,7 @@ public class Dimension
         this.height = (float)height;
     }
     public Dimension clone(){
-        return (Dimension)super.clone();
+        return null;
     }
     protected StringBuilder toStringBuilder(){
         StringBuilder string = new StringBuilder();
