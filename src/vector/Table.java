@@ -258,7 +258,7 @@ public interface Table {
                         this.rowheights[rr] = RowH(this.rowheights[rr],cb.height);
                     }
 
-                    this.index[cx1].setFrame(cb);
+                    this.index[cx1].setFrameVector(cb);
                 }
             }
             this.rows = rr;

@@ -26,18 +26,67 @@ import vector.Bounds;
  * 
  */
 public class Rectangle
-    extends java.awt.geom.Rectangle2D.Float
+    extends Object
     implements vector.geom.Rectangle
 {
+
+    public float x, y, width, height;
+
 
     public Rectangle(){
         super();
     }
     public Rectangle(float x, float y, float w, float h){
-        super(x,y,w,h);
+        super();
     }
 
 
+    public boolean isEmpty(){
+        return false;
+    }
+    public double getX(){
+        return 0;
+    }
+    public double getY(){
+        return 0;
+    }
+    public double getWidth(){
+        return 0;
+    }
+    public double getHeight(){
+        return 0;
+    }
+    public double getMinX(){
+        return 0;
+    }
+    public double getMinY(){
+        return 0;
+    }
+    public double getMaxX(){
+        return 0;
+    }
+    public double getMaxY(){
+        return 0;
+    }
+    public double getCenterX(){
+        return 0;
+    }
+    public double getCenterY(){
+        return 0;
+    }
+    public void setFrame(double x, double y, double w, double h){
+    }
+    public void setFrameVector(vector.geom.RectangularShape r){
+    }
+    public boolean contains(int x, int y){
+        return false;
+    }
+    public boolean contains(float x, float y){
+        return false;
+    }
+    public boolean contains(vector.geom.RectangularShape r){
+        return false;
+    }
     public Bounds getBoundsVector(){
 
         return new Bounds(this.x,this.y,this.width,this.height);
@@ -47,5 +96,8 @@ public class Rectangle
     }
     public String toString(){
         return Path.ToString(this);
+    }
+    public Rectangle clone(){
+        return null;
     }
 }

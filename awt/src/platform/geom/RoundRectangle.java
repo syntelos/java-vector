@@ -38,6 +38,22 @@ public class RoundRectangle
     }
 
 
+    public void setFrameVector(vector.geom.RectangularShape r){
+
+        super.setFrame(r.getX(),r.getY(),r.getWidth(),r.getHeight());
+    }
+    public boolean contains(vector.geom.RectangularShape r){
+
+        return super.contains(r.getX(),r.getY(),r.getWidth(),r.getHeight());
+    }
+    public boolean contains(int x, int y){
+
+        return super.contains(x,y);
+    }
+    public boolean contains(float x, float y){
+
+        return super.contains(x,y);
+    }
     public Bounds getBoundsVector(){
 
         return new Bounds(this.x,this.y,this.width,this.height);

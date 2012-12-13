@@ -185,7 +185,7 @@ public abstract class AbstractComponent
     public final Component setBoundsVector(Bounds bounds){
         if (null != bounds){
 
-            this.bounds.setFrame(bounds);
+            this.bounds.setFrame(bounds.x,bounds.y,bounds.width,bounds.height);
         }
         return this;
     }

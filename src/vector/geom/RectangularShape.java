@@ -49,4 +49,12 @@ public interface RectangularShape
 
     public void setFrame(double x, double y, double w, double h);
 
+    public void setFrameVector(RectangularShape r);
+
+    public boolean contains(int x, int y);
+
+    public boolean contains(float x, float y);
+
+    public boolean contains(RectangularShape r);
+
 }

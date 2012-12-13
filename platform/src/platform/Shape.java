@@ -19,6 +19,7 @@
 package platform;
 
 public interface Shape
+    extends java.lang.Cloneable
 {
 
     public vector.Bounds getBoundsVector();

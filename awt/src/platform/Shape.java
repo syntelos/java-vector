@@ -19,7 +19,8 @@
 package platform;
 
 public interface Shape
-    extends java.awt.Shape
+    extends java.awt.Shape,
+            java.lang.Cloneable
 {
 
     public vector.Bounds getBoundsVector();

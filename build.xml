@@ -40,30 +40,71 @@
 
   <available property="available.signing.properties" file="signing.properties"/>
 
+  <target name="prove" description="Compile all packages">
+    <antcall target="vector-jar-prove" inheritRefs="true"/>
+    <antcall target="platform-prove" inheritRefs="true"/>
+    <antcall target="awt-prove" inheritRefs="true"/>
+
+    <antcall target="android-compile" inheritRefs="true"/>
+
+    <antcall target="demo-prove" inheritRefs="true"/>
+    <antcall target="geda-prove" inheritRefs="true"/>
+    <antcall target="fonview-prove" inheritRefs="true"/>
+    <antcall target="xmpp-prove" inheritRefs="true"/>
+
+  </target>
+
   <target name="signed" description="Rebuild all jars and sign">
-    <antcall target="vector-update-awt"/>
-    <antcall target="platform"/>
-    <antcall target="awt"/>
-    <antcall target="android"/>
-    <antcall target="demo-update-awt"/>
-    <antcall target="geda-update-awt"/>
-    <antcall target="fonview-update-awt"/>
-    <antcall target="xmpp-sign-awt"/>
+    <antcall target="vector-update-awt" inheritRefs="true"/>
+    <antcall target="platform" inheritRefs="true"/>
+    <antcall target="awt" inheritRefs="true"/>
+
+    <antcall target="demo-update-awt" inheritRefs="true"/>
+    <antcall target="geda-update-awt" inheritRefs="true"/>
+    <antcall target="fonview-update-awt" inheritRefs="true"/>
+    <antcall target="xmpp-sign-awt" inheritRefs="true"/>
 
   </target>
 
   <target name="unsigned" description="Rebuild all jars">
-    <antcall target="vector-update-awt"/>
-    <antcall target="platform"/>
-    <antcall target="awt"/>
-    <antcall target="android"/>
-    <antcall target="demo-update-awt"/>
-    <antcall target="geda-update-awt"/>
-    <antcall target="fonview-update-awt"/>
-    <antcall target="xmpp-update-awt"/>
+    <antcall target="vector-update-awt" inheritRefs="true"/>
+    <antcall target="platform" inheritRefs="true"/>
+    <antcall target="awt" inheritRefs="true"/>
+
+    <antcall target="demo-update-awt" inheritRefs="true"/>
+    <antcall target="geda-update-awt" inheritRefs="true"/>
+    <antcall target="fonview-update-awt" inheritRefs="true"/>
+    <antcall target="xmpp-update-awt" inheritRefs="true"/>
 
   </target>
 
+  <target name="help" description="Overview">
+    <echo>
+
+      A number of processes have been defined here for proving
+      portability, and building libraries and demos.  The processes
+      themselves are very basic, but numerous.  This script just glues
+      together the correct identifiers for a convenient, productive,
+      and reproducible process.
+
+      Some of the corner cases that are implied by the rules and
+      scripts defined here are unintended.  For example,
+      vector-X.Y.Z.jar can be generated with manifest class-path for
+      the portability proof vector-platform-X.Y.Z.jar and then
+      accidently employed in a runtime.
+
+      The primary entry points have target names without hyphens.  See
+      "ant -p" for a listing.
+
+      The "ant jar" (and "signed" and "unsigned") entry points are
+      employed for operational runtimes.
+
+      The "ant prove" entry points are employed for a compilation test
+      of portability.  These products have no runtime.  In a runtime,
+      these binaries will produce "java.lang.NoSuchMethodError".
+
+    </echo>
+  </target>
   <!-- 
     - PLATFORM
     -->
@@ -102,6 +143,19 @@
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${existing.vector.jar}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="platform-prove" depends="version">
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+
+    <javac includeAntRuntime="false" srcdir="${platform.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <path refid="lib.path"/>
+        <pathelement location="${target.vector.jar}"/>
       </classpath>
     </javac>
   </target>
@@ -156,6 +210,19 @@
     </javac>
   </target>
 
+  <target name="awt-prove" depends="version">
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+
+    <javac includeAntRuntime="false" srcdir="${awt.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <path refid="lib.path"/>
+        <pathelement location="${target.vector.jar}"/>
+      </classpath>
+    </javac>
+  </target>
+
   <target name="awt-version" depends="version">
 
     <java outputproperty="awt.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
@@ -189,7 +256,7 @@
     <delete dir="${bin}"/>
   </target>
 
-  <target name="android-compile" depends="vector-jar-prove,android-version">
+  <target name="android-compile" depends="android-version">
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -265,14 +332,10 @@
     </javac>
   </target>
 
-  <target name="demo-prove" depends="vector-jar-prove" description="Compile against platform for proof of portability.">
+  <target name="demo-prove" depends="version" description="Compile against platform for proof of portability.">
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
-    <copy todir="${bin}">
-      <fileset dir="${demo.src}" includes="**/*.properties"/>
-      <fileset dir="${demo.src}" includes="**/*.txt"/>
-      <fileset dir="${demo.src}" includes="**/*.xml"/>
-    </copy>
+
     <javac includeAntRuntime="false" srcdir="${demo.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
@@ -282,7 +345,7 @@
     </javac>
   </target>
 
-  <target name="demo-version-awt" depends="version">
+  <target name="demo-version-awt" unless="demo.lib.path.manifest" depends="version">
 
     <java outputproperty="demo.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
@@ -329,14 +392,10 @@
     </javac>
   </target>
 
-  <target name="geda-prove" depends="vector-jar-prove" description="Compile against platform for proof of portability.">
+  <target name="geda-prove" depends="version" description="Compile against platform for proof of portability.">
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
-    <copy todir="${bin}">
-      <fileset dir="${geda.src}" includes="**/*.properties"/>
-      <fileset dir="${geda.src}" includes="**/*.txt"/>
-      <fileset dir="${geda.src}" includes="**/*.xml"/>
-    </copy>
+
     <javac includeAntRuntime="false" srcdir="${geda.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
@@ -347,7 +406,7 @@
     </javac>
   </target>
 
-  <target name="geda-version-awt" depends="version">
+  <target name="geda-version-awt" unless="geda.lib.path.manifest" depends="version">
 
     <java outputproperty="geda.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
@@ -394,14 +453,11 @@
     </javac>
   </target>
 
-  <target name="fonview-prove" depends="vector-jar-prove" description="Compile against platform for proof of portability.">
+  <target name="fonview-prove" depends="version" description="Compile against platform for proof of portability.">
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
-    <copy todir="${bin}">
-      <fileset dir="${fonview.src}" includes="**/*.properties"/>
-      <fileset dir="${fonview.src}" includes="**/*.txt"/>
-      <fileset dir="${fonview.src}" includes="**/*.xml"/>
-    </copy>
+
     <javac includeAntRuntime="false" srcdir="${fonview.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
@@ -412,7 +468,7 @@
     </javac>
   </target>
 
-  <target name="fonview-version-awt" depends="version">
+  <target name="fonview-version-awt" unless="fonview.lib.path.manifest" depends="version">
 
     <java outputproperty="fonview.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
@@ -496,15 +552,11 @@
     </javac>
   </target>
 
-  <target name="xmpp-prove" depends="vector-jar-prove,xmpp-version" description="Compile against platform for proof of portability.">
+  <target name="xmpp-prove" depends="xmpp-version" description="Compile against platform for proof of portability.">
 
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
-    <copy todir="${bin}">
-      <fileset dir="${xmpp.src}" includes="**/*.properties"/>
-      <fileset dir="${xmpp.src}" includes="**/*.txt"/>
-      <fileset dir="${xmpp.src}" includes="**/*.xml"/>
-    </copy>
+
     <javac includeAntRuntime="false" srcdir="${xmpp.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
@@ -516,7 +568,7 @@
     </javac>
   </target>
 
-  <target name="xmpp-version" depends="version">
+  <target name="xmpp-version" unless="xmpp.lib.path.manifest" depends="version">
 
     <path id="xmpp.lib.path">
 
@@ -573,14 +625,11 @@
     </javac>
   </target>
 
-  <target name="jogl-prove" depends="vector-jar-prove" description="Compile against platform for proof of portability.">
+  <target name="jogl-prove" depends="version" description="Compile against platform for proof of portability.">
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
-    <copy todir="${bin}">
-      <fileset dir="${jogl.src}" includes="**/*.properties"/>
-      <fileset dir="${jogl.src}" includes="**/*.txt"/>
-      <fileset dir="${jogl.src}" includes="**/*.xml"/>
-    </copy>
+
     <javac includeAntRuntime="false" srcdir="${jogl.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
@@ -591,7 +640,7 @@
     </javac>
   </target>
 
-  <target name="jogl-version" depends="version">
+  <target name="jogl-version" unless="jogl.lib.path.manifest" depends="version">
 
     <java outputproperty="jogl.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
@@ -638,26 +687,22 @@
     </javac>
   </target>
 
-  <target name="llg-prove" depends="vector-jar-prove" description="Compile against platform for proof of portability.">
+  <target name="llg-prove" depends="version" description="Compile against platform for proof of portability.">
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
-    <copy todir="${bin}/fonts">
-      <fileset dir="${llg.dir}/fonts" includes="**/futural.jhf,**/markers.jhf"/>
-    </copy>
-    <copy todir="${bin}/models">
-      <fileset dir="${llg.dir}/models" includes="**/*.emf"/>
-    </copy>
+
     <javac includeAntRuntime="false" srcdir="${llg.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
-        <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${target.vector.jar}"/>
         <pathelement location="${existing.platform.jar}"/>
         <path refid="lib.path"/>
       </classpath>
     </javac>
   </target>
 
-  <target name="llg-version" depends="version">
+  <target name="llg-version" unless="llg.lib.path.manifest" depends="version">
 
     <java outputproperty="llg.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
@@ -676,13 +721,13 @@
   <target name="vector-jar-awt" depends="vector-compile-awt" description="Package bin to target jar, clean bin.">
 
     <echo message="Main-Class: platform.Frame"/>
-    <echo message="Class-Path: ${vector.lib.path.manifest}"/>
+    <echo message="Class-Path: ${vector.lib.path.manifest.awt}"/>
 
     <delete file="${existing.vector.jar}"/>
     <jar jarfile="${target.vector.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="platform.Frame"/>
-        <attribute name="Class-Path" value="${vector.lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${vector.lib.path.manifest.awt}"/>
       </manifest>
     </jar>
     <delete dir="${bin}"/>
@@ -705,29 +750,30 @@
     </javac>
   </target>
 
-  <target name="vector-jar-prove" depends="vector-prove" description="Package bin to target jar, clean bin.">
+  <target name="vector-jar-prove" unless="cond.vector.jar.prove" depends="vector-prove" description="Package bin to target jar, clean bin.">
 
-    <echo message="Main-Class: platform.Frame"/>
-    <echo message="Class-Path: ${vector.lib.path.manifest}"/>
+    <property name="cond.vector.jar.prove" value="false"/>
+
+
+    <echo message="Class-Path: ${vector.lib.path.manifest.prove}"/>
 
     <delete file="${existing.vector.jar}"/>
     <jar jarfile="${target.vector.jar}" basedir="${bin}" >
       <manifest>
-        <attribute name="Main-Class" value="platform.Frame"/>
-        <attribute name="Class-Path" value="${vector.lib.path.manifest}"/>
+
+        <attribute name="Class-Path" value="${vector.lib.path.manifest.prove}"/>
       </manifest>
     </jar>
     <delete dir="${bin}"/>
   </target>
 
-  <target name="vector-prove" depends="vector-version-prove" description="Compile against platform for proof of portability.">
+  <target name="vector-prove" unless="cond.vector.prove" depends="vector-version-prove" description="Compile against platform for proof of portability.">
+
+    <property name="cond.vector.prove" value="false"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
-    <copy todir="${bin}">
-      <fileset dir="${src}" includes="**/*.properties"/>
-      <fileset dir="${src}" includes="**/*.txt"/>
-      <fileset dir="${src}" includes="**/*.xml"/>
-    </copy>
+
     <javac includeAntRuntime="false" srcdir="${src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            classpathref="lib.path" source="${compiler.source}" target="${compiler.target}">
       <classpath>
@@ -737,17 +783,17 @@
     </javac>
   </target>
 
-  <target name="vector-version-awt" depends="version">
+  <target name="vector-version-awt" unless="vector.lib.path.manifest.awt" depends="version">
 
-    <java outputproperty="vector.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="vector.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
   </target>
 
-  <target name="vector-version-prove" depends="version">
+  <target name="vector-version-prove" unless="vector.lib.path.manifest.prove" depends="version">
 
-    <java outputproperty="vector.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="vector.lib.path.manifest.prove" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.platform.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
@@ -758,7 +804,7 @@
     <delete dir="${bin}"/>
   </target>
 
-  <target name="version" description="Report current version.">
+  <target name="version" unless="this.version" description="Report current version.">
     <version/>
     <property name="target.vector.jar" value="${dst}/${ant.project.name}-${this.version}.jar"/>
     <property name="target.platform.jar" value="${dst}/${ant.project.name}-platform-${this.version}.jar"/>
