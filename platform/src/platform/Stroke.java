@@ -24,11 +24,31 @@ import json.Json;
  * 
  */
 public abstract class Stroke
-    extends java.awt.BasicStroke
+    extends Object
 {
 
     public Stroke(float lineWidth, int endCap, int lineJoin, float miterLimit, float[] dashArray, float dashPhase){
-        super(lineWidth,endCap,lineJoin,miterLimit,dashArray,dashPhase);
+        super();
+    }
+
+    public float getLineWidth(){
+        return 0;
+    }
+    public int getEndCap(){
+        return 0;
+    }
+    public int getLineJoin(){
+        return 0;
+    }
+    public float getMiterLimit(){
+        return 0;
+    }
+    public float[] getDashArray(){
+
+        return null;
+    }
+    public float getDashPhase(){
+        return 0;
     }
 
 }

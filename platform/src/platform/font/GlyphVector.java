@@ -30,38 +30,18 @@ public class GlyphVector
     implements vector.font.GlyphVector
 {
 
-    private final java.awt.font.GlyphVector vector;
 
-    private final int count;
-
-
-    public GlyphVector(java.awt.font.GlyphVector vector, int count){
+    public GlyphVector(Object vector, int count){
         super();
-        if (null != vector && -1 < count){
-            this.vector = vector;
-            this.count = count;
-        }
-        else
-            throw new IllegalArgumentException();
     }
 
 
     public Shape createOutline(Point baseline){
 
-        return new Path(this.vector.getOutline(baseline.x,baseline.y));
+        return null;
     }
     public float[] queryPositions(Point baseline){
 
-        final int c = (this.count+1);
-
-        float[] positions = this.vector.getGlyphPositions(0,c,new float[c<<1]);
-
-        for (int cc = 0; cc < c; cc++){
-            int ix = (cc<<1);
-            int iy = (ix+1);
-            positions[ix] += baseline.x;
-            positions[iy] += baseline.y;
-        }
-        return positions;
+        return null;
     }
 }

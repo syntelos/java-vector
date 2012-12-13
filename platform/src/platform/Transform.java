@@ -24,7 +24,6 @@ import vector.geom.RectangularShape;
 
 import platform.geom.Point;
 
-import java.awt.geom.NoninvertibleTransformException;
 import java.util.StringTokenizer;
 
 /**
@@ -32,7 +31,7 @@ import java.util.StringTokenizer;
  * here, or need to add (overriding) method definitions here.
  */
 public class Transform
-    extends java.awt.geom.AffineTransform
+    extends Object
 {
     public static Transform getTranslateInstance(double tx, double ty){
         Transform t = new Transform();
@@ -79,33 +78,9 @@ public class Transform
     }
     public Transform(String string){
         super();
-        if (null != string){
-            StringTokenizer strtok = new StringTokenizer(string,"][)(,");
-            switch(strtok.countTokens()){
-            case 0:
-                break;
-            case 6:
-                try {
-                    final double m00 = Double.parseDouble(strtok.nextToken());
-                    final double m01 = Double.parseDouble(strtok.nextToken());
-                    final double m02 = Double.parseDouble(strtok.nextToken());
-                    final double m10 = Double.parseDouble(strtok.nextToken());
-                    final double m11 = Double.parseDouble(strtok.nextToken());
-                    final double m12 = Double.parseDouble(strtok.nextToken());
-
-                    this.setTransform(m00,m10,m01,m11,m02,m12);
-                }
-                catch (RuntimeException exc){
-                    throw new IllegalArgumentException(string,exc);
-                }
-                break;
-            default:
-                throw new IllegalArgumentException(string);
-            }
-        }
     }
     public Transform(java.awt.geom.AffineTransform t){
-        super(t);
+        super();
     }
 
 
@@ -115,51 +90,86 @@ public class Transform
 
         this.setToIdentity();
     }
-    /**
-     * Transform from coordinate space
-     */
+
+    public void getMatrix(double[] m){
+    }
+    public double getDeterminant(){
+        return 0;
+    }
+    public double getScaleX(){
+        return 0;
+    }
+    public double getScaleY(){
+        return 0;
+    }
+    public double getShearX(){
+        return 0;
+    }
+    public double getShearY(){
+        return 0;
+    }
+    public double getTranslateX(){
+        return 0;
+    }
+    public double getTranslateY(){
+        return 0;
+    }
+    public void translate(double tx, double ty){
+    }
+    public void rotate(double theta){
+    }
+    public void rotate(double theta, double anchorx, double anchory){
+    }
+    public void rotate(double vecx, double vecy){
+    }
+    public void scale(double sx, double sy){
+    }
+    public void shear(double shx, double shy){
+    }
+    public void setToIdentity(){
+    }
+    public void setToTranslation(double tx, double ty){
+    }
+    public void setToRotation(double theta){
+    }
+    public void setToRotation(double theta, double anchorx, double anchory){
+    }
+    public void setToRotation(double rx, double ry, double cx, double cy){
+    }
+    public void setToRotation(double rx, double ry){
+    }
+    public void setToScale(double sx, double sy){
+    }
+    public void setToShear(double shx, double shy){
+    }
+    public void setTransform(Transform tx){
+    }
+    public void setTransform(double... m){
+    }
+    public void concatenate(Transform tx){
+    }
+    public void preConcatenate(Transform tx){
+    }
+    public Point inverseTransform(Point src, Point dst){
+
+        return dst;
+    }
+    public void inverseTransform(float[] src, int sofs, float[] dst, int dofs, int count){
+    }
+    public void invert(){
+    }
+    public boolean isIdentity(){
+        return false;
+    }
+
     public Bounds transform(Bounds in){
-        double[] src = new double[]{
-            in.x, in.y,
-            (in.x+in.width), (in.y+in.height)
-        };
-        double[] tgt = new double[4];
-
-        super.transform(src,0,tgt,0,2);
-
-        in.x = (float)tgt[0];
-        in.y = (float)tgt[1];
-        in.width = (float)(tgt[2]-tgt[0]);
-        in.height = (float)(tgt[3]-tgt[1]);
 
         return in;
     }
-    /**
-     * Transform to coordinate space
-     */
     public Bounds inverseTransform(Bounds in){
-        double[] src = new double[]{
-            in.x, in.y,
-            (in.x+in.width), (in.y+in.height)
-        };
-        double[] tgt = new double[4];
-        try {
-            super.inverseTransform(src,0,tgt,0,2);
 
-            in.x = (float)tgt[0];
-            in.y = (float)tgt[1];
-            in.width = (float)(tgt[2]-tgt[0]);
-            in.height = (float)(tgt[3]-tgt[1]);
-
-            return in;
-        }
-        catch (NoninvertibleTransformException exc){
-            throw new IllegalStateException(this.toString(),exc);
-        }
+        return in;
     }
-    /**
-     * Scale from coordinate space
-     */
     public Bounds scaleFrom(Bounds in){
 
         final double sx = this.getScaleX();
@@ -172,9 +182,6 @@ public class Transform
 
         return in;
     }
-    /**
-     * Scale to coordinate space
-     */
     public Bounds scaleTo(Bounds in){
 
         final double sx = this.getScaleX();
@@ -187,9 +194,6 @@ public class Transform
 
         return in;
     }
-    /**
-     * Define scale as internal scale from external
-     */
     public Transform scaleFromAbsolute(Bounds internal, RectangularShape external){
 
         this.inverse = null;
@@ -198,9 +202,6 @@ public class Transform
 
         return this;
     }
-    /**
-     * Define scale with internal scale from external
-     */
     public Transform scaleFromRelative(Bounds internal, RectangularShape external){
 
         this.inverse = null;
@@ -209,9 +210,6 @@ public class Transform
 
         return this;
     }
-    /**
-     * Define scale as internal scale to external
-     */
     public Transform scaleToAbsolute(Bounds internal, RectangularShape external){
 
         this.inverse = null;
@@ -220,9 +218,6 @@ public class Transform
 
         return this;
     }
-    /**
-     * Define scale with internal scale to external
-     */
     public Transform scaleToRelative(Bounds internal, RectangularShape external){
 
         this.inverse = null;
@@ -239,56 +234,26 @@ public class Transform
 
         return this;
     }
-    /**
-     * Common input transformation from parent to child -- this is the
-     * parent transform.
-     */
     public Point transformFrom(Point source){
-        try {
-            Point target = new Point(0,0);
-            /*
-             * The transform arithmetic is double, and the point class
-             * will store to float
-             */
-            this.inverseTransform(source,target);
 
-            return target;
-        }
-        catch (NoninvertibleTransformException exc){
-            throw new IllegalStateException(this.toString(),exc);
-        }
+        Point target = new Point(0,0);
+
+        this.inverseTransform(source,target);
+
+        return target;
     }
-    /**
-     * Common graphics transformation from parent to child -- this is
-     * the parent transform.
-     * 
-     * @param g Graphics context
-     * 
-     * @return The argument graphics context (not a clone or copy)
-     */
     public Context transformFrom(Context g){
 
         g.transform(this);
 
         return g;
     }
-    @Override
     public Transform createInverse(){
-        Transform inverse = this.inverse;
-        if (null == inverse){
-            try {
 
-                return (this.inverse = new Transform( super.createInverse()));
-            }
-            catch (NoninvertibleTransformException exc){
-                throw new IllegalStateException(this.toString(),exc);
-            }
-        }
-        else
-            return inverse;
+        return inverse;
     }
     public Transform clone(){
-        return (Transform)super.clone();
+        return null;
     }
     public String toString(){
         final double[] matrix = new double[6];

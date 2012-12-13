@@ -19,7 +19,6 @@
 package platform;
 
 public interface Shape
-    extends java.awt.Shape
 {
 
     public vector.Bounds getBoundsVector();

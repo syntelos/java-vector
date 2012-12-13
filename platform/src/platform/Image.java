@@ -29,12 +29,12 @@ public class Image
     extends Object
     implements vector.Image
 {
-    private final static java.awt.Toolkit TK = java.awt.Toolkit.getDefaultToolkit();
+
 
 
     public final URL source;
 
-    protected java.awt.Image nativeImage;
+    protected Object nativeImage;
 
 
     public Image(Class context, String resource){
@@ -44,11 +44,6 @@ public class Image
         super();
         if (null != url){
             this.source = url;
-            this.nativeImage = TK.createImage(url);
-            /*
-             * bg load to original size
-             */
-            TK.prepareImage(this.nativeImage,-1,-1,null);
         }
         else
             throw new IllegalArgumentException();
@@ -56,31 +51,17 @@ public class Image
 
 
     public int getWidth(){
-        java.awt.Image nativeImage = this.nativeImage;
-        if (null != nativeImage)
-            return nativeImage.getWidth(null);
-        else
-            return 0;
+        return 0;
     }
     public int getHeight(){
-        java.awt.Image nativeImage = this.nativeImage;
-        if (null != nativeImage)
-            return nativeImage.getHeight(null);
-        else
-            return 0;
+        return 0;
     }
     public void flush(){
-
-        java.awt.Image nativeImage = this.nativeImage;
-        if (null != nativeImage){
-            this.nativeImage = null;
-
-            nativeImage.flush();
-        }
+        this.nativeImage = null;
     }
     public Context blit(Context g){
-        java.awt.Image nativeImage = this.nativeImage;
-        if (null != nativeImage){
+
+        if (null != this.nativeImage){
 
             g.draw(this);
             return g;
