@@ -20,10 +20,9 @@ package platform;
 
 import vector.Bounds;
 
-import json.Json;
-import json.Reader;
-
+import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,21 +37,52 @@ public class Frame
 {
 
 
-    protected final static Dimension2D screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    protected volatile static DisplayMetrics screen;
 
-    protected final static int width = (int)(((float)screen.getWidth())/2.0f);
-    protected final static int height = (int)(((float)screen.getHeight())/2.0f);
+    protected volatile static int width = 0;
+    protected volatile static int height = 0;
 
-    protected final static int x = (width/2);
-    protected final static int y = (height/2);
+    protected volatile static int x = 0;
+    protected volatile static int y = 0;
 
 
+
+    protected static void Init(DisplayMetrics screen){
+
+        if (null != screen){
+
+            Frame.screen = screen;
+
+            final int w0 = screen.widthPixels;
+            final int h0 = screen.heightPixels;
+
+            final int sw, sh;
+            if (w0 > h0){
+                sw = w0;
+                sh = h0;
+            }
+            else {
+                sw = h0;
+                sh = w0;
+            }
+
+            Frame.width = sw;
+            Frame.height = sh;
+
+            Frame.x = 0;
+            Frame.y = 0;
+        }
+    }
     public final static Bounds Center(Bounds b){
 
-        if (null != b){
+        final float fw = Frame.width;
 
-            final float sx = Frame.width;
-            final float sy = Frame.height;
+        if (null != b && 0.0f != fw){
+
+            final float fh = Frame.height;
+
+            final float sx = (fw/2);
+            final float sy = (fh/2);
 
             final float bx = (b.width/2);
             final float by = (b.height/2);
@@ -65,27 +95,9 @@ public class Frame
 
     protected final Logger log = Logger.getLogger(this.getClass().getName());
 
-    protected Display display;
-
 
     public Frame(){
-        this(null);
-    }
-    public Frame(String title){
-        super((null == title)?("Vector"):(title));
-
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        this.setSize(Frame.width,Frame.height);
-
-        this.setLocation(Frame.x,Frame.y);
-
-        this.add((this.display = this.createDisplay()), BorderLayout.CENTER);
-
-        this.display.setSize(width,height);
-
-        this.pack();
-        this.show();
+        super();
     }
 
 
@@ -93,6 +105,12 @@ public class Frame
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Resources resources = this.getResources();
+
+        if (null != resources){
+
+            Frame.Init(resources.getDisplayMetrics());
+        }
     }
     @Override
     protected void onStart() {
@@ -119,53 +137,7 @@ public class Frame
         super.onDestroy();
 
     }
-    public Display getDisplay(){
 
-        return this.display;
-    }
-    public Display createDisplay(){
-
-        return new Display();
-    }
-    public void init(){
-
-        Display display = this.display;
-        if (null != display){
-
-            display.init();
-        }
-    }
-    public void destroy(){
-
-        Display display = this.display;
-        if (null != display){
-            this.display = null;
-            display.destroy();
-        }
-        this.dispose();
-    }
-    /**
-     * For subclasses not using Frame eval or Display open
-     */
-    public void modified(){
-
-        Display display = this.display;
-        if (null != display){
-
-            display.modified();
-        }
-    }
-    /**
-     * For subclasses not using Frame eval or Display open
-     */
-    public void outputScene(){
-
-        Display display = this.display;
-        if (null != display){
-
-            display.outputScene();
-        }
-    }
     public final Frame warn(Throwable t, String fmt, Object... args){
 
         this.log.log(Level.WARNING,String.format(fmt,args),t);
@@ -192,11 +164,11 @@ public class Frame
     }
     public final boolean open(File file){
 
-        return this.display.open(file);
+        return false;
     }
     public final boolean open(URL url){
 
-        return this.display.open(url);
+        return false;
     }
     public final boolean eval(String[] cli){
         if (0 < cli.length){
@@ -252,18 +224,4 @@ public class Frame
         }
     }
 
-
-
-
-    public static void main(String[] argv){
-
-        final Frame frame = new Frame();
-
-        frame.init();
-
-        if (frame.eval(argv))
-            return;
-        else
-            System.exit(1);
-    }
 }

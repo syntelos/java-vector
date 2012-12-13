@@ -142,13 +142,13 @@
     </copy>
     <javac includeAntRuntime="false" includeJavaRuntime="false" srcdir="${android.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
-      <bootclasspath>
-        <pathelement location="${android.rt.jar}"/>
-      </bootclasspath>
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${existing.vector.jar}"/>
       </classpath>
+      <bootclasspath>
+        <pathelement location="${android.rt.jar}"/>
+      </bootclasspath>
     </javac>
   </target>
 
