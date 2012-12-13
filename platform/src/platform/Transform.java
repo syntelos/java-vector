@@ -79,7 +79,7 @@ public class Transform
     public Transform(String string){
         super();
     }
-    public Transform(java.awt.geom.AffineTransform t){
+    public Transform(Transform t){
         super();
     }
 

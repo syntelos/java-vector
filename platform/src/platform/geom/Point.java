@@ -19,17 +19,28 @@
 package platform.geom;
 
 public class Point
-    extends java.awt.geom.Point2D.Float
+    extends Object
     implements vector.geom.Point
 {
+
+    public float x, y;
+
 
     public Point(){
         super();
     }
     public Point(float x, float y){
-        super(x,y);
+        super();
     }
     public Point(double x, double y){
-        super((float)x,(float)y);
+        super();
+    }
+
+
+    public double getX(){
+        return this.x;
+    }
+    public double getY(){
+        return this.y;
     }
 }

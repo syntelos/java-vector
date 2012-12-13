@@ -2,13 +2,12 @@ package demo;
 
 import vector.Context;
 import vector.Event;
+import vector.geom.Point;
 
 import platform.Color;
 
 import json.Json;
 import json.ObjectJson;
-
-import java.awt.geom.Point2D;
 
 public class ScrollBar
     extends vector.ContainerScrollPosition
@@ -57,7 +56,7 @@ public class ScrollBar
 
         if (null != this.axis){
 
-            Point2D.Float p = this.queryPosition(this.radius);
+            Point p = this.queryPosition(this.radius);
 
             if (this.mouseIn && null != this.colorOver)
                 g.setColor(this.colorOver);

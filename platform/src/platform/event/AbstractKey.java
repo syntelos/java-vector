@@ -20,11 +20,6 @@ package platform.event;
 
 import vector.Event;
 
-import java.awt.event.InputEvent;
-import static java.awt.event.InputEvent.*;
-import java.awt.event.KeyEvent;
-import static java.awt.event.KeyEvent.*;
-
 /**
  * 
  */
@@ -40,13 +35,13 @@ public class AbstractKey
     public final int modifiers;
 
 
-    public AbstractKey(Type type, KeyEvent evt){
+    public AbstractKey(Type type, Object evt){
         super(type);
         if (null != evt){
 
-            this.code = Code.For(evt.getKeyCode());
-            this.keyChar = evt.getKeyChar();
-            this.modifiers = evt.getModifiers();
+            this.code = Code.For(0);
+            this.keyChar = 0;
+            this.modifiers = 0;
         }
         else
             throw new IllegalArgumentException();
@@ -66,10 +61,10 @@ public class AbstractKey
         return this.keyChar;
     }
     public boolean isControl(){
-        return (0 != (this.modifiers & CTRL_MASK));
+        return false;
     }
     public boolean isAlt(){
-        return (0 != (this.modifiers & ALT_MASK));
+        return false;
     }
     public boolean isCode(){
         return this.code.isCode();

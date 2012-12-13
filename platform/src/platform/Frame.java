@@ -1,5 +1,5 @@
 /*
- * Vector (http://code.google.com/p/java-awt/)
+ * Vector (http://code.google.com/p/java-vector/)
  * Copyright (C) 2012, The DigiVac Company
  * 
  * This program is free software: you can redistribute it and/or

@@ -20,15 +20,13 @@ package platform.event;
 
 import vector.Event;
 
-import java.awt.event.KeyEvent;
-
 /**
  * 
  */
 public class KeyDown
     extends AbstractKey
 {
-    public KeyDown(KeyEvent evt){
+    public KeyDown(Object evt){
         super(Event.Type.KeyDown,evt);
     }
 }

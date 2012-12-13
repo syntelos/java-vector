@@ -24,16 +24,12 @@ import vector.font.GlyphVector;
 
 import platform.geom.Point;
 
-import java.awt.FontMetrics;
-import java.awt.Toolkit;
-import java.awt.font.FontRenderContext;
-
 
 /**
- * Font primitive.
+ * 
  */
 public class Font
-    extends java.awt.Font
+    extends Object
     implements vector.font.Font
 {
 
@@ -50,8 +46,6 @@ public class Font
     public final static float PW = 4f;
     public final static float PH = 1f;
 
-    protected final static Toolkit TK = Toolkit.getDefaultToolkit();
-
 
     public final static String DefaultFontFamily = "monospaced";
 
@@ -60,14 +54,20 @@ public class Font
     public final static Font Default = new Font(DefaultFontFamily,(int)SZ);
 
 
-    public final FontRenderContext frc;
-    public final FontMetrics metrics;
     public final int ascent, descent, height, em;
     public final float prop, spacing, leading;
 
 
     public Font(String code){
-        this(java.awt.Font.decode(code));
+        super();
+
+        this.ascent = 0;
+        this.descent = 0;
+        this.height = (this.ascent + this.descent);
+        this.em = 0;
+        this.prop = 0;
+        this.spacing = 0;
+        this.leading = 0;
     }
     public Font(int size){
         this(DefaultFontFamily,Style.PLAIN,size);
@@ -76,40 +76,26 @@ public class Font
         this(name,Style.PLAIN,size);
     }
     public Font(String name, Style style, int size){
-        super(name,style.ordinal(),size);
+        super();
 
-        this.metrics = TK.getFontMetrics(this);
-        this.ascent = this.metrics.getAscent();
-        this.descent = this.metrics.getDescent();
+        this.ascent = 0;
+        this.descent = 0;
         this.height = (this.ascent + this.descent);
-        this.em = this.metrics.charWidth(0x20);
-        this.prop = this.getSize2D()/SZ;
-        this.spacing = (prop*PW);
-        this.leading = (prop*PH);
-
-        FontRenderContext frc = this.metrics.getFontRenderContext();
-        if (frc.isAntiAliased())
-            this.frc = frc;
-        else
-            this.frc = new FontRenderContext(frc.getTransform(),true,frc.usesFractionalMetrics());
+        this.em = 0;
+        this.prop = 0;
+        this.spacing = (this.prop*PW);
+        this.leading = (this.prop*PH);
     }
-    public Font(java.awt.Font font){
-        super(font);
+    public Font(Object font){
+        super();
 
-        this.metrics = TK.getFontMetrics(this);
-        this.ascent = this.metrics.getAscent();
-        this.descent = this.metrics.getDescent();
+        this.ascent = 0;
+        this.descent = 0;
         this.height = (this.ascent + this.descent);
-        this.em = this.metrics.charWidth(0x20);
-        this.prop = this.getSize2D()/SZ;
-        this.spacing = (prop*PW);
-        this.leading = (prop*PH);
-
-        FontRenderContext frc = this.metrics.getFontRenderContext();
-        if (frc.isAntiAliased())
-            this.frc = frc;
-        else
-            this.frc = new FontRenderContext(frc.getTransform(),true,frc.usesFractionalMetrics());
+        this.em = 0;
+        this.prop = 0;
+        this.spacing = (this.prop*PW);
+        this.leading = (this.prop*PH);
     }
 
 
@@ -192,6 +178,24 @@ public class Font
             
         return new Bounds(x1,y1,(x2-x1),(y2-y1));
     }
+    public boolean isPlain(){
+        return false;
+    }
+    public boolean isBold(){
+        return false;
+    }
+    public boolean isItalic(){
+        return false;
+    }
+    public String getFamily(){
+        return null;
+    }
+    public String getName(){
+        return null;
+    }
+    public int getSize(){
+        return 0;
+    }
     public final Font decrementSize(){
         return this.decrementSize(2);
     }
@@ -200,22 +204,15 @@ public class Font
     }
     public final Font decrementSize(float dy){
 
-        float size = this.getSize2D()-dy;
-
-        if (6 <= size)
-            return new Font(this.deriveFont(size));
-        else
-            return this;
+        return this;
     }
     public final Font incrementSize(float dy){
 
-        float size = this.getSize2D()+dy;
-
-        return new Font(this.deriveFont(size));
+        return this;
     }
     public final GlyphVector createGlyphVector(String string){
 
-        return new platform.font.GlyphVector( super.createGlyphVector(this.frc,string), string.length());
+        return new platform.font.GlyphVector( null, string.length());
     }
     public final float em(float n){
 

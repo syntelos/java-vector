@@ -26,24 +26,27 @@ import vector.Bounds;
  * 
  */
 public class Line
-    extends java.awt.geom.Line2D.Float
+    extends Object
     implements vector.geom.Line
 {
+
+    public float x0, y0, x1, y1;
+
 
     public Line(){
         super();
     }
     public Line(float x0, float y0, float x1, float y1){
-        super(x0,y0,x1,y1);
+        super();
     }
     public Line(Point a, Point b){
-        super(a,b);
+        super();
     }
 
 
     public Bounds getBoundsVector(){
-        java.awt.geom.Rectangle2D bounds = super.getBounds2D();
-        return new Bounds(bounds.getX(),bounds.getY(),bounds.getWidth(),bounds.getHeight());
+
+        return null;
     }
     public Path toPath(){
         return new Path(this);

@@ -113,9 +113,22 @@
   <!-- 
     - PLATFORM
     -->
-  <target name="platform" if="vector.platform.update" depends="platform-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.platform.update'.">
+  <target name="platform" description="Platform dev check cycle">
 
-    <do-update src="${target.platform.jar}" tgt="${vector.platform.update}" />
+    <antcall target="platform-jar" inheritRefs="true"/>
+
+    <antcall target="vector-jar-prove" inheritRefs="true"/>
+
+    <antcall target="platform-jar" inheritRefs="true"/>
+
+  </target>
+  <target name="platform-pull" description="Platform dev check cycle">
+
+    <antcall target="vector-jar-prove" inheritRefs="true"/>
+
+    <antcall target="platform-jar" inheritRefs="true"/>
+
+    <antcall target="vector-jar-prove" inheritRefs="true"/>
   </target>
 
   <target name="platform-jar" depends="platform-compile" description="Package platform jar, clean bin.">
@@ -268,7 +281,6 @@
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <path refid="lib.path"/>
-        <pathelement location="${target.platform.jar}"/><!-- delete-me when platform is awt-free -->
         <pathelement location="${target.vector.jar}"/>
       </classpath>
       <bootclasspath>

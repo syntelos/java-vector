@@ -27,7 +27,7 @@ import platform.geom.Point;
 
 
 /**
- * Graphics output context for AWT
+ * Graphics output context
  * 
  * <h3>System properties</h3>
  * 
