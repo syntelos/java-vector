@@ -31,16 +31,6 @@ import json.Json;
 import json.ObjectJson;
 import json.Reader;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import static java.awt.event.MouseEvent.*;
-import java.awt.event.MouseWheelEvent;
-import java.awt.geom.Point2D;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -52,13 +42,8 @@ import java.util.logging.Logger;
 
 
 public class Display
-    extends java.awt.Canvas
-    implements vector.Display,
-               java.awt.event.KeyListener,
-               java.awt.event.MouseListener,
-               java.awt.event.MouseMotionListener,
-               java.awt.event.MouseWheelListener,
-               java.awt.event.ComponentListener
+    extends java.lang.Object
+    implements vector.Display
 {
 
     protected final Logger log = Logger.getLogger(this.getClass().getName());
@@ -84,70 +69,25 @@ public class Display
 
     public Display(){
         super();
-        super.addKeyListener(this);
-        super.addMouseListener(this);
-        super.addMouseMotionListener(this);
-        super.addMouseWheelListener(this);
-        super.addComponentListener(this);
     }
 
 
     public void init(){
-
-        this.destroy();
-
-        this.mouseIn = false;
-
-        this.bufferOverlay = true;
-
-        this.transform.init();
-
-        this.layout();
     }
     public void init(Boolean init){
-        if (null != init && init.booleanValue()){
-
-            this.init();
-        }
     }
     public void destroy(){
-        this.outputOverlayAnimateCancel();
-        try {
-            for (Component c: this){
-                c.destroy();
-            }
-        }
-        finally {
-            this.components = null;
-            this.boundsNative = null;
-            this.boundsUser = null;
-
-            this.flush();
-        }
     }
     public void resized(){
-
-        this.layout();
-
-        for (Component c: this){
-
-            c.resized();
-        }
     }
     public void modified(){
-
-        this.layout();
-
-        for (Component c: this){
-
-            c.modified();
-        }
     }
     public void relocated(){
     }
     public void flush(){
-
-        this.output.flush();
+    }
+    public boolean isVisible(){
+        return false;
     }
     public final boolean hasBackground(){
 
@@ -188,19 +128,8 @@ public class Display
             return this;
     }
     protected final <F extends Frame> F getFrame(){
-        java.awt.Component p = super.getParent();
-        java.awt.Component parent = null;
-        while (null != p){
-            parent = p;
-            p = p.getParent();
-        }
-        try {
-            return (F)parent;
-        }
-        catch (ClassCastException exc){
 
-            return null;
-        }
+        return null;
     }
     public final <T extends Component> T getParentVector(){
 
@@ -215,42 +144,24 @@ public class Display
         throw new UnsupportedOperationException();
     }
     public final Component setVisibleVector(boolean visible){
-        super.setVisible(visible);
+
         return this;
     }
     public final Viewport getViewport(){
 
-        if (null != this.boundsUser)
-
-            return new Viewport(this.boundsUser);
-
-        else {
-            final java.awt.Rectangle r = this.getBounds();
-
-            return new Viewport(r.width,r.height);
-        }
+        return new Viewport(this.boundsUser);
     }
     public final Display setViewport(Viewport.Size size){
-        if (null != size){
-            final Frame frame = this.getFrame();
-            if (null != frame){
-                final Bounds b = Frame.Center(size.get(this.getViewport()));
 
-                frame.setBounds((int)b.x,(int)b.y,(int)b.width,(int)b.height);
-            }
-        }
         return this;
+    }
+    public boolean contains(int x, int y){
+
+        return false;
     }
     public final Bounds getBoundsVector(){
 
-        if (null == this.boundsUser){
-
-            java.awt.Rectangle b = super.getBounds();
-
-            return new Bounds(b.x,b.y,b.width,b.height);
-        }
-        else
-            return this.boundsUser.clone();
+        return this.boundsUser.clone();
     }
     public final Component setBoundsVector(Bounds bounds){
         if (null != bounds){
@@ -259,23 +170,22 @@ public class Display
         return this;
     }
     public final Display setBounds(Bounds bounds){
-        if (null != bounds){
-            super.setBounds(new java.awt.Rectangle((int)Math.floor(bounds.x),(int)Math.floor(bounds.y),(int)Math.ceil(bounds.width),(int)Math.ceil(bounds.height)));
-        }
+
         return this;
     }
     public final boolean contains(float x, float y){
-        return super.contains( (int)x, (int)y);
+
+        return false;
     }
     public final boolean contains(Point p){
-        return super.contains( (int)p.x, (int)p.y);
+        return false;
     }
     public final Point getLocationVector(){
-        java.awt.Point p = super.getLocation();
-        return new Point(p.x,p.y);
+
+        return new Point(0,0);
     }
     public final Component setLocationVector(Point p){
-        super.setLocation( (int)p.x, (int)p.y);
+
         return this;
     }
     public final Transform getTransformLocal(){
@@ -302,63 +212,10 @@ public class Display
      */
     public boolean input(Event e){
 
-        boolean action = false;
-
-        /*
-         * Interpret Viewport event
-         */
-        if (Event.Type.Action == e.getType()){
-
-            action = true;
-
-            final Event.NamedAction actor = (Event.NamedAction)e;
-
-            if (actor.isValueClass(Viewport.Size.class)){
-
-                final Event.NamedAction<Viewport.Size> viewport = 
-                    (Event.NamedAction<Viewport.Size>)actor;
-
-                this.setViewport( viewport.getValue());
-            }
-        }
-
-        /*
-         * Dispatch event
-         */
-        boolean re = false;
-
-        for (Component c: this){
-            /*
-             * Broadcast
-             */
-            re = (c.input(e) || re);
-        }
-
-        /*
-         * Output scene
-         */
-        if (action || re){
-
-            this.outputScene();
-        }
-        return re;
+        return false;
     }
     public final boolean isMouseIn(){
         return this.mouseIn;
-    }
-    public final void update(Graphics g){
-
-        if (this.bufferOverlay)
-            this.output2(new Context(this,(Graphics2D)g));
-        else
-            this.output1(new Context(this,(Graphics2D)g));
-    }
-    public final void paint(Graphics g){
-
-        if (this.bufferOverlay)
-            this.output2(new Context(this,(Graphics2D)g));
-        else
-            this.output1(new Context(this,(Graphics2D)g));
     }
     protected final void output1(Context g){
 
@@ -475,12 +332,12 @@ public class Display
     }
     public final Display outputScene(){
         this.output.requestScene();
-        this.repaint();
+
         return this;
     }
     public final Display outputOverlay(){
         this.output.requestOverlay();
-        this.repaint();
+
         return this;
     }
     public final Display outputOverlayAnimateSuspend(){
@@ -623,10 +480,6 @@ public class Display
 
         return this;
     }
-    protected final Point transformFromParent(Point2D point){
-
-        return this.getTransformParent().transformFrom(new Point(point.getX(),point.getY()));
-    }
     public boolean drop(Component c){
 
         int idx = this.indexOf(c);
@@ -692,206 +545,6 @@ public class Display
         }
         return this;
     }
-
-    public void mouseClicked(MouseEvent evt){
-    }
-    public void mousePressed(MouseEvent evt){
-        /*
-         * Narrow-cast
-         */
-        final Event.Mouse.Action action = PointButton(evt);
-
-        if (null != action){
-            final Point point = this.transformFromParent(evt.getPoint());
-
-            final Event down = new platform.event.MouseDown(action,point);
-
-            for (Component c: this){
-
-                if (c.input(down))
-                    break;
-            }
-        }
-    }
-    public void mouseReleased(MouseEvent evt){
-        /*
-         * Narrow-cast
-         */
-        final Event.Mouse.Action action = PointButton(evt);
-
-        if (null != action){
-            final Point point = this.transformFromParent(evt.getPoint());
-
-            final Event up = new platform.event.MouseUp(action,point);
-
-            for (Component c: this){
-
-                if (c.input(up))
-                    break;
-            }
-        }
-    }
-    public void mouseEntered(MouseEvent evt){
-        /*
-         * Broad-cast
-         */
-        this.requestFocus();
-
-        this.mouseIn = true;
-
-        final Point point = this.transformFromParent(evt.getPoint());
-
-        final Event entered = new platform.event.MouseEntered(point);
-
-        final Event exited = new platform.event.MouseExited(point);
-
-        for (Component c: this){
-
-            if (c.contains(point)){
-
-                c.input(entered);
-            }
-            else if (c.isMouseIn()){
-
-                c.input(exited);
-            }
-        }
-    }
-    public void mouseExited(MouseEvent evt){
-        /*
-         * Broad-cast
-         */
-        this.mouseIn = false;
-
-        final Point point = this.transformFromParent(evt.getPoint());
-
-        final Event exited = new platform.event.MouseExited(point);
-
-        for (Component c: this.listMouseIn(Component.class)){
-
-            c.input(exited);
-        }
-    }
-    public void mouseDragged(MouseEvent evt){
-        /*
-         * Broad-cast
-         */
-        final Event.Mouse.Action action = PointButton(evt);
-
-        if (null != action){
-            final Point point = this.transformFromParent(evt.getPoint());
-
-            final Event dragged = new platform.event.MouseDrag(action,point);
-
-            final Event entered = new platform.event.MouseEntered(point);
-
-            final Event exited = new platform.event.MouseExited(point);
-
-            for (Component c: this){
-
-                if (c.isMouseIn()){
-
-                    if (c.contains(point)){
-
-                        c.input(dragged);
-                    }
-                    else {
-                        c.input(exited);
-                    }
-                }
-                else if (c.contains(point)){
-                    c.input(entered);
-                }
-            }
-        }
-    }
-    public void mouseMoved(MouseEvent evt){
-        /*
-         * Broad-cast
-         */
-        final Point point = this.transformFromParent(evt.getPoint());
-
-        final Event moved = new platform.event.MouseMoved(point);
-
-        final Event entered = new platform.event.MouseEntered(point);
-
-        final Event exited = new platform.event.MouseExited(point);
-
-        for (Component c: this){
-
-            if (c.isMouseIn()){
-
-                if (c.contains(point)){
-
-                    c.input(moved);
-                }
-                else {
-                    c.input(exited);
-                }
-            }
-            else if (c.contains(point)){
-                c.input(entered);
-            }
-        }
-    }
-    public void mouseWheelMoved(MouseWheelEvent evt){
-        /*
-         * Narrow-cast
-         */
-        final Event e = new platform.event.MouseWheel(evt.getWheelRotation());
-
-        for (Component c: this){
-
-            if (c.input(e))
-                break;
-        }
-    }
-    public void keyTyped(KeyEvent e){
-    }
-    public void keyPressed(KeyEvent evt){
-        /*
-         * Narrow-cast
-         */
-        final Event e = new platform.event.KeyDown(evt);
-
-        for (Component c: this){
-
-            if (c.input(e))
-                break;
-        }
-    }
-    public void keyReleased(KeyEvent evt){
-        /*
-         * Narrow-cast
-         */
-        final Event e = new platform.event.KeyUp(evt);
-
-        for (Component c: this){
-
-            if (c.input(e))
-                break;
-        }
-    }
-    public final void componentResized(ComponentEvent evt){
-
-        this.flush();
-        {
-            java.awt.Rectangle b = super.getBounds();
-
-            this.boundsNative = new Bounds(b.x,b.y,b.width,b.height);
-        }
-        this.resized();
-        this.repaint();
-    }
-    public final void componentMoved(ComponentEvent evt){
-    }
-    public final void componentShown(ComponentEvent evt){
-        this.requestFocus();
-        this.shown();
-    }
-    public final void componentHidden(ComponentEvent evt){
-        this.hidden();
-    }
     public void shown(){
 
         this.outputOverlayAnimateResume();
@@ -900,18 +553,7 @@ public class Display
 
         this.outputOverlayAnimateSuspend();
     }
-    @Override
     public void layout(){
-        if (null == this.boundsNative){
-            java.awt.Rectangle b = super.getBounds();
-            
-            this.boundsNative = new Bounds(b.x,b.y,b.width,b.height);
-        }
-        if (null == this.boundsUser){
-
-            this.boundsUser = this.boundsNative;
-        }
-        this.transform.scaleToRelative(this.boundsUser,this.boundsNative);
     }
 
     public Json toJson(){
@@ -1001,19 +643,4 @@ public class Display
         }
     }
 
-    public final static Event.Mouse.Action PointButton(MouseEvent evt){
-        switch(evt.getButton()){
-        case BUTTON1:
-            return Event.Mouse.Action.Point1;
-
-        case BUTTON2:
-            return Event.Mouse.Action.Point2;
-
-        case BUTTON3:
-            return Event.Mouse.Action.Point3;
-
-        default:
-            return null;
-        }
-    }
 }

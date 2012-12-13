@@ -21,14 +21,10 @@ package platform;
 import json.Hex;
 
 /**
- * 32 bit alpha-color I/O in <code>'#AARRGGBB'</code> string format.
- * Also accepts <code>'#RRGGBB'</code>, <code>'#RGB'</code> and
- * <code>'#ARGB'</code> string formats.
  * 
- * Unrecognized format produces black color.
  */
 public class Color
-    extends java.awt.Color
+    extends java.lang.Object
 {
     public static Color decode(String value){
         vector.NamedColors named = vector.NamedColors.For(value);
@@ -37,9 +33,7 @@ public class Color
         else
             return new Color(value);
     }
-    /*
-     * Subclass overrides
-     */
+
     public final static Color white      = new Color(255, 255, 255);
     public final static Color WHITE      = white;
     public final static Color lightGray  = new Color(192, 192, 192);
@@ -69,32 +63,44 @@ public class Color
 
 
 
-    public Color(java.awt.Color color){
-        super(color.getRGB(),true);
-    }
     public Color(String code){
         this(Hex.decode(Parse(code)));
     }
     private Color(byte[] code){
-        super(R(code),G(code),B(code),A(code));
+        this(R(code),G(code),B(code),A(code));
     }
     public Color(int r, int g, int b){
-        super(r,g,b);
+        super();
     }
     public Color(int r, int g, int b, int a){
-        super(r,g,b,a);
+        super();
     }
     public Color(int argb){
-        super(argb,(0 != ((argb>>24)&0xFF)));
+        super();
     }
     public Color(float r, float g, float b){
-        super(r,g,b);
+        super();
     }
     public Color(float r, float g, float b, float a){
-        super(r,g,b,a);
+        super();
     }
 
 
+    public int getRed() {
+        return 0;
+    }
+    public int getGreen() {
+        return 0;
+    }
+    public int getBlue() {
+        return 0;
+    }
+    public int getAlpha() {
+        return 0;
+    }
+    public int getRGB(){
+        return 0;
+    }
     public Color opacity(float a){
 
         return new Color((this.getRed()/255f),(this.getGreen()/255f),(this.getBlue()/255f),a);

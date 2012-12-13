@@ -37,7 +37,7 @@ public final class Output
     }
 
 
-    public Offscreen scene(java.awt.Component component){
+    public Offscreen scene(Object component){
 
         if (null == this.scene){
 
@@ -45,7 +45,7 @@ public final class Output
         }
         return this.scene;
     }
-    public Offscreen overlay(java.awt.Component component){
+    public Offscreen overlay(Object component){
 
         if (null == this.overlay){
 

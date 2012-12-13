@@ -23,11 +23,6 @@ import vector.Bounds;
 import json.Json;
 import json.Reader;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.geom.Dimension2D;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -40,16 +35,16 @@ import java.util.logging.Logger;
  * 
  */
 public class Frame
-    extends javax.swing.JFrame
+    extends java.lang.Object
 {
 
-    protected final static Dimension2D screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    protected static Object screen = null;
 
-    protected final static int width = (int)(((float)screen.getWidth())/2.0f);
-    protected final static int height = (int)(((float)screen.getHeight())/2.0f);
+    protected static int width;
+    protected static int height;
 
-    protected final static int x = (width/2);
-    protected final static int y = (height/2);
+    protected static int x;
+    protected static int y;
 
 
     public final static Bounds Center(Bounds b){
@@ -77,20 +72,9 @@ public class Frame
         this(null);
     }
     public Frame(String title){
-        super((null == title)?("Vector"):(title));
+        super();
 
-        this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        this.setSize(Frame.width,Frame.height);
-
-        this.setLocation(Frame.x,Frame.y);
-
-        this.add((this.display = this.createDisplay()), BorderLayout.CENTER);
-
-        this.display.setSize(width,height);
-
-        this.pack();
-        this.show();
+        this.display = this.createDisplay();
     }
 
 
@@ -118,7 +102,6 @@ public class Frame
             this.display = null;
             display.destroy();
         }
-        this.dispose();
     }
     /**
      * For subclasses not using Frame eval or Display open

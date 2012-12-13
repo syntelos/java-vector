@@ -18,64 +18,44 @@
  */
 package platform;
 
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import static java.awt.RenderingHints.*;
-import java.awt.image.ImageObserver;
-
 /**
  * {@link Output} buffer
  * 
  * @see Display
  */
 public final class Offscreen
-    extends java.awt.image.BufferedImage
+    extends Object
     implements vector.Image.Offscreen
 {
-
-    private final int width, height;
-
-    private ImageObserver observer;
 
 
     /**
      * @param component First argument to platform context (Display)
      */
-    public Offscreen(java.awt.Component component){
-        this(component,component.getBounds());
+    public Offscreen(Object component){
+        this(component,null);
     }
-    private Offscreen(ImageObserver observer, Rectangle bounds){
-        this(observer,bounds.width,bounds.height);
+    private Offscreen(Object observer, Object bounds){
+        this(observer,0,0);
     }
     /**
      * @param observer First argument to platform context (Display)
      * @param width Pixel buffer X dimension
      * @param height Pixel buffer Y dimension
      */
-    public Offscreen(ImageObserver observer, int width, int height){
-        super(width,height,TYPE_INT_ARGB);
-        if (null != observer && 0 < width && 0 < height){
-            this.observer = observer;
-            this.width = width;
-            this.height = height;
-        }
-        else
-            throw new IllegalArgumentException();
+    public Offscreen(Object observer, int width, int height){
+        super();
     }
 
 
     public int getWidth(){
-        return this.width;
+        return 0;
     }
     public int getHeight(){
-        return this.height;
+        return 0;
     }
     @Override
     public void flush(){
-
-        this.observer = null;
-
-        super.flush();
     }
     public Context blit(Context g){
 
@@ -85,12 +65,7 @@ public final class Offscreen
     }
     public Context create(){
 
-        final Graphics2D g = (Graphics2D)this.getGraphics();
 
-        g.setRenderingHint(KEY_RENDERING,VALUE_RENDER_QUALITY);
-        g.setRenderingHint(KEY_ANTIALIASING,VALUE_ANTIALIAS_ON);
-        g.setRenderingHint(KEY_TEXT_ANTIALIASING,VALUE_TEXT_ANTIALIAS_ON);
-
-        return new Context(this.observer,g);
+        return new Context(null,null);
     }
 }
