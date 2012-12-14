@@ -33,7 +33,7 @@
   <property file="${user.home}/update.properties"/>
 
 
-  <target name="build-gwtcc-update" if="build-gwtcc.update" depends="build-gwtcc-compile" description="Copy products to locations defined in '{user.home}/update.properties' name 'build-gwtcc.update'.">
+  <target name="build-gwtcc-update" if="build-gwtcc.update" depends="build-gwtcc-compile" >
 
     <java classname="Update" fork="true" failonerror="true">
 

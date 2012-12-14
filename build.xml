@@ -40,6 +40,9 @@
 
   <available property="available.signing.properties" file="signing.properties"/>
 
+  <!--
+    - 
+    -->
   <target name="prove" description="Compile all packages">
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
@@ -110,10 +113,11 @@
 
     </echo>
   </target>
+
   <!-- 
     - PLATFORM
     -->
-  <target name="platform" description="Platform dev check cycle">
+  <target name="platform-vector" description="Platform dev check cycle">
 
     <antcall target="platform-jar" inheritRefs="true"/>
 
@@ -121,14 +125,6 @@
 
     <antcall target="platform-jar" inheritRefs="true"/>
 
-  </target>
-  <target name="platform-pull" description="Platform dev check cycle">
-
-    <antcall target="vector-jar-prove" inheritRefs="true"/>
-
-    <antcall target="platform-jar" inheritRefs="true"/>
-
-    <antcall target="vector-jar-prove" inheritRefs="true"/>
   </target>
 
   <target name="platform-jar" depends="platform-compile" description="Package platform jar, clean bin.">
@@ -248,6 +244,14 @@
   <!-- 
     - ANDROID
     -->
+  <target name="android-vector" description="Calls android, vector-update-android">
+
+    <antcall target="android" inheritRefs="true"/>
+
+    <antcall target="vector-update-android" inheritRefs="true"/>
+  </target>
+
+
   <target name="android" if="vector.android.update" depends="android-jar" description="Compile, archive, and copy to targets defined in '{user.home}/update.properties'.">
 
     <do-update src="${target.android.jar}" tgt="${vector.android.update}" />
@@ -306,7 +310,6 @@
       <arg value="${toString:lib.path}"/>
     </java>
   </target>
-
 
   <!-- 
     - DEMO
@@ -598,6 +601,9 @@
     </java>
   </target>
 
+  <!--
+    - JOGL
+    -->
   <target name="jogl-update-awt" if="vector.jogl.update" depends="jogl-jar-awt" description="Compile, archive, and copy to targets defined in '{user.home}/update.properties'.">
 
     <do-update src="${target.jogl.jar}" tgt="${vector.jogl.update}" />
@@ -662,8 +668,7 @@
     </java>
   </target>
 
-
-
+  
   <target name="llg-update-awt" depends="llg-compile-awt" description="Compile, archive, and copy to targets defined in '{user.home}/update.properties'.">
 
     <echo message="Main-Class: llg.Fullscreen"/>
@@ -724,7 +729,31 @@
     </java>
   </target>
 
+  <!--
+    - VECTOR
+    -->
+  <target name="vector-platform" description="Platform dev check cycle">
 
+    <antcall target="vector-jar-prove" inheritRefs="true"/>
+
+    <antcall target="platform-jar" inheritRefs="true"/>
+
+    <antcall target="vector-jar-prove" inheritRefs="true"/>
+  </target>
+
+  <target name="vector-awt" description="Calls vector-update-awt, awt">
+
+    <antcall target="vector-update-awt" inheritRefs="true"/>
+
+    <antcall target="awt" inheritRefs="true"/>
+  </target>
+
+  <target name="vector-android" description="Calls vector-update-android, android">
+
+    <antcall target="vector-update-android" inheritRefs="true"/>
+
+    <antcall target="android" inheritRefs="true"/>
+  </target>
 
   <target name="vector-update-awt" if="vector.update" depends="vector-jar-awt" description="Compile, archive, and copy to targets defined in '{user.home}/update.properties'.">
 
@@ -763,6 +792,43 @@
     </javac>
   </target>
 
+  <target name="vector-update-android" if="vector.update" depends="vector-jar-android" description="Compile, archive, and copy to targets defined in '{user.home}/update.properties'.">
+
+    <do-update src="${target.vector.jar}" tgt="${vector.update}" />
+  </target>
+
+  <target name="vector-jar-android" depends="vector-compile-android" description="Package bin to target jar, clean bin.">
+
+    <echo message="Class-Path: ${vector.lib.path.manifest.android}"/>
+
+    <delete file="${existing.vector.jar}"/>
+    <jar jarfile="${target.vector.jar}" basedir="${bin}" >
+      <manifest>
+        <attribute name="Main-Class" value="platform.Frame"/>
+        <attribute name="Class-Path" value="${vector.lib.path.manifest.android}"/>
+      </manifest>
+    </jar>
+    <delete dir="${bin}"/>
+  </target>
+
+  <target name="vector-compile-android" depends="vector-version-android" description="Compile src to bin">
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+    <copy todir="${bin}">
+      <fileset dir="${src}" includes="**/*.properties"/>
+      <fileset dir="${src}" includes="**/*.txt"/>
+      <fileset dir="${src}" includes="**/*.xml"/>
+    </copy>
+    <javac includeAntRuntime="false" srcdir="${src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           classpathref="lib.path" source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <path refid="lib.path"/>
+        <pathelement location="${existing.android.jar}"/>
+        <pathelement location="${android.rt.jar}"/>
+      </classpath>
+    </javac>
+  </target>
+
   <target name="vector-jar-prove" unless="cond.vector.jar.prove" depends="vector-prove" description="Package bin to target jar, clean bin.">
 
     <property name="cond.vector.jar.prove" value="false"/>
@@ -795,7 +861,7 @@
       </classpath>
     </javac>
   </target>
-
+ 
   <target name="vector-version-awt" unless="vector.lib.path.manifest.awt" depends="version">
 
     <java outputproperty="vector.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
@@ -804,7 +870,15 @@
     </java>
   </target>
 
-  <target name="vector-version-prove" unless="vector.lib.path.manifest.prove" depends="version">
+  <target name="vector-version-android" unless="vector.lib.path.manifest.android" depends="android-version">
+
+    <java outputproperty="vector.lib.path.manifest.android" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+      <arg value="${target.android.jar}"/>
+      <arg value="${toString:lib.path}"/>
+    </java>
+  </target>
+
+ <target name="vector-version-prove" unless="vector.lib.path.manifest.prove" depends="version">
 
     <java outputproperty="vector.lib.path.manifest.prove" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.platform.jar}"/>
@@ -812,11 +886,16 @@
     </java>
   </target>
 
-
+  <!--
+    - 
+    -->
   <target name="clean" description="Delete products">
     <delete dir="${bin}"/>
   </target>
 
+  <!--
+    - VERSION
+    -->
   <target name="version" unless="this.version" description="Report current version.">
     <version/>
     <property name="target.vector.jar" value="${dst}/${ant.project.name}-${this.version}.jar"/>

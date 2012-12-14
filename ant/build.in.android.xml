@@ -29,7 +29,7 @@
   <property file="${user.home}/update.properties"/>
 
 
-  <target name="build-android-update" if="build-android.update" depends="build-android-compile" description="Copy products to locations defined in '{user.home}/update.properties' name 'build-android.update'.">
+  <target name="build-android-update" if="build-android.update" depends="build-android-compile">
 
     <java classname="Update" fork="true" failonerror="true">
 
