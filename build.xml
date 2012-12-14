@@ -282,10 +282,10 @@
   <!-- 
     - ANDROID
     -->
-  <target name="android" description="Calls android-jar, vector-jar, android-jar (enter Android)">
+  <target name="android" description="Calls android-jar, vector-jar-android, android-jar (enter Android)">
 
     <antcall target="android-jar"/>
-    <antcall target="vector-jar"/>
+    <antcall target="vector-jar-android"/>
     <antcall target="android-jar"/>
   </target>
 
@@ -864,7 +864,7 @@
     <delete file="${existing.vector.jar}"/>
     <jar jarfile="${target.vector.jar}" basedir="${bin}" >
       <manifest>
-        <attribute name="Main-Class" value="platform.Frame"/>
+
         <attribute name="Class-Path" value="${vector.lib.path.manifest.android}"/>
       </manifest>
     </jar>
