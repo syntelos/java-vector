@@ -25,6 +25,8 @@ import vector.Stroke;
 
 import platform.geom.Point;
 
+import android.graphics.Canvas;
+import android.view.View;
 
 /**
  * Graphics output context
@@ -43,16 +45,28 @@ import platform.geom.Point;
  * <dl>
  */
 public class Context
-    extends Object
-    implements vector.Context
+    extends Canvas
+    implements vector.Context,
+               android.opengl.GLSurfaceView.GLWrapper
 {
 
     public final static boolean Trace = false;
     public final static boolean Deep = false;
 
 
-    public Context(Object observer, Object instance){
+    public final View observer;
+
+    public final Canvas instance;
+
+
+    public Context(View observer, Canvas instance){
         super();
+        if (null != observer && null != instance){
+            this.observer = observer;
+            this.instance = instance;
+        }
+        else
+            throw new IllegalArgumentException();
     }
     public Context(Context context){
         super();
@@ -69,10 +83,15 @@ public class Context
         return 0;
     }
     public boolean hasGL(){
-        return false;
+        return true;
     }
-    public vector.gl.GL getGL(){
-        throw new UnsupportedOperationException();
+    public platform.gl.GL wrap(javax.microedition.khronos.opengles.GL gl){
+
+        return new platform.gl.GL(this,gl);
+    }
+    public platform.gl.GL getGL(){
+
+        return this.wrap(this.instance.getGL());
     }
     public boolean isTracing(){
         return false;

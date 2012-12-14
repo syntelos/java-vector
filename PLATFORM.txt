@@ -25,20 +25,14 @@ Portable pixel programming
 
     Discussion
 
-      Ideally, the API would be in the vector package.  However this
-      strategy has only one tactic (that can solve the problem), the
-      interface and factory or tooling classes as in the case of
-      vector Component and Component Tools.
+      Ideally, the API would be in the vector package.  However, this
+      strategy has only one tactic: interfaces and factories.
 
-      A singular interface strategy to platform adaptation would
-      result in a vector interface factory class that calls
-      constructors in a platform agnostic way with the unique name
-      "platform.Classname".
+      In such an approach, portable factory functions would call
+      constructors using the portable class name "platform.Classname".
 
-      Therefore the the pure interface strategy necessarily
-      degenerates to the mixed or dual strategy by dropping the
-      factory class and presenting the "platform.Classname" to the
-      library and applications for direct use.
+      The vector architecture drops the factory and presents the
+      "platform.Classname" for direct use.
 
     API platform
 
@@ -49,7 +43,7 @@ Portable pixel programming
     API vector
 
       The vector package is primarily a component scene graph for
-      interactive applications.  A reasonable level of usability
+      interactive applications.  A reasonable level of convenience
       implies a dependence on the platform package as highlighted in
       the case of the Color and Font classes.
 

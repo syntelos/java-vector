@@ -95,6 +95,8 @@ public class Frame
 
     protected final Logger log = Logger.getLogger(this.getClass().getName());
 
+    protected static Frame Instance;
+
 
     protected Display display;
 
@@ -102,8 +104,9 @@ public class Frame
     public Frame(){
         super();
 
-        this.display = this.createDisplay();
+        Frame.Instance = this;
 
+        this.display = this.createDisplay();
     }
 
 
@@ -117,10 +120,19 @@ public class Frame
     }
     public void init(){
 
-        Display display = this.display;
-        if (null != display){
+        Resources resources = this.getResources();
 
-            display.init();
+        if (null != resources){
+
+            Frame.Init(resources.getDisplayMetrics());
+
+            Display display = this.display;
+            if (null != display){
+
+                this.setContentView(display);
+
+                display.init();
+            }
         }
     }
     public void destroy(){
@@ -158,17 +170,15 @@ public class Frame
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Resources resources = this.getResources();
-
-        if (null != resources){
-
-            Frame.Init(resources.getDisplayMetrics());
-        }
+        this.init();
     }
     @Override
     protected void onStart() {
         super.onStart();
 
+        this.modified();
+
+        this.outputScene();
     }
     @Override
     protected void onResume() {
@@ -189,6 +199,7 @@ public class Frame
     protected void onDestroy() {
         super.onDestroy();
 
+        this.destroy();
     }
 
     public final Frame warn(Throwable t, String fmt, Object... args){

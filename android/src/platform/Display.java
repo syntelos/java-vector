@@ -31,6 +31,9 @@ import json.Json;
 import json.ObjectJson;
 import json.Reader;
 
+import android.graphics.Canvas;
+import android.view.View;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -42,7 +45,7 @@ import java.util.logging.Logger;
 
 
 public class Display
-    extends java.lang.Object
+    extends android.opengl.GLSurfaceView
     implements vector.Display
 {
 
@@ -68,23 +71,68 @@ public class Display
 
 
     public Display(){
-        super();
+        super(Frame.Instance);
     }
 
 
+    /**
+     * The Frame and super class have been initialized.
+     */
     public void init(){
+        this.destroy();
+
+        this.mouseIn = false;
+
+        this.bufferOverlay = true;
+
+        this.transform.init();
+
+        this.layout();
     }
     public void init(Boolean init){
+        if (null != init && init.booleanValue()){
+
+            this.init();
+        }
     }
     public void destroy(){
+        this.outputOverlayAnimateCancel();
+        try {
+            for (Component c: this){
+                c.destroy();
+            }
+        }
+        finally {
+            this.components = null;
+            this.boundsNative = null;
+            this.boundsUser = null;
+
+            this.flush();
+        }
     }
     public void resized(){
+
+        this.layout();
+
+        for (Component c: this){
+
+            c.resized();
+        }
     }
     public void modified(){
+
+        this.layout();
+
+        for (Component c: this){
+
+            c.modified();
+        }
     }
     public void relocated(){
     }
     public void flush(){
+
+        this.output.flush();
     }
     public boolean isVisible(){
         return false;
@@ -93,7 +141,7 @@ public class Display
 
         return (null != this.background);
     }
-    public final Color getBackground(){
+    public final Color getBackgroundVector(){
 
         return this.background;
     }
@@ -556,13 +604,52 @@ public class Display
     public void layout(){
     }
 
+    @Override
+    protected void onMeasure(int psw, int psh){
+        super.onMeasure(psw,psh);
+
+        final int w = this.getMeasuredWidth();
+        final int h = this.getMeasuredHeight();
+
+        {
+            final int[] location = new int[2];
+            this.getLocationInWindow(location);
+
+            this.boundsNative = new Bounds(location[0],location[1],w,h);
+        }
+    }
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom){
+
+        this.boundsNative = new Bounds(left,top,(right-left),(bottom-top));
+
+        this.modified();
+
+        this.outputScene();
+    }
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+
+        this.modified();
+
+        this.outputScene();
+    }
+    @Override
+    protected void onDraw(Canvas canvas) {
+
+        final Context context = new Context(this,canvas);
+
+        this.output1(context);
+    }
+
+
     public Json toJson(){
         Json thisModel = new ObjectJson();
         thisModel.setValue("class",this.getClass().getName());
         thisModel.setValue("init",Boolean.TRUE);
         thisModel.setValue("transform",this.transform);
         thisModel.setValue("bounds",this.getBoundsVector());
-        thisModel.setValue("background",this.getBackground());
+        thisModel.setValue("background",this.getBackgroundVector());
         thisModel.setValue("buffer-overlay",this.getBufferOverlay());
         thisModel.setValue("components",new ArrayJson(this));
         return thisModel;

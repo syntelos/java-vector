@@ -93,7 +93,7 @@ public class Display
 
         return (null != this.background);
     }
-    public final Color getBackground(){
+    public final Color getBackgroundVector(){
 
         return this.background;
     }
@@ -562,7 +562,7 @@ public class Display
         thisModel.setValue("init",Boolean.TRUE);
         thisModel.setValue("transform",this.transform);
         thisModel.setValue("bounds",this.getBoundsVector());
-        thisModel.setValue("background",this.getBackground());
+        thisModel.setValue("background",this.getBackgroundVector());
         thisModel.setValue("buffer-overlay",this.getBufferOverlay());
         thisModel.setValue("components",new ArrayJson(this));
         return thisModel;

@@ -32,7 +32,7 @@ public interface Display
 
     public boolean hasBackground();
 
-    public Color getBackground();
+    public Color getBackgroundVector();
 
     public Display setBackground(Color background);
 
