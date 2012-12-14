@@ -44,7 +44,7 @@
   <!--
     - 
     -->
-  <target name="prove" description="Compile all packages">
+  <target name="prove" description="Prove all packages (from Prove)">
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
 
@@ -63,11 +63,18 @@
 
   </target>
 
-  <target name="signed" description="Rebuild all jars and sign">
+  <target name="prove-vector" description="Calls platform-jar, vector-jar-prove (enter Prove)">
+
+    <antcall target="platform-jar"/>
+
+    <antcall target="vector-jar-prove"/>
+  </target>
+
+  <target name="signed" description="Rebuild all jars and sign (from AWT)">
 
     <antcall target="vector-update-awt" inheritRefs="true"/>
 
-    <antcall target="awt" inheritRefs="true"/>
+    <antcall target="awt-update" inheritRefs="true"/>
 
     <antcall target="demo-update-awt" inheritRefs="true"/>
     <antcall target="geda-update-awt" inheritRefs="true"/>
@@ -76,11 +83,11 @@
 
   </target>
 
-  <target name="unsigned" description="Rebuild all jars">
+  <target name="unsigned" description="Rebuild all jars (from AWT)">
 
     <antcall target="vector-update-awt" inheritRefs="true"/>
 
-    <antcall target="awt" inheritRefs="true"/>
+    <antcall target="awt-update" inheritRefs="true"/>
 
     <antcall target="demo-update-awt" inheritRefs="true"/>
     <antcall target="geda-update-awt" inheritRefs="true"/>
@@ -118,17 +125,7 @@
       The nominal products are intended to be runtimes, with update
       functions.  
 
-      A typical build error mixes the runtime in a javac class path.
-      The compiler complains of foreign runtime classes not found.
-
-      For example, compiling an AWT runtime produces errors for
-      Android classes not found.
-
-      In this case, one or more of the archives in that javac class
-      path will have been compiled for the foreign platform.
-
-      The fault lies in the build order.  The error is in the build
-      script and class path.
+      See PLATFORM.txt for more info.
 
     </echo>
   </target>
@@ -206,7 +203,23 @@
   <!-- 
     - AWT
     -->
-  <target name="awt" if="vector.awt.update" depends="awt-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.awt.update'.">
+  <target name="awt" description="Enter the AWT state">
+
+    <antcall target="awt-jar"/>
+
+    <antcall target="vector-jar-awt"/>
+
+    <antcall target="awt-jar"/>
+  </target>
+
+  <target name="awt-vector" description="Calls awt-jar, vector-jar-awt">
+
+    <antcall target="awt-jar"/>
+
+    <antcall target="vector-jar-awt"/>
+  </target>
+
+  <target name="awt-update" if="vector.awt.update" depends="awt-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.awt.update'.">
 
     <do-update src="${target.awt.jar}" tgt="${vector.awt.update}" />
   </target>
@@ -269,15 +282,22 @@
   <!-- 
     - ANDROID
     -->
-  <target name="android-vector" description="Calls android, vector-update-android">
+  <target name="android" description="Calls android-jar, vector-jar, android-jar (enter Android)">
 
-    <antcall target="android" inheritRefs="true"/>
+    <antcall target="android-jar"/>
+    <antcall target="vector-jar"/>
+    <antcall target="android-jar"/>
+  </target>
 
-    <antcall target="vector-update-android" inheritRefs="true"/>
+  <target name="android-vector" description="Calls android-jar, vector-jar-android (enter Android)">
+
+    <antcall target="android-jar" inheritRefs="true"/>
+
+    <antcall target="vector-jar-android" inheritRefs="true"/>
   </target>
 
 
-  <target name="android" if="vector.android.update" depends="android-jar" description="Compile, archive, and copy to targets defined in '{user.home}/update.properties'.">
+  <target name="android-update" if="vector.android.update" depends="android-jar" description="Compile, archive, and copy to targets defined in '{user.home}/update.properties'.">
 
     <do-update src="${target.android.jar}" tgt="${vector.android.update}" />
   </target>
@@ -781,11 +801,11 @@
     <antcall target="vector-jar-prove" inheritRefs="true"/>
   </target>
 
-  <target name="vector-awt" description="Calls vector-jar-awt, awt">
+  <target name="vector-awt" description="Calls vector-jar-awt, awt-jar.  See also 'awt'.">
 
     <antcall target="vector-jar-awt" inheritRefs="true"/>
 
-    <antcall target="awt" inheritRefs="true"/>
+    <antcall target="awt-jar" inheritRefs="true"/>
   </target>
 
   <target name="vector-android" description="Calls vector-jar-android, android">

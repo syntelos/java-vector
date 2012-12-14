@@ -1,9 +1,24 @@
 
 Portable pixel programming
 
+
+  Overview
+
+    In order to maximize performance, platform adaptation is performed
+    in the java class path by a java compiler.
+
+    This choice permits any platform to be adapted to vector through a
+    compiler that sources the Java Programming Language, or Java Class
+    File Format.
+
+
   Objective 
 
-    The "javac" class path is a type proof system.
+    The "javac" class path is a type prover.  
+
+    An application compiles to a platform, or compiles to prove
+    portability, through the conventional java class path.
+
 
   Solution
 
@@ -32,13 +47,60 @@ Portable pixel programming
     particular vector runtime class path.
 
 
+  Building
+
+      Run
+
+          ant <platform>
+
+      to enter the <platform> state in the binary archives.  For
+      example, "ant awt" or "ant android" or "ant prove".
+
+      A typical build error mixes the runtime in a javac class path.
+      The compiler complains of foreign runtime classes not found.
+
+      Before performing a build on a unique platform, run a build for
+      that platform as shown above, "ant <platform>".
+
+      Examples of the errors that arise from mixed platforms include
+      compiler errors for a foreign platform (compiling an AWT runtime
+      produces errors for Android classes not found), or, running an
+      application produces errors for a platform method not found.
+
+      In this case, one or more of the archives in that javac class
+      path will have been compiled for the foreign platform.
+
+      In non - platform archives, this is indicated in the manifest
+      class path.
+
+          vector-X.Y.Z.jar
+            /META-INF/MANIFEST.MF
+              Class-Path: vector-<platform>-X.Y.Z.jar
+
+      In a platform archive, the class path is not helpful.
+
+          vector-<platform>-X.Y.Z.jar
+            /META-INF/MANIFEST.MF
+              Class-Path: vector-X.Y.Z.jar
+
+      To ensure a clean build, run 
+
+          ant <platform>
+      or
+          ant <platform>-vector
+
+      (once) to switch platforms.
+
+      Subsequently, any builds in that platform will find the archives
+      in the <platform> state.
+
   Design
 
     There's two architectural strategies: one in which the API is in
     the platform package, and another in which the API is in the
     vector package.
 
-    Discussion
+    Background
 
       Ideally, the API would be in the vector package.  However, this
       strategy has only one tactic: interfaces and factories.
