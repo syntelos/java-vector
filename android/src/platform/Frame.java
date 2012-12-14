@@ -96,11 +96,64 @@ public class Frame
     protected final Logger log = Logger.getLogger(this.getClass().getName());
 
 
+    protected Display display;
+
+
     public Frame(){
         super();
+
+        this.display = this.createDisplay();
+
     }
 
 
+    public Display getDisplay(){
+
+        return this.display;
+    }
+    public Display createDisplay(){
+
+        return new Display();
+    }
+    public void init(){
+
+        Display display = this.display;
+        if (null != display){
+
+            display.init();
+        }
+    }
+    public void destroy(){
+
+        Display display = this.display;
+        if (null != display){
+            this.display = null;
+            display.destroy();
+        }
+
+    }
+    /**
+     * For subclasses not using Frame eval or Display open
+     */
+    public void modified(){
+
+        Display display = this.display;
+        if (null != display){
+
+            display.modified();
+        }
+    }
+    /**
+     * For subclasses not using Frame eval or Display open
+     */
+    public void outputScene(){
+
+        Display display = this.display;
+        if (null != display){
+
+            display.outputScene();
+        }
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,11 +217,11 @@ public class Frame
     }
     public final boolean open(File file){
 
-        return false;
+        return this.display.open(file);
     }
     public final boolean open(URL url){
 
-        return false;
+        return this.display.open(url);
     }
     public final boolean eval(String[] cli){
         if (0 < cli.length){

@@ -104,11 +104,11 @@
       The primary entry points have target names without hyphens.  See
       "ant -p" for a listing.
 
-      The "ant jar" (and "signed" and "unsigned") entry points are
-      employed for operational runtimes.
+      The "ant signed" and "ant unsigned" entry points are employed
+      for producing operational runtimes.
 
-      The "ant prove" entry points are employed for a compilation test
-      of portability.  These products have no runtime.  In a runtime,
+      The "prove" entry points are employed for a compilation test of
+      portability.  These products have no runtime.  In a runtime,
       these binaries will produce "java.lang.NoSuchMethodError".
 
     </echo>
