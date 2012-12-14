@@ -59,6 +59,8 @@
     <antcall target="fonview-prove" inheritRefs="true"/>
     <antcall target="xmpp-prove" inheritRefs="true"/>
 
+    <delete file="${target.vector.jar}"/>
+
   </target>
 
   <target name="signed" description="Rebuild all jars and sign">
@@ -932,6 +934,9 @@
     -->
   <target name="clean" description="Delete products">
     <delete dir="${bin}"/>
+    <!-- <![CDATA[delete dir="${dst}">
+      <include name="**/*.jar" />
+    </delete ]]> -->
   </target>
 
   <!--
@@ -950,36 +955,26 @@
     <property name="target.jogl.jar" value="${dst}/${ant.project.name}-jogl-${this.version}.jar"/>
     <property name="target.llg.jar" value="${dst}/${ant.project.name}-llg-${this.version}.jar"/>
 
-    <java outputproperty="existing.vector.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
-      <arg value="${ant.project.name}"/>
-    </java>
-    <java outputproperty="existing.platform.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
-      <arg value="${ant.project.name}-platform"/>
-    </java>
-    <java outputproperty="existing.awt.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
-      <arg value="${ant.project.name}-awt"/>
-    </java>
-    <java outputproperty="existing.android.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
-      <arg value="${ant.project.name}-android"/>
-    </java>
-    <java outputproperty="existing.demo.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
-      <arg value="${ant.project.name}-demo"/>
-    </java>
-    <java outputproperty="existing.geda.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
-      <arg value="${ant.project.name}-geda"/>
-    </java>
-    <java outputproperty="existing.fonview.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
-      <arg value="${ant.project.name}-fonview"/>
-    </java>
-    <java outputproperty="existing.xmpp.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
-      <arg value="${ant.project.name}-xmpp"/>
-    </java>
-    <java outputproperty="existing.jogl.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
-      <arg value="${ant.project.name}-jogl"/>
-    </java>
-    <java outputproperty="existing.llg.jar" classpath="${ant}" classname="JarPublisher" failonerror="true" fork="true">
-      <arg value="${ant.project.name}-llg"/>
-    </java>
+    <version-pub property="existing.vector.jar" prefix="${ant.project.name}"/>
+
+    <version-pub property="existing.platform.jar" prefix="${ant.project.name}-platform"/>
+
+    <version-pub property="existing.awt.jar" prefix="${ant.project.name}-awt"/>
+
+    <version-pub property="existing.android.jar" prefix="${ant.project.name}-android"/>
+
+    <version-pub property="existing.demo.jar" prefix="${ant.project.name}-demo"/>
+
+    <version-pub property="existing.geda.jar" prefix="${ant.project.name}-geda"/>
+
+    <version-pub property="existing.fonview.jar" prefix="${ant.project.name}-fonview"/>
+
+    <version-pub property="existing.xmpp.jar" prefix="${ant.project.name}-xmpp"/>
+
+    <version-pub property="existing.jogl.jar" prefix="${ant.project.name}-jogl"/>
+
+    <version-pub property="existing.llg.jar" prefix="${ant.project.name}-llg"/>
+
 
   </target>
 

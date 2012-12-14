@@ -78,11 +78,11 @@ public class Context
 
 
 
-    private final int depth;
+    public final int depth;
 
-    private ImageObserver observer;
+    public final ImageObserver observer;
 
-    private java.awt.Graphics2D instance;
+    public final java.awt.Graphics2D instance;
 
     private boolean trace = Context.Trace, deep = Context.Deep;
 

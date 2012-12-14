@@ -3,21 +3,36 @@ Portable pixel programming
 
   Objective 
 
-    A vector application is portable to the platforms with which it
-    compiles (ant build script).
+    The "javac" class path is a type proof system.
+
+  Solution
+
+    A common "platform" software package is available in multiple
+    flavors.  Each platform class file archive supports type proving,
+    or a runtime.
+
+          Runtime                 Archive
+
+          AWT                     vector-awt-X.Y.Z.jar
+          Android                 vector-android-X.Y.Z.jar
+          N/A (Portability Test)  vector-platform-X.Y.Z.jar
 
 
-  Solution set
+    The vector runtime class path is a combination of the vector
+    library compiled to the platform, with the platform.
 
-    A common library of platform adaptation for vector is defined as a
-    package named "platform" which is available through multiple JAR
-    package files.  
+          Runtime                 Archive
 
-    One platform package is made available to the vector runtime by
-    the selection of a platform package JAR file in the java
-    application Class Path.
+          AWT                     vector-X.Y.Z.jar
+          Android                 vector-X.Y.Z.jar
+          N/A (Portability Test)  vector-X.Y.Z.jar
 
-  Implementation architecture
+
+    An application class path requires the application compiled to a
+    particular vector runtime class path.
+
+
+  Design
 
     There's two architectural strategies: one in which the API is in
     the platform package, and another in which the API is in the

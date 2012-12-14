@@ -9,6 +9,39 @@
     </sequential>
   </macrodef>
 
+  <macrodef name="version-pub">
+    <attribute name="prefix"/>
+    <attribute name="property"/>
+    <sequential>
+      <java outputproperty="@{property}" classname="VersionPub" classpath="ant" fork="true" failonerror="true">
+        <arg value="pub"/>
+        <arg value="@{prefix}"/>
+      </java>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="version-add">
+    <attribute name="file"/>
+    <attribute name="property"/>
+    <sequential>
+      <java outputproperty="@{property}" classname="VersionPub" classpath="ant" fork="true" failonerror="true">
+        <arg value="add"/>
+        <arg value="@{file}"/>
+      </java>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="version-delete">
+    <attribute name="file"/>
+    <attribute name="property"/>
+    <sequential>
+      <java outputproperty="@{property}" classname="VersionPub" classpath="ant" fork="true" failonerror="true">
+        <arg value="delete"/>
+        <arg value="@{file}"/>
+      </java>
+    </sequential>
+  </macrodef>
+
   <macrodef name="version">
     <sequential>
       <property file="build.version" />

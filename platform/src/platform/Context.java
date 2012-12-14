@@ -27,20 +27,8 @@ import platform.geom.Point;
 
 
 /**
- * Graphics output context
- * 
- * <h3>System properties</h3>
- * 
- * The following properties are read at class initialization time.
- * 
- * <dl>
- * <dt><code>platform.Context.Trace</code></dt>
- * <dd> Boolean to enable context tracing to process standard error
- * </dd>
- * <dt><code>platform.Context.Deep</code></dt>
- * <dd> Boolean to enable context call stack tracing to process standard error
- * </dd>
- * <dl>
+ * Type proof member of vector context.  Applications compile against
+ * this package in order to prove portability.
  */
 public class Context
     extends Object
@@ -49,6 +37,13 @@ public class Context
 
     public final static boolean Trace = false;
     public final static boolean Deep = false;
+
+
+    public final int depth = 0;
+
+    public final Object observer = null;
+
+    public final Object instance = null;
 
 
     public Context(Object observer, Object instance){

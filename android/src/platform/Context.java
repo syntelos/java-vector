@@ -49,14 +49,43 @@ public class Context
     implements vector.Context,
                android.opengl.GLSurfaceView.GLWrapper
 {
+    public final static boolean Trace;
+    static {
+        boolean trace = false;
+        try {
+            String conf = System.getProperty("platform.Context.Trace");
+            trace = (null != conf && conf.equals("true"));
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+        Trace = trace;
+    }
 
-    public final static boolean Trace = false;
-    public final static boolean Deep = false;
+    public final static boolean Deep;
+    static {
+        boolean deep = false;
+        try {
+            String conf = System.getProperty("platform.Context.Deep");
+            deep = (null != conf && conf.equals("true"));
+        }
+        catch (Exception exc){
+            exc.printStackTrace();
+        }
+        Deep = deep;
+    }
 
+
+
+    public final int depth;
 
     public final View observer;
 
     public final Canvas instance;
+
+    protected final int save;
+
+    private boolean trace = Context.Trace, deep = Context.Deep;
 
 
     public Context(View observer, Canvas instance){
@@ -64,23 +93,50 @@ public class Context
         if (null != observer && null != instance){
             this.observer = observer;
             this.instance = instance;
+            this.depth = 1;
+            this.save = 0;
         }
         else
             throw new IllegalArgumentException();
     }
     public Context(Context context){
         super();
+        if (null != context){
+            this.instance = context.instance;
+            this.save = this.instance.save();
+
+            this.observer = context.observer;
+            this.depth = (context.depth+1);
+            this.trace = context.trace;
+            this.deep = context.deep;
+        }
+        else
+            throw new IllegalArgumentException();
     }
     public Context(Context context, int x, int y, int w, int h){
         super();
+        if (null != context){
+            this.instance = context.instance;
+            this.save = this.instance.save();
+            {
+                this.instance.clipRect(x,y,(x+w),(y+h));
+                this.instance.translate(x,y);
+            }
+            this.observer = context.observer;
+            this.depth = (context.depth+1);
+            this.trace = context.trace;
+            this.deep = context.deep;
+        }
+        else
+            throw new IllegalArgumentException();
     }
 
 
-    public Object getNative(){
-        return this;
+    public Canvas getNative(){
+        return this.instance;
     }
     public int depth(){
-        return 0;
+        return this.depth;
     }
     public boolean hasGL(){
         return true;
@@ -94,17 +150,17 @@ public class Context
         return this.wrap(this.instance.getGL());
     }
     public boolean isTracing(){
-        return false;
+        return this.trace;
     }
     public vector.Context setTracing(boolean trace){
-
+        this.trace = trace;
         return this;
     }
     public boolean isTracingDeep(){
-        return false;
+        return this.deep;
     }
     public vector.Context setTracingDeep(boolean deep){
-
+        this.deep = deep;
         return this;
     }
     public void transform(Transform at)
@@ -162,6 +218,7 @@ public class Context
     }
     public void dispose()
     {
+        this.instance.restoreToCount(this.save);
     }
     public Shape getClip()
     {
