@@ -94,6 +94,8 @@ Portable pixel programming
       Subsequently, any builds in that platform will find the archives
       in the <platform> state.
 
+      See also "ant -p" and "ant help".
+
   Design
 
     There's two architectural strategies: one in which the API is in

@@ -108,6 +108,8 @@
   <target name="help" description="Overview">
     <echo>
 
+ant help (for portable pixel programming with vector)
+
       See "ant -p" for a listing of the entry points.
 
       The "ant signed-awt" and "ant unsigned-awt" (default) entry
