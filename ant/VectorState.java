@@ -38,7 +38,7 @@ public class VectorState
         return CMD_NONE;
     }
 
-    protected final static File StateTxt = new File("state.txt");
+    protected final static File StateTxt = new File("vector-state.txt");
 
 
     public static void main(String[] argv){
