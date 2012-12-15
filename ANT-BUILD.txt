@@ -1,0 +1,41 @@
+
+
+ant help (for portable pixel programming with vector)
+
+
+      See "ant -p" for a listing of the entry points.
+
+      The "ant signed-awt" and "ant unsigned-awt" (default) entry
+      points are employed for producing operational runtimes.
+
+      The "prove" entry points are employed for a compilation test of
+      portability.  These products have no runtime.  In an otherwise
+      correct runtime, a jar compiled for "prove" will throw
+      "java.lang.NoSuchMethodError" for calls to platform methods.
+
+      See PLATFORM.txt for more info.
+
+      A number of processes have been defined here for proving
+      portability, and building libraries and demos.  The processes
+      themselves are very basic, but numerous.  This script just glues
+      together the correct identifiers for a convenient, productive,
+      and reproducible process.  Dependencies are (simple) linear
+      binding and construction chains.
+
+      Some of the corner cases that are implied by the rules and
+      scripts defined here are unintended.  For example,
+      vector-X.Y.Z.jar can be generated with manifest class-path for
+      the portability proof vector-platform-X.Y.Z.jar and then
+      accidently employed in a runtime.
+
+      The vector-state tool has been defined and employed here to
+      prevent these errors.  The state of the build script reflects
+      the current build platform.  The build script enters states
+      "prove", "awt" or "android" from some entry points, and requires
+      existing states from other entry points.
+
+      The vector-state process simplifies the number of invalid states
+      that the build directory can enter.  Invalid (secondary) states
+      exist immediately after entering a state and before rebuilding
+      all packages for the new platform.
+
