@@ -23,7 +23,7 @@ public class VersionPub
     public final static int CMD_DELETE = 2;
     public final static int CMD_PUB = 3;
 
-    public final static int Cmd(String cmd){
+    public static int Cmd(String cmd){
 
         if (null != cmd && 0 < cmd.length()){
 
@@ -50,9 +50,74 @@ public class VersionPub
         return CMD_NONE;
     }
 
-    private final static String[] ENV = new String[0];
+    protected final static String[] ENV = new String[0];
 
-    private final static void Copy(InputStream in, OutputStream out){
+    /**
+     * Eight bit US-ASCII
+     */
+    protected final static String ReadFile(File file){
+        try {
+            InputStream in = new java.io.FileInputStream(file);
+            try {
+                ByteArrayOutputStream string = new ByteArrayOutputStream();
+                byte[] iob = new byte[128];
+                int read;
+                while (0 < (read = in.read(iob,0,128)))
+                    string.write(iob,0,read);
+
+                if (0 < string.size()){
+
+                    iob = string.toByteArray();
+
+                    return new String(iob,0,0,iob.length).trim();
+                }
+            }
+            finally {
+                in.close();
+            }
+        }
+        catch (IOException exc){
+        }
+        return null;
+    }
+    /**
+     * Eight bit US-ASCII
+     */
+    protected final static String WriteFile(File file, String line){
+        if (null != line){
+            line = line.trim();
+            final int linelen = line.length();
+            if (0 < linelen){
+                try {
+                    OutputStream out = new java.io.FileOutputStream(file);
+                    try {
+                        ByteArrayOutputStream string = new ByteArrayOutputStream();
+
+                        final char[] content = line.toCharArray();
+                
+                        final byte[] iob = new byte[linelen];
+                        {
+                            for (int cc = 0; cc < linelen; cc++){
+                                iob[cc] = (byte)(content[cc] & 0xff);
+                            }
+                        }
+                        out.write(iob,0,linelen);
+                        out.write('\n');
+                        out.flush();
+
+                        return line;
+                    }
+                    finally {
+                        out.close();
+                    }
+                }
+                catch (IOException exc){
+                }
+            }
+        }
+        return null;
+    }
+    protected final static void Copy(InputStream in, OutputStream out){
         try {
             try {
                 byte[] iob = new byte[128];
@@ -171,16 +236,20 @@ public class VersionPub
 
     private final static Runtime RT = Runtime.getRuntime();
 
-    private final static boolean DeleteFile(File file)
+    protected final static boolean DeleteFile(File file)
         throws java.io.IOException,
                java.lang.InterruptedException
     {
         if (file.isFile()){
+            File dir = file.getParentFile();
+            if (null == dir)
+                dir = CWD;
+
             if (IsSvnRepo(file)){
                 if (SvnContains(file))
                     return SvnDelete(file);
                 else if (Debug){
-                    System.out.printf("+ delete %s in %s%n",file.getName(),file.getParentFile().getPath());
+                    System.out.printf("+ delete %s in %s%n",file.getName(),dir.getPath());
                     return true;
                 }
                 else
@@ -189,7 +258,7 @@ public class VersionPub
             else if (GitContains(file))
                 return GitDelete(file);
             else if (Debug){
-                System.out.printf("+ delete %s in %s%n",file.getName(),file.getParentFile().getPath());
+                System.out.printf("+ delete %s in %s%n",file.getName(),dir.getPath());
                 return true;
             }
             else
@@ -206,20 +275,24 @@ public class VersionPub
             String[] cmd = new String[]{
                 VersionPub.Svn, "delete", "--force", file.getName()
             };
+            File dir = file.getParentFile();
+            if (null == dir)
+                dir = CWD;
 
             if (Debug){
-                System.out.printf("+ svn delete --force %s in %s%n",file.getName(),file.getParentFile().getPath());
+                System.out.printf("+ svn delete --force %s in %s%n",file.getName(),dir.getPath());
 
                 return true;
             }
             else {
-                Process p = RT.exec(cmd,ENV,file.getParentFile());
+
+                Process p = RT.exec(cmd,ENV,dir);
                 if (0 == p.waitFor()){
 
                     return true;
                 }
                 else {
-                    System.out.printf("| svn delete --force %s in %s%n",file.getName(),file.getParentFile().getPath());
+                    System.out.printf("| svn delete --force %s in %s%n",file.getName(),dir.getPath());
                     Copy(p.getInputStream(),System.out);
                     Copy(p.getErrorStream(),System.err);
                     return false;
@@ -237,9 +310,12 @@ public class VersionPub
             String[] cmd = new String[]{
                 VersionPub.Git, "rm", "-f", file.getName()
             };
+            File dir = file.getParentFile();
+            if (null == dir)
+                dir = CWD;
 
             if (Debug){
-                System.out.printf("+ git rm -f %s in %s%n",file.getName(),file.getParentFile().getPath());
+                System.out.printf("+ git rm -f %s in %s%n",file.getName(),dir.getPath());
 
                 return true;
             }
@@ -250,7 +326,7 @@ public class VersionPub
                     return true;
                 }
                 else {
-                    System.out.printf("| git rm -f %s in %s%n",file.getName(),file.getParentFile().getPath());
+                    System.out.printf("| git rm -f %s in %s%n",file.getName(),dir.getPath());
                     Copy(p.getInputStream(),System.out);
                     Copy(p.getErrorStream(),System.err);
                     return false;
@@ -260,7 +336,7 @@ public class VersionPub
         else
             return false;
     }
-    private final static boolean AddFile(File file)
+    protected final static boolean AddFile(File file)
         throws java.io.IOException,
                java.lang.InterruptedException
     {
@@ -271,13 +347,20 @@ public class VersionPub
                 return SvnAdd(file);
         }
         else if (VersionPub.HaveGit && IsGitRepo(file)){
-            if (GitContains(file))
+
+            if (GitContains(file)){
+
                 return false;
-            else
+            }
+            else {
+
                 return GitAdd(file);
+            }
         }
-        else
+        else {
+
             return false;
+        }
     }
     private final static boolean SvnAdd(File file)
         throws java.io.IOException,
@@ -287,20 +370,23 @@ public class VersionPub
             String[] cmd = new String[]{
                 VersionPub.Svn, "add", file.getName()
             };
+            File dir = file.getParentFile();
+            if (null == dir)
+                dir = CWD;
 
             if (Debug){
-                System.out.printf("+ svn add %s in %s%n",file.getName(),file.getParentFile().getPath());
+                System.out.printf("+ svn add %s in %s%n",file.getName(),dir.getPath());
 
                 return true;
             }
             else {
-                Process p = RT.exec(cmd,ENV,file.getParentFile());
+                Process p = RT.exec(cmd,ENV,dir);
                 if (0 == p.waitFor()){
 
                     return true;
                 }
                 else {
-                    System.out.printf("| svn add %s in %s%n",file.getName(),file.getParentFile().getPath());
+                    System.out.printf("| svn add %s in %s%n",file.getName(),dir.getPath());
                     Copy(p.getInputStream(),System.out);
                     Copy(p.getErrorStream(),System.err);
                     return false;
@@ -315,23 +401,27 @@ public class VersionPub
                java.lang.InterruptedException
     {
         if (VersionPub.HaveGit){
+
             String[] cmd = new String[]{
                 VersionPub.Git, "add", file.getName()
             };
+            File dir = file.getParentFile();
+            if (null == dir)
+                dir = CWD;
 
             if (Debug){
-                System.out.printf("+ git add %s in %s%n",file.getName(),file.getParentFile().getPath());
+                System.out.printf("+ git add %s in %s%n",file.getName(),dir.getPath());
 
                 return true;
             }
             else {
-                Process p = RT.exec(cmd,ENV,file.getParentFile());
+                Process p = RT.exec(cmd,ENV,dir);
                 if (0 == p.waitFor()){
 
                     return true;
                 }
                 else {
-                    System.out.printf("| git add %s in %s%n",file.getName(),file.getParentFile().getPath());
+                    System.out.printf("| git add %s in %s%n",file.getName(),dir.getPath());
                     Copy(p.getInputStream(),System.out);
                     Copy(p.getErrorStream(),System.err);
                     return false;
@@ -342,20 +432,31 @@ public class VersionPub
             return false;
     }
     private final static boolean IsSvnRepo(File file){
-        File dir = new File(file.getParentFile(),".svn");
+        File dir = file.getParentFile();
+        if (null == dir)
+            dir = CWD;
+
+        dir = new File(dir,".svn");
         return (dir.isDirectory());
     }
     private final static boolean IsGitRepo(File file){
 
-        File parent = file;
-        if (!file.isDirectory())
+        File parent = file.getAbsoluteFile();
+        if (!file.isDirectory()){
             parent = file.getParentFile();
+
+            if (null == parent)
+                parent = CWD;
+        }
 
         while (null != parent){
             File dir = new File(parent,".git");
-            if (dir.isDirectory())
+            if (dir.isDirectory()){
+
                 return true;
+            }
             else {
+
                 parent = parent.getParentFile();
             }
         }
@@ -369,8 +470,11 @@ public class VersionPub
             String[] cmd = new String[]{
                 VersionPub.Svn, "diff", file.getName()
             };
+            File dir = file.getParentFile();
+            if (null == dir)
+                dir = CWD;
 
-            Process p = RT.exec(cmd,ENV,file.getParentFile());
+            Process p = RT.exec(cmd,ENV,dir);
             if (0 == p.waitFor()){
 
                 return true;
@@ -390,8 +494,11 @@ public class VersionPub
             String[] cmd = new String[]{
                 VersionPub.Git, "ls-files", "--others"
             };
+            File dir = file.getParentFile();
+            if (null == dir)
+                dir = CWD;
 
-            Process p = RT.exec(cmd,ENV,file.getParentFile());
+            Process p = RT.exec(cmd,ENV,dir);
             if (0 == p.waitFor()){
                 /*
                  * Is a git repo
@@ -547,6 +654,11 @@ public class VersionPub
         this.name = name;
         this.index = name.length();
     }
+    protected VersionPub(){
+        super();
+        throw new UnsupportedOperationException();
+    }
+
 
     public boolean accept(File file){
         if (file.isFile()){

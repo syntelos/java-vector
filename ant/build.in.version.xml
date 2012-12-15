@@ -6,6 +6,10 @@
       <java classname="VersionTag" classpath="ant" fork="true" failonerror="true">
         <arg value="@{prefix}"/>
       </java>
+
+      <echo>         version tag @{prefix}
+      </echo>
+
     </sequential>
   </macrodef>
 
@@ -28,6 +32,10 @@
         <arg value="add"/>
         <arg value="@{file}"/>
       </java>
+
+      <echo>         version add @{file} @{property}
+      </echo>
+
     </sequential>
   </macrodef>
 
@@ -39,6 +47,9 @@
         <arg value="delete"/>
         <arg value="@{file}"/>
       </java>
+
+      <echo>         version delete @{file} @{property}
+      </echo>
     </sequential>
   </macrodef>
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="vector" default="vector-update-awt">
+<project name="vector" default="unsigned-awt">
 
   <property name="src" value="src"/>
   <property name="ant" value="ant"/>
@@ -28,7 +28,7 @@
   <property file="${user.home}/update.properties"/>
   <import file="ant/build.in.update.xml"/>
   <import file="ant/build.in.android.xml"/>
-
+  <import file="ant/build.in.vector-state.xml"/>
 
 
   <path id="lib.path">
@@ -45,6 +45,8 @@
     - 
     -->
   <target name="prove" description="Prove all packages (from Prove)">
+
+    <vector-state-require name="prove" property="vector.state"/>
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
 
@@ -68,9 +70,14 @@
     <antcall target="platform-jar"/>
 
     <antcall target="vector-jar-prove"/>
+
+    <vector-state-set name="prove" property="vector.state"/>
+
   </target>
 
-  <target name="signed" description="Rebuild all jars and sign (from AWT)">
+  <target name="signed-awt" description="Rebuild all jars and sign (from AWT)">
+
+    <vector-state-require name="awt" property="vector.state"/>
 
     <antcall target="vector-update-awt" inheritRefs="true"/>
 
@@ -83,7 +90,9 @@
 
   </target>
 
-  <target name="unsigned" description="Rebuild all jars (from AWT)">
+  <target name="unsigned-awt" description="Rebuild all jars (from AWT)">
+
+    <vector-state-require name="awt" property="vector.state"/>
 
     <antcall target="vector-update-awt" inheritRefs="true"/>
 
@@ -99,11 +108,24 @@
   <target name="help" description="Overview">
     <echo>
 
+      See "ant -p" for a listing of the entry points.
+
+      The "ant signed-awt" and "ant unsigned-awt" (default) entry
+      points are employed for producing operational runtimes.
+
+      The "prove" entry points are employed for a compilation test of
+      portability.  These products have no runtime.  In an otherwise
+      correct runtime, a jar compiled for "prove" will throw
+      "java.lang.NoSuchMethodError" for calls to platform methods.
+
+      See PLATFORM.txt for more info.
+
       A number of processes have been defined here for proving
       portability, and building libraries and demos.  The processes
       themselves are very basic, but numerous.  This script just glues
       together the correct identifiers for a convenient, productive,
-      and reproducible process.
+      and reproducible process.  Dependencies are (simple) linear
+      binding and construction chains.
 
       Some of the corner cases that are implied by the rules and
       scripts defined here are unintended.  For example,
@@ -111,21 +133,16 @@
       the portability proof vector-platform-X.Y.Z.jar and then
       accidently employed in a runtime.
 
-      The primary entry points have target names without hyphens.  See
-      "ant -p" for a listing.
+      The vector-state tool has been defined and employed here to
+      prevent these errors.  The state of the build script reflects
+      the current build platform.  The build script enters states
+      "prove", "awt" or "android" from some entry points, and requires
+      existing states from other entry points.
 
-      The "ant signed" and "ant unsigned" entry points are employed
-      for producing operational runtimes.
-
-      The "prove" entry points are employed for a compilation test of
-      portability.  These products have no runtime.  In an otherwise
-      correct runtime, a jar compiled for "prove" will produce
-      "java.lang.NoSuchMethodError".
-
-      The nominal products are intended to be runtimes, with update
-      functions.  
-
-      See PLATFORM.txt for more info.
+      The vector-state process simplifies the number of invalid states
+      that the build directory can enter.  Invalid (secondary) states
+      exist immediately after entering a state and before rebuilding
+      all packages for the new platform.
 
     </echo>
   </target>
@@ -133,13 +150,15 @@
   <!-- 
     - PLATFORM
     -->
-  <target name="platform-vector" description="Platform dev check cycle">
+  <target name="platform-vector" description="Platform dev check cycle (enter Prove)">
 
     <antcall target="platform-jar" inheritRefs="true"/>
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
 
     <antcall target="platform-jar" inheritRefs="true"/>
+
+    <vector-state-set name="prove" property="vector.state"/>
 
   </target>
 
@@ -161,6 +180,9 @@
   </target>
 
   <target name="platform-compile" depends="platform-version">
+
+    <vector-state-require name="prove" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
 
@@ -177,6 +199,9 @@
   </target>
 
   <target name="platform-prove" depends="version">
+
+    <vector-state-require name="prove" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
 
@@ -210,13 +235,18 @@
     <antcall target="vector-jar-awt"/>
 
     <antcall target="awt-jar"/>
+
+    <vector-state-set name="awt" property="vector.state"/>
+
   </target>
 
-  <target name="awt-vector" description="Calls awt-jar, vector-jar-awt">
+  <target name="awt-vector" description="Calls awt-jar, vector-jar-awt (enter AWT)">
 
     <antcall target="awt-jar"/>
 
     <antcall target="vector-jar-awt"/>
+
+    <vector-state-set name="awt" property="vector.state"/>
   </target>
 
   <target name="awt-update" if="vector.awt.update" depends="awt-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.awt.update'.">
@@ -242,6 +272,9 @@
   </target>
 
   <target name="awt-compile" depends="awt-version">
+
+    <vector-state-require name="awt" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -259,6 +292,9 @@
   </target>
 
   <target name="awt-prove" depends="version">
+
+    <vector-state-require name="prove" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
 
@@ -287,6 +323,8 @@
     <antcall target="android-jar"/>
     <antcall target="vector-jar-android"/>
     <antcall target="android-jar"/>
+
+    <vector-state-set name="android" property="vector.state"/>
   </target>
 
   <target name="android-vector" description="Calls android-jar, vector-jar-android (enter Android)">
@@ -294,6 +332,8 @@
     <antcall target="android-jar" inheritRefs="true"/>
 
     <antcall target="vector-jar-android" inheritRefs="true"/>
+
+    <vector-state-set name="android" property="vector.state"/>
   </target>
 
 
@@ -319,6 +359,9 @@
   </target>
 
   <target name="android-compile" depends="android-version">
+
+    <vector-state-require name="android" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -377,6 +420,9 @@
   </target>
 
   <target name="demo-compile-awt" depends="demo-version-awt">
+
+    <vector-state-require name="awt" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -394,6 +440,9 @@
   </target>
 
   <target name="demo-prove" depends="version" description="Compile against platform for proof of portability.">
+
+    <vector-state-require name="prove" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
 
@@ -439,6 +488,9 @@
   </target>
 
   <target name="geda-compile-awt" depends="geda-version-awt">
+
+    <vector-state-require name="awt" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -457,6 +509,9 @@
   </target>
 
   <target name="geda-prove" depends="version" description="Compile against platform for proof of portability.">
+
+    <vector-state-require name="prove" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
 
@@ -503,6 +558,9 @@
   </target>
 
   <target name="fonview-compile-awt" depends="fonview-version-awt">
+
+    <vector-state-require name="awt" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -521,6 +579,8 @@
   </target>
 
   <target name="fonview-prove" depends="version" description="Compile against platform for proof of portability.">
+
+    <vector-state-require name="prove" property="vector.state"/>
 
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
@@ -602,6 +662,8 @@
 
   <target name="xmpp-compile-awt" depends="xmpp-version">
 
+    <vector-state-require name="awt" property="vector.state"/>
+
     <echo message="Class-Path: ${xmpp.lib.path.manifest}"/>
 
     <delete dir="${bin}"/>
@@ -623,6 +685,8 @@
   </target>
 
   <target name="xmpp-prove" depends="xmpp-version" description="Compile against platform for proof of portability.">
+
+    <vector-state-require name="prove" property="vector.state"/>
 
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
@@ -684,6 +748,9 @@
   </target>
 
   <target name="jogl-compile-awt" depends="jogl-version">
+
+    <vector-state-require name="awt" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -702,6 +769,8 @@
   </target>
 
   <target name="jogl-prove" depends="version" description="Compile against platform for proof of portability.">
+
+    <vector-state-require name="prove" property="vector.state"/>
 
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
@@ -744,6 +813,9 @@
   </target>
 
   <target name="llg-compile-awt" depends="llg-version">
+
+    <vector-state-require name="awt" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}/fonts">
@@ -763,6 +835,8 @@
   </target>
 
   <target name="llg-prove" depends="version" description="Compile against platform for proof of portability.">
+
+    <vector-state-require name="prove" property="vector.state"/>
 
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
@@ -792,27 +866,33 @@
   <!--
     - VECTOR
     -->
-  <target name="vector-platform" description="Platform dev check cycle">
+  <target name="vector-platform" description="Calls vector-jar-prove, platform-jar, vector-jar-prove (enter Prove)">
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
 
     <antcall target="platform-jar" inheritRefs="true"/>
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
+
+    <vector-state-set name="prove" property="vector.state"/>
   </target>
 
-  <target name="vector-awt" description="Calls vector-jar-awt, awt-jar.  See also 'awt'.">
+  <target name="vector-awt" description="Calls vector-jar-awt, awt-jar  (enter AWT)">
 
     <antcall target="vector-jar-awt" inheritRefs="true"/>
 
     <antcall target="awt-jar" inheritRefs="true"/>
+
+    <vector-state-set name="awt" property="vector.state"/>
   </target>
 
-  <target name="vector-android" description="Calls vector-jar-android, android">
+  <target name="vector-android" description="Calls vector-jar-android, android (enter Android)">
 
     <antcall target="vector-jar-android" inheritRefs="true"/>
 
     <antcall target="android" inheritRefs="true"/>
+
+    <vector-state-set name="android" property="vector.state"/>
   </target>
 
   <target name="vector-update-awt" if="vector.update" depends="vector-jar-awt" description="Compile, archive, and copy to targets defined in '{user.home}/update.properties'.">
@@ -836,6 +916,9 @@
   </target>
 
   <target name="vector-compile-awt" depends="vector-version-awt" description="Compile src to bin">
+
+    <vector-state-require name="awt" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -872,6 +955,9 @@
   </target>
 
   <target name="vector-compile-android" depends="vector-version-android" description="Compile src to bin">
+
+    <vector-state-require name="android" property="vector.state"/>
+
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
@@ -907,6 +993,8 @@
   </target>
 
   <target name="vector-prove" unless="cond.vector.prove" depends="vector-version-prove" description="Compile against platform for proof of portability.">
+
+    <vector-state-require name="prove" property="vector.state"/>
 
     <property name="cond.vector.prove" value="false"/>
 

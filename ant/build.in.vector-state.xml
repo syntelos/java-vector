@@ -1,0 +1,51 @@
+<project name="build-vector-state">
+
+  <macrodef name="vector-state-require">
+    <attribute name="name"/>
+    <attribute name="property"/>
+    <sequential>
+      <java outputproperty="@{property}" classname="VectorState" classpath="ant" fork="true" failonerror="true">
+        <arg value="get"/>
+      </java>
+      <fail message="vector-state require '@{name}': found '${@{property}}'.">
+        <condition>
+          <not>
+            <equals arg1="@{name}" arg2="${@{property}}" casesensitive="false" trim="true" forcestring="true"/>
+          </not>
+        </condition>
+      </fail>
+
+      <echo>
+         vector-state require '@{name}'
+      </echo>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="vector-state-get">
+
+    <attribute name="property"/>
+    <sequential>
+      <java outputproperty="@{property}" classname="VectorState" classpath="ant" fork="true" failonerror="true">
+        <arg value="get"/>
+      </java>
+      <echo>
+         vector-state get '${@{property}}'
+      </echo>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="vector-state-set">
+    <attribute name="name"/>
+    <attribute name="property"/>
+    <sequential>
+      <java outputproperty="@{property}" classname="VectorState" classpath="ant" fork="true" failonerror="true">
+        <arg value="set"/>
+        <arg value="@{name}"/>
+      </java>
+      <echo>
+         vector-state set '${@{property}}'
+      </echo>
+    </sequential>
+  </macrodef>
+
+</project>
