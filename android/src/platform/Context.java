@@ -27,6 +27,7 @@ import platform.geom.Point;
 
 import android.graphics.Canvas;
 import android.view.View;
+import android.view.SurfaceHolder;
 
 /**
  * Graphics output context
@@ -83,6 +84,8 @@ public class Context
 
     public final Canvas instance;
 
+    private final SurfaceHolder surface;
+
     protected final int save;
 
     private boolean trace = Context.Trace, deep = Context.Deep;
@@ -92,7 +95,20 @@ public class Context
         super();
         if (null != observer && null != instance){
             this.observer = observer;
+            this.surface = null;
             this.instance = instance;
+            this.depth = 1;
+            this.save = 0;
+        }
+        else
+            throw new IllegalArgumentException();
+    }
+    public Context(View observer, SurfaceHolder surface){
+        super();
+        if (null != observer && null != surface){
+            this.observer = observer;
+            this.surface = surface;
+            this.instance = surface.lockCanvas();
             this.depth = 1;
             this.save = 0;
         }
@@ -102,10 +118,11 @@ public class Context
     public Context(Context context){
         super();
         if (null != context){
+            this.observer = context.observer;
+            this.surface = null;
             this.instance = context.instance;
             this.save = this.instance.save();
 
-            this.observer = context.observer;
             this.depth = (context.depth+1);
             this.trace = context.trace;
             this.deep = context.deep;
@@ -116,13 +133,14 @@ public class Context
     public Context(Context context, int x, int y, int w, int h){
         super();
         if (null != context){
+            this.observer = context.observer;
+            this.surface = null;
             this.instance = context.instance;
             this.save = this.instance.save();
             {
                 this.instance.clipRect(x,y,(x+w),(y+h));
                 this.instance.translate(x,y);
             }
-            this.observer = context.observer;
             this.depth = (context.depth+1);
             this.trace = context.trace;
             this.deep = context.deep;
@@ -216,9 +234,23 @@ public class Context
     public void clipTo(int a0, int a1, int a2, int a3)
     {
     }
+    /* package */ void disposeAndroid()
+    {
+        if (null != this.surface){
+
+            this.surface.unlockCanvasAndPost(this.instance);
+        }
+    }
     public void dispose()
     {
-        this.instance.restoreToCount(this.save);
+        if (null != this.surface){
+
+            this.surface.unlockCanvasAndPost(this.instance);
+        }
+        else if (null != this.instance && 0 != this.save){
+
+            this.instance.restoreToCount(this.save);
+        }
     }
     public Shape getClip()
     {

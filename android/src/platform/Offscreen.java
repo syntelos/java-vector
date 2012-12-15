@@ -66,6 +66,6 @@ public final class Offscreen
     public Context create(){
 
 
-        return new Context(null,null);
+        return null;
     }
 }

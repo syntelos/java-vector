@@ -33,6 +33,10 @@ import json.Reader;
 
 import android.graphics.Canvas;
 import android.view.View;
+import android.view.SurfaceHolder;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -46,7 +50,10 @@ import java.util.logging.Logger;
 
 public class Display
     extends android.opengl.GLSurfaceView
-    implements vector.Display
+    implements vector.Display,
+               android.view.SurfaceHolder.Callback,
+               android.opengl.GLSurfaceView.GLWrapper,
+               android.opengl.GLSurfaceView.Renderer
 {
 
     protected final Logger log = Logger.getLogger(this.getClass().getName());
@@ -69,9 +76,14 @@ public class Display
 
     protected Document document;
 
+    protected volatile SurfaceHolder surface;
+
 
     public Display(){
         super(Frame.Instance);
+
+        this.setGLWrapper(this);
+        this.setRenderer(this);
     }
 
 
@@ -129,6 +141,10 @@ public class Display
         }
     }
     public void relocated(){
+    }
+    public platform.gl.GL wrap(javax.microedition.khronos.opengles.GL gl){
+
+        return new platform.gl.GL(new Context(this,this.surface),gl);
     }
     public void flush(){
 
@@ -641,7 +657,54 @@ public class Display
 
         this.output1(context);
     }
+    public void surfaceCreated(SurfaceHolder holder){
+        super.surfaceCreated(holder);
 
+        this.surface = holder;
+    }
+    public void surfaceChanged(SurfaceHolder holder, int fmt, int w, int h){
+        super.surfaceChanged(holder, fmt, w, h);
+
+        this.surface = holder;
+    }
+    public void surfaceDestroyed(SurfaceHolder holder){
+        super.surfaceDestroyed(holder);
+
+        this.surface = null;
+    }
+
+    public void onSurfaceCreated(GL10 gl, EGLConfig config){
+
+        final Context context = this.wrap(gl);
+
+        try {
+            this.output1(context);
+        }
+        finally {
+            context.disposeAndroid();
+        }
+    }
+    public void onSurfaceChanged(GL10 gl, int width, int height){
+
+        final Context context = this.wrap(gl);
+
+        try {
+            this.output1(context);
+        }
+        finally {
+            context.disposeAndroid();
+        }
+    }
+    public void onDrawFrame(GL10 gl){
+
+        final Context context = this.wrap(gl);
+        try {
+            this.output1(context);
+        }
+        finally {
+            context.disposeAndroid();
+        }
+    }
 
     public Json toJson(){
         Json thisModel = new ObjectJson();

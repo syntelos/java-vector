@@ -20,6 +20,8 @@ package platform.gl;
 
 import platform.Context;
 
+import javax.microedition.khronos.opengles.GL10;
+
 /**
  * Android GL context
  * 
@@ -31,13 +33,18 @@ public class GL
                javax.microedition.khronos.opengles.GL
 {
 
-    public final javax.microedition.khronos.opengles.GL gl;
+    public final GL10 gl;
 
 
     public GL(Context context, javax.microedition.khronos.opengles.GL gl){
         super(context);
-        if (null != gl)
-            this.gl = gl;
+        if (null != gl){
+
+            if (gl instanceof GL10)
+                this.gl = (GL10)gl;
+            else
+                throw new IllegalArgumentException(gl.getClass().getName());
+        }
         else
             throw new IllegalArgumentException();
     }
