@@ -167,6 +167,295 @@ public class Context
 
         return this.wrap(this.instance.getGL());
     }
+
+    public void setBitmap(android.graphics.Bitmap bitmap) {
+        this.instance.setBitmap(bitmap);
+    }
+    public void setViewport(int width, int height) {
+        this.instance.setViewport(width,height);
+    }
+    public boolean isOpaque(){
+        return this.instance.isOpaque();
+    }
+    public int getWidth(){
+        return this.instance.getWidth();
+    }
+    public int getHeight(){
+        return this.instance.getHeight();
+    }
+    public int getDensity(){
+        return this.instance.getDensity();
+    }
+    public void setDensity(int density){
+        this.instance.setDensity(density);
+    }
+    public int save(){
+        return this.instance.save();
+    }
+    public int save(int flags){
+        return this.instance.save(flags);
+    }
+    public int saveLayer(android.graphics.RectF bounds, android.graphics.Paint paint, int flags){
+        return this.instance.saveLayer(bounds, paint, flags);
+    }
+    public int saveLayer(float left, float top, float right, float bottom,
+                         android.graphics.Paint paint, int flags)
+    {
+        return this.instance.saveLayer(left, top, right, bottom, paint, flags);
+    }
+    public int saveLayerAlpha(android.graphics.RectF bounds, int alpha, int flags){
+        return this.instance.saveLayerAlpha(bounds, alpha, flags);
+    }
+    public int saveLayerAlpha(float left, float top, float right, float bottom, int alpha, int flags){
+        return this.instance.saveLayerAlpha(left, top, right, bottom, alpha, flags);
+    }
+    public void restore(){
+        this.instance.restore();
+    }
+    public int getSaveCount(){
+        return this.instance.getSaveCount();
+    }
+    public void restoreToCount(int saveCount){
+        this.instance.restoreToCount(saveCount);
+    }
+    public void translate(float dx, float dy){
+        this.instance.translate(dx, dy);
+    }
+    public void scale(float sx, float sy){
+        this.instance.scale(sx, sy);
+    }
+    public void rotate(float degrees){
+        this.instance.rotate(degrees);
+    }
+    public void skew(float sx, float sy){
+        this.instance.skew(sx, sy);
+    }
+    public void concat(android.graphics.Matrix matrix){
+        this.instance.concat(matrix);
+    }
+    public void setMatrix(android.graphics.Matrix matrix){
+        this.instance.setMatrix(matrix);
+    }
+    public void getMatrix(android.graphics.Matrix ctm){
+        this.instance.getMatrix(ctm);
+    }
+    public boolean clipRect(android.graphics.RectF rect, android.graphics.Region.Op op){
+        return this.instance.clipRect(rect, op);
+    }
+    public boolean clipRect(android.graphics.Rect rect, android.graphics.Region.Op op){
+        return this.instance.clipRect(rect, op);
+    }
+    public boolean clipRect(android.graphics.RectF rect){
+        return this.instance.clipRect(rect);
+    }
+    public boolean clipRect(android.graphics.Rect rect){
+        return this.instance.clipRect(rect);
+    }
+    public boolean clipRect(float left, float top, float right, float bottom,
+                            android.graphics.Region.Op op)
+    {
+        return this.instance.clipRect(left, top, right, bottom, op);
+    }
+    public boolean clipRect(float left, float top, float right, float bottom){
+        return this.instance.clipRect(left, top, right, bottom);
+    }
+    public boolean clipRect(int left, int top, int right, int bottom){
+        return this.instance.clipRect(left, top, right, bottom);
+    }
+    public boolean clipPath(android.graphics.Path path, android.graphics.Region.Op op){
+        return this.instance.clipPath(path, op);
+    }
+    public boolean clipPath(android.graphics.Path path){
+        return this.instance.clipPath(path);
+    }
+    public boolean clipRegion(android.graphics.Region region, android.graphics.Region.Op op){
+        return this.instance.clipRegion(region, op);
+    }
+    public boolean clipRegion(android.graphics.Region region){
+        return this.instance.clipRegion(region);
+    }
+    public android.graphics.DrawFilter getDrawFilter(){
+        return this.instance.getDrawFilter();
+    }
+    public void setDrawFilter(android.graphics.DrawFilter filter){
+        this.instance.setDrawFilter(filter);
+    }
+    public boolean quickReject(android.graphics.RectF rect, android.graphics.Canvas.EdgeType type){
+        return this.instance.quickReject(rect, type);
+    }
+    public boolean quickReject(android.graphics.Path path, android.graphics.Canvas.EdgeType type){
+        return this.instance.quickReject(path, type);
+    }
+    public boolean quickReject(float left, float top, float right, float bottom,
+                               android.graphics.Canvas.EdgeType type)
+    {
+        return this.instance.quickReject(left, top, right, bottom, type);
+    }
+    public boolean getClipBounds(android.graphics.Rect bounds){
+        return this.instance.getClipBounds(bounds);
+    }
+    public void drawRGB(int r, int g, int b){
+        this.instance.drawRGB(r, g, b);
+    }
+    public void drawARGB(int a, int r, int g, int b){
+        this.instance.drawARGB(a, r, g, b);
+    }
+    public void drawColor(int color){
+        this.instance.drawColor(color);
+    }
+    public void drawColor(int color, android.graphics.PorterDuff.Mode mode){
+        this.instance.drawColor(color, mode);
+    }
+    public void drawPaint(android.graphics.Paint paint){
+        this.instance.drawPaint(paint);
+    }
+    public void drawPoints(float[] pts, int offset, int count, android.graphics.Paint paint){
+        this.instance.drawPoints(pts, offset, count, paint);
+    }
+    public void drawPoints(float[] pts, android.graphics.Paint paint){
+        this.instance.drawPoints(pts, paint);
+    }
+    public void drawPoint(float x, float y, android.graphics.Paint paint){
+        this.instance.drawPoint(x, y, paint);
+    }
+    public void drawLine(float startX, float startY, float stopX, float stopY, 
+                         android.graphics.Paint paint)
+    {
+        this.instance.drawLine(startX, startY, stopX, stopY, paint);
+    }
+    public void drawLines(float[] pts, int offset, int count, android.graphics.Paint paint){
+        this.instance.drawLines(pts, offset, count, paint);
+    }
+    public void drawLines(float[] pts, android.graphics.Paint paint){
+        this.instance.drawLines(pts, paint);
+    }
+    public void drawRect(android.graphics.RectF rect, android.graphics.Paint paint){
+        this.instance.drawRect(rect, paint);
+    }
+    public void drawRect(android.graphics.Rect r, android.graphics.Paint paint){
+        this.instance.drawRect(r, paint);
+    }
+    public void drawRect(float left, float top, float right, float bottom,
+                         android.graphics.Paint paint)
+    {
+        this.instance.drawRect(left, top, right, bottom, paint);
+    }
+    public void drawOval(android.graphics.RectF oval, android.graphics.Paint paint){
+        this.instance.drawOval(oval, paint);
+    }
+    public void drawCircle(float cx, float cy, float radius, android.graphics.Paint paint){
+        this.instance.drawCircle(cx, cy, radius, paint);
+    }
+    public void drawArc(android.graphics.RectF oval, float startAngle, float sweepAngle,
+                        boolean useCenter, android.graphics.Paint paint)
+    {
+        this.instance.drawArc(oval, startAngle, sweepAngle, useCenter, paint);
+    }
+    public void drawRoundRect(android.graphics.RectF rect, float rx, float ry, android.graphics.Paint paint){
+        this.instance.drawRoundRect(rect, rx, ry, paint);
+    }
+    public void drawPath(android.graphics.Path path, android.graphics.Paint paint){
+        this.instance.drawPath(path, paint);
+    }
+    public void drawBitmap(android.graphics.Bitmap bitmap, float left, float top, android.graphics.Paint paint){
+        this.instance.drawBitmap(bitmap, left, top, paint);
+    }
+    public void drawBitmap(android.graphics.Bitmap bitmap, android.graphics.Rect src, android.graphics.RectF dst, android.graphics.Paint paint){
+        this.instance.drawBitmap(bitmap, src, dst, paint);
+    }
+    public void drawBitmap(android.graphics.Bitmap bitmap, android.graphics.Rect src, android.graphics.Rect dst, android.graphics.Paint paint){
+        this.instance.drawBitmap(bitmap, src, dst, paint);
+    }
+    public void drawBitmap(int[] colors, int offset, int stride, float x,
+                           float y, int width, int height, boolean hasAlpha,
+                           android.graphics.Paint paint)
+    {
+        this.instance.drawBitmap(colors, offset, stride, x,
+                                 y, width, height, hasAlpha,
+                                 paint);
+    }
+    public void drawBitmap(int[] colors, int offset, int stride, int x, int y,
+                           int width, int height, boolean hasAlpha,
+                           android.graphics.Paint paint)
+    {
+        this.instance.drawBitmap(colors, offset, stride, x, y,
+                                 width, height, hasAlpha,
+                                 paint);
+    }
+    public void drawBitmap(android.graphics.Bitmap bitmap, android.graphics.Matrix matrix, android.graphics.Paint paint){
+        this.instance.drawBitmap(bitmap, matrix, paint);
+    }
+    public void drawBitmapMesh(android.graphics.Bitmap bitmap, int meshWidth, int meshHeight,
+                               float[] verts, int vertOffset,
+                               int[] colors, int colorOffset, android.graphics.Paint paint)
+    {
+        this.instance.drawBitmapMesh(bitmap, meshWidth, meshHeight,
+                                     verts, vertOffset,
+                                     colors, colorOffset, paint);
+    }
+    public void drawVertices(android.graphics.Canvas.VertexMode mode, int vertexCount,
+                             float[] verts, int vertOffset,
+                             float[] texs, int texOffset,
+                             int[] colors, int colorOffset,
+                             short[] indices, int indexOffset,
+                             int indexCount, android.graphics.Paint paint)
+    {
+        this.instance.drawVertices(mode, vertexCount,
+                                   verts, vertOffset,
+                                   texs, texOffset,
+                                   colors, colorOffset,
+                                   indices, indexOffset,
+                                   indexCount, paint);
+    }
+    public void drawText(char[] text, int index, int count, float x, float y,
+                         android.graphics.Paint paint)
+    {
+        this.instance.drawText(text, index, count, x, y, paint);
+    }
+    public void drawText(java.lang.String text, float x, float y, android.graphics.Paint paint){
+        this.instance.drawText(text, x, y, paint);
+    }
+    public void drawText(java.lang.String text, int start, int end, float x, float y, 
+                         android.graphics.Paint paint)
+    {
+        this.instance.drawText(text, start, end, x, y, paint);
+    }
+    public void drawText(java.lang.CharSequence text, int start, int end, float x,
+                         float y, android.graphics.Paint paint)
+    {
+        this.instance.drawText(text, start, end, x, y, paint);
+    }
+    public void drawPosText(char[] text, int index, int count, float[] pos, 
+                            android.graphics.Paint paint)
+    {
+        this.instance.drawPosText(text, index, count, pos, paint);
+    }
+    public void drawPosText(java.lang.String text, float[] pos, android.graphics.Paint paint){
+        this.instance.drawPosText(text, pos, paint);
+    }
+    public void drawTextOnPath(char[] text, int index, int count, android.graphics.Path path, 
+                               float hOffset, float vOffset, android.graphics.Paint paint)
+    {
+        this.instance.drawTextOnPath(text, index, count, path, 
+                                     hOffset, vOffset, paint);
+    }
+    public void drawTextOnPath(String text, android.graphics.Path path, float hOffset,
+                               float vOffset, android.graphics.Paint paint)
+    {
+        this.instance.drawTextOnPath(text, path, hOffset,
+                                     vOffset, paint);
+    }
+    public void drawPicture(android.graphics.Picture picture){
+        this.instance.drawPicture(picture);
+    }
+    public void drawPicture(android.graphics.Picture picture, android.graphics.RectF dst){
+        this.instance.drawPicture(picture, dst);
+    }
+    public void drawPicture(android.graphics.Picture picture, android.graphics.Rect dst){
+        this.instance.drawPicture(picture, dst);
+    }
+
+
     public boolean isTracing(){
         return this.trace;
     }
@@ -184,11 +473,9 @@ public class Context
     public void transform(Transform at)
     {
     }
-    public void translate(float x, float y)
+    public void translate(double x, double y)
     {
-    }
-    public void translate(double dob0, double dob1)
-    {
+        this.translate((float) x, (float) y);
     }
     public void fill(Shape shape)
     {
@@ -215,11 +502,11 @@ public class Context
     }
     public vector.Context create()
     {
-        return null;
+        return new Context(this);
     }
     public vector.Context create(int x, int y, int w, int h)
     {
-        return null;
+        return new Context(this,x,y,w,h);
     }
     public void draw(Image image)
     {
