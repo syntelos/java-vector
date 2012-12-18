@@ -114,7 +114,7 @@ public class Display
 
                 this.inGL = true;
 
-                this.setRenderer(this);
+                //this.setRenderer(this);//[TODO] manage Repainter vs GLThread+GLSurface.Mode
             }
         }
     }

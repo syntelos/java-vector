@@ -498,10 +498,13 @@ public class Context
     }
     public Transform getTransform()
     {
-        return null;
+        final Transform tx = new Transform();
+        this.instance.getMatrix(tx);
+        return tx;
     }
-    public void setTransform(Transform at)
+    public void setTransform(Transform tx)
     {
+        this.instance.setMatrix(tx);
     }
     public vector.Context create()
     {
