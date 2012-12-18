@@ -16,9 +16,9 @@ then
         then
             if unzip -q "${srcfar}"
             then
-                for class in $(find . -type f -name '*.class')
+                for class in $(find . -type f )
                 do
-                    strings=$(echo $class | sed 's/\.class$/.strings/')
+                    strings=$(echo $class | sed 's/$/.strings/')
                     strings "${class}" > "${strings}"
 
                 done
@@ -57,7 +57,7 @@ Usage
 Description
 
   Search class files in 'file.jar' for string 're', an egrep regular
-  expression over the output of "strings file.class > file.strings".
+  expression over the product of "strings file > file.strings".
 
 Purpose
 
