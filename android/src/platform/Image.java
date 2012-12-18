@@ -20,6 +20,9 @@ package platform;
 
 import platform.geom.Point;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.net.URL;
 
 /**
@@ -34,7 +37,7 @@ public class Image
 
     public final URL source;
 
-    protected Object nativeImage;
+    protected Bitmap nativeImage;
 
 
     public Image(Class context, String resource){
@@ -44,6 +47,13 @@ public class Image
         super();
         if (null != url){
             this.source = url;
+            try {
+                this.nativeImage = BitmapFactory.decodeStream(url.openStream());
+            }
+            catch (java.io.IOException openStream){
+
+                this.nativeImage = null;
+            }
         }
         else
             throw new IllegalArgumentException();
@@ -51,10 +61,18 @@ public class Image
 
 
     public int getWidth(){
-        return 0;
+        final Bitmap nativeImage = this.nativeImage;
+        if (null != nativeImage)
+            return nativeImage.getWidth();
+        else
+            return 0;
     }
     public int getHeight(){
-        return 0;
+        final Bitmap nativeImage = this.nativeImage;
+        if (null != nativeImage)
+            return nativeImage.getHeight();
+        else
+            return 0;
     }
     public void flush(){
         this.nativeImage = null;

@@ -184,11 +184,19 @@ public class Frame
     protected void onResume() {
         super.onResume();
 
+        final Display display = this.display;
+        if (null != display){
+            display.onResume();
+        }
     }
     @Override
     protected void onPause() {
         super.onPause();
 
+        final Display display = this.display;
+        if (null != display){
+            display.onPause();
+        }
     }
     @Override
     protected void onStop() {

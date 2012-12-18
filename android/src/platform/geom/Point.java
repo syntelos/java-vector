@@ -18,6 +18,9 @@
  */
 package platform.geom;
 
+/**
+ * 2D Point for Android
+ */
 public class Point
     extends Object
     implements vector.geom.Point
@@ -31,9 +34,13 @@ public class Point
     }
     public Point(float x, float y){
         super();
+        this.x = x;
+        this.y = y;
     }
     public Point(double x, double y){
         super();
+        this.x = (float)x;
+        this.y = (float)y;
     }
 
 

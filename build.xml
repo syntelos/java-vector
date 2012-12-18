@@ -152,13 +152,11 @@ ant help (for portable pixel programming with vector)
   <!-- 
     - PLATFORM
     -->
-  <target name="platform-vector" description="Platform dev check cycle (enter Prove)">
+  <target name="platform" description="Calls platform-jar, vector-jar-prove (enter Prove)">
 
     <antcall target="platform-jar" inheritRefs="true"/>
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
-
-    <antcall target="platform-jar" inheritRefs="true"/>
 
     <vector-state-set name="prove" property="vector.state"/>
 
@@ -230,25 +228,14 @@ ant help (for portable pixel programming with vector)
   <!-- 
     - AWT
     -->
-  <target name="awt" description="Enter the AWT state">
-
-    <antcall target="awt-jar"/>
-
-    <antcall target="vector-jar-awt"/>
-
-    <antcall target="awt-jar"/>
-
-    <vector-state-set name="awt" property="vector.state"/>
-
-  </target>
-
-  <target name="awt-vector" description="Calls awt-jar, vector-jar-awt (enter AWT)">
+  <target name="awt" description="Calls awt-jar, vector-jar-awt (enter AWT)">
 
     <antcall target="awt-jar"/>
 
     <antcall target="vector-jar-awt"/>
 
     <vector-state-set name="awt" property="vector.state"/>
+
   </target>
 
   <target name="awt-update" if="vector.awt.update" depends="awt-jar" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.awt.update'.">
@@ -320,24 +307,14 @@ ant help (for portable pixel programming with vector)
   <!-- 
     - ANDROID
     -->
-  <target name="android" description="Calls android-jar, vector-jar-android, android-jar (enter Android)">
+  <target name="android" description="Calls android-jar, vector-jar-android (enter Android)">
 
     <antcall target="android-jar"/>
+
     <antcall target="vector-jar-android"/>
-    <antcall target="android-jar"/>
 
     <vector-state-set name="android" property="vector.state"/>
   </target>
-
-  <target name="android-vector" description="Calls android-jar, vector-jar-android (enter Android)">
-
-    <antcall target="android-jar" inheritRefs="true"/>
-
-    <antcall target="vector-jar-android" inheritRefs="true"/>
-
-    <vector-state-set name="android" property="vector.state"/>
-  </target>
-
 
   <target name="android-update" if="vector.android.update" depends="android-jar" description="Compile, archive, and copy to targets defined in '{user.home}/update.properties'.">
 
@@ -868,13 +845,11 @@ ant help (for portable pixel programming with vector)
   <!--
     - VECTOR
     -->
-  <target name="vector-platform" description="Calls vector-jar-prove, platform-jar, vector-jar-prove (enter Prove)">
+  <target name="vector-platform" description="Calls vector-jar-prove, platform-jar (enter Prove)">
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
 
     <antcall target="platform-jar" inheritRefs="true"/>
-
-    <antcall target="vector-jar-prove" inheritRefs="true"/>
 
     <vector-state-set name="prove" property="vector.state"/>
   </target>

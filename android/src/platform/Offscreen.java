@@ -18,6 +18,10 @@
  */
 package platform;
 
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.view.View;
+
 /**
  * {@link Output} buffer
  * 
@@ -28,44 +32,78 @@ public final class Offscreen
     implements vector.Image.Offscreen
 {
 
+    private final View observer;
+
+    private final int width, height;
+
+    protected Bitmap nativeImage;
+
 
     /**
      * @param component First argument to platform context (Display)
      */
-    public Offscreen(Object component){
-        this(component,null);
-    }
-    private Offscreen(Object observer, Object bounds){
-        this(observer,0,0);
+    public Offscreen(View observer){
+        super();
+        if (null != observer){
+            android.graphics.Rect ar = new android.graphics.Rect();
+            observer.getDrawingRect(ar);
+            final int width = (ar.right-ar.left);
+            final int height = (ar.bottom-ar.top);
+            if (0 < width && 0 < height){
+                this.observer = observer;
+                this.width = width;
+                this.height = height;
+                this.nativeImage = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
+            }
+            else
+                throw new IllegalArgumentException();
+        }
+        else
+            throw new IllegalArgumentException();
     }
     /**
      * @param observer First argument to platform context (Display)
      * @param width Pixel buffer X dimension
      * @param height Pixel buffer Y dimension
      */
-    public Offscreen(Object observer, int width, int height){
+    public Offscreen(View observer, int width, int height){
         super();
+        if (null != observer && 0 < width && 0 < height){
+            this.observer = observer;
+            this.width = width;
+            this.height = height;
+            this.nativeImage = Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
+        }
+        else
+            throw new IllegalArgumentException();
     }
 
 
     public int getWidth(){
-        return 0;
+        return this.width;
     }
     public int getHeight(){
-        return 0;
+        return this.height;
     }
     @Override
     public void flush(){
+
+        this.nativeImage = null;
     }
     public Context blit(Context g){
 
-        g.draw(this);
+        if (null != this.nativeImage){
 
+            g.draw(this);
+        }
         return g;
     }
     public Context create(){
 
+        if (null == this.nativeImage){
+            this.nativeImage = Bitmap.createBitmap(this.width,this.height,Bitmap.Config.ARGB_8888);
+        }
 
-        return null;
+        return new Context(this.observer,new Canvas(this.nativeImage));
     }
 }

@@ -18,6 +18,8 @@
  */
 package platform;
 
+import android.view.View;
+
 /**
  * Output fast overlay on a double buffered scene.  Requires flush on
  * {@link Component user} resize.
@@ -37,7 +39,7 @@ public final class Output
     }
 
 
-    public Offscreen scene(Object component){
+    public Offscreen scene(View component){
 
         if (null == this.scene){
 
@@ -45,7 +47,7 @@ public final class Output
         }
         return this.scene;
     }
-    public Offscreen overlay(Object component){
+    public Offscreen overlay(View component){
 
         if (null == this.overlay){
 

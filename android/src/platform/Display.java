@@ -78,12 +78,19 @@ public class Display
 
     protected volatile SurfaceHolder surface;
 
+    protected volatile boolean useGL;
+    /**
+     * Change this value once and only once for each instance object.
+     * @see android.opengl.GLSurfaceView#setRenderer(android.opengl.Renderer)
+     */
+    protected volatile boolean inGL;
+
 
     public Display(){
         super(Frame.Instance);
 
+        this.setWillNotDraw(false);
         this.setGLWrapper(this);
-        this.setRenderer(this);
     }
 
 
@@ -100,6 +107,16 @@ public class Display
         this.transform.init();
 
         this.layout();
+
+        if (this.useGL){
+
+            if (!this.inGL){
+
+                this.inGL = true;
+
+                this.setRenderer(this);
+            }
+        }
     }
     public void init(Boolean init){
         if (null != init && init.booleanValue()){
@@ -144,7 +161,10 @@ public class Display
     }
     public platform.gl.GL wrap(javax.microedition.khronos.opengles.GL gl){
 
-        return new platform.gl.GL(new Context(this,this.surface),gl);
+        if (gl instanceof platform.gl.GL)
+            return (platform.gl.GL)gl;
+        else
+            return new platform.gl.GL(new Context(this,this.surface),gl);
     }
     public void flush(){
 
@@ -396,12 +416,12 @@ public class Display
     }
     public final Display outputScene(){
         this.output.requestScene();
-
+        this.invalidate();
         return this;
     }
     public final Display outputOverlay(){
         this.output.requestOverlay();
-
+        this.invalidate();
         return this;
     }
     public final Display outputOverlayAnimateSuspend(){
@@ -621,18 +641,27 @@ public class Display
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        this.shown();
+    }
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        this.hidden();
+    }
+    @Override
     protected void onMeasure(int psw, int psh){
         super.onMeasure(psw,psh);
 
-        final int w = this.getMeasuredWidth();
-        final int h = this.getMeasuredHeight();
+        final int x = this.getLeft();
+        final int y = this.getTop();
+        final int w = this.getWidth();
+        final int h = this.getHeight();
 
-        {
-            final int[] location = new int[2];
-            this.getLocationInWindow(location);
-
-            this.boundsNative = new Bounds(location[0],location[1],w,h);
-        }
+        this.boundsNative = new Bounds(x,y,w,h);
     }
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom){
@@ -645,6 +674,16 @@ public class Display
     }
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+
+        Bounds b = this.boundsNative;
+
+        if (null != b){
+
+            final float x = b.x;
+            final float y = b.y;
+
+            this.boundsNative = new Bounds(x,y,w,h);
+        }
 
         this.modified();
 
@@ -661,6 +700,8 @@ public class Display
         super.surfaceCreated(holder);
 
         this.surface = holder;
+
+        this.shown();
     }
     public void surfaceChanged(SurfaceHolder holder, int fmt, int w, int h){
         super.surfaceChanged(holder, fmt, w, h);

@@ -161,7 +161,10 @@ public class Context
     }
     public platform.gl.GL wrap(javax.microedition.khronos.opengles.GL gl){
 
-        return new platform.gl.GL(this,gl);
+        if (gl instanceof platform.gl.GL)
+            return (platform.gl.GL)gl;
+        else
+            return new platform.gl.GL(this,gl);
     }
     public platform.gl.GL getGL(){
 
