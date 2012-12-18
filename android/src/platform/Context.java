@@ -26,6 +26,7 @@ import vector.Stroke;
 import platform.geom.Point;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.view.View;
 import android.view.SurfaceHolder;
 
@@ -89,6 +90,8 @@ public class Context
     protected final int save;
 
     private boolean trace = Context.Trace, deep = Context.Deep;
+
+    protected Paint paint;
 
 
     public Context(View observer, Canvas instance){
@@ -170,205 +173,276 @@ public class Context
 
         return this.wrap(this.instance.getGL());
     }
+    /* package */ Paint android(){
+        Paint paint = this.paint;
+        if (null == paint){
+            paint = new Paint();
+            this.paint = paint;
+        }
+        return paint;
+    }
 
+    @Override
     public void setBitmap(android.graphics.Bitmap bitmap) {
         this.instance.setBitmap(bitmap);
     }
+    @Override
     public void setViewport(int width, int height) {
         this.instance.setViewport(width,height);
     }
+    @Override
     public boolean isOpaque(){
         return this.instance.isOpaque();
     }
+    @Override
     public int getWidth(){
         return this.instance.getWidth();
     }
+    @Override
     public int getHeight(){
         return this.instance.getHeight();
     }
+    @Override
     public int getDensity(){
         return this.instance.getDensity();
     }
+    @Override
     public void setDensity(int density){
         this.instance.setDensity(density);
     }
+    @Override
     public int save(){
         return this.instance.save();
     }
+    @Override
     public int save(int flags){
         return this.instance.save(flags);
     }
+    @Override
     public int saveLayer(android.graphics.RectF bounds, android.graphics.Paint paint, int flags){
         return this.instance.saveLayer(bounds, paint, flags);
     }
+    @Override
     public int saveLayer(float left, float top, float right, float bottom,
                          android.graphics.Paint paint, int flags)
     {
         return this.instance.saveLayer(left, top, right, bottom, paint, flags);
     }
+    @Override
     public int saveLayerAlpha(android.graphics.RectF bounds, int alpha, int flags){
         return this.instance.saveLayerAlpha(bounds, alpha, flags);
     }
+    @Override
     public int saveLayerAlpha(float left, float top, float right, float bottom, int alpha, int flags){
         return this.instance.saveLayerAlpha(left, top, right, bottom, alpha, flags);
     }
+    @Override
     public void restore(){
         this.instance.restore();
     }
+    @Override
     public int getSaveCount(){
         return this.instance.getSaveCount();
     }
+    @Override
     public void restoreToCount(int saveCount){
         this.instance.restoreToCount(saveCount);
     }
+    @Override
     public void translate(float dx, float dy){
         this.instance.translate(dx, dy);
     }
+    @Override
     public void scale(float sx, float sy){
         this.instance.scale(sx, sy);
     }
+    @Override
     public void rotate(float degrees){
         this.instance.rotate(degrees);
     }
+    @Override
     public void skew(float sx, float sy){
         this.instance.skew(sx, sy);
     }
+    @Override
     public void concat(android.graphics.Matrix matrix){
         this.instance.concat(matrix);
     }
+    @Override
     public void setMatrix(android.graphics.Matrix matrix){
         this.instance.setMatrix(matrix);
     }
+    @Override
     public void getMatrix(android.graphics.Matrix ctm){
         this.instance.getMatrix(ctm);
     }
+    @Override
     public boolean clipRect(android.graphics.RectF rect, android.graphics.Region.Op op){
         return this.instance.clipRect(rect, op);
     }
+    @Override
     public boolean clipRect(android.graphics.Rect rect, android.graphics.Region.Op op){
         return this.instance.clipRect(rect, op);
     }
+    @Override
     public boolean clipRect(android.graphics.RectF rect){
         return this.instance.clipRect(rect);
     }
+    @Override
     public boolean clipRect(android.graphics.Rect rect){
         return this.instance.clipRect(rect);
     }
+    @Override
     public boolean clipRect(float left, float top, float right, float bottom,
                             android.graphics.Region.Op op)
     {
         return this.instance.clipRect(left, top, right, bottom, op);
     }
+    @Override
     public boolean clipRect(float left, float top, float right, float bottom){
         return this.instance.clipRect(left, top, right, bottom);
     }
+    @Override
     public boolean clipRect(int left, int top, int right, int bottom){
         return this.instance.clipRect(left, top, right, bottom);
     }
+    @Override
     public boolean clipPath(android.graphics.Path path, android.graphics.Region.Op op){
         return this.instance.clipPath(path, op);
     }
+    @Override
     public boolean clipPath(android.graphics.Path path){
         return this.instance.clipPath(path);
     }
+    @Override
     public boolean clipRegion(android.graphics.Region region, android.graphics.Region.Op op){
         return this.instance.clipRegion(region, op);
     }
+    @Override
     public boolean clipRegion(android.graphics.Region region){
         return this.instance.clipRegion(region);
     }
+    @Override
     public android.graphics.DrawFilter getDrawFilter(){
         return this.instance.getDrawFilter();
     }
+    @Override
     public void setDrawFilter(android.graphics.DrawFilter filter){
         this.instance.setDrawFilter(filter);
     }
+    @Override
     public boolean quickReject(android.graphics.RectF rect, android.graphics.Canvas.EdgeType type){
         return this.instance.quickReject(rect, type);
     }
+    @Override
     public boolean quickReject(android.graphics.Path path, android.graphics.Canvas.EdgeType type){
         return this.instance.quickReject(path, type);
     }
+    @Override
     public boolean quickReject(float left, float top, float right, float bottom,
                                android.graphics.Canvas.EdgeType type)
     {
         return this.instance.quickReject(left, top, right, bottom, type);
     }
+    @Override
     public boolean getClipBounds(android.graphics.Rect bounds){
         return this.instance.getClipBounds(bounds);
     }
+    @Override
     public void drawRGB(int r, int g, int b){
         this.instance.drawRGB(r, g, b);
     }
+    @Override
     public void drawARGB(int a, int r, int g, int b){
         this.instance.drawARGB(a, r, g, b);
     }
+    @Override
     public void drawColor(int color){
         this.instance.drawColor(color);
     }
+    @Override
     public void drawColor(int color, android.graphics.PorterDuff.Mode mode){
         this.instance.drawColor(color, mode);
     }
+    @Override
     public void drawPaint(android.graphics.Paint paint){
         this.instance.drawPaint(paint);
     }
+    @Override
     public void drawPoints(float[] pts, int offset, int count, android.graphics.Paint paint){
         this.instance.drawPoints(pts, offset, count, paint);
     }
+    @Override
     public void drawPoints(float[] pts, android.graphics.Paint paint){
         this.instance.drawPoints(pts, paint);
     }
+    @Override
     public void drawPoint(float x, float y, android.graphics.Paint paint){
         this.instance.drawPoint(x, y, paint);
     }
+    @Override
     public void drawLine(float startX, float startY, float stopX, float stopY, 
                          android.graphics.Paint paint)
     {
         this.instance.drawLine(startX, startY, stopX, stopY, paint);
     }
+    @Override
     public void drawLines(float[] pts, int offset, int count, android.graphics.Paint paint){
         this.instance.drawLines(pts, offset, count, paint);
     }
+    @Override
     public void drawLines(float[] pts, android.graphics.Paint paint){
         this.instance.drawLines(pts, paint);
     }
+    @Override
     public void drawRect(android.graphics.RectF rect, android.graphics.Paint paint){
         this.instance.drawRect(rect, paint);
     }
+    @Override
     public void drawRect(android.graphics.Rect r, android.graphics.Paint paint){
         this.instance.drawRect(r, paint);
     }
+    @Override
     public void drawRect(float left, float top, float right, float bottom,
                          android.graphics.Paint paint)
     {
         this.instance.drawRect(left, top, right, bottom, paint);
     }
+    @Override
     public void drawOval(android.graphics.RectF oval, android.graphics.Paint paint){
         this.instance.drawOval(oval, paint);
     }
+    @Override
     public void drawCircle(float cx, float cy, float radius, android.graphics.Paint paint){
         this.instance.drawCircle(cx, cy, radius, paint);
     }
+    @Override
     public void drawArc(android.graphics.RectF oval, float startAngle, float sweepAngle,
                         boolean useCenter, android.graphics.Paint paint)
     {
         this.instance.drawArc(oval, startAngle, sweepAngle, useCenter, paint);
     }
+    @Override
     public void drawRoundRect(android.graphics.RectF rect, float rx, float ry, android.graphics.Paint paint){
         this.instance.drawRoundRect(rect, rx, ry, paint);
     }
+    @Override
     public void drawPath(android.graphics.Path path, android.graphics.Paint paint){
         this.instance.drawPath(path, paint);
     }
+    @Override
     public void drawBitmap(android.graphics.Bitmap bitmap, float left, float top, android.graphics.Paint paint){
         this.instance.drawBitmap(bitmap, left, top, paint);
     }
+    @Override
     public void drawBitmap(android.graphics.Bitmap bitmap, android.graphics.Rect src, android.graphics.RectF dst, android.graphics.Paint paint){
         this.instance.drawBitmap(bitmap, src, dst, paint);
     }
+    @Override
     public void drawBitmap(android.graphics.Bitmap bitmap, android.graphics.Rect src, android.graphics.Rect dst, android.graphics.Paint paint){
         this.instance.drawBitmap(bitmap, src, dst, paint);
     }
+    @Override
     public void drawBitmap(int[] colors, int offset, int stride, float x,
                            float y, int width, int height, boolean hasAlpha,
                            android.graphics.Paint paint)
@@ -377,6 +451,7 @@ public class Context
                                  y, width, height, hasAlpha,
                                  paint);
     }
+    @Override
     public void drawBitmap(int[] colors, int offset, int stride, int x, int y,
                            int width, int height, boolean hasAlpha,
                            android.graphics.Paint paint)
@@ -385,9 +460,11 @@ public class Context
                                  width, height, hasAlpha,
                                  paint);
     }
+    @Override
     public void drawBitmap(android.graphics.Bitmap bitmap, android.graphics.Matrix matrix, android.graphics.Paint paint){
         this.instance.drawBitmap(bitmap, matrix, paint);
     }
+    @Override
     public void drawBitmapMesh(android.graphics.Bitmap bitmap, int meshWidth, int meshHeight,
                                float[] verts, int vertOffset,
                                int[] colors, int colorOffset, android.graphics.Paint paint)
@@ -396,6 +473,7 @@ public class Context
                                      verts, vertOffset,
                                      colors, colorOffset, paint);
     }
+    @Override
     public void drawVertices(android.graphics.Canvas.VertexMode mode, int vertexCount,
                              float[] verts, int vertOffset,
                              float[] texs, int texOffset,
@@ -410,54 +488,64 @@ public class Context
                                    indices, indexOffset,
                                    indexCount, paint);
     }
+    @Override
     public void drawText(char[] text, int index, int count, float x, float y,
                          android.graphics.Paint paint)
     {
         this.instance.drawText(text, index, count, x, y, paint);
     }
+    @Override
     public void drawText(java.lang.String text, float x, float y, android.graphics.Paint paint){
         this.instance.drawText(text, x, y, paint);
     }
+    @Override
     public void drawText(java.lang.String text, int start, int end, float x, float y, 
                          android.graphics.Paint paint)
     {
         this.instance.drawText(text, start, end, x, y, paint);
     }
+    @Override
     public void drawText(java.lang.CharSequence text, int start, int end, float x,
                          float y, android.graphics.Paint paint)
     {
         this.instance.drawText(text, start, end, x, y, paint);
     }
+    @Override
     public void drawPosText(char[] text, int index, int count, float[] pos, 
                             android.graphics.Paint paint)
     {
         this.instance.drawPosText(text, index, count, pos, paint);
     }
+    @Override
     public void drawPosText(java.lang.String text, float[] pos, android.graphics.Paint paint){
         this.instance.drawPosText(text, pos, paint);
     }
+    @Override
     public void drawTextOnPath(char[] text, int index, int count, android.graphics.Path path, 
                                float hOffset, float vOffset, android.graphics.Paint paint)
     {
         this.instance.drawTextOnPath(text, index, count, path, 
                                      hOffset, vOffset, paint);
     }
+    @Override
     public void drawTextOnPath(String text, android.graphics.Path path, float hOffset,
                                float vOffset, android.graphics.Paint paint)
     {
         this.instance.drawTextOnPath(text, path, hOffset,
                                      vOffset, paint);
     }
+    @Override
     public void drawPicture(android.graphics.Picture picture){
         this.instance.drawPicture(picture);
     }
+    @Override
     public void drawPicture(android.graphics.Picture picture, android.graphics.RectF dst){
         this.instance.drawPicture(picture, dst);
     }
+    @Override
     public void drawPicture(android.graphics.Picture picture, android.graphics.Rect dst){
         this.instance.drawPicture(picture, dst);
     }
-
 
     public boolean isTracing(){
         return this.trace;
@@ -475,6 +563,7 @@ public class Context
     }
     public void transform(Transform at)
     {
+        this.concat(at);
     }
     public void translate(double x, double y)
     {
@@ -491,10 +580,15 @@ public class Context
     }
     public Stroke getStroke()
     {
-        return null;
+        Paint paint = this.paint;
+        if (paint instanceof Stroke)
+            return (Stroke)paint;
+        else
+            return null;
     }
     public void setStroke(Stroke stroke)
     {
+        this.paint = new platform.Stroke(this.paint,stroke);
     }
     public Transform getTransform()
     {

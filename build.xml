@@ -67,11 +67,11 @@
 
   <target name="prove-vector" description="Calls platform-jar, vector-jar-prove (enter Prove)">
 
+    <vector-state-set name="prove" property="vector.state"/>
+
     <antcall target="platform-jar"/>
 
     <antcall target="vector-jar-prove"/>
-
-    <vector-state-set name="prove" property="vector.state"/>
 
   </target>
 
@@ -154,11 +154,11 @@ ant help (for portable pixel programming with vector)
     -->
   <target name="platform" description="Calls platform-jar, vector-jar-prove (enter Prove)">
 
+    <vector-state-set name="prove" property="vector.state"/>
+
     <antcall target="platform-jar" inheritRefs="true"/>
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
-
-    <vector-state-set name="prove" property="vector.state"/>
 
   </target>
 
@@ -230,11 +230,11 @@ ant help (for portable pixel programming with vector)
     -->
   <target name="awt" description="Calls awt-jar, vector-jar-awt (enter AWT)">
 
+    <vector-state-set name="awt" property="vector.state"/>
+
     <antcall target="awt-jar"/>
 
     <antcall target="vector-jar-awt"/>
-
-    <vector-state-set name="awt" property="vector.state"/>
 
   </target>
 
@@ -309,11 +309,12 @@ ant help (for portable pixel programming with vector)
     -->
   <target name="android" description="Calls android-jar, vector-jar-android (enter Android)">
 
+    <vector-state-set name="android" property="vector.state"/>
+
     <antcall target="android-jar"/>
 
     <antcall target="vector-jar-android"/>
 
-    <vector-state-set name="android" property="vector.state"/>
   </target>
 
   <target name="android-update" if="vector.android.update" depends="android-jar" description="Compile, archive, and copy to targets defined in '{user.home}/update.properties'.">
@@ -847,29 +848,29 @@ ant help (for portable pixel programming with vector)
     -->
   <target name="vector-platform" description="Calls vector-jar-prove, platform-jar (enter Prove)">
 
+    <vector-state-set name="prove" property="vector.state"/>
+
     <antcall target="vector-jar-prove" inheritRefs="true"/>
 
     <antcall target="platform-jar" inheritRefs="true"/>
-
-    <vector-state-set name="prove" property="vector.state"/>
   </target>
 
   <target name="vector-awt" description="Calls vector-jar-awt, awt-jar  (enter AWT)">
 
+    <vector-state-set name="awt" property="vector.state"/>
+
     <antcall target="vector-jar-awt" inheritRefs="true"/>
 
     <antcall target="awt-jar" inheritRefs="true"/>
-
-    <vector-state-set name="awt" property="vector.state"/>
   </target>
 
   <target name="vector-android" description="Calls vector-jar-android, android (enter Android)">
 
+    <vector-state-set name="android" property="vector.state"/>
+
     <antcall target="vector-jar-android" inheritRefs="true"/>
 
     <antcall target="android" inheritRefs="true"/>
-
-    <vector-state-set name="android" property="vector.state"/>
   </target>
 
   <target name="vector-state" description="Report the build directory platform">

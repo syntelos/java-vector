@@ -138,7 +138,7 @@ public class Stroke
     public final boolean hasColor(){
         return (null != this.color);
     }
-    public final Color getColor(){
+    public final Color getColorVector(){
         return this.color;
     }
     public final String getEndCapString(){

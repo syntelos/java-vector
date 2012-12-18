@@ -20,14 +20,19 @@ package platform;
 
 import json.Json;
 
+import android.graphics.Paint;
+
 /**
  * 
  */
-public abstract class Stroke
-    extends Object
+public class Stroke
+    extends Paint
 {
 
     public Stroke(float lineWidth, int endCap, int lineJoin, float miterLimit, float[] dashArray, float dashPhase){
+        super();
+    }
+    /* package */ Stroke(Paint paint, Stroke stroke){
         super();
     }
 
