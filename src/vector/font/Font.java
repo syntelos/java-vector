@@ -28,6 +28,22 @@ import platform.geom.Point;
  */
 public interface Font {
 
+    public enum DefaultFamily {
+        SansSerif, Serif, Monospaced;
+
+
+        public final static DefaultFamily For(String name){
+            if (null != name){
+                name = vector.Component.Tools.Camel(name);
+                try {
+                    return DefaultFamily.valueOf(name);
+                }
+                catch (RuntimeException notfound){
+                }
+            }
+            return DefaultFamily.Monospaced;
+        }
+    }
     public enum Style {
         PLAIN, BOLD, ITALIC;
     }

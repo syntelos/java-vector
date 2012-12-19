@@ -53,7 +53,7 @@ public class Font
     protected final static Toolkit TK = Toolkit.getDefaultToolkit();
 
 
-    public final static String DefaultFontFamily = "monospaced";
+    public final static String DefaultFontFamily = DefaultFamily.Monospaced.name();
 
     public final static String DefaultFontName = DefaultFontFamily+'-'+(int)SZ;
 

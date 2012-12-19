@@ -76,6 +76,9 @@ public class Color
         super();
     }
     public Color(int argb){
+        this(argb,(0 != ((argb>>24)&0xFF)));
+    }
+    public Color(int argb, boolean usea){
         super();
     }
     public Color(float r, float g, float b){

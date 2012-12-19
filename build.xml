@@ -7,8 +7,8 @@
   <property name="lib" value="lib"/>
   <property name="dst" value="."/>
 
-  <property name="platform.src" value="platform/src"/>
-  <property name="platform.rt.jar" location="platform/rt.jar"/>
+  <property name="prove.src" value="prove/src"/>
+  <property name="prove.rt.jar" location="prove/rt.jar"/>
   <property name="awt.src" value="awt/src"/>
   <property name="android.src" value="android/src"/>
   <property name="demo.src" value="demo/src"/>
@@ -44,37 +44,6 @@
   <!--
     - 
     -->
-  <target name="prove" description="Prove all packages (from Prove)">
-
-    <vector-state-require name="prove" property="vector.state"/>
-
-    <antcall target="vector-jar-prove" inheritRefs="true"/>
-
-    <antcall target="platform-jar" inheritRefs="true"/>
-
-    <antcall target="awt-prove" inheritRefs="true"/>
-
-    <antcall target="android-compile" inheritRefs="true"/>
-
-    <antcall target="demo-prove" inheritRefs="true"/>
-    <antcall target="geda-prove" inheritRefs="true"/>
-    <antcall target="fonview-prove" inheritRefs="true"/>
-    <antcall target="xmpp-prove" inheritRefs="true"/>
-
-    <delete file="${target.vector.jar}"/>
-
-  </target>
-
-  <target name="prove-vector" description="Calls platform-jar, vector-jar-prove (enter Prove)">
-
-    <vector-state-set name="prove" property="vector.state"/>
-
-    <antcall target="platform-jar"/>
-
-    <antcall target="vector-jar-prove"/>
-
-  </target>
-
   <target name="signed-awt" description="Rebuild all jars and sign (from AWT)">
 
     <vector-state-require name="awt" property="vector.state"/>
@@ -115,10 +84,11 @@ ant help (for portable pixel programming with vector)
       The "ant signed-awt" and "ant unsigned-awt" (default) entry
       points are employed for producing operational runtimes.
 
-      The "prove" entry points are employed for a compilation test of
-      portability.  These products have no runtime.  In an otherwise
-      correct runtime, a jar compiled for "prove" will throw
-      "java.lang.NoSuchMethodError" for calls to platform methods.
+      The "prove" or "prove" entry points are employed for a
+      compilation test of portability.  These products have no
+      runtime.  In an otherwise correct runtime, a jar compiled for
+      "prove" will throw "java.lang.NoSuchMethodError" for calls to
+      prove methods.
 
       See PLATFORM.txt for more info.
 
@@ -132,14 +102,14 @@ ant help (for portable pixel programming with vector)
       Some of the corner cases that are implied by the rules and
       scripts defined here are unintended.  For example,
       vector-X.Y.Z.jar can be generated with manifest class-path for
-      the portability proof vector-platform-X.Y.Z.jar and then
+      the portability proof vector-prove-X.Y.Z.jar and then
       accidently employed in a runtime.
 
       The vector-state tool has been defined and employed here to
       prevent these errors.  The state of the build script reflects
       the current build platform.  The build script enters states
-      "prove", "awt" or "android" from some entry points, and requires
-      existing states from other entry points.
+      "prove", "awt" or "android" from some entry points, and
+      requires existing states from other entry points.
 
       The vector-state process simplifies the number of invalid states
       that the build directory can enter.  Invalid (secondary) states
@@ -150,76 +120,91 @@ ant help (for portable pixel programming with vector)
   </target>
 
   <!-- 
-    - PLATFORM
+    - PROVE
     -->
-  <target name="platform" description="Calls platform-jar, vector-jar-prove (enter Prove)">
+  <target name="prove" description="Prove application packages (enter Prove)">
 
     <vector-state-set name="prove" property="vector.state"/>
 
-    <antcall target="platform-jar" inheritRefs="true"/>
+    <antcall target="prove-jar" inheritRefs="true"/>
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
 
+    <antcall target="demo-prove" inheritRefs="true"/>
+    <antcall target="geda-prove" inheritRefs="true"/>
+    <antcall target="fonview-prove" inheritRefs="true"/>
+    <antcall target="xmpp-prove" inheritRefs="true"/>
+
   </target>
 
-  <target name="platform-jar" depends="platform-compile" description="Package platform jar, clean bin.">
+  <target name="prove-vector" description="Calls prove-jar, vector-jar-prove (enter Prove)">
+
+    <vector-state-set name="prove" property="vector.state"/>
+
+    <antcall target="prove-jar"/>
+
+    <antcall target="vector-jar-prove"/>
+
+  </target>
+
+  <target name="prove-jar" depends="prove-compile" description="Package prove jar, clean bin.">
 
 
-    <echo message="Class-Path: ${platform.lib.path.manifest}"/>
+    <echo message="Class-Path: ${prove.lib.path.manifest}"/>
 
-    <delete file="${existing.platform.jar}"/>
+    <delete file="${existing.prove.jar}"/>
 
-    <jar jarfile="${target.platform.jar}" basedir="${bin}" >
+    <jar jarfile="${target.prove.jar}" basedir="${bin}" >
       <manifest>
 
-        <attribute name="Class-Path" value="${platform.lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${prove.lib.path.manifest}"/>
       </manifest>
     </jar>
 
     <delete dir="${bin}"/>
   </target>
 
-  <target name="platform-compile" depends="platform-version">
+  <target name="prove-compile" depends="prove-version">
 
     <vector-state-require name="prove" property="vector.state"/>
 
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
 
-    <javac includeAntRuntime="false" srcdir="${platform.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+    <javac includeAntRuntime="false" srcdir="${prove.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${existing.vector.jar}"/>
       </classpath>
       <bootclasspath>
-        <pathelement location="${platform.rt.jar}"/>
+        <pathelement location="${prove.rt.jar}"/>
       </bootclasspath>
     </javac>
   </target>
 
-  <target name="platform-prove" depends="version">
+  <target name="prove-prove" depends="version">
 
     <vector-state-require name="prove" property="vector.state"/>
 
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
 
-    <javac includeAntRuntime="false" srcdir="${platform.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+    <javac includeAntRuntime="false" srcdir="${prove.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${target.vector.jar}"/>
       </classpath>
       <bootclasspath>
-        <pathelement location="${platform.rt.jar}"/>
+        <pathelement location="${prove.rt.jar}"/>
       </bootclasspath>
     </javac>
   </target>
 
-  <target name="platform-version" unless="platform.lib.path.manifest" depends="version">
+  <target name="prove-version" unless="prove.lib.path.manifest" depends="version">
 
-    <java outputproperty="platform.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
+    <java outputproperty="prove.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
@@ -276,22 +261,6 @@ ant help (for portable pixel programming with vector)
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${existing.vector.jar}"/>
-      </classpath>
-    </javac>
-  </target>
-
-  <target name="awt-prove" depends="version">
-
-    <vector-state-require name="prove" property="vector.state"/>
-
-    <delete dir="${bin}"/>
-    <mkdir dir="${bin}"/>
-
-    <javac includeAntRuntime="false" srcdir="${awt.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
-           source="${compiler.source}" target="${compiler.target}">
-      <classpath>
-        <path refid="lib.path"/>
-        <pathelement location="${target.vector.jar}"/>
       </classpath>
     </javac>
   </target>
@@ -419,7 +388,7 @@ ant help (for portable pixel programming with vector)
     </javac>
   </target>
 
-  <target name="demo-prove" depends="version" description="Compile against platform for proof of portability.">
+  <target name="demo-prove" depends="version" description="Compile against prove for proof of portability.">
 
     <vector-state-require name="prove" property="vector.state"/>
 
@@ -433,7 +402,7 @@ ant help (for portable pixel programming with vector)
         <pathelement location="${target.vector.jar}"/>
       </classpath>
       <bootclasspath>
-        <pathelement location="${platform.rt.jar}"/>
+        <pathelement location="${prove.rt.jar}"/>
       </bootclasspath>
     </javac>
   </target>
@@ -488,7 +457,7 @@ ant help (for portable pixel programming with vector)
     </javac>
   </target>
 
-  <target name="geda-prove" depends="version" description="Compile against platform for proof of portability.">
+  <target name="geda-prove" depends="version" description="Compile against prove for proof of portability.">
 
     <vector-state-require name="prove" property="vector.state"/>
 
@@ -499,11 +468,11 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${target.vector.jar}"/>
-        <pathelement location="${existing.platform.jar}"/>
+        <pathelement location="${existing.prove.jar}"/>
         <path refid="lib.path"/>
       </classpath>
       <bootclasspath>
-        <pathelement location="${platform.rt.jar}"/>
+        <pathelement location="${prove.rt.jar}"/>
       </bootclasspath>
     </javac>
   </target>
@@ -558,7 +527,7 @@ ant help (for portable pixel programming with vector)
     </javac>
   </target>
 
-  <target name="fonview-prove" depends="version" description="Compile against platform for proof of portability.">
+  <target name="fonview-prove" depends="version" description="Compile against prove for proof of portability.">
 
     <vector-state-require name="prove" property="vector.state"/>
 
@@ -569,11 +538,11 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${target.vector.jar}"/>
-        <pathelement location="${existing.platform.jar}"/>
+        <pathelement location="${existing.prove.jar}"/>
         <path refid="lib.path"/>
       </classpath>
       <bootclasspath>
-        <pathelement location="${platform.rt.jar}"/>
+        <pathelement location="${prove.rt.jar}"/>
       </bootclasspath>
     </javac>
   </target>
@@ -664,7 +633,7 @@ ant help (for portable pixel programming with vector)
     </javac>
   </target>
 
-  <target name="xmpp-prove" depends="xmpp-version" description="Compile against platform for proof of portability.">
+  <target name="xmpp-prove" depends="xmpp-version" description="Compile against prove for proof of portability.">
 
     <vector-state-require name="prove" property="vector.state"/>
 
@@ -675,12 +644,12 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${target.vector.jar}"/>
-        <pathelement location="${existing.platform.jar}"/>
+        <pathelement location="${existing.prove.jar}"/>
         <path refid="lib.path"/>
         <path refid="xmpp.lib.path"/>
       </classpath>
       <bootclasspath>
-        <pathelement location="${platform.rt.jar}"/>
+        <pathelement location="${prove.rt.jar}"/>
       </bootclasspath>
     </javac>
   </target>
@@ -748,7 +717,7 @@ ant help (for portable pixel programming with vector)
     </javac>
   </target>
 
-  <target name="jogl-prove" depends="version" description="Compile against platform for proof of portability.">
+  <target name="jogl-prove" depends="version" description="Compile against prove for proof of portability.">
 
     <vector-state-require name="prove" property="vector.state"/>
 
@@ -759,7 +728,7 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${target.vector.jar}"/>
-        <pathelement location="${existing.platform.jar}"/>
+        <pathelement location="${existing.prove.jar}"/>
         <path refid="lib.path"/>
       </classpath>
     </javac>
@@ -814,7 +783,7 @@ ant help (for portable pixel programming with vector)
     </javac>
   </target>
 
-  <target name="llg-prove" depends="version" description="Compile against platform for proof of portability.">
+  <target name="llg-prove" depends="version" description="Compile against prove for proof of portability.">
 
     <vector-state-require name="prove" property="vector.state"/>
 
@@ -825,11 +794,11 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${target.vector.jar}"/>
-        <pathelement location="${existing.platform.jar}"/>
+        <pathelement location="${existing.prove.jar}"/>
         <path refid="lib.path"/>
       </classpath>
       <bootclasspath>
-        <pathelement location="${platform.rt.jar}"/>
+        <pathelement location="${prove.rt.jar}"/>
       </bootclasspath>
     </javac>
   </target>
@@ -846,13 +815,18 @@ ant help (for portable pixel programming with vector)
   <!--
     - VECTOR
     -->
-  <target name="vector-platform" description="Calls vector-jar-prove, platform-jar (enter Prove)">
+  <target name="vector" depends="vector-state" description="Calls vector jar for current state">
+
+    <antcall target="vector-jar-${vector.state}" inheritRefs="true"/>
+  </target>
+
+  <target name="vector-prove" description="Calls vector-jar-prove, prove-jar (enter Prove)">
 
     <vector-state-set name="prove" property="vector.state"/>
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
 
-    <antcall target="platform-jar" inheritRefs="true"/>
+    <antcall target="prove-jar" inheritRefs="true"/>
   </target>
 
   <target name="vector-awt" description="Calls vector-jar-awt, awt-jar  (enter AWT)">
@@ -958,7 +932,7 @@ ant help (for portable pixel programming with vector)
     </javac>
   </target>
 
-  <target name="vector-jar-prove" unless="cond.vector.jar.prove" depends="vector-prove" description="Package bin to target jar, clean bin.">
+  <target name="vector-jar-prove" unless="cond.vector.jar.prove" depends="vector-compile-prove" description="Package bin to target jar, clean bin.">
 
     <property name="cond.vector.jar.prove" value="false"/>
 
@@ -975,7 +949,7 @@ ant help (for portable pixel programming with vector)
     <delete dir="${bin}"/>
   </target>
 
-  <target name="vector-prove" unless="cond.vector.prove" depends="vector-version-prove" description="Compile against platform for proof of portability.">
+  <target name="vector-compile-prove" unless="cond.vector.prove" depends="vector-version-prove" description="Compile against prove for proof of portability.">
 
     <vector-state-require name="prove" property="vector.state"/>
 
@@ -988,10 +962,10 @@ ant help (for portable pixel programming with vector)
            classpathref="lib.path" source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <path refid="lib.path"/>
-        <pathelement location="${existing.platform.jar}"/>
+        <pathelement location="${existing.prove.jar}"/>
       </classpath>
       <bootclasspath>
-        <pathelement location="${platform.rt.jar}"/>
+        <pathelement location="${prove.rt.jar}"/>
       </bootclasspath>
     </javac>
   </target>
@@ -1015,7 +989,7 @@ ant help (for portable pixel programming with vector)
  <target name="vector-version-prove" unless="vector.lib.path.manifest.prove" depends="version">
 
     <java outputproperty="vector.lib.path.manifest.prove" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
-      <arg value="${target.platform.jar}"/>
+      <arg value="${target.prove.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
   </target>
@@ -1036,7 +1010,7 @@ ant help (for portable pixel programming with vector)
   <target name="version" unless="this.version" description="Report current version.">
     <version/>
     <property name="target.vector.jar" value="${dst}/${ant.project.name}-${this.version}.jar"/>
-    <property name="target.platform.jar" value="${dst}/${ant.project.name}-platform-${this.version}.jar"/>
+    <property name="target.prove.jar" value="${dst}/${ant.project.name}-prove-${this.version}.jar"/>
     <property name="target.awt.jar" value="${dst}/${ant.project.name}-awt-${this.version}.jar"/>
     <property name="target.android.jar" value="${dst}/${ant.project.name}-android-${this.version}.jar"/>
     <property name="target.demo.jar" value="${dst}/${ant.project.name}-demo-${this.version}.jar"/>
@@ -1048,7 +1022,7 @@ ant help (for portable pixel programming with vector)
 
     <version-pub property="existing.vector.jar" prefix="${ant.project.name}"/>
 
-    <version-pub property="existing.platform.jar" prefix="${ant.project.name}-platform"/>
+    <version-pub property="existing.prove.jar" prefix="${ant.project.name}-prove"/>
 
     <version-pub property="existing.awt.jar" prefix="${ant.project.name}-awt"/>
 

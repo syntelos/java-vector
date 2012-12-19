@@ -85,7 +85,10 @@ public class Color
         super(r,g,b,a);
     }
     public Color(int argb){
-        super(argb,(0 != ((argb>>24)&0xFF)));
+        this(argb,(0 != ((argb>>24)&0xFF)));
+    }
+    public Color(int argb, boolean usea){
+        super(argb,usea);
     }
     public Color(float r, float g, float b){
         super(r,g,b);

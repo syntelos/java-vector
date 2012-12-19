@@ -38,54 +38,95 @@ public class Rectangle
     }
     public Rectangle(float x, float y, float w, float h){
         super();
+        this.x = x;
+        this.y = y;
+        this.width = w;
+        this.height = h;
+    }
+    public Rectangle(android.graphics.Rect r){
+        super();
+        this.x = r.left;
+        this.y = r.top;
+        this.width = (r.right-r.left);
+        this.height = (r.bottom-r.top);
+    }
+    public Rectangle(android.graphics.RectF r){
+        super();
+        this.x = r.left;
+        this.y = r.top;
+        this.width = (r.right-r.left);
+        this.height = (r.bottom-r.top);
+    }
+    public Rectangle(vector.geom.RectangularShape r){
+        this((float)r.getX(),(float)r.getY(),(float)r.getWidth(),(float)r.getHeight());
     }
 
 
     public boolean isEmpty(){
-        return false;
+        return (0f >= this.width)&&(0f >= this.height);
     }
     public double getX(){
-        return 0;
+        return this.x;
     }
     public double getY(){
-        return 0;
+        return this.y;
     }
     public double getWidth(){
-        return 0;
+        return this.width;
     }
     public double getHeight(){
-        return 0;
+        return this.height;
     }
     public double getMinX(){
-        return 0;
+        return this.x;
     }
     public double getMinY(){
-        return 0;
+        return this.y;
     }
     public double getMaxX(){
-        return 0;
+        return (this.x+this.width);
     }
     public double getMaxY(){
-        return 0;
+        return (this.y+this.height);
     }
     public double getCenterX(){
-        return 0;
+        return (this.x+(this.width/2));
     }
     public double getCenterY(){
-        return 0;
+        return (this.y+(this.height/2));
     }
     public void setFrame(double x, double y, double w, double h){
+        this.x = (float)x;
+        this.y = (float)y;
+        this.width = (float)w;
+        this.height = (float)h;
     }
     public void setFrameVector(vector.geom.RectangularShape r){
+        this.x = (float)r.getX();
+        this.y = (float)r.getY();
+        this.width = (float)r.getWidth();
+        this.height = (float)r.getHeight();
     }
     public boolean contains(int x, int y){
-        return false;
+        return ((this.x <= x && (this.x+this.width) >= x)&&
+                (this.y <= y && (this.y+this.height) >= y));
     }
     public boolean contains(float x, float y){
-        return false;
+        return ((this.x <= x && (this.x+this.width) >= x)&&
+                (this.y <= y && (this.y+this.height) >= y));
     }
     public boolean contains(vector.geom.RectangularShape r){
-        return false;
+        final float x0 = (float)r.getX();
+        final float y0 = (float)r.getY();
+        final float w = (float)r.getWidth();
+        final float h = (float)r.getHeight();
+        final float x1 = (x0+w);
+        final float y1 = (y0+h);
+
+        return ((this.x <= x0 && (this.x+this.width) >= x0)&&
+                (this.y <= y0 && (this.y+this.height) >= y0)&&
+                (this.x <= x1 && (this.x+this.width) >= x1)&&
+                (this.y <= y1 && (this.y+this.height) >= y1));
     }
     public Bounds getBoundsVector(){
 
@@ -98,6 +139,11 @@ public class Rectangle
         return Path.ToString(this);
     }
     public Rectangle clone(){
-        return null;
+        try {
+            return (Rectangle)super.clone();
+        }
+        catch (java.lang.CloneNotSupportedException exc){
+            throw new java.lang.InternalError();
+        }
     }
 }

@@ -26,11 +26,23 @@ import json.Json;
 public abstract class Stroke
     extends Object
 {
+    /**
+     * 
+     */
+    protected Color color;
+
 
     public Stroke(float lineWidth, int endCap, int lineJoin, float miterLimit, float[] dashArray, float dashPhase){
         super();
     }
 
+
+    public boolean hasColor(){
+        return (null != this.color);
+    }
+    public Color getColorVector(){
+        return this.color;
+    }
     public float getLineWidth(){
         return 0;
     }

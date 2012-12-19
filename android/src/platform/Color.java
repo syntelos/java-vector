@@ -24,7 +24,7 @@ import json.Hex;
  * 
  */
 public class Color
-    extends java.lang.Object
+    extends android.graphics.Color
 {
     public static Color decode(String value){
         vector.NamedColors named = vector.NamedColors.For(value);
@@ -62,6 +62,8 @@ public class Color
     public final static Color BLUE       = blue;
 
 
+    private final int argb;
+
 
     public Color(String code){
         this(Hex.decode(Parse(code)));
@@ -71,35 +73,50 @@ public class Color
     }
     public Color(int r, int g, int b){
         super();
+        this.argb = (((0xFF) << 24) |
+                     ((r & 0xFF) << 16) |
+                     ((g & 0xFF) << 8)  |
+                     ((b & 0xFF) << 0));
     }
     public Color(int r, int g, int b, int a){
         super();
+        this.argb = (((a & 0xFF) << 24) |
+                     ((r & 0xFF) << 16) |
+                     ((g & 0xFF) << 8)  |
+                     ((b & 0xFF) << 0));
     }
     public Color(int argb){
+        this(argb,(0 != ((argb>>24)&0xFF)));
+    }
+    public Color(int argb, boolean usea){
         super();
+        if (usea)
+            this.argb = argb;
+        else
+            this.argb = (0xFF<<24)|(argb & 0xFFFFFF);
     }
     public Color(float r, float g, float b){
-        super();
+        this( (int)(r * 255f), (int)(g * 255f), (int)(b * 255f));
     }
     public Color(float r, float g, float b, float a){
-        super();
+        this( (int)(r * 255f), (int)(g * 255f), (int)(b * 255f), (int)(a * 255f));
     }
 
 
     public int getRed() {
-        return 0;
+        return ((this.argb & 0xFF0000)>>16);
     }
     public int getGreen() {
-        return 0;
+        return ((this.argb & 0xFF00)>>8);
     }
     public int getBlue() {
-        return 0;
+        return (this.argb & 0xFF);
     }
     public int getAlpha() {
-        return 0;
+        return ((this.argb >>24) & 0xFF);
     }
     public int getRGB(){
-        return 0;
+        return this.argb;
     }
     public Color opacity(float a){
 

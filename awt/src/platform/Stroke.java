@@ -26,9 +26,23 @@ import json.Json;
 public abstract class Stroke
     extends java.awt.BasicStroke
 {
+    /**
+     * If not null, override any other color definition for the
+     * application of this stroke.
+     */
+    protected Color color;
+
 
     public Stroke(float lineWidth, int endCap, int lineJoin, float miterLimit, float[] dashArray, float dashPhase){
         super(lineWidth,endCap,lineJoin,miterLimit,dashArray,dashPhase);
+    }
+
+
+    public boolean hasColor(){
+        return (null != this.color);
+    }
+    public Color getColorVector(){
+        return this.color;
     }
 
 }

@@ -1,9 +1,36 @@
 
-* ant android
-** for src in $(find awt -type f ); do tgt=$(echo $src | sed 's/awt/android/g'); cat $src > $tgt; done
+* android
+
+** Context
+
+*** (Color) get/set
+**** platform Color
+
+*** fill, clip, draw (Shape)
+
+** Stroke
+*** subclass Paint
+
+** GlyphVector
+*** (from) Canvas
+
+** Path
+
+** review native cleanup/destroy/close/dispose/unlock
+*** Matrix/Transform
+
 
 * ant html
 ** ant esidl
 *** src: html/idl
 *** tgt: html/lib/src
 ** see html/TODO.txt
+
+* vector Image
+** is a Reader
+** subclass Writer
+** subclass Editor
+
+* vector (*)
+** ? subclass Editor
+

@@ -28,6 +28,12 @@ import android.graphics.Paint;
 public class Stroke
     extends Paint
 {
+    /**
+     * If not null, override any other color definition for the
+     * application of this stroke.
+     */
+    protected Color color;
+
 
     public Stroke(float lineWidth, int endCap, int lineJoin, float miterLimit, float[] dashArray, float dashPhase){
         super();
@@ -36,6 +42,12 @@ public class Stroke
         super();
     }
 
+    public boolean hasColor(){
+        return (null != this.color);
+    }
+    public Color getColorVector(){
+        return this.color;
+    }
     public float getLineWidth(){
         return 0;
     }

@@ -610,16 +610,26 @@ public class Context
     }
     public void draw(Image image)
     {
+        if (image instanceof platform.Offscreen){
+
+            this.instance.drawBitmap( ((platform.Offscreen)image).nativeImage,0,0,null);
+        }
+        else if (image instanceof platform.Image){
+
+            this.instance.drawBitmap( ((platform.Image)image).nativeImage,0,0,null);
+        }
     }
     public Color getColor()
     {
-        return null;
+        return new Color(this.android().getColor(),true);
     }
-    public void setColor(Color color0)
+    public void setColor(Color color)
     {
+        this.android().setColor(color.getRGB());
     }
-    public void clipTo(int a0, int a1, int a2, int a3)
+    public void clipTo(int x, int y, int w, int h)
     {
+        this.instance.clipRect(x,y,w,h);
     }
     /* package */ void disposeAndroid()
     {
@@ -641,14 +651,30 @@ public class Context
     }
     public Shape getClip()
     {
-        return null;
+        final android.graphics.Rect clip = new android.graphics.Rect();
+        this.instance.getClipBounds(clip);
+        return new platform.geom.Rectangle(clip);
+    }
+    public void setClip(Shape shape)
+    {
+        if (shape instanceof platform.geom.Rectangle){
+            final platform.geom.Rectangle p = (platform.geom.Rectangle)shape;
+            final float l = p.x;
+            final float t = p.y;
+            final float r = (l+p.width);
+            final float b = (t+p.height);
+
+            this.instance.clipRect(l,t,r,b);
+        }
+        else {
+            final Path path = shape.toPath();
+
+            this.instance.clipPath(path);
+        }
     }
     public Font getFont()
     {
         return null;
-    }
-    public void setClip(Shape shape)
-    {
     }
     public void setFont(Font font)
     {

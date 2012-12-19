@@ -36,6 +36,18 @@ public class Rectangle
     public Rectangle(float x, float y, float w, float h){
         super(x,y,w,h);
     }
+    public Rectangle(java.awt.geom.Rectangle2D.Float r){
+        super(r.x,r.y,r.width,r.height);
+    }
+    public Rectangle(java.awt.geom.Rectangle2D.Double r){
+        super((float)r.x,(float)r.y,(float)r.width,(float)r.height);
+    }
+    public Rectangle(java.awt.geom.RectangularShape r){
+        this((float)r.getX(),(float)r.getY(),(float)r.getWidth(),(float)r.getHeight());
+    }
+    public Rectangle(vector.geom.RectangularShape r){
+        this((float)r.getX(),(float)r.getY(),(float)r.getWidth(),(float)r.getHeight());
+    }
 
 
     public void setFrameVector(vector.geom.RectangularShape r){

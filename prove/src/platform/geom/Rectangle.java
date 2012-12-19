@@ -39,6 +39,12 @@ public class Rectangle
     public Rectangle(float x, float y, float w, float h){
         super();
     }
+    public Rectangle(Object nativeRect){
+        super();
+    }
+    public Rectangle(vector.geom.RectangularShape r){
+        this((float)r.getX(),(float)r.getY(),(float)r.getWidth(),(float)r.getHeight());
+    }
 
 
     public boolean isEmpty(){

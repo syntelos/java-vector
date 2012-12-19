@@ -30,7 +30,7 @@ import path.Winding;
  * 
  */
 public class Path
-    extends Object
+    extends android.graphics.Path
     implements vector.geom.Path
 {
 
@@ -48,8 +48,7 @@ public class Path
     }
 
 
-    public void reset(){
-    }
+
     public Winding getWinding(){
 
         return Winding.For(0);
@@ -116,47 +115,88 @@ public class Path
         throw new java.lang.UnsupportedOperationException(String.format("Op: %s, Op-Index: %d, Vertices-Len: %d",op,opx,vertices_len));
     }
     public void moveTo(float[] operands) {
+
+        super.moveTo(operands[0],operands[1]);
     }
     public void moveTo(Point p){
-    }
-    public void moveTo(float x, float y){
+        super.moveTo(p.x,p.y);
     }
     public void lineTo(float[] operands) {
+
+        super.lineTo(operands[0],operands[1]);
     }
     public void lineTo(Point p){
-    }
-    public void lineTo(float x, float y){
+        super.lineTo(p.x,p.y);
     }
     public void quadTo(float[] operands)
     {
+        switch(operands.length){
+        case 4:
+            super.quadTo(operands[0],operands[1],operands[2],operands[3]);
+            break;
+        case 6:
+            super.quadTo(operands[0],operands[1],operands[3],operands[4]);
+            break;
+        default:
+            throw new IllegalArgumentException(String.valueOf(operands.length));
+        }
     }
     public void quadTo(Point p0, Point p1){
-    }
-    public void quadTo(float x0, float y0, float x1, float y1)
-    {
+        super.quadTo(p0.x,p0.y,p1.x,p1.y);
     }
     public void cubicTo(float[] operands)
     {
+        switch(operands.length){
+        case 6:
+            super.cubicTo(operands[0],operands[1],operands[2],operands[3],operands[4],operands[5]);
+            break;
+        case 9:
+            super.cubicTo(operands[0],operands[1],operands[3],operands[4],operands[6],operands[7]);
+            break;
+        default:
+            throw new IllegalArgumentException(String.valueOf(operands.length));
+        }
     }
     public void cubicTo(Point p0, Point p1, Point p2){
-    }
-    public void cubicTo(float x0, float y0, float x1, float y1, float x2, float y2){
-    }
-    public void close(){
+        super.cubicTo(p0.x,p0.y,p1.x,p1.y,p2.x,p2.y);
     }
     public void set(path.Path p){
+        if (p instanceof android.graphics.Path)
+            super.set( (android.graphics.Path)p);
+        else if (null != p)
+            throw new IllegalArgumentException(p.getClass().getName());
     }
     public void add(path.Path p){
+        if (p instanceof android.graphics.Path)
+            super.addPath( (android.graphics.Path)p);
+        else if (null != p)
+            throw new IllegalArgumentException(p.getClass().getName());
     }
     public void set(Shape p){
+        if (p instanceof android.graphics.Path)
+            super.set( (android.graphics.Path)p);
+        else if (null != p){
+            this.set( (path.Path)p.toPath());
+        }
     }
     public void add(Shape p){
+        if (p instanceof android.graphics.Path)
+            super.addPath( (android.graphics.Path)p);
+        else if (null != p){
+            this.addPath(p.toPath());
+        }
     }
     public void transform(Transform t){
+
+        super.transform(t,null);
     }
     public Bounds getBoundsVector(){
 
-        return new Bounds();
+        final android.graphics.RectF b = new android.graphics.RectF();
+
+        super.computeBounds(b,true);
+
+        return new Bounds(new platform.geom.Rectangle(b));
     }
     public Path toPath(){
         return this;

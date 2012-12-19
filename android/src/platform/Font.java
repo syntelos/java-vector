@@ -47,7 +47,7 @@ public class Font
     public final static float PH = 1f;
 
 
-    public final static String DefaultFontFamily = "monospaced";
+    public final static String DefaultFontFamily = DefaultFamily.Monospaced.name();
 
     public final static String DefaultFontName = DefaultFontFamily+'-'+(int)SZ;
 

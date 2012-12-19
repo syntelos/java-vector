@@ -110,11 +110,6 @@ public class Stroke
     }
 
 
-    /**
-     * If not null, override any other color definition for the
-     * application of this stroke.
-     */
-    public final Color color;
 
 
     public Stroke(Json model){
@@ -135,12 +130,6 @@ public class Stroke
     }
 
 
-    public final boolean hasColor(){
-        return (null != this.color);
-    }
-    public final Color getColorVector(){
-        return this.color;
-    }
     public final String getEndCapString(){
 
         return Cap.For(this.getEndCap()).toString();
