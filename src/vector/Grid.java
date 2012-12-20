@@ -21,6 +21,7 @@ package vector;
 import platform.Color;
 import platform.Path;
 import platform.Shape;
+import platform.Stroke;
 
 import json.Json;
 import json.ObjectJson;

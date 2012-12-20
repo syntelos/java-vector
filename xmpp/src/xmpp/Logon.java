@@ -25,10 +25,11 @@ import vector.Component;
 import vector.Event;
 import vector.Label;
 import vector.Password;
-import vector.Stroke;
 import vector.TableSmall;
 import vector.TextEdit;
 import vector.dialog.Style;
+
+import platform.Stroke;
 
 /**
  * Hard coded XMPP information dialog.

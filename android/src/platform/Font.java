@@ -20,16 +20,21 @@ package platform;
 
 import vector.Bounds;
 import vector.Padding;
+
 import vector.font.GlyphVector;
 
 import platform.geom.Point;
 
+import android.graphics.Paint;
+import android.graphics.Typeface;
+
+import java.util.StringTokenizer;
 
 /**
  * 
  */
 public class Font
-    extends Object
+    extends Paint
     implements vector.font.Font
 {
 
@@ -54,48 +59,89 @@ public class Font
     public final static Font Default = new Font(DefaultFontFamily,(int)SZ);
 
 
-    public final int ascent, descent, height, em;
+    public final float ascent, descent, height, em;
     public final float prop, spacing, leading;
 
-
     public Font(String code){
-        super();
-
-        this.ascent = 0;
-        this.descent = 0;
-        this.height = (this.ascent + this.descent);
-        this.em = 0;
-        this.prop = 0;
-        this.spacing = 0;
-        this.leading = 0;
+        this(Ctor(code));
+    }
+    private Font(String[] code){
+        this(code[0],code[1],code[2]);
+    }
+    private Font(String name, String style, String size){
+        this(name,(null != style)?(vector.font.Font.Style.For(style)):(null),(null != size)?(Integer.parseInt(size)):(11));
     }
     public Font(int size){
-        this(DefaultFontFamily,Style.PLAIN,size);
+        this(DefaultFontFamily,vector.font.Font.Style.PLAIN,size);
     }
-    public Font(String name, int size){
-        this(name,Style.PLAIN,size);
+    public Font(String name, int psize){
+        this(name,vector.font.Font.Style.PLAIN,psize);
     }
-    public Font(String name, Style style, int size){
+    public Font(String name, vector.font.Font.Style style, int psize){
         super();
+        this.setAntiAlias(true);
 
-        this.ascent = 0;
-        this.descent = 0;
+        if (null != name){
+
+            if (null != style)
+                this.setTypeface(Typeface.create(name,style.ordinal()));
+            else 
+                this.setTypeface(Typeface.create(name,0));
+        }
+
+        this.setTextSize(Frame.Points2Pixels(psize));
+
+        final android.graphics.Paint.FontMetrics metrics = this.getFontMetrics();
+
+        this.ascent = Math.abs(metrics.ascent);
+        this.descent = metrics.descent;
         this.height = (this.ascent + this.descent);
-        this.em = 0;
-        this.prop = 0;
+        this.em = (int)this.measureText(" ",0,1);
+        this.prop = (this.height/SZ);
         this.spacing = (this.prop*PW);
         this.leading = (this.prop*PH);
     }
-    public Font(Object font){
-        super();
+    public Font(android.graphics.Paint paint){
+        super(paint);
+        this.setAntiAlias(true);
 
-        this.ascent = 0;
-        this.descent = 0;
+        final android.graphics.Paint.FontMetrics metrics = this.getFontMetrics();
+
+        this.ascent = Math.abs(metrics.ascent);
+        this.descent = metrics.descent;
         this.height = (this.ascent + this.descent);
-        this.em = 0;
-        this.prop = 0;
+        this.em = this.measureText(" ",0,1);
+        this.prop = (this.height/SZ);
         this.spacing = (this.prop*PW);
         this.leading = (this.prop*PH);
+    }
+    public Font(android.graphics.Paint paint, Font font){
+        super(paint);
+        this.setAntiAlias(true);
+
+        if (null != font){
+            this.setTypeface(font.getTypeface());
+            this.setTextSize(font.getTextSize());
+
+            this.ascent = font.ascent;
+            this.descent = font.descent;
+            this.height = font.height;
+            this.em = font.em;
+            this.prop = font.prop;
+            this.spacing = font.spacing;
+            this.leading = font.leading;
+        }
+        else {
+            final android.graphics.Paint.FontMetrics metrics = this.getFontMetrics();
+
+            this.ascent = Math.abs(metrics.ascent);
+            this.descent = metrics.descent;
+            this.height = (this.ascent + this.descent);
+            this.em = this.measureText(" ",0,1);
+            this.prop = (this.height/SZ);
+            this.spacing = (this.prop*PW);
+            this.leading = (this.prop*PH);
+        }
     }
 
 
@@ -243,5 +289,40 @@ public class Font
         }
         string.append(this.getSize());
         return string.toString();
+    }
+
+
+    private final static String[] Ctor(String string){
+        String[] re = new String[3];
+        if (null != string){
+            final StringTokenizer strtok = new StringTokenizer(string,"-");
+            final int count = strtok.countTokens();
+            switch(count){
+            case 0:
+                break;
+            case 1:
+                re[0] = strtok.nextToken();
+                break;
+            case 2:
+                re[0] = strtok.nextToken();
+                re[2] = strtok.nextToken();
+                break;
+            case 3:
+                re[0] = strtok.nextToken();
+                re[1] = strtok.nextToken();
+                re[2] = strtok.nextToken();
+                break;
+            default:
+                re[0] = strtok.nextToken();
+                final int cat = (count-3);
+                for (int cc = 0; cc < cat; cc++){
+                    re[0] += ('-'+strtok.nextToken());
+                }
+                re[1] = strtok.nextToken();
+                re[2] = strtok.nextToken();
+                break;
+            }
+        }
+        return re;
     }
 }

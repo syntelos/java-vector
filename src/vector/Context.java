@@ -23,6 +23,7 @@ import vector.gl.GL;
 import platform.Color;
 import platform.Font;
 import platform.Shape;
+import platform.Stroke;
 import platform.Transform;
 import platform.geom.Point;
 

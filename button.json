@@ -25,7 +25,7 @@
                     "line-width": 8.0
                 }
             },
-            "enum-class": "vector.Stroke$Join",
+            "enum-class": "platform.Stroke$Join",
             "enum-value": "BEVEL"
         }
     ]

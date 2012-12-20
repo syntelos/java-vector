@@ -73,6 +73,21 @@ public class Frame
             Frame.y = 0;
         }
     }
+    protected static float Points2Pixels(float points){
+        final DisplayMetrics screen = Frame.screen;
+        if (null != screen){
+
+            final float dpi = (screen.scaledDensity*DisplayMetrics.DENSITY_MEDIUM);
+
+            return (points/72f)*dpi;
+        }
+        else {
+
+            final float dpi = (1.0f*DisplayMetrics.DENSITY_MEDIUM);
+
+            return (points/72f)*dpi;
+        }
+    }
     public final static Bounds Center(Bounds b){
 
         final float fw = Frame.width;

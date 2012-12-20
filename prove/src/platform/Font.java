@@ -54,7 +54,7 @@ public class Font
     public final static Font Default = new Font(DefaultFontFamily,(int)SZ);
 
 
-    public final int ascent, descent, height, em;
+    public final float ascent, descent, height, em;
     public final float prop, spacing, leading;
 
 

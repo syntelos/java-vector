@@ -19,6 +19,7 @@
 package vector;
 
 import platform.Color;
+import platform.Stroke;
 
 import json.Json;
 import json.ObjectJson;

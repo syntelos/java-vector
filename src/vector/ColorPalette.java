@@ -19,6 +19,7 @@
 package vector;
 
 import platform.Color;
+import platform.Stroke;
 import platform.event.NamedAction;
 import platform.geom.Point;
 import platform.geom.Rectangle;

@@ -21,7 +21,6 @@ package platform;
 import vector.Bounds;
 import vector.DebugTrace;
 import vector.Image;
-import vector.Stroke;
 
 import platform.geom.Point;
 
@@ -569,56 +568,6 @@ public class Context
     {
         this.translate((float) x, (float) y);
     }
-    public void fill(Shape shape)
-    {
-    }
-    public void clip(Shape shape)
-    {
-    }
-    public void draw(Shape shape)
-    {
-    }
-    public Stroke getStroke()
-    {
-        Paint paint = this.paint;
-        if (paint instanceof Stroke)
-            return (Stroke)paint;
-        else
-            return null;
-    }
-    public void setStroke(Stroke stroke)
-    {
-        this.paint = new platform.Stroke(this.paint,stroke);
-    }
-    public Transform getTransform()
-    {
-        final Transform tx = new Transform();
-        this.instance.getMatrix(tx);
-        return tx;
-    }
-    public void setTransform(Transform tx)
-    {
-        this.instance.setMatrix(tx);
-    }
-    public vector.Context create()
-    {
-        return new Context(this);
-    }
-    public vector.Context create(int x, int y, int w, int h)
-    {
-        return new Context(this,x,y,w,h);
-    }
-    public void draw(Image image)
-    {
-        if (image instanceof platform.Offscreen){
-
-            this.instance.drawBitmap( ((platform.Offscreen)image).nativeImage,0,0,null);
-        }
-        else if (image instanceof platform.Image){
-
-            this.instance.drawBitmap( ((platform.Image)image).nativeImage,0,0,null);
-        }
-    }
     public Color getColor()
     {
         return new Color(this.android().getColor(),true);
@@ -626,28 +575,6 @@ public class Context
     public void setColor(Color color)
     {
         this.android().setColor(color.getRGB());
-    }
-    public void clipTo(int x, int y, int w, int h)
-    {
-        this.instance.clipRect(x,y,w,h);
-    }
-    /* package */ void disposeAndroid()
-    {
-        if (null != this.surface){
-
-            this.surface.unlockCanvasAndPost(this.instance);
-        }
-    }
-    public void dispose()
-    {
-        if (null != this.surface){
-
-            this.surface.unlockCanvasAndPost(this.instance);
-        }
-        else if (null != this.instance && 0 != this.save){
-
-            this.instance.restoreToCount(this.save);
-        }
     }
     public Shape getClip()
     {
@@ -674,10 +601,85 @@ public class Context
     }
     public Font getFont()
     {
-        return null;
+        if (this.paint instanceof Font)
+            return (Font)this.paint;
+        else
+            return new Font(this.android());
     }
     public void setFont(Font font)
     {
+        this.paint = new Font(this.paint,font);
+    }
+    public Stroke getStroke()
+    {
+        if (this.paint instanceof Stroke)
+            return (Stroke)this.paint;
+        else
+            return new Stroke(this.android());
+    }
+    public void setStroke(Stroke stroke)
+    {
+        this.paint = new Stroke(this.paint,(Stroke)stroke);
+    }
+    public Transform getTransform()
+    {
+        final Transform tx = new Transform();
+        this.instance.getMatrix(tx);
+        return tx;
+    }
+    public void setTransform(Transform tx)
+    {
+        this.instance.setMatrix(tx);
+    }
+    public vector.Context create()
+    {
+        return new Context(this);
+    }
+    public vector.Context create(int x, int y, int w, int h)
+    {
+        return new Context(this,x,y,w,h);
+    }
+    public void fill(Shape shape)
+    {
+    }
+    public void clip(Shape shape)
+    {
+    }
+    public void clipTo(int x, int y, int w, int h)
+    {
+        this.instance.clipRect(x,y,w,h);
+    }
+    public void draw(Shape shape)
+    {
+    }
+    public void draw(Image image)
+    {
+        if (image instanceof platform.Offscreen){
+
+            this.instance.drawBitmap( ((platform.Offscreen)image).nativeImage,0,0,null);
+        }
+        else if (image instanceof platform.Image){
+
+            this.instance.drawBitmap( ((platform.Image)image).nativeImage,0,0,null);
+        }
+    }
+    /* package */ void disposeAndroid()
+    {
+        if (null != this.surface){
+
+            this.surface.unlockCanvasAndPost(this.instance);
+        }
+    }
+    public void dispose()
+    {
+        if (null != this.surface){
+
+            this.surface.unlockCanvasAndPost(this.instance);
+        }
+        else if (null != this.instance && 0 != this.save){
+
+            this.instance.restoreToCount(this.save);
+        }
     }
 
 }

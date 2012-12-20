@@ -45,7 +45,19 @@ public interface Font {
         }
     }
     public enum Style {
-        PLAIN, BOLD, ITALIC;
+        PLAIN, BOLD, ITALIC, BOLDITALIC;
+
+        public final static Style For(String name){
+            if (null != name){
+                name = vector.Component.Tools.Camel(name);
+                try {
+                    return Style.valueOf(name.toUpperCase());
+                }
+                catch (RuntimeException notfound){
+                }
+            }
+            return Style.PLAIN;
+        }
     }
     /**
      * @return Group name

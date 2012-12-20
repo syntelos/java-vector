@@ -60,9 +60,9 @@ public class Font
     public final static Font Default = new Font(DefaultFontFamily,(int)SZ);
 
 
-    public final FontRenderContext frc;
-    public final FontMetrics metrics;
-    public final int ascent, descent, height, em;
+    /* package */ final FontRenderContext frc;
+    /* package */ final FontMetrics metrics;
+    public final float ascent, descent, height, em;
     public final float prop, spacing, leading;
 
 

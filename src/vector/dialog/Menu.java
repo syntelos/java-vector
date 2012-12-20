@@ -23,7 +23,8 @@ import vector.Border;
 import vector.Button;
 import vector.Component;
 import vector.Event;
-import vector.Stroke;
+
+import platform.Stroke;
 
 import json.Json;
 import json.ObjectJson;

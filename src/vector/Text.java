@@ -25,6 +25,7 @@ import platform.Color;
 import platform.Font;
 import platform.Path;
 import platform.Shape;
+import platform.Stroke;
 import platform.Transform;
 import platform.geom.Point;
 import platform.geom.Rectangle;

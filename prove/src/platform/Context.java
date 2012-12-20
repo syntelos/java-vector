@@ -21,7 +21,6 @@ package platform;
 import vector.Bounds;
 import vector.DebugTrace;
 import vector.Image;
-import vector.Stroke;
 
 import platform.geom.Point;
 

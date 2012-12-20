@@ -21,7 +21,6 @@ package platform;
 import vector.Bounds;
 import vector.DebugTrace;
 import vector.Image;
-import vector.Stroke;
 
 import platform.geom.Point;
 
@@ -194,8 +193,8 @@ public class Context
     }
     public void setStroke(Stroke stroke)
     {
-        if (null != stroke.color)
-            this.setColor(stroke.color);
+        if (stroke.hasColor())
+            this.setColor(stroke.getColorVector());
 
         if (this.trace) (new DebugTrace(this.depth,"[%d] setStroke(%s)", this.depth, stroke)).print(this.deep);
 

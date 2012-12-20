@@ -29,12 +29,12 @@ import vector.Button;
 import vector.Component;
 import vector.Event;
 import vector.Padding;
-import vector.Stroke;
 import vector.TableSmall;
 import vector.TextEdit;
 import vector.dialog.Style;
 
 import platform.Color;
+import platform.Stroke;
 
 /**
  * Status of connection and contacts

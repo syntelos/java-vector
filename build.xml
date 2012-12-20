@@ -130,7 +130,7 @@ ant help (for portable pixel programming with vector)
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
 
-    <antcall target="demo-prove" inheritRefs="true"/>
+    <!-- antcall target="demo-prove" inheritRefs="true"/ [TODO](AWT) -->
     <antcall target="geda-prove" inheritRefs="true"/>
     <antcall target="fonview-prove" inheritRefs="true"/>
     <antcall target="xmpp-prove" inheritRefs="true"/>
@@ -351,6 +351,11 @@ ant help (for portable pixel programming with vector)
   <!-- 
     - DEMO
     -->
+  <target name="demo" depends="vector-state" description="Calls demo jar for current state">
+
+    <antcall target="demo-jar-${vector.state}" inheritRefs="true"/>
+  </target>
+
   <target name="demo-update-awt" depends="demo-compile-awt" description="Package demo jar, clean bin.  Depends on the target jar.">
 
     <echo message="Main-Class: platform.Frame"/>
@@ -419,6 +424,11 @@ ant help (for portable pixel programming with vector)
   <!-- 
     - GEDA
     -->
+  <target name="geda" depends="vector-state" description="Calls geda jar for current state">
+
+    <antcall target="geda-jar-${vector.state}" inheritRefs="true"/>
+  </target>
+
   <target name="geda-update-awt" depends="geda-compile-awt" description="Package geda jar, clean bin.  Depends on the target jar.">
 
     <echo message="Main-Class: geda.Frame"/>
@@ -489,6 +499,11 @@ ant help (for portable pixel programming with vector)
   <!-- 
     - FONVIEW
     -->
+  <target name="fonview" depends="vector-state" description="Calls fonview jar for current state">
+
+    <antcall target="fonview-jar-${vector.state}" inheritRefs="true"/>
+  </target>
+
   <target name="fonview-update-awt" depends="fonview-compile-awt" description="Package fonview jar, clean bin.  Depends on the target jar.">
 
     <echo message="Main-Class: fonview.Frame"/>
@@ -559,6 +574,11 @@ ant help (for portable pixel programming with vector)
   <!-- 
     - XMPPP
     -->
+  <target name="xmpp" depends="vector-state" description="Calls xmpp jar for current state">
+
+    <antcall target="xmpp-jar-${vector.state}" inheritRefs="true"/>
+  </target>
+
   <target name="xmpp-sign-awt" if="available.signing.properties" depends="xmpp-jar-awt" description="Sign jars required by xmpp.jnlp">
 
     <property file="signing.properties"/>

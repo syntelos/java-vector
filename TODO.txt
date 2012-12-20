@@ -1,23 +1,18 @@
+                                   -*-outline-*-
+
+
+* awt demo paint/repaint failure
+** svg-sagittarius.json
 
 * android
 
 ** Context
-
-*** (Color) get/set
-**** platform Color
-
 *** fill, clip, draw (Shape)
-
-** Stroke
-*** subclass Paint
 
 ** GlyphVector
 *** (from) Canvas
 
 ** Path
-
-** review native cleanup/destroy/close/dispose/unlock
-*** Matrix/Transform
 
 
 * ant html
