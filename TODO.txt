@@ -1,8 +1,13 @@
                                    -*-outline-*-
 
 
-* awt demo paint/repaint failure
+* awt
+
+** xmpp
+*** border rollver size
+
 ** svg-sagittarius.json
+*** paint/repaint failure
 
 * android
 
