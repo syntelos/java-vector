@@ -14,6 +14,9 @@
 
 ** input events
 
+** display
+*** review repainter and renderer+glthread
+**** if(glthread) then define renderer with (getGL)?
 
 * ant html
 ** ant esidl
