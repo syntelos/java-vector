@@ -66,12 +66,26 @@ public class Path
     }
     public Path(Winding winding){
         super();
+        this.setWinding(winding);
     }
     public Path(Shape shape){
         super();
+        if (null != shape){
+
+            super.set(shape.toPath());
+        }
     }
     public Path(Shape shape, Transform xform){
         super();
+        if (null != shape){
+
+            super.set(shape.toPath());
+
+            if (null != xform){
+
+                this.transform(xform);
+            }
+        }
     }
 
 
