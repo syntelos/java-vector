@@ -12,8 +12,6 @@
 
 * android
 
-** Path ctors
-
 ** input events
 
 
