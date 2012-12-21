@@ -60,7 +60,7 @@ public class Font
     public final static Font Default = new Font(DefaultFontFamily,(int)SZ);
 
 
-    /* package */ final FontRenderContext frc;
+    /* package */ public final FontRenderContext frc;
     /* package */ final FontMetrics metrics;
     public final float ascent, descent, height, em;
     public final float prop, spacing, leading;
@@ -215,7 +215,7 @@ public class Font
     }
     public final GlyphVector createGlyphVector(String string){
 
-        return new platform.font.GlyphVector( super.createGlyphVector(this.frc,string), string.length());
+        return new platform.font.GlyphVector( this, string);
     }
     public final float em(float n){
 

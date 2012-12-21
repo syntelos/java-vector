@@ -109,6 +109,25 @@ public class Stroke
         }
     }
 
+    /* package */ final static boolean Not(android.graphics.Paint paint){
+        if (null == paint)
+            return false;
+        else {
+            android.graphics.Paint.Style style = paint.getStyle();
+            if (null == style)
+                return false;
+            else {
+                switch(style){
+                case STROKE:
+                case FILL_AND_STROKE:
+                    return true;
+                default:
+                    return false;
+                }
+            }
+        }
+    }
+
     /**
      * If not null, override any other color definition for the
      * application of this stroke.
@@ -120,16 +139,68 @@ public class Stroke
         this(LineWidth(model),EndCap(model),LineJoin(model),MiterLimit(model),DashArray(model),DashPhase(model));
     }
     public Stroke(float lineWidth, int endCap, int lineJoin, float miterLimit, float[] dashArray, float dashPhase){
-        super();
+        this(lineWidth,endCap,lineJoin,miterLimit,dashArray,dashPhase,null);
     }
     public Stroke(float lineWidth, int endCap, int lineJoin, float miterLimit, float[] dashArray, float dashPhase, Color color){
         super();
+        super.setStrokeWidth(lineWidth);
+        switch(endCap){
+        case 0:
+            super.setStrokeCap(android.graphics.Paint.Cap.BUTT);
+            break;
+        case 1:
+            super.setStrokeCap(android.graphics.Paint.Cap.ROUND);
+            break;
+        case 2:
+            super.setStrokeCap(android.graphics.Paint.Cap.SQUARE);
+            break;
+        default:
+            break;
+        }
+        switch(lineJoin){
+        case 0:
+            super.setStrokeJoin(android.graphics.Paint.Join.MITER);
+            break;
+        case 1:
+            super.setStrokeJoin(android.graphics.Paint.Join.ROUND);
+            break;
+        case 2:
+            super.setStrokeJoin(android.graphics.Paint.Join.BEVEL);
+            break;
+        default:
+            break;
+        }
+
+        super.setStrokeMiter(miterLimit);
+
+        if (null != color){
+            this.color = color;
+            super.setColor(color.getRGB());
+            style();
+        }
+        else {
+            color();
+            style();
+        }
     }
     public Stroke(float lineWidth, Color color){
         super();
+        super.setStrokeWidth(lineWidth);
+        if (null != color){
+            this.color = color;
+            super.setColor(color.getRGB());
+            style();
+        }
+        else {
+            color();
+            style();
+        }
     }
     public Stroke(float lineWidth){
         super();
+        super.setStrokeWidth(lineWidth);
+        color();
+        style();
     }
     public Stroke(Object na){
         this( (Paint)na);
@@ -137,10 +208,8 @@ public class Stroke
     /* package */ Stroke(Paint paint){
         super(paint);
 
-        final int color = this.getColor();
-        if (0 != color)
-            this.color = new Color(color,true);
-
+        color();
+        style();
     }
     /* package */ Stroke(Paint paint, Stroke stroke){
         super();
@@ -155,9 +224,34 @@ public class Stroke
             }
         }
 
+        final android.graphics.Paint.Style style = this.getStyle();
+        if (null == style){
+            this.setStyle(android.graphics.Paint.Style.STROKE);
+        }
+        else if (android.graphics.Paint.Style.FILL == style){
+            this.setStyle(android.graphics.Paint.Style.FILL_AND_STROKE);
+        }
+
     }
 
 
+    /* package */ void color(){
+
+        final int color = this.getColor();
+        if (0 != color)
+            this.color = new Color(color,true);
+
+    }
+    /* package */ void style(){
+
+        final android.graphics.Paint.Style style = this.getStyle();
+        if (null == style){
+            this.setStyle(android.graphics.Paint.Style.STROKE);
+        }
+        else if (android.graphics.Paint.Style.FILL == style){
+            this.setStyle(android.graphics.Paint.Style.FILL_AND_STROKE);
+        }
+    }
     public boolean hasColor(){
         return (null != this.color);
     }
@@ -165,22 +259,35 @@ public class Stroke
         return this.color;
     }
     public float getLineWidth(){
-        return 0;
+        return super.getStrokeWidth();
     }
     public int getEndCap(){
-        return 0;
+        final android.graphics.Paint.Cap cap = super.getStrokeCap();
+        if (null == cap)
+            return 0;
+        else 
+            return cap.ordinal();
     }
     public int getLineJoin(){
-        return 0;
+        final android.graphics.Paint.Join join = super.getStrokeJoin();
+        if (null == join)
+            return 0;
+        else 
+            return join.ordinal();
     }
     public float getMiterLimit(){
-        return 0;
+        return super.getStrokeMiter();
     }
     public float[] getDashArray(){
-
+        /*
+         * android not found
+         */
         return null;
     }
     public float getDashPhase(){
+        /*
+         * android not found
+         */
         return 0;
     }
     public final String getEndCapString(){

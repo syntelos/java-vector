@@ -18,6 +18,7 @@
  */
 package platform.font;
 
+import platform.Font;
 import platform.Path;
 import platform.Shape;
 import platform.geom.Point;
@@ -35,11 +36,16 @@ public class GlyphVector
     private final int count;
 
 
-    public GlyphVector(java.awt.font.GlyphVector vector, int count){
+    public GlyphVector(Font font, String string){
         super();
-        if (null != vector && -1 < count){
-            this.vector = vector;
-            this.count = count;
+        if (null != font && null != string){
+            final int count = string.length();
+            if (-1 < count){
+                this.vector = font.createGlyphVector(font.frc,string);
+                this.count = count;
+            }
+            else
+                throw new IllegalArgumentException();
         }
         else
             throw new IllegalArgumentException();

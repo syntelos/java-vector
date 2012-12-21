@@ -639,18 +639,34 @@ public class Context
     {
         return new Context(this,x,y,w,h);
     }
-    public void fill(Shape shape)
-    {
-    }
     public void clip(Shape shape)
     {
+        this.instance.clipPath(shape.toPath());
     }
     public void clipTo(int x, int y, int w, int h)
     {
         this.instance.clipRect(x,y,w,h);
     }
+    public void fill(Shape shape)
+    {
+        final android.graphics.Paint paint = new android.graphics.Paint(this.android());
+        final android.graphics.Paint.Style style = paint.getStyle();
+        if (null == style){
+            paint.setStyle(android.graphics.Paint.Style.FILL);
+        }
+        else if (android.graphics.Paint.Style.STROKE == style){
+            paint.setStyle(android.graphics.Paint.Style.FILL_AND_STROKE);
+        }
+        this.instance.drawPath(shape.toPath(),paint);
+    }
     public void draw(Shape shape)
     {
+        android.graphics.Paint paint = this.android();
+        if (Stroke.Not(paint)){
+
+            paint = new Stroke(paint);
+        }
+        this.instance.drawPath(shape.toPath(),paint);
     }
     public void draw(Image image)
     {

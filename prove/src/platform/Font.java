@@ -212,7 +212,7 @@ public class Font
     }
     public final GlyphVector createGlyphVector(String string){
 
-        return new platform.font.GlyphVector( null, string.length());
+        return new platform.font.GlyphVector( this, string);
     }
     public final float em(float n){
 

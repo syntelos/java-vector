@@ -18,8 +18,10 @@
  */
 package platform.font;
 
+import platform.Font;
 import platform.Path;
 import platform.Shape;
+import platform.Transform;
 import platform.geom.Point;
 
 /**
@@ -30,18 +32,48 @@ public class GlyphVector
     implements vector.font.GlyphVector
 {
 
+    private final Path path;
 
-    public GlyphVector(Object vector, int count){
+    private final float[] xary;
+
+    private final int count;
+
+
+    public GlyphVector(Font font, String string){
         super();
+        if (null != font && null != string){
+            final int count = string.length();
+            if (0 < count){
+                this.count = count;
+                this.path = new Path();
+                font.getTextPath(string,0,count,0f,0f,this.path);
+                this.xary = new float[count];
+                font.getTextWidths(string,0,count,this.xary);
+            }
+            else
+                throw new IllegalArgumentException();
+        }
+        else
+            throw new IllegalArgumentException();
     }
 
 
     public Shape createOutline(Point baseline){
 
-        return null;
+        Path copy = new Path();
+
+        copy.addPath(this.path,baseline.x,baseline.y);
+
+        return copy;
     }
     public float[] queryPositions(Point baseline){
 
-        return null;
+        final int count = this.count<<1;
+        final float[] positions = new float[count];
+        for (int cc = 0; cc < count; ){
+            positions[cc++] = this.xary[cc>>1];
+            positions[cc++] = baseline.y;
+        }
+        return positions;
     }
 }

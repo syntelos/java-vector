@@ -5,19 +5,16 @@
 
 ** xmpp
 *** border rollver size
+*** clip?
 
 ** svg-sagittarius.json
 *** paint/repaint failure
 
 * android
 
-** Context
-*** fill, clip, draw (Shape)
+** Path ctors
 
-** GlyphVector
-*** (from) Canvas
-
-** Path
+** input events
 
 
 * ant html

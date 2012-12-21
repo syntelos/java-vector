@@ -18,6 +18,7 @@
  */
 package platform.font;
 
+import platform.Font;
 import platform.Path;
 import platform.Shape;
 import platform.geom.Point;
@@ -31,8 +32,20 @@ public class GlyphVector
 {
 
 
-    public GlyphVector(Object vector, int count){
+
+    public GlyphVector(Font font, String string){
         super();
+        if (null != font && null != string){
+            final int count = string.length();
+            if (-1 < count){
+
+                return;
+            }
+            else
+                throw new IllegalArgumentException();
+        }
+        else
+            throw new IllegalArgumentException();
     }
 
 

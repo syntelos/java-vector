@@ -26,6 +26,8 @@ import path.Op;
 import path.Operand;
 import path.Winding;
 
+import android.graphics.Path.FillType;
+
 /**
  * 
  */
@@ -33,6 +35,31 @@ public class Path
     extends android.graphics.Path
     implements vector.geom.Path
 {
+    /* package */ final static FillType Winding2FillType(Winding w){
+        if (null == w)
+            return FillType.WINDING;
+        else {
+            switch(w){
+            case EvenOdd:
+                return FillType.EVEN_ODD;
+            default:
+                return FillType.WINDING;
+            }
+        }
+    }
+    /* package */ final static Winding FillType2Winding(FillType ft){
+        if (null == ft)
+            return Winding.Default;
+        else {
+            switch(ft){
+            case EVEN_ODD:
+                return Winding.EvenOdd;
+            default:
+                return Winding.Default;
+            }
+        }
+    }
+
 
     public Path(){
         super();
@@ -51,30 +78,38 @@ public class Path
 
     public Winding getWinding(){
 
-        return Winding.For(0);
+        final FillType fillType = this.getFillType();
+        if (null == fillType)
+
+            return Winding.Default;
+        else 
+            return Path.FillType2Winding(fillType);
     }
     /**
      * @param winding Ignore null property value
      */
     public Path setWinding(Winding winding){
+        if (null != winding){
 
+            super.setFillType(Path.Winding2FillType(winding));
+        }
         return this;
     }
     public boolean isWindingNonZero(){
 
-        return false;
+        return (Winding.NonZero == this.getWinding());
     }
     public boolean isWindingEvenOdd(){
 
-        return false;
+        return (Winding.EvenOdd == this.getWinding());
     }
     public Path setWindingNonZero(){
 
-        return this;
+        return this.setWinding(Winding.NonZero);
     }
     public Path setWindingEvenOdd(){
 
-        return this;
+        return this.setWinding(Winding.EvenOdd);
     }
     public void add(Op op, float[] operands){
         switch(op){
@@ -100,7 +135,6 @@ public class Path
      * path.Operand path Operand} ctor in this package.
      */
     public float[] getVerticesPath(int opx, Op op, float[] vertices){
-
         /*
          * [TODO] This function is called by the second Operand ctor when used by Fv3.
          * It should be defined sometime in future.

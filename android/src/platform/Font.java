@@ -62,6 +62,9 @@ public class Font
     public final float ascent, descent, height, em;
     public final float prop, spacing, leading;
 
+    /* package */ final String name;
+
+
     public Font(String code){
         this(Ctor(code));
     }
@@ -79,6 +82,7 @@ public class Font
     }
     public Font(String name, vector.font.Font.Style style, int psize){
         super();
+        this.name = name;
         this.setAntiAlias(true);
 
         if (null != name){
@@ -101,8 +105,28 @@ public class Font
         this.spacing = (this.prop*PW);
         this.leading = (this.prop*PH);
     }
+    public Font(Font font, float dy){
+        super(font);
+        this.name = font.name;
+        this.setTextSize(this.getTextSize()+dy);
+
+        final android.graphics.Paint.FontMetrics metrics = this.getFontMetrics();
+
+        this.ascent = Math.abs(metrics.ascent);
+        this.descent = metrics.descent;
+        this.height = (this.ascent + this.descent);
+        this.em = (int)this.measureText(" ",0,1);
+        this.prop = (this.height/SZ);
+        this.spacing = (this.prop*PW);
+        this.leading = (this.prop*PH);
+    }
     public Font(android.graphics.Paint paint){
         super(paint);
+        if (paint instanceof Font)
+            this.name = ((Font)paint).name;
+        else
+            this.name = null;
+
         this.setAntiAlias(true);
 
         final android.graphics.Paint.FontMetrics metrics = this.getFontMetrics();
@@ -117,6 +141,10 @@ public class Font
     }
     public Font(android.graphics.Paint paint, Font font){
         super(paint);
+        if (paint instanceof Font)
+            this.name = ((Font)paint).name;
+        else
+            this.name = null;
         this.setAntiAlias(true);
 
         if (null != font){
@@ -225,22 +253,23 @@ public class Font
         return new Bounds(x1,y1,(x2-x1),(y2-y1));
     }
     public boolean isPlain(){
-        return false;
+        return (0 == super.getTypeface().getStyle());
     }
     public boolean isBold(){
-        return false;
+        return super.getTypeface().isBold();
     }
     public boolean isItalic(){
-        return false;
+        return super.getTypeface().isItalic();
     }
     public String getFamily(){
         return null;
     }
     public String getName(){
-        return null;
+        return this.name;
     }
     public int getSize(){
-        return 0;
+
+        return Frame.Pixels2Points(this.getTextSize());
     }
     public final Font decrementSize(){
         return this.decrementSize(2);
@@ -250,15 +279,15 @@ public class Font
     }
     public final Font decrementSize(float dy){
 
-        return this;
+        return new Font(this,-Math.abs(dy));
     }
     public final Font incrementSize(float dy){
 
-        return this;
+        return new Font(this,+Math.abs(dy));
     }
     public final GlyphVector createGlyphVector(String string){
 
-        return new platform.font.GlyphVector( null, string.length());
+        return new platform.font.GlyphVector( this, string);
     }
     public final float em(float n){
 
