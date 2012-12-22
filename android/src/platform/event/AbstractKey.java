@@ -20,6 +20,8 @@ package platform.event;
 
 import vector.Event;
 
+import android.view.KeyEvent;
+
 /**
  * 
  */
@@ -28,19 +30,19 @@ public class AbstractKey
     implements Event.Key
 {
 
-    public final Code code;
+    public final KeyCode code;
 
     public final char keyChar;
 
     public final int modifiers;
 
 
-    public AbstractKey(Type type, Object evt){
+    public AbstractKey(Type type, KeyEvent evt){
         super(type);
         if (null != evt){
 
-            this.code = Code.For(0);
-            this.keyChar = 0;
+            this.code = KeyCode.For(evt.getKeyCode());
+            this.keyChar = (char)evt.getUnicodeChar(evt.getMetaState());
             this.modifiers = 0;
         }
         else
@@ -54,7 +56,7 @@ public class AbstractKey
     public final boolean isDown(){
         return (Event.Type.KeyDown == this.type);
     }
-    public Code getCode(){
+    public KeyCode getCode(){
         return this.code;
     }
     public char getKeyChar(){

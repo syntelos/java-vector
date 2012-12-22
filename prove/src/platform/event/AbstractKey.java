@@ -28,7 +28,7 @@ public class AbstractKey
     implements Event.Key
 {
 
-    public final Code code;
+    public final KeyCode code;
 
     public final char keyChar;
 
@@ -39,7 +39,7 @@ public class AbstractKey
         super(type);
         if (null != evt){
 
-            this.code = Code.For(0);
+            this.code = KeyCode.For(0);
             this.keyChar = 0;
             this.modifiers = 0;
         }
@@ -54,7 +54,7 @@ public class AbstractKey
     public final boolean isDown(){
         return (Event.Type.KeyDown == this.type);
     }
-    public Code getCode(){
+    public KeyCode getCode(){
         return this.code;
     }
     public char getKeyChar(){

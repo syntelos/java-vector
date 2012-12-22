@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Module>
+  <ModulePrefs title="Vector Visitors Gadget" url="http://code.google.com/p/java-vector" description="Image display gadget" author="John Pritchard" author_email="syntelos@gmail.com" width="500" height="500">
+  </ModulePrefs>
+  <Content preferred_width="399" preferred_height="259" />
+  <Content type="html"><![CDATA[<a target="_top" style="margin: 0; padding: 0;" href="http://java-vector.googlecode.com/git/visitors/java-vector-visitors-20121221-1198x77.png"><img border="0" width="399" height="259" src="http://java-vector.googlecode.com/git/visitors/java-vector-visitors-20121221-1198x77.png" style="margin: 0; padding: 0;" /></a>]]></Content>
+</Module>

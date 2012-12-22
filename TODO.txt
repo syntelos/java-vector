@@ -1,5 +1,22 @@
                                    -*-outline-*-
 
+* prove
+** geda-prove, run 'ant prove' following 'ant awt'
+***
+***              vector-state require 'prove'
+***
+***     Created dir: /home/jdp/src/vector/bin
+***     Compiling 17 source files to /home/jdp/src/vector/bin
+***     /home/jdp/src/vector/geda/src/geda/Display.java:34: cannot access java.awt.event.KeyListener
+***     class file for java.awt.event.KeyListener not found
+***     public class Display
+***            ^
+***     /home/jdp/src/vector/geda/src/geda/Frame.java:24: cannot access javax.swing.JFrame
+***     class file for javax.swing.JFrame not found
+***     public class Frame
+***            ^
+***     BUILD FAILED
+
 
 * awt
 
@@ -25,10 +42,10 @@
 ** see html/TODO.txt
 
 * vector Image
-** is a Reader
-** subclass Writer
+*** (i/o json)+(r/o image)
 ** subclass Editor
 
-* vector (*)
+* vector (*,Component)
+*** (i/o json)
 ** ? subclass Editor
 

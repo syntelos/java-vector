@@ -359,14 +359,14 @@ ant help (for portable pixel programming with vector)
   <target name="demo-update-awt" depends="demo-compile-awt" description="Package demo jar, clean bin.  Depends on the target jar.">
 
     <echo message="Main-Class: platform.Frame"/>
-    <echo message="Class-Path: ${demo.lib.path.manifest}"/>
+    <echo message="Class-Path: ${demo.lib.path.manifest.awt}"/>
 
     <delete file="${existing.demo.jar}"/>
 
     <jar jarfile="${target.demo.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="platform.Frame"/>
-        <attribute name="Class-Path" value="${demo.lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${demo.lib.path.manifest.awt}"/>
       </manifest>
     </jar>
 
@@ -405,6 +405,7 @@ ant help (for portable pixel programming with vector)
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${target.vector.jar}"/>
+        <pathelement location="${target.prove.jar}"/>
       </classpath>
       <bootclasspath>
         <pathelement location="${prove.rt.jar}"/>
@@ -412,9 +413,9 @@ ant help (for portable pixel programming with vector)
     </javac>
   </target>
 
-  <target name="demo-version-awt" unless="demo.lib.path.manifest" depends="version">
+  <target name="demo-version-awt" unless="demo.lib.path.manifest.awt" depends="version">
 
-    <java outputproperty="demo.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="demo.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
@@ -432,14 +433,14 @@ ant help (for portable pixel programming with vector)
   <target name="geda-update-awt" depends="geda-compile-awt" description="Package geda jar, clean bin.  Depends on the target jar.">
 
     <echo message="Main-Class: geda.Frame"/>
-    <echo message="Class-Path: ${geda.lib.path.manifest}"/>
+    <echo message="Class-Path: ${geda.lib.path.manifest.awt}"/>
 
     <delete file="${existing.geda.jar}"/>
 
     <jar jarfile="${target.geda.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="geda.Frame"/>
-        <attribute name="Class-Path" value="${geda.lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${geda.lib.path.manifest.awt}"/>
       </manifest>
     </jar>
 
@@ -478,7 +479,7 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${target.vector.jar}"/>
-        <pathelement location="${existing.prove.jar}"/>
+        <pathelement location="${target.prove.jar}"/>
         <path refid="lib.path"/>
       </classpath>
       <bootclasspath>
@@ -487,9 +488,9 @@ ant help (for portable pixel programming with vector)
     </javac>
   </target>
 
-  <target name="geda-version-awt" unless="geda.lib.path.manifest" depends="version">
+  <target name="geda-version-awt" unless="geda.lib.path.manifest.awt" depends="version">
 
-    <java outputproperty="geda.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="geda.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
@@ -507,14 +508,14 @@ ant help (for portable pixel programming with vector)
   <target name="fonview-update-awt" depends="fonview-compile-awt" description="Package fonview jar, clean bin.  Depends on the target jar.">
 
     <echo message="Main-Class: fonview.Frame"/>
-    <echo message="Class-Path: ${fonview.lib.path.manifest}"/>
+    <echo message="Class-Path: ${fonview.lib.path.manifest.awt}"/>
 
     <delete file="${existing.fonview.jar}"/>
 
     <jar jarfile="${target.fonview.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="fonview.Frame"/>
-        <attribute name="Class-Path" value="${fonview.lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${fonview.lib.path.manifest.awt}"/>
       </manifest>
     </jar>
 
@@ -553,7 +554,7 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${target.vector.jar}"/>
-        <pathelement location="${existing.prove.jar}"/>
+        <pathelement location="${target.prove.jar}"/>
         <path refid="lib.path"/>
       </classpath>
       <bootclasspath>
@@ -562,9 +563,9 @@ ant help (for portable pixel programming with vector)
     </javac>
   </target>
 
-  <target name="fonview-version-awt" unless="fonview.lib.path.manifest" depends="version">
+  <target name="fonview-version-awt" unless="fonview.lib.path.manifest.awt" depends="version">
 
-    <java outputproperty="fonview.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="fonview.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
@@ -622,7 +623,7 @@ ant help (for portable pixel programming with vector)
     <jar jarfile="${target.xmpp.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="xmpp.Frame"/>
-        <attribute name="Class-Path" value="${xmpp.lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${xmpp.lib.path.manifest.awt}"/>
       </manifest>
     </jar>
 
@@ -633,7 +634,7 @@ ant help (for portable pixel programming with vector)
 
     <vector-state-require name="awt" property="vector.state"/>
 
-    <echo message="Class-Path: ${xmpp.lib.path.manifest}"/>
+    <echo message="Class-Path: ${xmpp.lib.path.manifest.awt}"/>
 
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
@@ -664,7 +665,7 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${target.vector.jar}"/>
-        <pathelement location="${existing.prove.jar}"/>
+        <pathelement location="${target.prove.jar}"/>
         <path refid="lib.path"/>
         <path refid="xmpp.lib.path"/>
       </classpath>
@@ -674,7 +675,7 @@ ant help (for portable pixel programming with vector)
     </javac>
   </target>
 
-  <target name="xmpp-version" unless="xmpp.lib.path.manifest" depends="version">
+  <target name="xmpp-version" unless="xmpp.lib.path.manifest.awt" depends="version">
 
     <path id="xmpp.lib.path">
 
@@ -683,7 +684,7 @@ ant help (for portable pixel programming with vector)
       </fileset>
     </path>
 
-    <java outputproperty="xmpp.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="xmpp.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
@@ -691,90 +692,20 @@ ant help (for portable pixel programming with vector)
     </java>
   </target>
 
-  <!--
-    - JOGL
+  <!-- 
+    - LLG (offline notes)
     -->
-  <target name="jogl-update-awt" if="vector.jogl.update" depends="jogl-jar-awt" description="Compile, archive, and copy to targets defined in '{user.home}/update.properties'.">
-
-    <do-update src="${target.jogl.jar}" tgt="${vector.jogl.update}" />
-  </target>
-
-  <target name="jogl-jar-awt" depends="jogl-compile-awt" description="Package jogl jar, clean bin.  Depends on the target jar.">
-
-    <echo message="Main-Class: platform.Frame"/>
-    <echo message="Class-Path: ${jogl.lib.path.manifest}"/>
-
-    <delete file="${existing.jogl.jar}"/>
-
-    <jar jarfile="${target.jogl.jar}" basedir="${bin}" >
-      <manifest>
-        <attribute name="Main-Class" value="platform.Frame"/>
-        <attribute name="Class-Path" value="${jogl.lib.path.manifest}"/>
-      </manifest>
-    </jar>
-
-    <delete dir="${bin}"/>
-  </target>
-
-  <target name="jogl-compile-awt" depends="jogl-version">
-
-    <vector-state-require name="awt" property="vector.state"/>
-
-    <delete dir="${bin}"/>
-    <mkdir dir="${bin}"/>
-    <copy todir="${bin}">
-      <fileset dir="${jogl.src}" includes="**/*.properties"/>
-      <fileset dir="${jogl.src}" includes="**/*.txt"/>
-      <fileset dir="${jogl.src}" includes="**/*.xml"/>
-    </copy>
-    <javac includeAntRuntime="false" srcdir="${jogl.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
-           source="${compiler.source}" target="${compiler.target}">
-      <classpath>
-        <pathelement location="${existing.vector.jar}"/>
-        <pathelement location="${existing.awt.jar}"/>
-        <path refid="lib.path"/>
-      </classpath>
-    </javac>
-  </target>
-
-  <target name="jogl-prove" depends="version" description="Compile against prove for proof of portability.">
-
-    <vector-state-require name="prove" property="vector.state"/>
-
-    <delete dir="${bin}"/>
-    <mkdir dir="${bin}"/>
-
-    <javac includeAntRuntime="false" srcdir="${jogl.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
-           source="${compiler.source}" target="${compiler.target}">
-      <classpath>
-        <pathelement location="${target.vector.jar}"/>
-        <pathelement location="${existing.prove.jar}"/>
-        <path refid="lib.path"/>
-      </classpath>
-    </javac>
-  </target>
-
-  <target name="jogl-version" unless="jogl.lib.path.manifest" depends="version">
-
-    <java outputproperty="jogl.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
-      <arg value="${target.awt.jar}"/>
-      <arg value="${target.vector.jar}"/>
-      <arg value="${toString:lib.path}"/>
-    </java>
-  </target>
-
-  
   <target name="llg-update-awt" depends="llg-compile-awt" description="Compile, archive, and copy to targets defined in '{user.home}/update.properties'.">
 
     <echo message="Main-Class: llg.Fullscreen"/>
-    <echo message="Class-Path: ${llg.lib.path.manifest}"/>
+    <echo message="Class-Path: ${llg.lib.path.manifest.awt}"/>
 
     <delete file="${existing.llg.jar}"/>
 
     <jar jarfile="${target.llg.jar}" basedir="${bin}" >
       <manifest>
         <attribute name="Main-Class" value="llg.Fullscreen"/>
-        <attribute name="Class-Path" value="${llg.lib.path.manifest}"/>
+        <attribute name="Class-Path" value="${llg.lib.path.manifest.awt}"/>
       </manifest>
     </jar>
 
@@ -823,9 +754,9 @@ ant help (for portable pixel programming with vector)
     </javac>
   </target>
 
-  <target name="llg-version" unless="llg.lib.path.manifest" depends="version">
+  <target name="llg-version" unless="llg.lib.path.manifest.awt" depends="version">
 
-    <java outputproperty="llg.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+    <java outputproperty="llg.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>

@@ -20,13 +20,15 @@ package platform.event;
 
 import vector.Event;
 
+import android.view.KeyEvent;
+
 /**
  * 
  */
 public class KeyDown
     extends AbstractKey
 {
-    public KeyDown(Object evt){
+    public KeyDown(KeyEvent evt){
         super(Event.Type.KeyDown,evt);
     }
 }
