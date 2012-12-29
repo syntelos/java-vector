@@ -296,7 +296,46 @@ public class Display
      */
     public boolean input(Event e){
 
-        return false;
+        boolean action = false;
+
+        /*
+         * Interpret Viewport event
+         */
+        if (Event.Type.Action == e.getType()){
+
+            action = true;
+
+            final Event.NamedAction actor = (Event.NamedAction)e;
+
+            if (actor.isValueClass(Viewport.Size.class)){
+
+                final Event.NamedAction<Viewport.Size> viewport = 
+                    (Event.NamedAction<Viewport.Size>)actor;
+
+                this.setViewport( viewport.getValue());
+            }
+        }
+
+        /*
+         * Dispatch event
+         */
+        boolean re = false;
+
+        for (Component c: this){
+            /*
+             * Broadcast
+             */
+            re = (c.input(e) || re);
+        }
+
+        /*
+         * Output scene
+         */
+        if (action || re){
+
+            this.outputScene();
+        }
+        return re;
     }
     public final boolean isMouseIn(){
         return this.mouseIn;
