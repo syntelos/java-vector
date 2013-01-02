@@ -433,6 +433,12 @@ public abstract class AbstractComponent
         }
         return false;
     }
+    public Display show(Component c){
+        Display display = this.getRootContainer();
+        if (null != display && null != c)
+            display.show(c);
+        return display;
+    }
 
     public ObjectJson toJson(){
         ObjectJson thisModel = new ObjectJson();
