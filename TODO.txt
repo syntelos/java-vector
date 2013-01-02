@@ -22,7 +22,8 @@
 
 ** xmpp
 *** border rollver size
-*** clip?
+**** clip?
+*** right-mouse viewport, logon, menu
 
 ** svg-sagittarius.json
 *** paint/repaint failure
@@ -40,10 +41,6 @@
 *** src: html/idl
 *** tgt: html/lib/src
 ** see html/TODO.txt
-
-* vector Image
-*** (i/o json)+(r/o image)
-** subclass Editor
 
 * vector (*,Component)
 *** (i/o json)
