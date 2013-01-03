@@ -494,6 +494,20 @@ public class Display
         else
             return false;
     }
+    public boolean drop(Class<? extends Component> c){
+
+        int idx = this.indexOf(c);
+        if (-1 < idx){
+
+            this.remove(idx).destroy();
+
+            this.outputScene();
+
+            return true;
+        }
+        else
+            return false;
+    }
     public Display show(Component c){
         if (null != c){
             int idx = this.indexOf(c.getClass());
@@ -522,6 +536,41 @@ public class Display
                 this.modified();
 
                 this.center(c);
+            }
+            this.outputScene();
+        }
+        return this;
+    }
+    public Display show(Class<? extends Component> c){
+        if (null != c){
+            int idx = this.indexOf(c);
+            if (0 > idx){
+                try {
+                    Component cc = c.newInstance();
+
+                    cc = this.add(cc);
+
+                    if (cc instanceof Component.Build.InShow){
+
+                        ((Component.Build.InShow)cc).build();
+                    }
+
+                    cc.setVisibleVector(true);
+
+                    this.modified();
+
+                    this.center(cc);
+                }
+                catch (InstantiationException exc){
+                    throw new IllegalArgumentException(c.getName(),exc);
+                }
+                catch (IllegalAccessException exc){
+                    throw new IllegalArgumentException(c.getName(),exc);
+                }
+            }
+            else {
+
+                this.remove(idx).destroy();
             }
             this.outputScene();
         }

@@ -361,6 +361,8 @@ public interface Component
      * @return Requested removal performed successfully
      */
     public boolean drop(Component c);
+
+    public boolean drop(Class<? extends Component> clas);
 
     /**
      * Marker for layout and listing

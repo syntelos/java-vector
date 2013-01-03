@@ -422,18 +422,35 @@ public abstract class AbstractComponent
 
         return this.getTransformParent().transformFrom(point);
     }
+    /**
+     * @see Container
+     */
     public boolean drop(Component c){
 
         Component p = this.getParentVector();
-        while (null != p){
-            if (p.drop(c))
-                return true;
-            else
-                p = p.getParentVector();
-        }
-        return false;
+        if (null != p)
+            return p.drop(c);
+        else
+            return false;
+    }
+    /**
+     * @see Container
+     */
+    public boolean drop(Class<? extends Component> c){
+
+        Component p = this.getParentVector();
+        if (null != p)
+            return p.drop(c);
+        else
+            return false;
     }
     public Display show(Component c){
+        Display display = this.getRootContainer();
+        if (null != display && null != c)
+            display.show(c);
+        return display;
+    }
+    public Display show(Class<? extends Component> c){
         Display display = this.getRootContainer();
         if (null != display && null != c)
             display.show(c);

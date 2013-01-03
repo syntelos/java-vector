@@ -57,6 +57,8 @@ public interface Display
      * Intended for dialog windows.
      */
     public Display show(Component component);
+
+    public Display show(Class<? extends Component> component);
     /**
      * Set location to center dimensions
      */

@@ -648,8 +648,29 @@ public class Container
 
         return this;
     }
+    /**
+     * @see AbstractComponent
+     */
     @Override
     public boolean drop(Component c){
+
+        int idx = this.indexOf(c);
+        if (-1 < idx){
+
+            this.remove(idx).destroy();
+
+            this.outputScene();
+
+            return true;
+        }
+        else
+            return super.drop(c);
+    }
+    /**
+     * @see AbstractComponent
+     */
+    @Override
+    public boolean drop(Class<? extends Component> c){
 
         int idx = this.indexOf(c);
         if (-1 < idx){
