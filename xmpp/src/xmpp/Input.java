@@ -180,11 +180,7 @@ public class Input
 
                 if (m.isPoint() && Event.Mouse.Action.Point1 != m.getAction()){
 
-                    Display display = this.getRootContainer();
-
-                    Viewport viewport = new Viewport();
-
-                    display.show(viewport);
+                    this.menu();
 
                     return true;
                 }
@@ -196,5 +192,8 @@ public class Input
             }
         }
     }
+    public void menu(){
 
+        this.show(Viewport.class);
+    }
 }

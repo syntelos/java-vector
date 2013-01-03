@@ -187,11 +187,7 @@ public class Output
 
                 if (m.isPoint() && Event.Mouse.Action.Point1 != m.getAction()){
 
-                    Display display = this.getRootContainer();
-
-                    Viewport viewport = new Viewport();
-
-                    display.show(viewport);
+                    this.menu();
 
                     return true;
                 }
@@ -202,6 +198,10 @@ public class Output
                 return false;
             }
         }
+    }
+    public void menu(){
+
+        this.show(Viewport.class);
     }
     public Output send(Message m){
 
