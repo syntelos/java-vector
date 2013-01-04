@@ -32,8 +32,19 @@ public class Display
     implements Terminal
 {
 
+    protected final Class<? extends Component> menuClass;
+
+
     public Display(){
         super();
+        this.menuClass = Menu.class;
+    }
+    public Display(Class<? extends Component> menuClass){
+        super();
+        if (null == menuClass)
+            this.menuClass = Menu.class;
+        else
+            this.menuClass = menuClass;
     }
 
 
@@ -156,7 +167,7 @@ public class Display
     }
     public Display menu(){
 
-        this.show(Menu.class);
+        this.show(this.menuClass);
 
         return this;
     }
