@@ -58,62 +58,6 @@ public class Input
             Logon.Configure(border);
         }
     }
-    public void send(){
-
-        String m = this.getText();
-
-        if (null != m){
-
-            At.Command input = new At.Command(m);
-
-            switch (input.at){
-
-            case Clear:
-                {
-                    this.setText(null);
-
-                    Output.Clear();
-
-                    this.modified();
-
-                    this.outputScene();
-
-                    return;
-                }
-
-            case Identifier:
-            case Logon:
-                try {
-                    Status.Select(input.address);
-                }
-                catch (IllegalArgumentException nlogon){
-
-                    this.setText(null);
-
-                    XThread.Send(input.source);
-
-                    this.modified();
-
-                    this.outputScene();
-
-                    return;
-                }
-
-            case Tail:
-
-                this.setText(null);
-
-                XThread.Send(input.tail);
-
-                this.modified();
-
-                this.outputScene();
-
-            default:
-                break;
-            }
-        }
-    }
     public boolean input(Event e){
         if (super.input(e)){
 
@@ -122,27 +66,6 @@ public class Input
         else {
             switch(e.getType()){
 
-            case Action:{
-                Event.NamedAction action = (Event.NamedAction)e;
-
-                if (action.isValueClass(Actor.class)){
-                    final Event.NamedAction<Actor> actor = (Event.NamedAction<Actor>)e;
-                    switch(actor.getValue()){
-                    case Connect:
-                    case Disconnect:
-                        /*
-                         * Logon 
-                         */
-                        this.outputScene();
-                        return true;
-
-                    default:
-                        break;
-                    }
-                }
-
-                return false;
-            }
             case KeyUp:
                 if (this.mouseIn){
                     final Event.Key k = (Event.Key)e;
@@ -183,6 +106,25 @@ public class Input
             default:
                 return false;
             }
+        }
+    }
+    public void send(){
+
+        String m = this.getText();
+
+        if (null != m){
+
+            final Terminal terminal = this.getParentVector();
+            if (null != terminal){
+
+                terminal.send(m);
+            }
+
+            this.setText(null);
+
+            this.modified();
+
+            this.outputScene();
         }
     }
     public void menu(){

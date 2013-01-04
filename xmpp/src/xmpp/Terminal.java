@@ -44,4 +44,6 @@ public interface Terminal
 
     public Terminal menu();
 
+    public Terminal send(String input);
+
 }

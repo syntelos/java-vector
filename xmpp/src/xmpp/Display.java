@@ -102,6 +102,42 @@ public class Display
         }
         return null;
     }
+    public Display send(String m){
+
+        At.Command input = new At.Command(m);
+
+        switch (input.at){
+
+        case Clear:
+
+            Output.Clear();
+
+            return this;
+
+        case Identifier:
+        case Logon:
+            try {
+                Status.Select(input.address);
+            }
+            catch (IllegalArgumentException nlogon){
+
+                XThread.Send(input.source);
+
+                return this;
+            }
+
+            // || \\
+
+        case Tail:
+
+            XThread.Send(input.tail);
+
+            // || \\
+
+        default:
+            return this;
+        }
+    }
     public Logon logon(){
         Logon logon = this.getLogon();
         if (null == logon){
