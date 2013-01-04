@@ -20,6 +20,7 @@ package xmpp;
 
 import vector.Component;
 import vector.dialog.Style;
+import vector.dialog.Viewport;
 
 import platform.Color;
 
@@ -116,5 +117,17 @@ public class Display
         this.outputScene();
 
         return logon;
+    }
+    public Display menu(){
+
+        this.show(Menu.class);
+
+        return this;
+    }
+    public Display viewport(){
+
+        this.show(Viewport.class);
+
+        return this;
     }
 }

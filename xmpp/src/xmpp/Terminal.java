@@ -40,4 +40,8 @@ public interface Terminal
 
     public Logon logon();
 
+    public Terminal viewport();
+
+    public Terminal menu();
+
 }

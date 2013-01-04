@@ -32,7 +32,6 @@ import vector.Stroke;
 import vector.TableSmall;
 import vector.TextEdit;
 import vector.dialog.Style;
-import vector.dialog.Viewport;
 
 import platform.Color;
 
@@ -151,11 +150,6 @@ public class Output
 
         this.layout();
     }
-    public void logon(){
-
-        final Terminal parent = this.getParentVector();
-        parent.logon();
-    }
     @Override
     public boolean input(Event e){
         if (super.input(e))
@@ -171,7 +165,7 @@ public class Output
 
                     case ESCAPE:
 
-                        this.logon();
+                        this.menu();
 
                         return true;
                     }
@@ -201,7 +195,11 @@ public class Output
     }
     public void menu(){
 
-        this.show(Viewport.class);
+        final Terminal parent = this.getParentVector();
+        if (null != parent){
+
+            parent.menu();
+        }
     }
     public Output send(Message m){
 

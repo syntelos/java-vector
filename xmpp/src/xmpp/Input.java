@@ -21,8 +21,6 @@ package xmpp;
 import vector.Border;
 import vector.Event;
 
-import vector.dialog.Viewport;
-
 /**
  * Input text line
  */
@@ -116,11 +114,6 @@ public class Input
             }
         }
     }
-    public void logon(){
-
-        final Terminal parent = this.getParentVector();
-        parent.logon();
-    }
     public boolean input(Event e){
         if (super.input(e)){
 
@@ -164,7 +157,7 @@ public class Input
 
                     case ESCAPE:
 
-                        this.logon();
+                        this.menu();
 
                         return true;
                     }
@@ -194,6 +187,10 @@ public class Input
     }
     public void menu(){
 
-        this.show(Viewport.class);
+        final Terminal parent = this.getParentVector();
+        if (null != parent){
+
+            parent.menu();
+        }
     }
 }
