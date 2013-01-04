@@ -213,11 +213,11 @@ ant help (for portable pixel programming with vector)
   <!-- 
     - AWT
     -->
-  <target name="awt" description="Calls awt-jar, vector-jar-awt (enter AWT)">
+  <target name="awt" description="Calls awt-update, vector-jar-awt (enter AWT)">
 
     <vector-state-set name="awt" property="vector.state"/>
 
-    <antcall target="awt-jar"/>
+    <antcall target="awt-update"/>
 
     <antcall target="vector-jar-awt"/>
 
@@ -276,11 +276,11 @@ ant help (for portable pixel programming with vector)
   <!-- 
     - ANDROID
     -->
-  <target name="android" description="Calls android-jar, vector-jar-android (enter Android)">
+  <target name="android" description="Calls android-update, vector-jar-android (enter Android)">
 
     <vector-state-set name="android" property="vector.state"/>
 
-    <antcall target="android-jar"/>
+    <antcall target="android-update"/>
 
     <antcall target="vector-jar-android"/>
 
@@ -353,7 +353,7 @@ ant help (for portable pixel programming with vector)
     -->
   <target name="demo" depends="vector-state" description="Calls demo jar for current state">
 
-    <antcall target="demo-jar-${vector.state}" inheritRefs="true"/>
+    <antcall target="demo-update-${vector.state}" inheritRefs="true"/>
   </target>
 
   <target name="demo-update-awt" depends="demo-compile-awt" description="Package demo jar, clean bin.  Depends on the target jar.">
@@ -427,7 +427,7 @@ ant help (for portable pixel programming with vector)
     -->
   <target name="geda" depends="vector-state" description="Calls geda jar for current state">
 
-    <antcall target="geda-jar-${vector.state}" inheritRefs="true"/>
+    <antcall target="geda-update-${vector.state}" inheritRefs="true"/>
   </target>
 
   <target name="geda-update-awt" depends="geda-compile-awt" description="Package geda jar, clean bin.  Depends on the target jar.">
@@ -502,7 +502,7 @@ ant help (for portable pixel programming with vector)
     -->
   <target name="fonview" depends="vector-state" description="Calls fonview jar for current state">
 
-    <antcall target="fonview-jar-${vector.state}" inheritRefs="true"/>
+    <antcall target="fonview-update-${vector.state}" inheritRefs="true"/>
   </target>
 
   <target name="fonview-update-awt" depends="fonview-compile-awt" description="Package fonview jar, clean bin.  Depends on the target jar.">
@@ -577,7 +577,7 @@ ant help (for portable pixel programming with vector)
     -->
   <target name="xmpp" depends="vector-state" description="Calls xmpp jar for current state">
 
-    <antcall target="xmpp-jar-${vector.state}" inheritRefs="true"/>
+    <antcall target="xmpp-update-${vector.state}" inheritRefs="true"/>
   </target>
 
   <target name="xmpp-sign-awt" if="available.signing.properties" depends="xmpp-jar-awt" description="Sign jars required by xmpp.jnlp">
@@ -768,7 +768,7 @@ ant help (for portable pixel programming with vector)
     -->
   <target name="vector" depends="vector-state" description="Calls vector jar for current state">
 
-    <antcall target="vector-jar-${vector.state}" inheritRefs="true"/>
+    <antcall target="vector-update-${vector.state}" inheritRefs="true"/>
   </target>
 
   <target name="vector-prove" description="Calls vector-jar-prove, prove-jar (enter Prove)">
@@ -946,13 +946,11 @@ ant help (for portable pixel programming with vector)
   </target>
 
   <!--
-    - 
+    - clean bin
     -->
   <target name="clean" description="Delete products">
+
     <delete dir="${bin}"/>
-    <!-- <![CDATA[delete dir="${dst}">
-      <include name="**/*.jar" />
-    </delete ]]> -->
   </target>
 
   <!--
