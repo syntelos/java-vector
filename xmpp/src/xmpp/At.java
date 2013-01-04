@@ -21,31 +21,38 @@ package xmpp;
 import java.util.StringTokenizer;
 
 /**
- * {@link Input} in the patterns
+ * {@link Input} parser for at code classifiers, see {@link TL
+ * terminal language}.
+ * 
+ * <p> At code includes the empty string, <code>""</code>, and the
+ * following patterns for the special characers <code>'@'</code> and
+ * <code>':'</code>.
  * 
  * <pre>
- * @contact
- * @contact: message
- * @contact message
+ * @head: tail
+ * @head tail
+ * @head
+ * tail
  * </pre>
+ * </p>
  * 
- * will cause contact to be selected or contacted. An optional message
- * will be sent when the present contact is known.
+ * <p> At code permits local and remote semantics via transparency.
+ * An at code string with no particular semantics is repeated to the
+ * selected current remote recipient. </p>
  * 
- * More typical input is a message without a contact prefix.
+ * <p> An at code head that matches to a known remote recipient has
+ * the function to select the identified recipient as the current
+ * remote recipient.  In this case the head clause is consumed, and
+ * any tail is sent to the remote recipient. </p>
  */
 public enum At {
-    Clear,
-    Identifier,
-    Logon,
+    Head,
     Tail,
     Empty;
 
     /**
      * <pre>
      * head, tail := ( '@' head (_:)* )? ( tail )?
-     * address := head
-     * at := address
      * </pre>
      */
     public static class Command
@@ -54,16 +61,12 @@ public enum At {
 
         public final At at;
 
-        public final XAddress address;
-
         public final String source, head, tail;
 
         public Command(String string){
             super();
             this.source = string;
 
-            XAddress addr = null;
-            At at = At.Empty;
             String head = null, tail = null;
 
             if (null != string){
@@ -75,20 +78,17 @@ public enum At {
                     case 1:
                         tail = tokens[0];
 
-                        at = At.Tail;
-
                         break;
 
                     default:
                         for (int cc = 0; cc < count; cc++){
                             String tok = tokens[cc];
                             if (1 == tok.length()){
-                                char ch = tok.charAt(0);
 
                                 if (null != tail)
                                     tail += tok;
                                 else if (inHead){
-                                    switch(ch){
+                                    switch(tok.charAt(0)){
                                     case ' ':
                                     case ':':
                                         inHead = false;
@@ -98,13 +98,19 @@ public enum At {
                                         break;
                                     }
                                 }
-                                else if ('@' == ch && 0 == cc)
-                                    inHead = true;
                                 else {
+                                    switch(tok.charAt(0)){
+                                    case '@':
+                                        inHead = (0 == cc);
+                                        break;
+                                    case ' ':
+                                    case ':':
+                                        break;
+                                    default:
+                                        tail = tok;
 
-                                    tail = tok;
-
-                                    at = At.Tail;
+                                        break;
+                                    }
                                 }
                             }
                             else if (inHead){
@@ -117,41 +123,39 @@ public enum At {
                             else if (null == tail){
 
                                 tail = tok;
-
-                                at = At.Tail;
                             }
                             else
                                 tail += tok;
                         }
                         break;
                     }
-
-                    if (null != head){
-
-                        if ("clear".equalsIgnoreCase(head)){
-
-                            addr = null;
-
-                            at = At.Clear;
-                        }
-                        else {
-                            try {
-                                addr = new XAddress(head);
-                                if (addr.isHostDefault())
-                                    at = At.Identifier;
-                                else
-                                    at = At.Logon;
-                            }
-                            catch (RuntimeException exc){
-                            }
-                        }
-                    }
                 }
             }
-            this.at = at;
-            this.address = addr;
-            this.head = head;
-            this.tail = tail;
+            if (null == head){
+                if (null == tail){
+                    this.at = At.Empty;
+                    this.head = null;
+                    this.tail = null;
+                }
+                else {
+                    this.at = At.Tail;
+                    this.head = null;
+                    this.tail = tail;
+                }
+            }
+            else {
+                this.at = At.Head;
+                this.head = head;
+                this.tail = tail;
+            }
+        }
+
+
+        public final boolean isEmpty(){
+            return (At.Empty == this.at);
+        }
+        public final boolean isNotEmpty(){
+            return (At.Empty != this.at);
         }
 
 
@@ -178,22 +182,12 @@ public enum At {
 
             switch (ac.at){
 
-            case Identifier:
-                System.out.printf(" Select(%s)",ac.address.identifier);
-                if (null != ac.tail){
-                    System.out.printf(" Send(%s)",ac.tail);
-                }
-                break;
-            case Logon:
-                System.out.printf(" Select(%s)",ac.address.logon);
-                if (null != ac.tail){
-                    System.out.printf(" Send(%s)",ac.tail);
-                }
-                break;
+            case Head:
+                System.out.printf(" Head(%s)",ac.head);
 
             case Tail:
-                System.out.printf(" Send(%s)",ac.tail);
-                break;
+                System.out.printf(" Tail(%s)",ac.tail);
+
             default:
                 break;
             }

@@ -104,9 +104,9 @@ public class Display
     }
     public Display send(String m){
 
-        At.Command input = new At.Command(m);
+        TL.Command input = new TL.Command(m);
 
-        switch (input.at){
+        switch (input.tl){
 
         case Clear:
 
