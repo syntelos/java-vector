@@ -198,7 +198,7 @@ public class Output
         final Terminal parent = this.getParentVector();
         if (null != parent){
 
-            parent.menu();
+            parent.displayMenu();
         }
     }
     public Output send(Message m){

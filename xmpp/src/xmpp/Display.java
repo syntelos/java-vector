@@ -149,7 +149,7 @@ public class Display
             return this;
         }
     }
-    public Logon logon(){
+    public Logon displayLogon(){
         Logon logon = this.getLogon();
         if (null == logon){
             logon = Logon.Instance();
@@ -165,13 +165,13 @@ public class Display
 
         return logon;
     }
-    public Display menu(){
+    public Display displayMenu(){
 
         this.show(this.menuClass);
 
         return this;
     }
-    public Display viewport(){
+    public Display displayViewport(){
 
         this.show(Viewport.class);
 

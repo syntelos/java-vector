@@ -53,11 +53,11 @@ public class Menu
                     switch(m.getValue()){
 
                     case Logon:
-                        terminal.logon();
+                        terminal.displayLogon();
                         this.drop(this);
                         return true;
                     case Resize:
-                        terminal.viewport();
+                        terminal.displayViewport();
                         this.drop(this);
                         return true;
 

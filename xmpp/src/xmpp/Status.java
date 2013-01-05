@@ -109,26 +109,24 @@ public class Status
         public void init(){
             super.init();
 
-            final Color bgd = Style.BGD(0.3f);
-            final Color fg1 = Style.FG();
+            final Color bg = Style.BG();
+            final Color fg = Style.FG();
 
             this.setEnumClass(Actor.class);
             this.setEnumValue(Actor.Select);
             this.setFont(Style.FontSmall());
             this.setFixed(true);
             this.setCols(40);
-            this.setColor(fg1);
-            this.setColorOver(fg1);
+            this.setColor(fg);
+            this.setColorOver(fg);
             this.setText(this.address.logon+'/'+this.address.resourceKind);
 
             Border border = new Border();
             this.setBorder(border);
 
-            final Color fg2 = Style.FG(0.5f);
-
-            border.setBackground(bgd);
-            border.setColor(fg2);
-            border.setColorOver(fg2);
+            border.setBackground(bg);
+            border.setColor(fg);
+            border.setColorOver(fg);
             border.setStyle(Border.Style.ROUND);
             border.setArc(6.0);
             border.setStroke(new Stroke(1f));
@@ -147,7 +145,7 @@ public class Status
 
             this.address = from;
 
-            final Color ok = Style.OK(0.5f);
+            final Color ok = Style.OK();
 
             this.setColor(ok);
             this.setColorOver(ok);
@@ -169,18 +167,18 @@ public class Status
 
                 switch(this.mode){
                 case chat:
-                    color = Style.ST(0.5f);
+                    color = Style.ST();
                     break;
                 case available:
-                    color = Style.OK(0.5f);
+                    color = Style.OK();
                     break;
                 case away:
                 case xa:
-                    color = Style.AY(0.5f);
+                    color = Style.AY();
                     break;
                 case dnd:
                 default:
-                    color = Style.NG(0.5f);
+                    color = Style.NG();
                     break;
                 }
                 this.setColor(color);
@@ -245,10 +243,9 @@ public class Status
         {
             this.add(border);
 
-            final Color bgd = Style.BGD(0.4f);
             final Color ng = Style.NG(0.5f);
 
-            border.setBackground(bgd);
+            border.setBackground(ng);
             border.setColor(ng);
             border.setColorOver(ng);
             border.setStyle(Border.Style.ROUND);
@@ -268,6 +265,8 @@ public class Status
 
             b.y = 16f;
             b.x = (p.width-b.width-20f);
+            b.width = Math.max(b.width,10);
+            b.height = Math.max(b.height,10);
 
             this.setBoundsVector(b);
 
@@ -293,6 +292,7 @@ public class Status
 
             border.setColor(ok);
             border.setColorOver(ok);
+            border.setBackground(ok);
         }
 
         this.outputScene();
@@ -307,6 +307,7 @@ public class Status
 
             border.setColor(ng);
             border.setColorOver(ng);
+            border.setBackground(ng);
         }
 
         this.outputScene();

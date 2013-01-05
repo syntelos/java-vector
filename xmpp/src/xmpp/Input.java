@@ -132,7 +132,7 @@ public class Input
         final Terminal parent = this.getParentVector();
         if (null != parent){
 
-            parent.menu();
+            parent.displayMenu();
         }
     }
 }

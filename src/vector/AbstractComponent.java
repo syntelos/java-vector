@@ -143,7 +143,7 @@ public abstract class AbstractComponent
      */
     public final Component setParentVector(Component parent){
         if (null != parent){
-            if (null != this.parent)
+            if (null != this.parent && parent != this.parent)
                 throw new IllegalStateException();
             else {
                 this.parent = parent;

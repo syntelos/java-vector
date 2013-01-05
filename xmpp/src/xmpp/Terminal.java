@@ -38,11 +38,11 @@ public interface Terminal
 
     public Logon getLogon();
 
-    public Logon logon();
+    public Logon displayLogon();
 
-    public Terminal viewport();
+    public Terminal displayViewport();
 
-    public Terminal menu();
+    public Terminal displayMenu();
 
     public Terminal send(String input);
 
