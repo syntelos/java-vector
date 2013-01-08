@@ -251,7 +251,12 @@ public class Logon
         Preferences.SetLogon(this.logon.getText());
         Preferences.SetPassword(this.password.getText());
 
-        return XThread.Connect();
+        if (XThread.Connect())
+            return true;
+        else {
+            this.show(this);
+            return false;
+        }
     }
     public void disconnect(){
 
@@ -264,7 +269,7 @@ public class Logon
         XThread.Disconnect();
     }
     public boolean input(Event e){
-
+        final Container parent = this.getParentVector();
         if (super.input(e)){
 
             switch(e.getType()){
@@ -279,6 +284,12 @@ public class Logon
                 switch(action.getValue()){
 
                 case Connect:
+                    /*
+                     * within super.input, Dialog called "this.drop(this)"
+                     * 
+                     * if connect fails, instances can call "this.show(this)"
+                     */
+                    this.setParentVector(parent);
 
                     this.connect();
 
