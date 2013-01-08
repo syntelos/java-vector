@@ -243,7 +243,7 @@ public class Logon
         // this.logon = null
         // this.password = null
     }
-    public void connect(){
+    public boolean connect(){
 
         Preferences.SetHost(this.host.getText());
         Preferences.SetPort(this.port.getText());
@@ -251,7 +251,7 @@ public class Logon
         Preferences.SetLogon(this.logon.getText());
         Preferences.SetPassword(this.password.getText());
 
-        XThread.Connect();
+        return XThread.Connect();
     }
     public void disconnect(){
 

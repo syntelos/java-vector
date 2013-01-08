@@ -63,9 +63,9 @@ public class XThread
         return Instance;
     }
 
-    public final static void Connect(){
+    public final static boolean Connect(){
 
-        Instance().connect();
+        return Instance().connect();
     }
     public final static void Disconnect(){
 
