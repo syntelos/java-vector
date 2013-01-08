@@ -321,6 +321,12 @@ public class XThread
                 re = true;
 
                 Status.Up();
+
+                try {
+                    this.select(Preferences.ComposeTo());
+                }
+                catch (RuntimeException optimistic){
+                }
             }
             else {
                 Output.Error("Failed to connect");
@@ -328,11 +334,7 @@ public class XThread
                 Status.Down();
             }
         }
-        try {
-            this.select(Preferences.ComposeTo());
-        }
-        catch (RuntimeException optimistic){
-        }
+
         return re;
     }
     public void disconnect(){
