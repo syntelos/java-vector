@@ -102,7 +102,7 @@ public class Output
      */
     public enum Format {
 
-        SendPresence   ("%@s: @%s"),
+        SendPresence   ("@%s: @%s"),
         ReceivePresence("@%s: @%s"),
         SendMessage    ("@%s: %s"),
         ReceiveMessage ("@%s: %s"),

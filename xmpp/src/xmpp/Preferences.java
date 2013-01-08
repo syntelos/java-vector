@@ -182,8 +182,7 @@ public class Preferences
         try {
             return new xmpp.XAddress.To();
         }
-        catch (RuntimeException exc){
-            exc.printStackTrace();
+        catch (IllegalArgumentException notFound){
             return null;
         }
     }
