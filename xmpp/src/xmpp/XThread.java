@@ -546,33 +546,52 @@ public class XThread
         final XMPPError.Type et = m.getError().getType();
         switch(et){
         case WAIT:
-
-            Output.Error("error(WAIT, from: %s)",(new xmpp.XAddress.From(m)));
-
+            try {
+                Output.Error("error(WAIT, from: %s)",(new xmpp.XAddress.From(m)));
+            }
+            catch (RuntimeException exc){
+                Output.Error("error(WAIT)");
+            }
             break;
         case CANCEL:
-
-            Output.Error("error(CANCEL, from: %s)",(new xmpp.XAddress.From(m)));
-
+            try {
+                Output.Error("error(CANCEL, from: %s)",(new xmpp.XAddress.From(m)));
+            }
+            catch (RuntimeException exc){
+                Output.Error("error(CANCEL)");
+            }
             break;
         case MODIFY:
-
-            Output.Error("error(MODIFY, from: %s)",(new xmpp.XAddress.From(m)));
-
+            try {
+                Output.Error("error(MODIFY, from: %s)",(new xmpp.XAddress.From(m)));
+            }
+            catch (RuntimeException exc){
+                Output.Error("error(MODIFY)");
+            }
             break;
         case AUTH:
-
-            Output.Error("error(AUTH, from: %s)",(new xmpp.XAddress.From(m)));
-
+            try {
+                Output.Error("error(AUTH, from: %s)",(new xmpp.XAddress.From(m)));
+            }
+            catch (RuntimeException exc){
+                Output.Error("error(AUTH)");
+            }
             break;
         case CONTINUE:
-
-            Output.Error("error(CONTINUE, from: %s)",(new xmpp.XAddress.From(m)));
-
+            try {
+                Output.Error("error(CONTINUE, from: %s)",(new xmpp.XAddress.From(m)));
+            }
+            catch (RuntimeException exc){
+                Output.Error("error(CONTINUE)");
+            }
             break;
         default:
-
-            Output.Error("error(name: %s, from: %s)",et.name(),(new xmpp.XAddress.From(m)));
+            try {
+                Output.Error("error(name: %s, from: %s)",et.name(),(new xmpp.XAddress.From(m)));
+            }
+            catch (RuntimeException exc){
+                Output.Error("error(name: %s)",et.name());
+            }
             break;
         }
     }
