@@ -59,7 +59,7 @@ public class Editor
 
 
     public String trim(){
-        return this.home.trim(this.visual);
+        return this.home.trim(this.logical);
     }
     public Shape cursor(Text text){
 
@@ -77,29 +77,29 @@ public class Editor
      */
     public boolean end(){
 
-        return this.cursor.end(this.visualLength());
+        return this.cursor.end(this.logicalLength());
     }
     /**
      * @return Cursor modified
      */
     public boolean left(){
 
-        return this.cursor.move(-1,this.visualLength());
+        return this.cursor.move(-1,this.logicalLength());
     }
     /**
      * @return Cursor modified
      */
     public boolean right(){
 
-        return this.cursor.move(+1,this.visualLength());
+        return this.cursor.move(+1,this.logicalLength());
     }
     /**
      * @return Text modified
      */
     public boolean backspace(){
 
-        char[] update = this.cursor.backspace(this.visual);
-        if (update != this.visual)
+        char[] update = this.cursor.backspace(this.logical);
+        if (update != this.logical)
 
             return this.set(update);
         else
@@ -110,8 +110,8 @@ public class Editor
      */
     public boolean delete(){
 
-        char[] update = this.cursor.delete(this.visual);
-        if (update != this.visual)
+        char[] update = this.cursor.delete(this.logical);
+        if (update != this.logical)
 
             return this.set(update);
         else
@@ -122,8 +122,8 @@ public class Editor
      */
     public boolean add(char key, int bound){
 
-        char[] update = this.cursor.add(this.visual, key, bound);
-        if (update != this.visual)
+        char[] update = this.cursor.add(this.logical, key, bound);
+        if (update != this.logical)
 
             return this.set(update);
         else
@@ -135,21 +135,21 @@ public class Editor
     public boolean set(CharSequence string){
 
         this.set(this.home.cat(string));
-        this.cursor.end(this.visualLength());
+        this.cursor.end(this.logicalLength());
         return true;
     }
     public Editor add(CharSequence string){
-        if (null == this.visual){
+        if (null == this.logical){
             this.set(string);
             return this;
         }
         else {
             char[] source = ToCharArray(string);
             if (null != source){
-                int thisLength = this.visual.length;
+                int thisLength = this.logical.length;
                 int sourceLength = source.length;
                 char[] copier = new char[thisLength+sourceLength];
-                System.arraycopy(this.visual,0,copier,0,thisLength);
+                System.arraycopy(this.logical,0,copier,0,thisLength);
                 System.arraycopy(source,0,copier,thisLength,sourceLength);
 
                 this.set(copier);
@@ -159,7 +159,7 @@ public class Editor
         }
     }
     public Editor add(int index, CharSequence string){
-        if (null == this.visual){
+        if (null == this.logical){
             if (0 == index){
                 this.set(string);
                 return this;
@@ -170,19 +170,19 @@ public class Editor
         else {
             char[] source = ToCharArray(string);
             if (null != source){
-                int thisLength = this.visual.length;
+                int thisLength = this.logical.length;
                 int sourceLength = source.length;
                 if (0 == index){
                     char[] copier = new char[thisLength+sourceLength];
                     System.arraycopy(source,0,copier,0,sourceLength);
-                    System.arraycopy(this.visual,0,copier,sourceLength,thisLength);
+                    System.arraycopy(this.logical,0,copier,sourceLength,thisLength);
 
                     this.set(copier);
                     this.cursor.left(index);
                 }
                 else if (index == (thisLength-1)){
                     char[] copier = new char[thisLength+sourceLength];
-                    System.arraycopy(this.visual,0,copier,0,thisLength);
+                    System.arraycopy(this.logical,0,copier,0,thisLength);
                     System.arraycopy(source,0,copier,thisLength,sourceLength);
 
                     this.set(copier);
@@ -190,9 +190,9 @@ public class Editor
                 }
                 else if (index < thisLength){
                     char[] copier = new char[thisLength+sourceLength];
-                    System.arraycopy(this.visual,0,copier,0,index);
+                    System.arraycopy(this.logical,0,copier,0,index);
                     System.arraycopy(source,0,copier,index,sourceLength);
-                    System.arraycopy(this.visual,index,copier,(index+sourceLength),(thisLength-index-1));
+                    System.arraycopy(this.logical,index,copier,(index+sourceLength),(thisLength-index-1));
 
                     this.set(copier);
                     this.cursor.left(index);
