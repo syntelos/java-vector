@@ -113,11 +113,25 @@ public class Preferences
         return (Preferences.GetResource()+'.'+Preferences.GetSession());
     }
     public final static void SetResource(String m){
+
         if (null != m){
             m = m.trim();
             if (0 < m.length()){
 
-                Instance().put(Resource,m);
+                final int idx = m.indexOf('.');
+                if (0 < idx){
+
+                    String resource = m.substring(0,idx);
+
+                    String session = m.substring(idx+1);
+
+                    Preferences instance = Instance();
+
+                    instance.put(Resource,resource);
+                    instance.put(Session,session);
+                }
+                else
+                    Instance().put(Resource,m);
             }
         }
     }
@@ -129,8 +143,12 @@ public class Preferences
         return Instance().get(Logon,null);
     }
     public final static XAddress ComposeLogon(){
-
-        return new xmpp.XAddress.From();
+        try {
+            return new xmpp.XAddress.From();
+        }
+        catch (RuntimeException notfound){
+            return null;
+        }
     }
     public final static void SetLogon(String m){
         if (null != m){
@@ -161,8 +179,13 @@ public class Preferences
         }
     }
     public final static XAddress ComposeTo(){
-
-        return new xmpp.XAddress.To();
+        try {
+            return new xmpp.XAddress.To();
+        }
+        catch (RuntimeException exc){
+            exc.printStackTrace();
+            return null;
+        }
     }
     public final static void SetTo(String m){
         if (null != m){
@@ -171,7 +194,7 @@ public class Preferences
     }
     public final static void SetTo(XAddress m){
         if (null != m){
-            Instance().put(To,m.full);
+            Instance().put(To,m.toString());
         }
     }
 
@@ -365,16 +388,7 @@ public class Preferences
         this(Preferences.class);
     }
     protected Preferences(Class clas){
-        super();
-        java.util.prefs.Preferences storage;
-        try {
-            storage = java.util.prefs.Preferences.userNodeForPackage(clas);
-        }
-        catch (SecurityException sec){
-
-            storage = new Preferences.TemporaryStorage();
-        }
-        this.storage = storage;
+        this(java.util.prefs.Preferences.userNodeForPackage(clas));
     }
     protected Preferences(java.util.prefs.Preferences storage){
         super();
