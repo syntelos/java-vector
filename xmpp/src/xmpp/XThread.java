@@ -154,13 +154,16 @@ public class XThread
     public void select(XAddress to){
         if (null != to){
 
-            Output.Headline("Select(%s)",to.identifier);
+            if (null == this.to || (! this.to.equals(to))){
 
-            this.to = to;
+                Output.Headline("Select(%s)",to.identifier);
 
-            this.subscribe(to);
+                this.to = to;
 
-            Preferences.SetTo(to);
+                this.subscribe(to);
+
+                Preferences.SetTo(to);
+            }
         }
     }
     public void contact(XAddress to){
@@ -246,7 +249,7 @@ public class XThread
 
                 if (null != this.connection && null != this.to){
 
-                    final String to = this.to.full;
+                    final String to = this.to.toString();
 
                     Message message = new Message(to, this.messageType);
                     message.setFrom(this.connection.getUser());
