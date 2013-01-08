@@ -295,7 +295,9 @@ public class XThread
         }
         return false;
     }
-    public void connect(){
+    public boolean connect(){
+
+        boolean re = false;
 
         this.disconnect();
 
@@ -309,17 +311,29 @@ public class XThread
         this.resource = Preferences.ComposeResource();
 
         if (this.isReady()){
-            Output.Headline("Connect");
 
             this.connection = this.createConnection();
 
-            Status.Up();
+            if (null != this.connection){
+
+                Output.Headline("Connect");
+
+                re = true;
+
+                Status.Up();
+            }
+            else {
+                Output.Error("Failed to connect");
+
+                Status.Down();
+            }
         }
         try {
             this.select(Preferences.ComposeTo());
         }
         catch (RuntimeException optimistic){
         }
+        return re;
     }
     public void disconnect(){
         if (null != this.connection){
@@ -587,6 +601,8 @@ public class XThread
             return connection;
         }
         catch (XMPPException exc){
+
+            exc.printStackTrace();
 
             return null;
         }
