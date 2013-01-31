@@ -62,8 +62,8 @@ public class Frame
             final float bx = (b.width/2);
             final float by = (b.height/2);
 
-            b.x = (sx-bx);
-            b.y = (sy-by);
+            b.x = Math.max(0,(sx-bx));
+            b.y = Math.max(0,(sy-by));
         }
         return b;
     }
