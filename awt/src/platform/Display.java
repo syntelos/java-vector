@@ -1,6 +1,6 @@
 /*
  * Vector (http://code.google.com/p/java-awt/)
- * Copyright (C) 2013, John Pritchard, Syntelos
+ * Copyright (C) 2012, The DigiVac Company
  * 
  * This program is free software: you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
