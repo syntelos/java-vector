@@ -46,8 +46,17 @@ import java.util.StringTokenizer;
  * any tail is sent to the remote recipient. </p>
  */
 public enum At {
+    /**
+     * Has head and tail
+     */
     Head,
+    /**
+     * Has tail
+     */
     Tail,
+    /**
+     * Is empty
+     */
     Empty;
 
     /**
