@@ -405,8 +405,6 @@ public interface Table {
                         cc = cell.col;
                     }
 
-                    Component c = cell.component;
-
                     cell.setFrame(xx,yy,((cellWidth*cell.spanCol)+(this.cs*(cell.spanCol-1))),cellHeight);
 
                     cell.component.setBoundsVector(cell);
