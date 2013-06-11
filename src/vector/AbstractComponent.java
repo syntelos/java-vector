@@ -254,6 +254,7 @@ public abstract class AbstractComponent
         if (null != parent){
             Bounds bounds = this.getBoundsVector();
 
+
             if (null == margin){
                 bounds.x = (parent.width/2)-(bounds.width/2);
                 bounds.y = (parent.height/2)-(bounds.height/2);
@@ -273,7 +274,7 @@ public abstract class AbstractComponent
         if (null != parent)
             return this.setBoundsVectorCenter(parent.getBoundsVector(),margin);
         else
-            throw new IllegalStateException();
+            throw new IllegalStateException("Orphan");
     }
     public boolean contains(int x, int y){
 
