@@ -131,13 +131,12 @@ public abstract class Repainter
     public Repainter(Component component){
         super("Repainter/"+component.getClass().getName());
         this.setDaemon(true);
+        this.setPriority(6);
         this.component = component;
     }
 
 
     public void period(long requested){
-
-        requested /= 2;
 
         if (0 < requested){
 
