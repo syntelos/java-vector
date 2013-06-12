@@ -114,9 +114,17 @@ public interface Context {
      * Define stroke with its optional color
      */
     public void setStroke(Stroke stroke);
-
+    /**
+     * Clip Rect, or convert Shape to Path
+     */
     public void setClip(Shape shape);
-
+    /**
+     * Clip Shape
+     */
+    public void clip(Shape shape);
+    /**
+     * Clip Rect
+     */
     public void clipTo(int x, int y, int w, int h);
 
     public Shape getClip();
