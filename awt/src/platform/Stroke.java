@@ -115,19 +115,23 @@ public class Stroke
 
 
     public Stroke(Json model){
-        this(LineWidth(model),EndCap(model),LineJoin(model),MiterLimit(model),DashArray(model),DashPhase(model));
+        this(LineWidth(model),EndCap(model),LineJoin(model),MiterLimit(model),DashArray(model),DashPhase(model),Color(model));
     }
     public Stroke(float lineWidth, int endCap, int lineJoin, float miterLimit, float[] dashArray, float dashPhase){
         super(lineWidth,endCap,lineJoin,miterLimit,dashArray,dashPhase);
     }
     public Stroke(float lineWidth, int endCap, int lineJoin, float miterLimit, float[] dashArray, float dashPhase, Color color){
-        super();
+        super(lineWidth, endCap, lineJoin, miterLimit, dashArray, dashPhase);
+
+        this.color = color;
     }
     public Stroke(float lineWidth){
-        super();
+        super(lineWidth,Cap.Default.ordinal(),Join.Default.ordinal(),MiterLimitDefault,DashArrayDefault,DashPhaseDefault);
     }
     public Stroke(float lineWidth, Color color){
-        super();
+        super(lineWidth,Cap.Default.ordinal(),Join.Default.ordinal(),MiterLimitDefault,DashArrayDefault,DashPhaseDefault);
+
+        this.color = color;
     }
     public Stroke(Object na){
         this( (java.awt.BasicStroke)na);
@@ -171,6 +175,17 @@ public class Stroke
         throw new UnsupportedOperationException();
     }
 
+    public final static Color ColorDefault = null;
+
+    public final static Color Color(Json model){
+        Object value = model.getValue("color");
+
+        if (value instanceof Color)
+            return (Color)value;
+        else
+            return ColorDefault;
+    }
+    public final static float LineWidthDefault = 1.0f;
 
     public final static float LineWidth(Json model){
         Object value = model.getValue("line-width");
@@ -178,7 +193,7 @@ public class Stroke
         if (value instanceof Number)
             return ((Number)value).floatValue();
         else
-            return 1.0f;
+            return LineWidthDefault;
     }
     public final static int EndCap(Json model){
         Object value = model.getValue("end-cap");
@@ -190,32 +205,42 @@ public class Stroke
 
         return Join.For(value).ordinal();
     }
+
+    public final static float MiterLimitDefault = 10.0f;
+
     public final static float MiterLimit(Json model){
         Object value = model.getValue("miter-limit");
 
         if (value instanceof Number)
             return ((Number)value).floatValue();
         else
-            return 10.0f;
+            return MiterLimitDefault;
     }
+
+    public final static float[] DashArrayDefault = null;
+
     public final static float[] DashArray(Json model){
         Json array = model.at("dash-array");
 
         if (null != array){
             float[] list = array.getValue(float[].class);
             if (null == list || 1 > list.length)
-                return null;
+                return DashArrayDefault;
             else 
                 return list;
         }
         else
-            return null;
+            return DashArrayDefault;
     }
+
+    public final static float DashPhaseDefault = 0.0f;
+
     public final static float DashPhase(Json model){
         Object value = model.getValue("dash-phase");
 
         if (value instanceof Number)
             return ((Number)value).floatValue();
         else
-            return 0.0f;
-    }}
+            return DashPhaseDefault;
+    }
+}
