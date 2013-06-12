@@ -33,6 +33,16 @@ public abstract class Repainter
     public final static class Scene
         extends Repainter
     {
+        public final static String PropertyName = "platform.event.Repainter.Scene.Debug";
+        public final static boolean Debug;
+        static {
+            String config = System.getProperty(PropertyName);
+            boolean debug = (null != config && "true".equalsIgnoreCase(config));
+            Debug = debug;
+            if (Debug){
+                vector.DebugTrace.out.println(PropertyName);
+            }
+        }
 
         public Scene(Component c){
             super(c);
@@ -42,6 +52,10 @@ public abstract class Repainter
             try {
 
                 while (!this.cancelled){
+
+                    if (Debug){
+                        vector.DebugTrace.out.printf("%s (%s) outputScene%n",PropertyName,this.getName());
+                    }
 
                     this.component.outputScene();
 
@@ -64,6 +78,16 @@ public abstract class Repainter
     public final static class Overlay
         extends Repainter
     {
+        public final static String PropertyName = "platform.event.Repainter.Overlay.Debug";
+        public final static boolean Debug;
+        static {
+            String config = System.getProperty(PropertyName);
+            boolean debug = (null != config && "true".equalsIgnoreCase(config));
+            Debug = debug;
+            if (Debug){
+                vector.DebugTrace.out.println(PropertyName);
+            }
+        }
 
         public Overlay(Component c){
             super(c);
@@ -73,6 +97,10 @@ public abstract class Repainter
             try {
 
                 while (!this.cancelled){
+
+                    if (Debug){
+                        vector.DebugTrace.out.printf("%s (%s) outputOverlay%n",PropertyName,this.getName());
+                    }
 
                     this.component.outputOverlay();
 
@@ -101,12 +129,9 @@ public abstract class Repainter
 
 
     public Repainter(Component component){
-        super("Repainter");
+        super("Repainter/"+component.getClass().getName());
         this.setDaemon(true);
-        if (null != component)
-            this.component = component;
-        else
-            throw new IllegalArgumentException();
+        this.component = component;
     }
 
 
@@ -116,7 +141,7 @@ public abstract class Repainter
 
         if (0 < requested){
 
-            this.cycle = Math.min(this.cycle,requested);
+            this.cycle = requested;
         }
     }
     public void cancel(){
