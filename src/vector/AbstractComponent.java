@@ -107,9 +107,9 @@ public abstract class AbstractComponent
      */
     public void relocated(){
     }
-    public <C extends Component> C clone(){
+    public AbstractComponent clone(){
         try {
-            return (C)super.clone();
+            return (AbstractComponent)super.clone();
         }
         catch (CloneNotSupportedException exc){
 
