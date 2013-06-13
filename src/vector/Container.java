@@ -575,6 +575,10 @@ public class Container
 
         return comp;
     }
+    public final <C extends Component> C replace(C a, C b){
+
+        return (C)Component.Tools.Replace(this.components,a,b);
+    }
     public final int indexOf(Component comp){
 
         return Component.Tools.IndexOf(this.components,comp);

@@ -560,6 +560,16 @@ public interface Component
         public <C extends Component> C get(int idx);
 
         public <C extends Component> C set(C comp, int idx);
+        /**
+         * Replace known 'a' with its clone, 'b'.  This method never
+         * calls add or init.
+         * 
+         * This process have been defined in the {@link
+         * Component$Tools Tools}.
+         * 
+         * @return B
+         */
+        public <C extends Component> C replace(C a, C b);
 
         public int indexOf(Component comp);
 
@@ -720,6 +730,18 @@ public interface Component
                 components[idx] = comp;
 
                 return old;
+            }
+            else
+                throw new java.util.NoSuchElementException(String.valueOf(idx));
+        }
+        public static Component Replace(Component[] components, Component a, Component b){
+
+            int idx = IndexOf(components,a);
+            if (-1 < idx){
+
+                components[idx] = b;
+
+                return b;
             }
             else
                 throw new java.util.NoSuchElementException(String.valueOf(idx));

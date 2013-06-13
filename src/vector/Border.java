@@ -31,8 +31,7 @@ import json.ObjectJson;
 public class Border
     extends AbstractComponent
     implements Component.Layout,
-               Table.Col.Span,
-               java.lang.Cloneable
+               Table.Col.Span
 {
     public enum Style {
         SQUARE, ROUND, NONE;
@@ -112,14 +111,6 @@ public class Border
         super.modified();
 
         this.layout();
-    }
-    public Border clone(){
-        try {
-            return (Border)super.clone();
-        }
-        catch (CloneNotSupportedException exc){
-            throw new InternalError();
-        }
     }
     public Component.Layout.Order queryLayout(){
 

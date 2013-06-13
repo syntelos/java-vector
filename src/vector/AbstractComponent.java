@@ -32,7 +32,8 @@ import platform.geom.Rectangle;
  */
 public abstract class AbstractComponent
     extends Object
-    implements Component
+    implements Component,
+               java.lang.Cloneable
 {
 
     protected boolean visible, mouseIn;
@@ -105,6 +106,15 @@ public abstract class AbstractComponent
      * <code>super.relocated()</code>
      */
     public void relocated(){
+    }
+    public <C extends Component> C clone(){
+        try {
+            return (C)super.clone();
+        }
+        catch (CloneNotSupportedException exc){
+
+            throw new InternalError();
+        }
     }
     public final boolean hasParentVector(){
 
