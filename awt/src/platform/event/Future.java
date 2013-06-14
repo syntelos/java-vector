@@ -71,7 +71,7 @@ public final class Future
 
 
     public void interaction(){
-        this.expiration = (System.currentTimeMillis()+this.timeout);
+        this.expiration = (platform.Clock.currentTimeMillis()+this.timeout);
     }
     public void cancel(){
         this.cancelled = true;
@@ -87,7 +87,7 @@ public final class Future
         }
     }
     private final boolean expired(){
-        return (0L < (System.currentTimeMillis()-this.expiration));
+        return (0L < (platform.Clock.currentTimeMillis()-this.expiration));
     }
     public void run(){
         try {

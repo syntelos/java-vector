@@ -37,7 +37,7 @@ public final class Ticker
         }
 
         public synchronized void waitfor(){
-            long last = System.currentTimeMillis();
+            long last = platform.Clock.currentTimeMillis();
             try {
                 long dt = (DT - (last - this.last));
                 this.last = last;

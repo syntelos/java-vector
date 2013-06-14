@@ -98,14 +98,14 @@ public final class FlyingLander
         /*
          * Handle Main Rocket
          */
-        if (System.currentTimeMillis() >  saveTimeMainRocketOn + 300 ) 
+        if (platform.Clock.currentTimeMillis() >  saveTimeMainRocketOn + 300 ) 
             this.mainRocketOff();
 
     }
     public void keyDown(Event evt, int key){
         if ( key == ' ' || key == Event.UP || key == Event.DOWN){
 
-            this.saveTimeMainRocketOn = System.currentTimeMillis();
+            this.saveTimeMainRocketOn = platform.Clock.currentTimeMillis();
 
             this.mainRocketOn();
         }

@@ -38,7 +38,7 @@ public class ExplodingLander
         collision.crash();
 
         mainRocketOperating = false;
-        saveTimeWeLandedOrCrashed = System.currentTimeMillis();
+        saveTimeWeLandedOrCrashed = platform.Clock.currentTimeMillis();
         if (!lander.intro){
             Game.Instance.landerCrash();
         }
@@ -77,7 +77,7 @@ public class ExplodingLander
         }
     }
     public void keyDown(Event evt, int key){
-        if ( System.currentTimeMillis() > (saveTimeWeLandedOrCrashed + 1000) ){
+        if ( platform.Clock.currentTimeMillis() > (saveTimeWeLandedOrCrashed + 1000) ){
             if (0d < fuel)
                 Game.Instance.newFlight();
         }

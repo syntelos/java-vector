@@ -96,11 +96,11 @@ public abstract class Aut
 
         public void enter() throws InterruptedException {
 
-            this.enter = System.currentTimeMillis();
+            this.enter = platform.Clock.currentTimeMillis();
         }
         public void exit(){
 
-            this.exit = System.currentTimeMillis();
+            this.exit = platform.Clock.currentTimeMillis();
         }
         public void run(){
             Animator animator = this.animator;
@@ -108,7 +108,7 @@ public abstract class Aut
                 try {
                     long dt = (this.exit - this.enter);
                     if (0 > dt){
-                        dt = (System.currentTimeMillis()- this.enter);
+                        dt = (platform.Clock.currentTimeMillis()- this.enter);
                         if (DT < dt && WAITING == animator.getState()){
 
                             animator.interrupt();

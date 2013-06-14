@@ -38,7 +38,7 @@ public class Blink
 
 
     public boolean high(){
-        final long time = System.currentTimeMillis();
+        final long time = platform.Clock.currentTimeMillis();
         if (this.cycle < (time-this.time)){
 
             this.time = time;

@@ -35,7 +35,7 @@ public final class LandedLander
         if (null != collision){
             this.collision = collision;
 
-            saveTimeWeLandedOrCrashed = System.currentTimeMillis(); 
+            saveTimeWeLandedOrCrashed = platform.Clock.currentTimeMillis(); 
 
             if (!lander.intro)
                 Game.Instance.landerLanded();
@@ -61,7 +61,7 @@ public final class LandedLander
     }
     public void keyDown(Event evt, int key){
 
-        if ( System.currentTimeMillis() > (saveTimeWeLandedOrCrashed + 500) )
+        if ( platform.Clock.currentTimeMillis() > (saveTimeWeLandedOrCrashed + 500) )
             if (0d < fuel)
                 this.launch();
     }
