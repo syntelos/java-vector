@@ -311,6 +311,23 @@ public class Text
         }
         return this;
     }
+    public vector.Text layoutText(String text){
+
+        if (null != text && 0 < text.length()){
+
+            this.string = this.createVisual(text);
+
+            this.cols = text.length();
+
+            this.layoutText();
+        }
+        else {
+            this.string = null;
+
+            this.shape = null;
+        }
+        return this;
+    }
     public final int getCols(){
         return this.cols;
     }
@@ -614,13 +631,7 @@ public class Text
 
         if (null == this.shape && 0 < this.length()){
 
-            final Point baseline = this.getShapeBaseline();
-
-            this.vector = this.font.createGlyphVector(this.string.toString());
-
-            this.shape = this.vector.createOutline(baseline);
-
-            this.localPositions = null;
+            this.layoutText();
         }
 
         if (this.fixed){
@@ -631,6 +642,16 @@ public class Text
             this.resizeToParent();
             this.layoutScaleToDimensions();
         }
+    }
+    public void layoutText(){
+
+        final Point baseline = this.getShapeBaseline();
+
+        this.vector = this.font.createGlyphVector(this.string.toString());
+
+        this.shape = this.vector.createOutline(baseline);
+
+        this.localPositions = null;
     }
     /**
      * May be called from {@link #layout()} to scale the local
