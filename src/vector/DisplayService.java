@@ -24,7 +24,27 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
+ * Services permit the separation of interface, implementor, and user.
  * 
+ * Complex application systems may employ services for configuring a
+ * wide variety of sources and sinks and subsystems.  
+ * 
+ * Services may broadcast their calls to one or more members, or
+ * unicast to class or caller exclusion.  This example demonstrates
+ * "caller exclusive unicast" by list index.
+ * 
+ * The super class reads all of the instances of the services resource
+ * found in the class path as a line delimited list of class names.
+ * These classes are loaded (and initialized) when the service class
+ * is initialized.  This resource is named
+ * 
+ * <pre>
+ * /META-INF/services/vector.Display
+ * </pre>
+ * 
+ * in the java archive (jar).
+ * 
+ * @see http://github.com/syntelos/services
  */
 public final class DisplayService
     extends services.Classes
@@ -101,7 +121,7 @@ public final class DisplayService
 
 
     private DisplayService(){
-        super(Display.class);
+        super(vector.Display.class);
     }
 
 
