@@ -44,6 +44,20 @@ public abstract class Repainter
             }
         }
 
+        /**
+         * Permit one scene repainter to be active
+         */
+        public final static class Swarm
+            extends platform.Semaphore
+        {
+            public final static Swarm Instance = new Swarm();
+
+            private Swarm(){
+                super(1);
+            }
+        }
+
+
         public Scene(Component c){
             super(c);
         }
@@ -53,14 +67,34 @@ public abstract class Repainter
 
                 while (!this.cancelled){
 
-                    if (Debug){
-                        vector.DebugTrace.out.printf("%s (%s) outputScene%n",PropertyName,this.getName());
+                    if (Scene.Swarm.Instance.tryAcquire()){
+                        /*
+                         * Take control
+                         */
+                        try {
+                            final Component component = this.component;
+
+                            while (!this.cancelled){
+
+                                if (Debug){
+                                    vector.DebugTrace.out.printf("%s (%s) outputScene%n",PropertyName,this.getName());
+                                }
+
+                                component.outputScene();
+
+                                synchronized(this.monitor){
+                                    this.monitor.wait(this.cycle);
+                                }
+                            }
+                        }
+                        finally {
+                            Scene.Swarm.Instance.release();
+                        }
                     }
-
-                    this.component.outputScene();
-
-                    synchronized(this.monitor){
-                        this.monitor.wait(this.cycle);
+                    else {
+                        synchronized(this.monitor){
+                            this.monitor.wait(this.cycle*10);
+                        }
                     }
                 }
             }
@@ -89,6 +123,20 @@ public abstract class Repainter
             }
         }
 
+        /**
+         * Permit one overlay repainter to be active
+         */
+        public final static class Swarm
+            extends platform.Semaphore
+        {
+            public final static Swarm Instance = new Swarm();
+
+            private Swarm(){
+                super(1);
+            }
+        }
+
+
         public Overlay(Component c){
             super(c);
         }
@@ -98,14 +146,34 @@ public abstract class Repainter
 
                 while (!this.cancelled){
 
-                    if (Debug){
-                        vector.DebugTrace.out.printf("%s (%s) outputOverlay%n",PropertyName,this.getName());
+                    if (Overlay.Swarm.Instance.tryAcquire()){
+                        /*
+                         * Take control
+                         */
+                        try {
+                            final Component component = this.component;
+
+                            while (!this.cancelled){
+
+                                if (Debug){
+                                    vector.DebugTrace.out.printf("%s (%s) outputOverlay%n",PropertyName,this.getName());
+                                }
+
+                                component.outputOverlay();
+
+                                synchronized(this.monitor){
+                                    this.monitor.wait(this.cycle);
+                                }
+                            }
+                        }
+                        finally {
+                            Overlay.Swarm.Instance.release();
+                        }
                     }
-
-                    this.component.outputOverlay();
-
-                    synchronized(this.monitor){
-                        this.monitor.wait(this.cycle);
+                    else {
+                        synchronized(this.monitor){
+                            this.monitor.wait(this.cycle*10);
+                        }
                     }
                 }
             }
