@@ -111,7 +111,10 @@ public final class DisplayService
     }
     public void deregister(Display display){
 
-        this.active.remove(display);
+        int idx = this.active.indexOf(display);
+        if (-1 < idx){
+            this.active.remove(idx);
+        }
     }
     public int activeIndexOf(Display display){
 

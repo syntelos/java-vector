@@ -98,6 +98,15 @@ public interface Event {
                     return false;
                 }
             }
+            public boolean isPointGt1(){
+                switch(this){
+                case Point2:
+                case Point3:
+                    return true;
+                default:
+                    return false;
+                }
+            }
             public boolean isWheel(){
                 switch(this){
                 case Wheel:

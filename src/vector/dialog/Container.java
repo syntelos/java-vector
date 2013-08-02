@@ -79,7 +79,7 @@ public class Container
 
                     final Event.Mouse m = (Event.Mouse)e;
 
-                    if (m.isPoint()){
+                    if (m.isPoint() && m.getAction().isPointGt1()){
 
                         this.showMenu();
 
