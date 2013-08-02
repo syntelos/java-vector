@@ -165,7 +165,7 @@ public class Output
 
                     case ESCAPE:
 
-                        this.menu();
+                        this.showMenu();
 
                         return true;
                     }
@@ -181,7 +181,7 @@ public class Output
 
                 if (m.isPoint() && Event.Mouse.Action.Point1 != m.getAction()){
 
-                    this.menu();
+                    this.showMenu();
 
                     return true;
                 }
@@ -193,7 +193,7 @@ public class Output
             }
         }
     }
-    public void menu(){
+    public void showMenu(){
 
         final Terminal parent = this.getParentVector();
         if (null != parent){

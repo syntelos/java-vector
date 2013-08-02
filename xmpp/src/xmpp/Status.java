@@ -196,9 +196,6 @@ public class Status
 
                 case MouseUp:{
 
-                    /*
-                     * Right click -> menu
-                     */
                     final Event.Mouse m = (Event.Mouse)e;
                     if (this.mouseIn && m.isPoint() && Event.Mouse.Action.Point1 == m.getAction()){
                         try {
