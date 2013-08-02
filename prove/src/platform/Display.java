@@ -695,5 +695,14 @@ public class Display
             return false;
         }
     }
+    public boolean copy(URL url){
+        return false;
+    }
+    public boolean copy(File file){
+        return false;
+    }
+    public boolean save(){
+        return false;
+    }
 
 }

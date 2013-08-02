@@ -100,6 +100,8 @@ public class Display
     public void init(){
         this.destroy();
 
+        vector.DisplayService.Register(this);
+
         this.mouseIn = false;
 
         this.bufferOverlay = true;
@@ -125,6 +127,9 @@ public class Display
         }
     }
     public void destroy(){
+
+        vector.DisplayService.Deregister(this);
+
         this.outputOverlayAnimateCancel();
         try {
             for (Component c: this){
@@ -924,6 +929,15 @@ public class Display
 
             return false;
         }
+    }
+    public boolean copy(URL url){
+        return false;
+    }
+    public boolean copy(File file){
+        return false;
+    }
+    public boolean save(){
+        return false;
     }
 
 }

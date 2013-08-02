@@ -24,7 +24,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
- * A display may have a document, depending on platform requirements.
+ * This class represents the container of a Display, with or without a
+ * (non empty) source document.  Operations in the platform Frame may
+ * be exposed here for platforms like Applet that have no window
+ * manager component (Frame).
+ * 
+ * Members of this class should perform platform I/O for Frame and
+ * Display.  This would permit more portable and shared (copied) code
+ * between platforms.
  * 
  * @see platform.Document
  */

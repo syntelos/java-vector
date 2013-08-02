@@ -20,6 +20,10 @@ package vector;
 
 import platform.Color;
 
+import java.io.File;
+
+import java.net.URL;
+
 /**
  * Class typically returned by {@link Component#getRootContainer
  * Component getRootContainer}.
@@ -63,5 +67,15 @@ public interface Display
      * Set location to center dimensions
      */
     public Display center(Component d);
+
+    public boolean open(File json);
+
+    public boolean open(URL json);
+
+    public boolean copy(File json);
+
+    public boolean copy(URL json);
+
+    public boolean save();
 
 }

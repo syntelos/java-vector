@@ -56,8 +56,8 @@ import java.util.StringTokenizer;
  * Index := [0-9]+
  * </pre>
  * 
- * The ultimately dereferenced {@link json.Json JSON} has its {@link
- * json.Json#getValue() getValue} called.
+ * The ultimately dereferenced {@link json.Json JSON object} has its
+ * {@link json.Json#getValue() getValue method} called.
  *
  * @see PointLabel
  */
