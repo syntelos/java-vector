@@ -165,11 +165,9 @@ public class Display
 
         return logon;
     }
-    public Display displayMenu(){
+    public boolean showMenu(){
 
-        this.show(this.menuClass);
-
-        return this;
+        return this.show(this.menuClass);
     }
     public Display displayViewport(){
 

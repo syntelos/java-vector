@@ -59,10 +59,25 @@ public interface Display
     /**
      * If add unique by class, then modify, center, and output.
      * Intended for dialog windows.
+     * 
+     * @param component Instance of component to add, or class of
+     * component to remove when found
+     * 
+     * @return Shown (true) or removed (false).  Failure to show is
+     * also false.
      */
-    public Display show(Component component);
-
-    public Display show(Class<? extends Component> component);
+    public boolean show(Component component);
+    /**
+     * If add unique by class, then modify, center, and output.
+     * Intended for dialog windows.
+     * 
+     * @param component Class of component to add when not found, or
+     * remove when found
+     * 
+     * @return Shown (true) or removed (false).  Failure to show is
+     * also false.
+     */
+    public boolean show(Class<? extends Component> component);
     /**
      * Set location to center dimensions
      */

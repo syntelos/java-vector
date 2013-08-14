@@ -42,7 +42,7 @@ public interface Terminal
 
     public Terminal displayViewport();
 
-    public Terminal displayMenu();
+    public boolean showMenu();
 
     public Terminal send(String input);
 

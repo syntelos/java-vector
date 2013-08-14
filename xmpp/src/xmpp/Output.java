@@ -193,13 +193,15 @@ public class Output
             }
         }
     }
-    public void showMenu(){
+    public boolean showMenu(){
 
         final Terminal parent = this.getParentVector();
         if (null != parent){
 
-            parent.displayMenu();
+            return parent.showMenu();
         }
+        else
+            return false;
     }
     public Output send(Message m){
 

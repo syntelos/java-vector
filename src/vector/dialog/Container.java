@@ -86,9 +86,7 @@ public class Container
 
                     if (m.isPoint() && m.getAction().isPointGt1()){
 
-                        this.showMenu();
-
-                        return true;
+                        return this.showMenu();
                     }
                 }
                 return false;
@@ -101,12 +99,17 @@ public class Container
     /**
      * 
      */
-    public Container showMenu(){
+    public boolean showMenu(){
 
         if (null != this.menuClass){
 
-            this.show(this.menuClass);
+            if (Event.Debug.IsClick){
+                Event.Debug.trace("show menu %s",this,this.menuClass);
+            }
+
+            return this.show(this.menuClass);
         }
-        return this;
+        else
+            return false;
     }
 }

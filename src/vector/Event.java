@@ -168,13 +168,22 @@ public interface Event {
             return Debug.Default;
         }
         /**
+         * Convenience method for event debugging.
+         * <pre>
+         * if (vector.Event.Debug.IsAny){
+         *     Event.Debug.trace("%s",this,evt);
+         * }
+         * </pre>
          * 
+         * @param fmt Format string 
+         * @param caller Display graph location 
+         * @param fargs Arguments to format string
          */
-        public final static void trace(String msg, Component caller, Event evt){
+        public final static void trace(String fmt, Component caller, Object... fargs){
 
-            String fmt = String.format(msg,evt);
+            String msg = String.format(fmt,fargs);
 
-            DebugTrace.out.printf("#(%s)\t%s\t%s%n",fmt,caller.getClass().getName(),caller.propertyPathOfThis());
+            DebugTrace.out.printf("#(%s)\t%s\t%s%n",msg,caller.getClass().getName(),caller.propertyPathOfThis());
         }
 
 

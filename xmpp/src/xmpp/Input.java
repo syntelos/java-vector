@@ -127,12 +127,14 @@ public class Input
             this.outputScene();
         }
     }
-    public void showMenu(){
+    public boolean showMenu(){
 
         final Terminal parent = this.getParentVector();
         if (null != parent){
 
-            parent.displayMenu();
+            return parent.showMenu();
         }
+        else
+            return false;
     }
 }

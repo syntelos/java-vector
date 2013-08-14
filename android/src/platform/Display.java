@@ -644,7 +644,7 @@ public class Display
         else
             return false;
     }
-    public Display show(Component c){
+    public boolean show(Component c){
         if (null != c){
             int idx = this.indexOf(c.getClass());
             if (0 > idx){
@@ -661,10 +661,18 @@ public class Display
                 this.modified();
 
                 this.center(c);
+
+                this.outputScene();
+
+                return true;
             }
             else if (c.isVisible()){
 
                 this.remove(idx).destroy();
+
+                this.outputScene();
+
+                return false;
             }
             else {
                 c.setVisibleVector(true);
@@ -672,12 +680,16 @@ public class Display
                 this.modified();
 
                 this.center(c);
+
+                this.outputScene();
+
+                return true;
             }
-            this.outputScene();
         }
-        return this;
+        else
+            return false;
     }
-    public Display show(Class<? extends Component> c){
+    public boolean show(Class<? extends Component> c){
         if (null != c){
             int idx = this.indexOf(c);
             if (0 > idx){
@@ -696,6 +708,10 @@ public class Display
                     this.modified();
 
                     this.center(cc);
+
+                    this.outputScene();
+
+                    return true;
                 }
                 catch (InstantiationException exc){
                     throw new IllegalArgumentException(c.getName(),exc);
@@ -707,10 +723,14 @@ public class Display
             else {
 
                 this.remove(idx).destroy();
+
+                this.outputScene();
+
+                return false;
             }
-            this.outputScene();
         }
-        return this;
+        else
+            return false;
     }
     public Display center(Component d){
 

@@ -467,17 +467,19 @@ public abstract class AbstractComponent
         else
             return false;
     }
-    public Display show(Component c){
+    public boolean show(Component c){
         Display display = this.getRootContainer();
         if (null != display && null != c)
-            display.show(c);
-        return display;
+            return display.show(c);
+        else
+            return false;
     }
-    public Display show(Class<? extends Component> c){
+    public boolean show(Class<? extends Component> c){
         Display display = this.getRootContainer();
         if (null != display && null != c)
-            display.show(c);
-        return display;
+            return display.show(c);
+        else
+            return false;
     }
 
     public String propertyNameOfValue(Class vac){
