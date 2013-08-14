@@ -24,6 +24,8 @@ import json.ObjectJson;
 import java.net.URL;
 
 /**
+ * Work in progress (WIP) on SVG data retrieval.  
+ * 
  * <h3>JSON</h3>
  * 
  * <p> Read or write the <b>vector</b> scene graph.  </p>
@@ -178,6 +180,22 @@ public class SVG
     public SVG setPathContent(Boolean booleanValue){
         this.pathContent = booleanValue;
         return this;
+    }
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            String name = super.propertyNameOfValue(vac);
+            if (null != name)
+                return name;
+            else {
+
+                if (URL.class.isAssignableFrom(vac))
+                    return "source";
+                else
+                    return null;
+            }
+        }
     }
     public ObjectJson toJson(){
         ObjectJson thisModel =  super.toJson();

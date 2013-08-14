@@ -21,19 +21,266 @@ package vector;
 import platform.Transform;
 import platform.event.KeyCode;
 
+import java.util.StringTokenizer;
+
 /**
- * Immutable universal event for a single input method, intended for
- * ease of application development.
+ * Immutable universal event for a single input method: intended for
+ * simplified input method programming
  */
 public interface Event {
+    /**
+     * System property <code>"vector.Event.Debug"</code> takes one of
+     * these values, default "none".  This facility may be employed to
+     * debug event based processes with the user's logging or
+     * printing.
+     * 
+     * <pre>
+     * if (vector.Event.Debug.IsClick){
+     *     Event.Debug.trace("mouse up",this,e);
+     * }
+     * </pre>
+     * 
+     * @see AbstractComponent
+     * @see BorderComponent
+     */
+    public enum Debug {
+        /**
+         * (Empty set)
+         */
+        NONE,
+        /**
+         * Mouse entry and exit events
+         */
+        ENTRY, 
+        /**
+         * Key release events
+         */
+        KEY,
+        /**
+         * Mouse motion, drag and drop events
+         */
+        MOTION,
+        /**
+         * Mouse release events
+         */
+        CLICK,
+        /**
+         * Action (synthesized or mapped input) events
+         */
+        ACTION,
+        /**
+         * All input events
+         */
+        ALL;
+
+
+        public boolean isEntry(){
+            switch(this){
+            case ENTRY:
+            case ALL:
+                return true;
+            default:
+                return false;
+            }
+        }
+        public boolean isKey(){
+            switch(this){
+            case KEY:
+            case ALL:
+                return true;
+            default:
+                return false;
+            }
+        }
+        public boolean isMotion(){
+            switch(this){
+            case MOTION:
+            case ALL:
+                return true;
+            default:
+                return false;
+            }
+        }
+        public boolean isClick(){
+            switch(this){
+            case CLICK:
+            case ALL:
+                return true;
+            default:
+                return false;
+            }
+
+        }
+        public boolean isAction(){
+            switch(this){
+            case ACTION:
+            case ALL:
+                return true;
+            default:
+                return false;
+            }
+
+        }
+        public boolean isAll(){
+            return (Debug.ALL == this);
+        }
+        public boolean isNone(){
+            return (Debug.NONE == this);
+        }
+        public boolean isAny(){
+            return (Debug.NONE != this);
+        }
+
+        /**
+         * 
+         */
+        public final static Debug.Set Config = new Debug.Set(System.getProperty("vector.Event.Debug"));
+
+        public final static Debug Default = Debug.NONE;
+
+        public final static boolean IsEntry = Config.isEntry();
+        public final static boolean IsKey = Config.isKey();
+        public final static boolean IsMotion = Config.isMotion();
+        public final static boolean IsClick = Config.isClick();
+        public final static boolean IsAction = Config.isAction();
+        public final static boolean IsAll = Config.isAll();
+        public final static boolean IsNone = Config.isNone();
+        public final static boolean IsAny = Config.isAny();
+
+        static {
+            if (!Config.isNone()){
+                DebugTrace.out.printf("vector.Event.Debug: %s%n",Config);
+            }
+        }
+
+
+        /**
+         * String binding with default value
+         */
+        public final static Debug For(String string){
+            if (null != string){
+                try {
+                    return Debug.valueOf(string.toUpperCase());
+                }
+                catch (RuntimeException exc){
+                }
+            }
+            return Debug.Default;
+        }
+        /**
+         * 
+         */
+        public final static void trace(String msg, Component caller, Event evt){
+
+            String fmt = String.format(msg,evt);
+
+            DebugTrace.out.printf("#(%s)\t%s\t%s%n",fmt,caller.getClass().getName(),caller.propertyPathOfThis());
+        }
+
+
+        /**
+         * Set of enum values.  The empty set represents {@link Event$Debug#NONE}.
+         * 
+         * @see Event$Debug#Config
+         */
+        public static class Set
+            extends lxl.Set<Debug>
+        {
+
+            public Set(){
+                super();
+            }
+            public Set(String descriptor){
+                super();
+                this.add(descriptor);
+            }
+
+
+            public boolean isEntry(){
+                return (this.contains(Debug.ENTRY) || this.contains(Debug.ALL));
+            }
+            public boolean isKey(){
+                return (this.contains(Debug.KEY) || this.contains(Debug.ALL));
+            }
+            public boolean isMotion(){
+                return (this.contains(Debug.MOTION) || this.contains(Debug.ALL));
+            }
+            public boolean isClick(){
+                return (this.contains(Debug.CLICK) || this.contains(Debug.ALL));
+            }
+            public boolean isAction(){
+                return (this.contains(Debug.ACTION) || this.contains(Debug.ALL));
+            }
+            public boolean isAll(){
+                return this.contains(Debug.ALL);
+            }
+            public boolean isNone(){
+                return (0 == this.size() || this.contains(Debug.ALL));
+            }
+            public boolean isAny(){
+                return (0 != this.size() && (!this.contains(Debug.NONE)));
+            }
+            /**
+             * @param descriptor One identifier from the set {@link
+             * Event$Debug}, or a combination of two or more {@link
+             * Event$Debug} identifiers separated by '+' (plus).
+             */
+            public Set add(String descriptor){
+
+                DebugTrace.out.printf("vector.Event.Debug.Set #add(%s)%n",descriptor);
+
+                if (null != descriptor){
+
+                    if (-1 < descriptor.indexOf('+')){
+                        final StringTokenizer strtok = new StringTokenizer(descriptor,"+");
+
+                        while (strtok.hasMoreTokens()){
+
+                            String tok = strtok.nextToken().toUpperCase();
+                            try {
+                                Debug dbg = Debug.valueOf(tok);
+
+                                int ix = this.add(dbg);
+                            
+                                DebugTrace.out.printf("vector.Event.Debug.Set #add [success] (%d %s)%n",ix,dbg);
+                            }
+                            catch (RuntimeException exc){
+
+                                DebugTrace.out.printf("vector.Event.Debug.Set #add [failure] (%s)%n",tok);
+                            }
+                        }
+                    }
+                    else {
+
+                        this.add(Debug.For(descriptor));
+                    }
+                }
+                return this;
+            }
+
+        }
+    }
 
     /**
-     * Mouse drag is a point action
-     * 
-     * Mouse moved includes enter and exit
+     * {@link Event} types include mouse, key, and action.
      */
     public enum Type {
-        MouseEntered, MouseExited, MouseMoved, MouseDown, MouseUp, MouseDrag, MouseWheel, KeyDown, KeyUp, Action;
+        MouseEntered, 
+        MouseExited, 
+        /**
+         * Mouse moved includes enter and exit
+         */
+        MouseMoved, 
+        MouseDown, 
+        MouseUp, 
+        /**
+         * Point action
+         */
+        MouseDrag, 
+        MouseWheel, 
+        KeyDown, 
+        KeyUp, 
+        Action;
 
         public boolean isMouse(){
             switch(this){
@@ -74,6 +321,9 @@ public interface Event {
     public interface Mouse
         extends Event
     {
+        /**
+         * Mouse input types
+         */
         public enum Action {
             Entered, Exited, Moved, Point1, Point2, Point3, Wheel;
 

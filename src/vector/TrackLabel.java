@@ -178,6 +178,24 @@ public class TrackLabel
         return this;
     }
 
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            String name = super.propertyNameOfValue(vac);
+            if (null != name)
+                return name;
+            else {
+
+                if (Align.Horizontal.class.isAssignableFrom(vac))
+                    return "horizontal";
+                else if (Align.Vertical.class.isAssignableFrom(vac))
+                    return "vertical";
+                else
+                    return null;
+            }
+        }
+    }
     public ObjectJson toJson(){
         ObjectJson thisModel = (ObjectJson)super.toJson();
 

@@ -388,11 +388,23 @@ public abstract class AbstractComponent
     public boolean input(Event e){
 
         switch(e.getType()){
+
         case MouseEntered:
+
             this.mouseIn = true;
+
+            if (Event.Debug.IsEntry){
+                Event.Debug.trace("mouse en",this,e);
+            }
             return true;
+
         case MouseExited:
+
             this.mouseIn = false;
+
+            if (Event.Debug.IsEntry){
+                Event.Debug.trace("mouse ex",this,e);
+            }
             return true;
         default:
             return false;
@@ -468,6 +480,50 @@ public abstract class AbstractComponent
         return display;
     }
 
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            if (Transform.class.isAssignableFrom(vac))
+                return "transform";
+            else if (Bounds.class.isAssignableFrom(vac))
+                return "bounds";
+            else
+                return null;
+        }
+    }
+    public String propertyPathOfValue(Object value){
+        if (null == value)
+            return null;
+        else {
+            String name = this.propertyNameOfValue(value.getClass());
+            if (null != name){
+                StringBuilder string = new StringBuilder();
+
+                string.append(name);
+
+                if (null != this.parent){
+
+                    String path = this.parent.propertyPathOfValue(this);
+
+                    if (null != path){
+                        string.insert(0,"/");
+                        string.insert(0,path);
+                    }
+                }
+                return string.toString();
+            }
+            else
+                return null;
+        }
+    }
+    public String propertyPathOfThis(){
+        Component parent = this.parent;
+        if (null != parent)
+            return parent.propertyPathOfValue(this);
+        else
+            return null;
+    }
     public ObjectJson toJson(){
         ObjectJson thisModel = new ObjectJson();
         thisModel.setValue("class",this.getClass().getName());

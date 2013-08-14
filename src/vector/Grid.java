@@ -308,6 +308,22 @@ public class Grid
         }
     }
 
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            String name = super.propertyNameOfValue(vac);
+            if (null != name)
+                return name;
+            else {
+
+                if (Stroke.class.isAssignableFrom(vac))
+                    return "stroke";
+                else
+                    return null;
+            }
+        }
+    }
     public ObjectJson toJson(){
         ObjectJson thisModel = super.toJson();
 

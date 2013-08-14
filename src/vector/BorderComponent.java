@@ -156,27 +156,51 @@ public class BorderComponent
     public boolean input(Event e){
 
         switch(e.getType()){
-
+            /*
+             * This method adds the border input event to the mouse
+             * entered and exited semantics (copied) as defined in the
+             * super class.
+             */
         case MouseEntered:{
             this.mouseIn = true;
+
+            if (Event.Debug.IsEntry){
+                Event.Debug.trace("mouse en",this,e);
+            }
 
             Border border = this.border;
             if (null != border){
 
                 border.input(e);
             }
+            /*
+             * Subclasses may choose to ignore these events and use
+             *  this.mouseIn
+             */
             return true;
         }
         case MouseExited:{
             this.mouseIn = false;
 
+            if (Event.Debug.IsEntry){
+                Event.Debug.trace("mouse ex",this,e);
+            }
+
+
             Border border = this.border;
             if (null != border){
 
                 border.input(e);
             }
+            /*
+             * Subclasses may choose to ignore these events and use
+             *  this.mouseIn
+             */
             return true;
         }
+            /*
+             * Border input event
+             */
         case MouseMoved:
             if (this.mouseIn){
 
@@ -188,6 +212,9 @@ public class BorderComponent
                     border.input(new platform.event.MouseMoved(point));
                 }
             }
+            /*
+             * Subclasses also see these events...
+             */
             return false;
 
         default:
@@ -278,6 +305,22 @@ public class BorderComponent
         return this;
     }
 
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            String name = super.propertyNameOfValue(vac);
+            if (null != name)
+                return name;
+            else {
+
+                if (Border.class.isAssignableFrom(vac))
+                    return "border";
+                else
+                    return null;
+            }
+        }
+    }
     public ObjectJson toJson(){
         ObjectJson thisModel =  super.toJson();
 

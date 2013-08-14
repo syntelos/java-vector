@@ -130,6 +130,24 @@ public class TableSmall
             return this;
     }
 
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            String name = super.propertyNameOfValue(vac);
+            if (null != name)
+                return name;
+            else {
+
+                if (Float.class.isAssignableFrom(vac))
+                    return "cellspacing";
+                else if (Integer.class.isAssignableFrom(vac))
+                    return "cols";
+                else
+                    return null;
+            }
+        }
+    }
     public ObjectJson toJson(){
         ObjectJson thisModel =  super.toJson();
 

@@ -577,6 +577,24 @@ public class Text
         }
         return this;
     }
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            String name = super.propertyNameOfValue(vac);
+            if (null != name)
+                return name;
+            else {
+
+                if (Font.class.isAssignableFrom(vac))
+                    return "font";
+                else if (String.class.isAssignableFrom(vac))
+                    return "text";
+                else
+                    return null;
+            }
+        }
+    }
     public ObjectJson toJson(){
 
         ObjectJson thisModel = super.toJson();

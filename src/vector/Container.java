@@ -362,9 +362,13 @@ public class Container
 
         case MouseEntered:{
             /*
-             * Broad-cast
+             * Broadcast
              */
             this.mouseIn = true;
+
+            if (Event.Debug.IsEntry){
+                Event.Debug.trace("mouse en",this,e);
+            }
 
             final Point point = this.transformFromParent(((Event.Mouse.Motion)e).getPoint());
             final Event entered = new platform.event.MouseEntered(point);
@@ -385,9 +389,13 @@ public class Container
         }
         case MouseExited:{
             /*
-             * Broad-cast
+             * Broadcast
              */
             this.mouseIn = false;
+
+            if (Event.Debug.IsEntry){
+                Event.Debug.trace("mouse ex",this,e);
+            }
 
             final Event m = ((Event.Mouse)e).transformFrom(this.getTransformParent());
 
@@ -715,6 +723,63 @@ public class Container
         return this;
     }
 
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            String name = super.propertyNameOfValue(vac);
+            if (null != name)
+                return name;
+            else {
+
+                if (Component.class.isAssignableFrom(vac))
+                    return "components";
+                else if (Padding.class.isAssignableFrom(vac))
+                    return "margin";
+                else if (Integer.class.isAssignableFrom(vac))
+                    return "col-span";
+                else
+                    return null;
+            }
+        }
+    }
+    public String propertyPathOfValue(Object value){
+        if (null == value)
+            return null;
+        else {
+            String name = this.propertyNameOfValue(value.getClass());
+            if (null != name){
+                StringBuilder string = new StringBuilder();
+
+                string.append(name);
+
+                final Component parent = super.parent;
+
+                if (null != parent){
+
+                    String path = parent.propertyPathOfValue(this);
+
+                    if (null != path){
+                        string.insert(0,"/");
+                        string.insert(0,path);
+                    }
+                }
+
+                if (Component.class.isAssignableFrom(value.getClass())){
+
+                    final int idx = this.indexOf( (Component)value);
+                    if (-1 < idx){
+
+                        string.append('/');
+                        string.append(idx);
+                    }
+                }
+                return string.toString();
+            }
+            else
+                return null;
+        }
+    }
     public ObjectJson toJson(){
         ObjectJson thisModel =  super.toJson();
 

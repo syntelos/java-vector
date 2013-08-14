@@ -321,6 +321,10 @@ public class Display
             }
         }
 
+        if (Event.Debug.IsAny){
+            Event.Debug.trace("%s",this,e);
+        }
+
         /*
          * Dispatch event
          */
@@ -844,6 +848,49 @@ public class Display
         }
     }
 
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            if (Transform.class.isAssignableFrom(vac))
+                return "transform";
+            else if (Bounds.class.isAssignableFrom(vac))
+                return "bounds";
+            else if (Component.class.isAssignableFrom(vac))
+                return "components";
+            else
+                return null;
+        }
+    }
+    public String propertyPathOfValue(Object value){
+        if (null == value)
+            return null;
+        else {
+            String name = this.propertyNameOfValue(value.getClass());
+            if (null != name){
+                StringBuilder string = new StringBuilder();
+
+                string.append('/');
+                string.append(name);
+
+                if (Component.class.isAssignableFrom(value.getClass())){
+
+                    final int idx = this.indexOf( (Component)value);
+                    if (-1 < idx){
+
+                        string.append('/');
+                        string.append(idx);
+                    }
+                }
+                return string.toString();
+            }
+            else
+                return null;
+        }
+    }
+    public String propertyPathOfThis(){
+        return "/";
+    }
     public Json toJson(){
         Json thisModel = new ObjectJson();
         thisModel.setValue("class",this.getClass().getName());

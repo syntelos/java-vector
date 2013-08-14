@@ -353,6 +353,22 @@ public abstract class ContainerScrollPosition
         this.boundsViewport = this.getParentVector().getBoundsVector();
     }
 
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            String name = super.propertyNameOfValue(vac);
+            if (null != name)
+                return name;
+            else {
+
+                if (Axis.class.isAssignableFrom(vac))
+                    return "axis";
+                else
+                    return null;
+            }
+        }
+    }
     public ObjectJson toJson(){
 
         ObjectJson thisModel = super.toJson();

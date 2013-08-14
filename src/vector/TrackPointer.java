@@ -96,6 +96,11 @@ public class TrackPointer
 
         case MouseEntered:{
             this.mouseIn = true;
+            if (Event.Debug.IsEntry){
+
+                Event.Debug.trace("mouse en",this,e);
+            }
+
             this.setVisibleVector(true);
 
             this.moveto(((Event.Mouse.Motion)e).getPoint());
@@ -112,6 +117,11 @@ public class TrackPointer
         }
         case MouseExited:{
             this.mouseIn = false;
+            if (Event.Debug.IsEntry){
+
+                Event.Debug.trace("mouse ex",this,e);
+            }
+
             this.setVisibleVector(false);
 
             final Event exited = ((Event.Mouse)e).transformFrom(this.getTransformParent());

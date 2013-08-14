@@ -27,7 +27,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 /**
+ * Button based on an enumerated set of buttons for input programming.
  * 
+ * For example, see {@link vector.dialog.Menu}.
  */
 public class Button<E extends Enum<E>>
     extends Text
@@ -91,6 +93,10 @@ public class Button<E extends Enum<E>>
 
             switch(e.getType()){
             case MouseUp:
+                if (Event.Debug.IsClick){
+                    Event.Debug.trace("mouse up",this,e);
+                }
+
                 if (this.mouseIn){
 
                     this.buttonInputAction();
@@ -159,6 +165,22 @@ public class Button<E extends Enum<E>>
         return this.setEnumValue(value);
     }
 
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            String name = super.propertyNameOfValue(vac);
+            if (null != name)
+                return name;
+            else {
+
+                if (Enum.class.isAssignableFrom(vac))
+                    return "enum-value";
+                else
+                    return null;
+            }
+        }
+    }
     public ObjectJson toJson(){
 
         ObjectJson thisModel = super.toJson();

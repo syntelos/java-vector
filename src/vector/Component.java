@@ -363,6 +363,42 @@ public interface Component
     public boolean drop(Component c);
 
     public boolean drop(Class<? extends Component> clas);
+    /**
+     * Implementations of this method return a (JSON) property field
+     * identifier for the argument class when one field of the
+     * implementor is a member of the argument class.  Otherwise it
+     * returns null.
+     * 
+     * Not all arguments can be mapped.  A value type class is
+     * ambiguous in the case where the implementor has multiple
+     * (property) fields in one type class.
+     * 
+     * Implementations of this method are never recursive.
+     * 
+     * @param classOfValue The class of a field of this instance, or
+     * the component type of an array - typed field.
+     * 
+     * @return The JSON property name of this value, or null for not
+     * found or ambiguous (unknown).
+     */
+    public String propertyNameOfValue(Class classOfValue);
+    /**
+     * Called on the component possessing the argument field (by type
+     * and instance identity), this method returns a {@link Reference}
+     * expression, or null for not found or ambiguous.
+     * 
+     * @param value An instance object
+     * 
+     * @return A reference expression, or null
+     * 
+     * @see #propertyNameOfValue(java.lang.Class)
+     */
+    public String propertyPathOfValue(Object value);
+    /**
+     * @return Call to {@link #propertyPathOfValue} with argument
+     * <code>this</code>, or null for a call into an orphan.
+     */
+    public String propertyPathOfThis();
 
     /**
      * Marker for layout and listing

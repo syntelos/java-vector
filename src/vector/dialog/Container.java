@@ -59,6 +59,9 @@ public class Container
             switch(e.getType()){
 
             case KeyUp:
+                if (Event.Debug.IsKey){
+                    Event.Debug.trace("key up",this,e);
+                }
                 if (this.mouseIn){
                     final Event.Key k = (Event.Key)e;
 
@@ -74,7 +77,9 @@ public class Container
                 return false;
 
             case MouseUp:
-
+                if (Event.Debug.IsClick){
+                    Event.Debug.trace("mouse up",this,e);
+                }
                 if (this.mouseIn){
 
                     final Event.Mouse m = (Event.Mouse)e;

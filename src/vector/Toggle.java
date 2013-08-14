@@ -44,7 +44,7 @@ public abstract class Toggle<E extends Enum<E>>
     implements Event.NamedAction.Producer<E>
 {
     /**
-     * Go low on mouse entered, and high on mouse exited: for subclass
+     * Go low on mouse en, and high on mouse ex: for subclass
      * extensions
      */
     public static class Rollover
@@ -456,6 +456,22 @@ public abstract class Toggle<E extends Enum<E>>
             }
             return this;
         }
+        public String propertyNameOfValue(Class vac){
+            if (null == vac)
+                return null;
+            else {
+                String name = super.propertyNameOfValue(vac);
+                if (null != name)
+                    return name;
+                else {
+
+                    if (ColorPalette.class.isAssignableFrom(vac))
+                        return "palette";
+                    else
+                        return null;
+                }
+            }
+        }
         public ObjectJson toJson(){
 
             ObjectJson thisModel = super.toJson();
@@ -649,6 +665,22 @@ public abstract class Toggle<E extends Enum<E>>
         return shape;
     }
 
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            String name = super.propertyNameOfValue(vac);
+            if (null != name)
+                return name;
+            else {
+
+                if (Enum.class.isAssignableFrom(vac))
+                    return "enum-value";
+                else
+                    return null;
+            }
+        }
+    }
     public ObjectJson toJson(){
 
         ObjectJson thisModel = super.toJson();

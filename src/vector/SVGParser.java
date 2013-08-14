@@ -53,8 +53,8 @@ import org.xml.sax.SAXParseException;
 
 
 /**
- * Work in progress on SVG data retrieval.  The intent is to extract
- * useful subsets of SVG, but this could change.
+ * Work in progress (WIP) on SVG data retrieval.  The intent is to
+ * extract useful subsets of SVG, but this could change.
  */
 public class SVGParser
     extends org.xml.sax.HandlerBase
@@ -65,6 +65,9 @@ public class SVGParser
         PF.setNamespaceAware(true);
         PF.setValidating(false);
     }
+    /**
+     * Objective subset of SVG spec
+     */
     public enum SVGElement {
         path, svg, unknown;
 
@@ -78,6 +81,9 @@ public class SVGParser
             }
         }
     }
+    /**
+     * Objective subset of SVG spec
+     */
     public enum SVGAttribute {
         xmlns, viewbox, d, style, fill, stroke, unknown;
 

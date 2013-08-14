@@ -517,6 +517,22 @@ public class Path
     }
 
 
+    public String propertyNameOfValue(Class vac){
+        if (null == vac)
+            return null;
+        else {
+            String name = super.propertyNameOfValue(vac);
+            if (null != name)
+                return name;
+            else {
+
+                if (platform.Path.class.isAssignableFrom(vac))
+                    return "d";
+                else
+                    return null;
+            }
+        }
+    }
     public ObjectJson toJson(){
         ObjectJson thisModel = (ObjectJson)super.toJson();
 
