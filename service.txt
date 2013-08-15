@@ -1,0 +1,10 @@
+#
+copy s t
+edit t n v
+move t x y dx dy
+resize t w h
+list
+cat s
+create s t
+add s t
+remove t
