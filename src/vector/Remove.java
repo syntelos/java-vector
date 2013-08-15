@@ -22,7 +22,7 @@ public enum Remove {
     /**
      * 
      */
-    T(true);
+    T(true,URI.class);
 
 
     /**

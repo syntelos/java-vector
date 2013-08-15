@@ -34,11 +34,16 @@ then
         cc=0
         for svcterm in $(echo $svcdesc | sed 's/%_%/ /g')
         do
-            svterm_name=$(echo $svcterm | sed 's/:.*//')
-            svterm_type=$(echo $svcterm | sed 's/.*://')
+            svcterm_name=$(echo $svcterm | sed 's/:.*//')
+            svcterm_type=$(echo $svcterm | sed 's/.*://')
 
             svc[${cc}]=${svcterm_name}
-            svc_args[${cc}]=${svcterm_type}
+            if [ "${svcterm_name}" != "${svcterm_type}" ]
+            then
+                svc_args[${cc}]=${svcterm_type}
+            else
+                svc_args[${cc}]=''
+            fi
 
             cc=$(( ${cc} + 1 ))
         done
@@ -106,21 +111,28 @@ EOF
         while [ $cc -lt $count ]
         do
             name=$(echo ${svc[${cc}]} | tr 'a-z' 'A-Z')
+            cat<<EOF >>${tgt_enum}
+    /**
+     * 
+     */
+EOF
+            printf "    %s(true" ${name}  >>${tgt_enum}
+            if [ -n "${svc_args[${cc}]}" ]
+            then
+                for svcarg in $(echo "${svc_args[${cc}]}" | sed 's/,/ /g')
+                do
+                    printf ",%s.class" ${svcarg}  >>${tgt_enum}
+                done
+            fi
 
             if [ $cc -eq $term ]
             then
-            cat<<EOF >>${tgt_enum}
-    /**
-     * 
-     */
-    ${name}(true);
+                cat<<EOF >>${tgt_enum}
+);
 EOF
             else
-            cat<<EOF >>${tgt_enum}
-    /**
-     * 
-     */
-    ${name}(true),
+                cat<<EOF >>${tgt_enum}
+),
 EOF
             fi
             cc=$(( ${cc} + 1 ))

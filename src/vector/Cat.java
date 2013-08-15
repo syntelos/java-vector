@@ -22,7 +22,7 @@ public enum Cat {
     /**
      * 
      */
-    S(true);
+    S(true,URI.class);
 
 
     /**

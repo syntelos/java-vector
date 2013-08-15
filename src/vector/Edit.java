@@ -22,15 +22,15 @@ public enum Edit {
     /**
      * 
      */
-    T(true),
+    T(true,URI.class),
     /**
      * 
      */
-    N(true),
+    N(true,String.class),
     /**
      * 
      */
-    V(true);
+    V(true,String.class);
 
 
     /**

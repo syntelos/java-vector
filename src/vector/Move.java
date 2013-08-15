@@ -22,23 +22,23 @@ public enum Move {
     /**
      * 
      */
-    T(true),
+    T(true,URI.class),
     /**
      * 
      */
-    X(true),
+    X(true,Float.class),
     /**
      * 
      */
-    Y(true),
+    Y(true,Float.class),
     /**
      * 
      */
-    DX(true),
+    DX(true,Float.class),
     /**
      * 
      */
-    DY(true);
+    DY(true,Float.class);
 
 
     /**

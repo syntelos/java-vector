@@ -22,15 +22,15 @@ public enum Resize {
     /**
      * 
      */
-    T(true),
+    T(true,URI.class),
     /**
      * 
      */
-    W(true),
+    W(true,Float.class),
     /**
      * 
      */
-    H(true);
+    H(true,Float.class);
 
 
     /**

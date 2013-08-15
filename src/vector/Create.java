@@ -22,11 +22,11 @@ public enum Create {
     /**
      * 
      */
-    S(true),
+    S(true,URI.class),
     /**
      * 
      */
-    T(true);
+    T(true,URI.class);
 
 
     /**
