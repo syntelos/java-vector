@@ -61,6 +61,8 @@ then
 
         tgt_enum="src/vector/${classname_enum}.java"
         tgt_svc="src/vector/${classname_svc}.java"
+        tgt_impl="src/vector/services/${classname_enum}.java"
+        tgt_meta="src/META-INF/services/vector.${classname_enum}"
 
         directory=$(dirname "${tgt_svc}")
 
@@ -384,6 +386,63 @@ public class ${classname_svc}
 
 }
 EOF
+
+        #
+        # Generate META 
+        #
+        echo "vector.services.${cname}" > ${tgt_meta}
+
+
+        #
+        # Generate IMPL
+        #
+        uname=$(echo ${cname} | tr 'a-z' 'A-Z')
+
+        cat<<EOF > ${tgt_impl}
+package vector.services;
+
+/**
+ * Built-in display service function for {@link vector.${cname} ${cname}}.
+ * 
+ * @see vector.${cname}Service
+ */
+public class ${cname}
+    extends Object
+    implements vector.${cname}Service.Service
+{
+
+    public ${cname}(){
+        super();
+    }
+
+
+    public String[] evaluate(Object... argv){
+
+        if (null != argv && 0 < argv.length){
+
+            if (vector.${cname}.${uname} == argv[0]){
+
+                ////////////////////////////////////
+                ////////////////////////////////////
+                ////////////////////////////////////
+
+                return null;
+            }
+            else
+                throw new IllegalArgumentException(String.format("First argument (%s) is not ${uname}",argv[0]));
+        }
+        else
+            throw new IllegalArgumentException("Missing arguments");
+    }
+}
+EOF
+
+
+        git add $tgt_enum
+        git add $tgt_svc
+        git add $tgt_impl
+        git add $tgt_meta
+
     done
 else
     usage

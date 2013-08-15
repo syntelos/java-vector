@@ -830,6 +830,7 @@ ant help (for portable pixel programming with vector)
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
+      <fileset dir="${src}" includes="**/META-INF/services/*.*"/>
       <fileset dir="${src}" includes="**/*.properties"/>
       <fileset dir="${src}" includes="**/*.txt"/>
       <fileset dir="${src}" includes="**/*.xml"/>
@@ -869,6 +870,7 @@ ant help (for portable pixel programming with vector)
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
+      <fileset dir="${src}" includes="**/META-INF/services/*.*"/>
       <fileset dir="${src}" includes="**/*.properties"/>
       <fileset dir="${src}" includes="**/*.txt"/>
       <fileset dir="${src}" includes="**/*.xml"/>
