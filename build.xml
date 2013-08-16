@@ -11,11 +11,17 @@
   <property name="prove.rt.jar" location="prove/rt.jar"/>
   <property name="awt.src" value="awt/src"/>
   <property name="android.src" value="android/src"/>
+
+  <property name="services.src" value="services/src"/>
+  <property name="services.impl.src" value="services-impl/src"/>
+
   <property name="demo.src" value="demo/src"/>
   <property name="geda.src" value="geda/src"/>
   <property name="fonview.src" value="fonview/src"/>
+
   <property name="xmpp.dir" value="xmpp"/>
   <property name="xmpp.src" value="${xmpp.dir}/src"/>
+
   <property name="llg.dir" value="llg"/>
   <property name="llg.src" value="${llg.dir}/src"/>
 
@@ -52,6 +58,9 @@
 
     <antcall target="awt-update" inheritRefs="true"/>
 
+    <antcall target="services-update-awt" inheritRefs="true"/>
+    <antcall target="services-impl-update-awt" inheritRefs="true"/>
+
     <antcall target="demo-update-awt" inheritRefs="true"/>
     <antcall target="geda-update-awt" inheritRefs="true"/>
     <antcall target="fonview-update-awt" inheritRefs="true"/>
@@ -66,6 +75,9 @@
     <antcall target="vector-update-awt" inheritRefs="true"/>
 
     <antcall target="awt-update" inheritRefs="true"/>
+
+    <antcall target="services-update-awt" inheritRefs="true"/>
+    <antcall target="services-impl-update-awt" inheritRefs="true"/>
 
     <antcall target="demo-update-awt" inheritRefs="true"/>
     <antcall target="geda-update-awt" inheritRefs="true"/>
@@ -129,6 +141,9 @@ ant help (for portable pixel programming with vector)
     <antcall target="prove-jar" inheritRefs="true"/>
 
     <antcall target="vector-jar-prove" inheritRefs="true"/>
+
+    <antcall target="services-prove" inheritRefs="true"/>
+    <antcall target="services-impl-prove" inheritRefs="true"/>
 
     <!-- antcall target="demo-prove" inheritRefs="true"/ [TODO](AWT) -->
     <antcall target="geda-prove" inheritRefs="true"/>
@@ -344,6 +359,157 @@ ant help (for portable pixel programming with vector)
 
     <java outputproperty="android.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${target.vector.jar}"/>
+      <arg value="${toString:lib.path}"/>
+    </java>
+  </target>
+
+  <!-- 
+    - SERVICES
+    -->
+  <target name="services" depends="vector-state" description="Calls services jar for current state">
+
+    <antcall target="services-update-${vector.state}" inheritRefs="true"/>
+  </target>
+
+  <target name="services-update-awt" depends="services-compile-awt" description="Package services jar, clean bin.  Depends on the target jar.">
+
+    <echo message="Main-Class: platform.Frame"/>
+    <echo message="Class-Path: ${services.lib.path.manifest.awt}"/>
+
+    <delete file="${existing.services.jar}"/>
+
+    <jar jarfile="${target.services.jar}" basedir="${bin}" >
+      <manifest>
+        <attribute name="Main-Class" value="platform.Frame"/>
+        <attribute name="Class-Path" value="${services.lib.path.manifest.awt}"/>
+      </manifest>
+    </jar>
+
+    <delete dir="${bin}"/>
+  </target>
+
+  <target name="services-compile-awt" depends="services-version-awt">
+
+    <vector-state-require name="awt" property="vector.state"/>
+
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+    <copy todir="${bin}">
+      <fileset dir="${services.src}" includes="**/*.properties"/>
+      <fileset dir="${services.src}" includes="**/*.txt"/>
+      <fileset dir="${services.src}" includes="**/*.xml"/>
+    </copy>
+    <javac includeAntRuntime="false" srcdir="${services.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <path refid="lib.path"/>
+        <pathelement location="${existing.vector.jar}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="services-prove" depends="version" description="Compile against prove for proof of portability.">
+
+    <vector-state-require name="prove" property="vector.state"/>
+
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+
+    <javac includeAntRuntime="false" srcdir="${services.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <path refid="lib.path"/>
+        <pathelement location="${target.vector.jar}"/>
+        <pathelement location="${target.prove.jar}"/>
+      </classpath>
+      <bootclasspath>
+        <pathelement location="${prove.rt.jar}"/>
+      </bootclasspath>
+    </javac>
+  </target>
+
+  <target name="services-version-awt" unless="services.lib.path.manifest.awt" depends="version">
+
+    <java outputproperty="services.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+      <arg value="${target.awt.jar}"/>
+      <arg value="${target.vector.jar}"/>
+      <arg value="${toString:lib.path}"/>
+    </java>
+  </target>
+
+  <!-- 
+    - SERVICES-IMPL
+    -->
+  <target name="services-impl" depends="vector-state" description="Calls services-impl jar for current state">
+
+    <antcall target="services-impl-update-${vector.state}" inheritRefs="true"/>
+  </target>
+
+  <target name="services-impl-update-awt" depends="services-impl-compile-awt" description="Package services-impl jar, clean bin.  Depends on the target jar.">
+
+    <echo message="Main-Class: platform.Frame"/>
+    <echo message="Class-Path: ${services.impl.lib.path.manifest.awt}"/>
+
+    <delete file="${existing.services.impl.jar}"/>
+
+    <jar jarfile="${target.services.impl.jar}" basedir="${bin}" >
+      <manifest>
+        <attribute name="Main-Class" value="platform.Frame"/>
+        <attribute name="Class-Path" value="${services.impl.lib.path.manifest.awt}"/>
+      </manifest>
+    </jar>
+
+    <delete dir="${bin}"/>
+  </target>
+
+  <target name="services-impl-compile-awt" depends="services-impl-version-awt">
+
+    <vector-state-require name="awt" property="vector.state"/>
+
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+    <copy todir="${bin}">
+      <fileset dir="${services.impl.src}" includes="**/META-INF/services/*.*"/>
+      <fileset dir="${services.impl.src}" includes="**/*.properties"/>
+      <fileset dir="${services.impl.src}" includes="**/*.txt"/>
+      <fileset dir="${services.impl.src}" includes="**/*.xml"/>
+    </copy>
+    <javac includeAntRuntime="false" srcdir="${services.impl.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <path refid="lib.path"/>
+        <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${existing.services.jar}"/>
+      </classpath>
+    </javac>
+  </target>
+
+  <target name="services-impl-prove" depends="version" description="Compile against prove for proof of portability.">
+
+    <vector-state-require name="prove" property="vector.state"/>
+
+    <delete dir="${bin}"/>
+    <mkdir dir="${bin}"/>
+
+    <javac includeAntRuntime="false" srcdir="${services.impl.src}" destdir="${bin}" debug="${compiler.debug}" encoding="${compiler.encoding}"
+           source="${compiler.source}" target="${compiler.target}">
+      <classpath>
+        <path refid="lib.path"/>
+        <pathelement location="${target.vector.jar}"/>
+        <pathelement location="${target.prove.jar}"/>
+      </classpath>
+      <bootclasspath>
+        <pathelement location="${prove.rt.jar}"/>
+      </bootclasspath>
+    </javac>
+  </target>
+
+  <target name="services-impl-version-awt" unless="services.impl.lib.path.manifest.awt" depends="version">
+
+    <java outputproperty="services.impl.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
+      <arg value="${target.awt.jar}"/>
+      <arg value="${target.vector.jar}"/>
+      <arg value="${target.services.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
   </target>
@@ -830,7 +996,6 @@ ant help (for portable pixel programming with vector)
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
-      <fileset dir="${src}" includes="**/META-INF/services/*.*"/>
       <fileset dir="${src}" includes="**/*.properties"/>
       <fileset dir="${src}" includes="**/*.txt"/>
       <fileset dir="${src}" includes="**/*.xml"/>
@@ -870,7 +1035,6 @@ ant help (for portable pixel programming with vector)
     <delete dir="${bin}"/>
     <mkdir dir="${bin}"/>
     <copy todir="${bin}">
-      <fileset dir="${src}" includes="**/META-INF/services/*.*"/>
       <fileset dir="${src}" includes="**/*.properties"/>
       <fileset dir="${src}" includes="**/*.txt"/>
       <fileset dir="${src}" includes="**/*.xml"/>
@@ -964,6 +1128,8 @@ ant help (for portable pixel programming with vector)
     <property name="target.prove.jar" value="${dst}/${ant.project.name}-prove-${this.version}.jar"/>
     <property name="target.awt.jar" value="${dst}/${ant.project.name}-awt-${this.version}.jar"/>
     <property name="target.android.jar" value="${dst}/${ant.project.name}-android-${this.version}.jar"/>
+    <property name="target.services.jar" value="${dst}/${ant.project.name}-services-${this.version}.jar"/>
+    <property name="target.services.impl.jar" value="${dst}/${ant.project.name}-services-impl-${this.version}.jar"/>
     <property name="target.demo.jar" value="${dst}/${ant.project.name}-demo-${this.version}.jar"/>
     <property name="target.geda.jar" value="${dst}/${ant.project.name}-geda-${this.version}.jar"/>
     <property name="target.fonview.jar" value="${dst}/${ant.project.name}-fonview-${this.version}.jar"/>
@@ -978,6 +1144,10 @@ ant help (for portable pixel programming with vector)
     <version-pub property="existing.awt.jar" prefix="${ant.project.name}-awt"/>
 
     <version-pub property="existing.android.jar" prefix="${ant.project.name}-android"/>
+
+    <version-pub property="existing.services.jar" prefix="${ant.project.name}-services"/>
+
+    <version-pub property="existing.services.impl.jar" prefix="${ant.project.name}-services-impl"/>
 
     <version-pub property="existing.demo.jar" prefix="${ant.project.name}-demo"/>
 

@@ -58,11 +58,17 @@ then
 
         classname_enum="${cname}"
         classname_svc="${cname}Service"
+        classname_impl="${cname}Impl"
 
-        tgt_enum="src/vector/${classname_enum}.java"
-        tgt_svc="src/vector/${classname_svc}.java"
-        tgt_impl="src/vector/services/${classname_enum}.java"
-        tgt_meta="src/META-INF/services/vector.${classname_enum}"
+        tgt_enum="services/src/vector/services/${classname_enum}.java"
+        tgt_svc="services/src/vector/services/${classname_svc}.java"
+
+        tgt_meta="services-impl/src/META-INF/services/vector.${classname_enum}"
+
+        tgt_impl="services-impl/src/vector/services/impl/${classname_enum}Impl.java"
+
+        package_svc="vector.services"
+        package_impl="vector.services.impl"
 
         directory=$(dirname "${tgt_svc}")
 
@@ -71,18 +77,16 @@ then
             cat<<EOF>&2
 Error, directory not found: ${directory}
 EOF
-        else
-            package=$(echo "${directory}" | sed 's%^\./%%; s%^src/%%; s%/%.%g;')
         fi
 
         #
         # Generate enum
         #
 
-        if [ -n "${package}" ]
+        if [ -n "${package_svc}" ]
         then
             cat<<EOF >${tgt_enum}
-package ${package};
+package ${package_svc};
 
 import java.lang.reflect.Constructor;
 import java.net.URI;
@@ -226,10 +230,10 @@ EOF
         # Generate service
         #
 
-        if [ -n "${package}" ]
+        if [ -n "${package_svc}" ]
         then
             cat<<EOF >${tgt_svc}
-package ${package};
+package ${package_svc};
 
 EOF
         else
@@ -390,7 +394,7 @@ EOF
         #
         # Generate META 
         #
-        echo "vector.services.${cname}" > ${tgt_meta}
+        echo "vector.services.impl.${classname_impl}" > ${tgt_meta}
 
 
         #
@@ -399,19 +403,19 @@ EOF
         uname=$(echo ${cname} | tr 'a-z' 'A-Z')
 
         cat<<EOF > ${tgt_impl}
-package vector.services;
+package ${package_impl};
 
 /**
  * Built-in display service function for {@link vector.${cname} ${cname}}.
  * 
- * @see vector.${cname}Service
+ * @see vector.${classname_svc}
  */
-public class ${cname}
+public class ${classname_impl}
     extends Object
-    implements vector.${cname}Service.Service
+    implements ${package_svc}.${classname_svc}.Service
 {
 
-    public ${cname}(){
+    public ${classname_impl}(){
         super();
     }
 
@@ -420,7 +424,7 @@ public class ${cname}
 
         if (null != argv && 0 < argv.length){
 
-            if (vector.${cname}.${uname} == argv[0]){
+            if (${package_svc}.${classname_enum}.${uname} == argv[0]){
 
                 ////////////////////////////////////
                 ////////////////////////////////////

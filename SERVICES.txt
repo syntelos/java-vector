@@ -1,0 +1,180 @@
+
+
+ Purpose
+
+
+   Generally services provide a separation between caller and
+   implementor that separates the user interface from the application
+   logic.
+
+   A menu system or command line can drive services.  Adding new
+   services dynamically may be useful for (trusted) package
+   distribution and management.
+
+
+   The services defined here are not general to all application
+   programming, but employ this idea for interaction with the vector
+   scene graph.
+
+   Each service is described by an enum.  A service class evaluates
+   expressions formed using the simple syntax described by the enum.
+
+
+ Enum command language
+
+   An array of name value pairs is constructed using these enums.
+   Each enum member (enum instance) is paired with an optional value
+   in a list.  This list is an expression in the language defined by
+   the service enum.
+
+   A service enum is horizontal in comparison with a menu enumeration.
+   Like a list of fields in an object, this horizontal enum is a
+   description of the enumeration of states constructed with
+   (optional) values corresponding to its names.
+
+
+ System
+
+   vector.DisplayService
+
+      Registry of initialized instances of platform.Display
+
+      Single frame vector application processes would have one display
+      at index zero.
+
+      Class path: vector-X.Y.Z.jar
+
+   vector.services.AddService
+   vector.services.CatService
+   vector.services.CopyService
+   vector.services.CreateService
+   vector.services.EditService
+   vector.services.ListService
+   vector.services.MoveService
+   vector.services.RemoveService
+   vector.services.ResizeService
+
+      These services provide DOM like programming on the vector scene
+      graph.  These programming interfaces evaluate expressions
+      defined by the following enum types.
+
+   vector.services.Add
+   vector.services.Cat
+   vector.services.Copy
+   vector.services.Create
+   vector.services.Edit
+   vector.services.List
+   vector.services.Move
+   vector.services.Remove
+   vector.services.Resize
+
+      These enums provide dynamic binding with syntactic structure.
+
+      Class path: vector-services-X.Y.Z.jar
+
+   vector.services.impl.AddImpl
+   vector.services.impl.CatImpl
+   vector.services.impl.CopyImpl
+   vector.services.impl.CreateImpl
+   vector.services.impl.EditImpl
+   vector.services.impl.ListImpl
+   vector.services.impl.MoveImpl
+   vector.services.impl.RemoveImpl
+   vector.services.impl.ResizeImpl
+
+      These functions implement the service API.
+
+      Class path: vector-services-impl-X.Y.Z.jar
+
+      This code archive also contains the services definitions
+
+         /META-INF/services/vector.Add
+         /META-INF/services/vector.Cat
+         /META-INF/services/vector.Copy
+         /META-INF/services/vector.Create
+         /META-INF/services/vector.Edit
+         /META-INF/services/vector.List
+         /META-INF/services/vector.Move
+         /META-INF/services/vector.Remove
+         /META-INF/services/vector.Resize
+
+      from
+
+         services-impl/src/META-INF/services/
+
+
+ Programming
+
+   Application logic programming has reconfigurable facilities for
+   loads, saves, edits, and shares of the display or fragments of the
+   scene graph.
+
+   This API employs URI strings to identify the nodes in a scene graph
+   as well as the documents that define them.
+
+   Components (class vector.Component) in the scene graph are
+   addressed by relative URI, while the sources and targets of
+   documents and fragments (JSON) are the absolute URIs supported by
+   java.net.URL I/O streams.  These are the FILE and HTTP schemes, and
+   this set may be extended with the java.net API.
+
+   The Display Service (class vector.DisplayService) API provides the
+   root of a scene graph.  
+
+
+ Fragment addressing
+
+   A relative URI is intended to optionally address a display with the
+   following pattern
+
+      0/components/0
+      /components/0
+
+   to address the first component under display index zero, and
+
+      1/components/0
+
+   to address the first component under display index one.
+
+
+ Configuration
+
+   The runtime class path must define the builtin service functions as
+   from
+
+      vector-services-impl-X.Y.Z.jar
+
+   or any substitute.
+
+   Without services implementation functions, the services API will
+   operate with no effect.
+
+
+ Security 
+
+   Runtime code is trusted code
+
+      Class path code is trusted to manipulate the services set of
+      implementation functions.
+
+
+
+ Code generation
+
+   The script 
+    ./service.sh 
+   generates source files from 
+    ./service.txt
+   into
+    ./services/
+   and
+    ./services-impl/
+
+   This script overwrites all of its targets.  The implementations,
+   however, will be lost.  
+
+   Restoration of lost files
+
+     Read the "git status" message for restoration instructions for
+     modified files.
+
