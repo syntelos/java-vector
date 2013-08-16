@@ -4,20 +4,33 @@
 
 
    Generally services provide a separation between caller and
-   implementor that separates the user interface from the application
-   logic.
+   implementor that separates a API from an implementation or
+   application of the API.
 
-   A menu system or command line can drive services.  Adding new
-   services dynamically may be useful for (trusted) package
-   distribution and management.
-
+   A menu system or command line can drive interaction services.  
 
    The services defined here are not general to all application
    programming, but employ this idea for interaction with the vector
-   scene graph.
+   scene graph -- for visual UI programming.
 
-   Each service is described by an enum.  A service class evaluates
-   expressions formed using the simple syntax described by the enum.
+   The following interaction operators communicate between web and
+   file resources, and existing scene graphs.
+
+      copy
+      edit
+      move
+      resize
+      list
+      cat
+      create
+      show
+      add
+      remove
+
+   Each of these operators is described by an enum.
+
+   A service class evaluates expressions formed using the simple
+   syntax described by the enum.
 
 
  Enum command language
@@ -53,6 +66,7 @@
    vector.services.MoveService
    vector.services.RemoveService
    vector.services.ResizeService
+   vector.services.ShowService
 
       These services provide DOM like programming on the vector scene
       graph.  These programming interfaces evaluate expressions
@@ -67,6 +81,7 @@
    vector.services.Move
    vector.services.Remove
    vector.services.Resize
+   vector.services.Show
 
       These enums provide dynamic binding with syntactic structure.
 
@@ -81,6 +96,7 @@
    vector.services.impl.MoveImpl
    vector.services.impl.RemoveImpl
    vector.services.impl.ResizeImpl
+   vector.services.impl.ShowImpl
 
       These functions implement the service API.
 
@@ -97,6 +113,7 @@
          /META-INF/services/vector.Move
          /META-INF/services/vector.Remove
          /META-INF/services/vector.Resize
+         /META-INF/services/vector.Show
 
       from
 
@@ -105,9 +122,11 @@
 
  Programming
 
-   Application logic programming has reconfigurable facilities for
-   loads, saves, edits, and shares of the display or fragments of the
-   scene graph.
+   This package provides synchronous I/O processing.
+
+   Visual UI programming has reconfigurable facilities for loads,
+   saves, edits, and shares of the display or fragments of the scene
+   graph.
 
    This API employs URI strings to identify the nodes in a scene graph
    as well as the documents that define them.
@@ -166,15 +185,15 @@
    generates source files from 
     ./service.txt
    into
-    ./services/
+    ./services/src/
    and
-    ./services-impl/
+    ./services-impl/src/
 
-   This script overwrites all of its targets.  The implementations,
-   however, will be lost.  
+   This script overwrites all of its targets.
 
-   Restoration of lost files
+   Restoration of lost file content
 
      Read the "git status" message for restoration instructions for
      modified files.
 
+     Or, check "git diff" for patches.

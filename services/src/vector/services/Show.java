@@ -6,23 +6,23 @@ import java.net.URI;
 /**
  * Display operator and arguments.
  * 
- * In {@link ListService} an input sequence (argv) is constructed
+ * In {@link ShowService} an input sequence (argv) is constructed
  * for evaluating expressions defined by this class.  
  * 
  * In the evaluation input sequence, each component of this enumerated
  * set may have a corresponding value.
  * 
- * @see ListService
+ * @see ShowService
  */
-public enum List {
+public enum Show {
     /**
      * 
      */
-    LIST(true),
+    SHOW(true),
     /**
      * 
      */
-    T(true,URI.class);
+    S(true,Class.class);
 
 
     /**
@@ -45,7 +45,7 @@ public enum List {
     private final Constructor[] possibleCtors;
 
 
-    private List(boolean required, Class... possibleValues){
+    private Show(boolean required, Class... possibleValues){
         this.required = required;
         this.possibleValues = possibleValues;
 

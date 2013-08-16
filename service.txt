@@ -3,8 +3,9 @@ copy s:URI t:URI
 edit t:URI n:String v:String
 move t:URI x:Float y:Float dx:Float dy:Float
 resize t:URI w:Float h:Float
-list
+list t:URI
 cat s:URI
 create s:URI t:URI
-add s:URI t:URI
+show s:Class
+add s:URI,Class t:URI
 remove t:URI
