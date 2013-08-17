@@ -371,7 +371,12 @@ ant help (for portable pixel programming with vector)
     <antcall target="services-update-${vector.state}" inheritRefs="true"/>
   </target>
 
-  <target name="services-update-awt" depends="services-compile-awt" description="Package services jar, clean bin.  Depends on the target jar.">
+  <target name="services-update-awt" if="vector.services.update" depends="services-jar-awt" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.services.update'.">
+
+    <do-update src="${target.services.jar}" tgt="${vector.services.update}" />
+  </target>
+
+  <target name="services-jar-awt" depends="services-compile-awt" description="Package services jar, clean bin.  Depends on the target jar.">
 
     <echo message="Main-Class: platform.Frame"/>
     <echo message="Class-Path: ${services.lib.path.manifest.awt}"/>
@@ -445,7 +450,12 @@ ant help (for portable pixel programming with vector)
     <antcall target="services-impl-update-${vector.state}" inheritRefs="true"/>
   </target>
 
-  <target name="services-impl-update-awt" depends="services-impl-compile-awt" description="Package services-impl jar, clean bin.  Depends on the target jar.">
+  <target name="services-impl-update-awt" if="vector.services.impl.update" depends="services-impl-jar-awt" description="Copy jar product to targets defined in '{user.home}/update.properties' by name 'vector.services.impl.update'.">
+
+    <do-update src="${target.services.impl.jar}" tgt="${vector.services.impl.update}" />
+  </target>
+
+  <target name="services-impl-jar-awt" depends="services-impl-compile-awt" description="Package services-impl jar, clean bin.  Depends on the target jar.">
 
     <echo message="Main-Class: platform.Frame"/>
     <echo message="Class-Path: ${services.impl.lib.path.manifest.awt}"/>
