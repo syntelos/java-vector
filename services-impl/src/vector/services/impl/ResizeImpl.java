@@ -19,14 +19,10 @@ public class ResizeImpl
 
         if (null != argv && 0 < argv.length){
 
-            if (vector.services.Resize.RESIZE == argv[0]){
+            if (vector.services.Resize.RESIZE == argv[0])
 
-                ////////////////////////////////////
-                ////////////////////////////////////
-                ////////////////////////////////////
+                return vector.services.DisplayService.Resize(argv);
 
-                return null;
-            }
             else
                 throw new IllegalArgumentException(String.format("First argument (%s) is not RESIZE",argv[0]));
         }

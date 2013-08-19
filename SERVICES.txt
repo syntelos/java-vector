@@ -32,18 +32,7 @@
    A service class evaluates expressions formed using the simple
    syntax described by the enum.
 
-
- Enum command language
-
-   An array of name value pairs is constructed using these enums.
-   Each enum member (enum instance) is paired with an optional value
-   in a list.  This list is an expression in the language defined by
-   the service enum.
-
-   A service enum is horizontal in comparison with a menu enumeration.
-   Like a list of fields in an object, this horizontal enum is a
-   description of the enumeration of states constructed with
-   (optional) values corresponding to its names.
+   See also ./DATA.txt.
 
 
  System

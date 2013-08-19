@@ -19,14 +19,10 @@ public class CopyImpl
 
         if (null != argv && 0 < argv.length){
 
-            if (vector.services.Copy.COPY == argv[0]){
+            if (vector.services.Copy.COPY == argv[0])
 
-                ////////////////////////////////////
-                ////////////////////////////////////
-                ////////////////////////////////////
+                return vector.services.DisplayService.Copy(argv);
 
-                return null;
-            }
             else
                 throw new IllegalArgumentException(String.format("First argument (%s) is not COPY",argv[0]));
         }

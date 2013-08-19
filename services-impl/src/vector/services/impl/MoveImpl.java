@@ -19,14 +19,10 @@ public class MoveImpl
 
         if (null != argv && 0 < argv.length){
 
-            if (vector.services.Move.MOVE == argv[0]){
+            if (vector.services.Move.MOVE == argv[0])
 
-                ////////////////////////////////////
-                ////////////////////////////////////
-                ////////////////////////////////////
+                return vector.services.DisplayService.Move(argv);
 
-                return null;
-            }
             else
                 throw new IllegalArgumentException(String.format("First argument (%s) is not MOVE",argv[0]));
         }

@@ -19,14 +19,10 @@ public class ShowImpl
 
         if (null != argv && 0 < argv.length){
 
-            if (vector.services.Show.SHOW == argv[0]){
+            if (vector.services.Show.SHOW == argv[0])
 
-                ////////////////////////////////////
-                ////////////////////////////////////
-                ////////////////////////////////////
+                return vector.services.DisplayService.Show(argv);
 
-                return null;
-            }
             else
                 throw new IllegalArgumentException(String.format("First argument (%s) is not SHOW",argv[0]));
         }

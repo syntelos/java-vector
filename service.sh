@@ -109,7 +109,9 @@ EOF
  * 
  * @see ${classname_svc}
  */
-public enum ${classname_enum} {
+public enum ${classname_enum}
+    implements vector.data.DataOperator<${classname_enum}>
+{
 EOF
         cc=0
         count=${#svc[*]}
@@ -218,12 +220,27 @@ cat<<EOF >>${tgt_enum}
         this.argument = (0 < possibleValues.length);
     }
 
+    public boolean isOperator(){
+        return true;
+    }
+    public boolean isSyntactic(){
+        return true;
+    }
+    public boolean isRequired(){
+        return this.required;
+    }
+    public boolean hasArgument(){
+        return this.argument;
+    }
+    public Object toObject(String uin){
 
+        return this.toObject( (Object)uin);
+    }
     /**
      * @param uin User input
      * @return Operator service argument value
      */
-    public Object parse(Object uin){
+    public Object toObject(Object uin){
         if (this.possibleString && uin instanceof String)
             return uin;
         else if (this.possibleClass){
@@ -247,11 +264,51 @@ cat<<EOF >>${tgt_enum}
         }
         return uin;
     }
+    public String toString(Object data){
+
+        return data.toString();
+    }
+    public boolean hasSubfieldClass(){
+        return false;
+    }
+    public <S extends vector.data.DataSubfield> Class<S> getSubfieldClass()
+        throws UnsupportedOperationException
+    {
+        throw new UnsupportedOperationException();
+    }
+    public boolean hasMapping(){
+        return false;
+    }
+    public Iterable<${classname_enum}> getMapping(){
+        throw new UnsupportedOperationException();
+    }
+    public boolean hasAlternative(){
+        return false;
+    }
+    public <DO extends vector.data.DataOperator> DO getAlternative()
+        throws UnsupportedOperationException
+    {
+        throw new UnsupportedOperationException();
+    }
+    public <DO extends vector.data.DataOperator> Class<DO> getAlternativeClass()
+        throws UnsupportedOperationException
+    {
+        throw new UnsupportedOperationException();
+    }
+    public boolean isPossibleString(){
+        return this.possibleString;
+    }
+    public boolean isPossibleClass(){
+        return this.possibleClass;
+    }
     public Class[] getPossibleValues(){
         return this.possibleValues.clone();
     }
     public Constructor[] getPossibleCtors(){
         return this.possibleCtors.clone();
+    }
+    public String[] evaluate(Object... argv){
+        return ${classname_svc}.Evaluate(argv);
     }
 }
 EOF
@@ -393,7 +450,7 @@ public class ${classname_svc}
             }
             else if (operator.argument){
 
-                argv[cc] = operator.parse(arg);
+                argv[cc] = operator.toObject(arg);
 
                 prev = operator;
 
@@ -454,14 +511,10 @@ public class ${classname_impl}
 
         if (null != argv && 0 < argv.length){
 
-            if (${package_svc}.${classname_enum}.${uname} == argv[0]){
+            if (${package_svc}.${classname_enum}.${uname} == argv[0])
 
-                ////////////////////////////////////
-                ////////////////////////////////////
-                ////////////////////////////////////
+                return ${package_svc}.DisplayService.${cname}(argv);
 
-                return null;
-            }
             else
                 throw new IllegalArgumentException(String.format("First argument (%s) is not ${uname}",argv[0]));
         }
@@ -471,11 +524,6 @@ public class ${classname_impl}
 }
 EOF
 
-
-        git add $tgt_enum
-        git add $tgt_svc
-        git add $tgt_impl
-        git add $tgt_meta
 
     done
 else

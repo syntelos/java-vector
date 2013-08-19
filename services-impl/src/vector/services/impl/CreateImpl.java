@@ -19,14 +19,10 @@ public class CreateImpl
 
         if (null != argv && 0 < argv.length){
 
-            if (vector.services.Create.CREATE == argv[0]){
+            if (vector.services.Create.CREATE == argv[0])
 
-                ////////////////////////////////////
-                ////////////////////////////////////
-                ////////////////////////////////////
+                return vector.services.DisplayService.Create(argv);
 
-                return null;
-            }
             else
                 throw new IllegalArgumentException(String.format("First argument (%s) is not CREATE",argv[0]));
         }

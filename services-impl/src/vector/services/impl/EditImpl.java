@@ -19,14 +19,10 @@ public class EditImpl
 
         if (null != argv && 0 < argv.length){
 
-            if (vector.services.Edit.EDIT == argv[0]){
+            if (vector.services.Edit.EDIT == argv[0])
 
-                ////////////////////////////////////
-                ////////////////////////////////////
-                ////////////////////////////////////
+                return vector.services.DisplayService.Edit(argv);
 
-                return null;
-            }
             else
                 throw new IllegalArgumentException(String.format("First argument (%s) is not EDIT",argv[0]));
         }

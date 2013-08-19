@@ -14,7 +14,9 @@ import java.net.URI;
  * 
  * @see ListService
  */
-public enum List {
+public enum List
+    implements vector.data.DataOperator<List>
+{
     /**
      * 
      */
@@ -97,12 +99,27 @@ public enum List {
         this.argument = (0 < possibleValues.length);
     }
 
+    public boolean isOperator(){
+        return true;
+    }
+    public boolean isSyntactic(){
+        return true;
+    }
+    public boolean isRequired(){
+        return this.required;
+    }
+    public boolean hasArgument(){
+        return this.argument;
+    }
+    public Object toObject(String uin){
 
+        return this.toObject( (Object)uin);
+    }
     /**
      * @param uin User input
      * @return Operator service argument value
      */
-    public Object parse(Object uin){
+    public Object toObject(Object uin){
         if (this.possibleString && uin instanceof String)
             return uin;
         else if (this.possibleClass){
@@ -126,10 +143,50 @@ public enum List {
         }
         return uin;
     }
+    public String toString(Object data){
+
+        return data.toString();
+    }
+    public boolean hasSubfieldClass(){
+        return false;
+    }
+    public <S extends vector.data.DataSubfield> Class<S> getSubfieldClass()
+        throws UnsupportedOperationException
+    {
+        throw new UnsupportedOperationException();
+    }
+    public boolean hasMapping(){
+        return false;
+    }
+    public Iterable<List> getMapping(){
+        throw new UnsupportedOperationException();
+    }
+    public boolean hasAlternative(){
+        return false;
+    }
+    public <DO extends vector.data.DataOperator> DO getAlternative()
+        throws UnsupportedOperationException
+    {
+        throw new UnsupportedOperationException();
+    }
+    public <DO extends vector.data.DataOperator> Class<DO> getAlternativeClass()
+        throws UnsupportedOperationException
+    {
+        throw new UnsupportedOperationException();
+    }
+    public boolean isPossibleString(){
+        return this.possibleString;
+    }
+    public boolean isPossibleClass(){
+        return this.possibleClass;
+    }
     public Class[] getPossibleValues(){
         return this.possibleValues.clone();
     }
     public Constructor[] getPossibleCtors(){
         return this.possibleCtors.clone();
+    }
+    public String[] evaluate(Object... argv){
+        return ListService.Evaluate(argv);
     }
 }

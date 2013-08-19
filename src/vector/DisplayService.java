@@ -46,7 +46,7 @@ import java.net.URL;
  * 
  * @see http://github.com/syntelos/services
  */
-public final class DisplayService
+public class DisplayService
     extends services.Classes
 {
     public final static DisplayService Instance = new DisplayService();
@@ -120,7 +120,7 @@ public final class DisplayService
     private final lxl.List<Display> active = new lxl.ArrayList();
 
 
-    private DisplayService(){
+    protected DisplayService(){
         super(vector.Display.class);
     }
 

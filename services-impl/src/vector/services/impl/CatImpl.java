@@ -19,14 +19,10 @@ public class CatImpl
 
         if (null != argv && 0 < argv.length){
 
-            if (vector.services.Cat.CAT == argv[0]){
+            if (vector.services.Cat.CAT == argv[0])
 
-                ////////////////////////////////////
-                ////////////////////////////////////
-                ////////////////////////////////////
+                return vector.services.DisplayService.Cat(argv);
 
-                return null;
-            }
             else
                 throw new IllegalArgumentException(String.format("First argument (%s) is not CAT",argv[0]));
         }

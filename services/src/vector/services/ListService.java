@@ -121,7 +121,7 @@ public class ListService
             }
             else if (operator.argument){
 
-                argv[cc] = operator.parse(arg);
+                argv[cc] = operator.toObject(arg);
 
                 prev = operator;
 

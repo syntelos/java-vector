@@ -19,14 +19,10 @@ public class AddImpl
 
         if (null != argv && 0 < argv.length){
 
-            if (vector.services.Add.ADD == argv[0]){
+            if (vector.services.Add.ADD == argv[0])
 
-                ////////////////////////////////////
-                ////////////////////////////////////
-                ////////////////////////////////////
+                return vector.services.DisplayService.Add(argv);
 
-                return null;
-            }
             else
                 throw new IllegalArgumentException(String.format("First argument (%s) is not ADD",argv[0]));
         }

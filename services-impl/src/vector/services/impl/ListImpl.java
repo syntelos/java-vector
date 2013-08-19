@@ -19,14 +19,10 @@ public class ListImpl
 
         if (null != argv && 0 < argv.length){
 
-            if (vector.services.List.LIST == argv[0]){
+            if (vector.services.List.LIST == argv[0])
 
-                ////////////////////////////////////
-                ////////////////////////////////////
-                ////////////////////////////////////
+                return vector.services.DisplayService.List(argv);
 
-                return null;
-            }
             else
                 throw new IllegalArgumentException(String.format("First argument (%s) is not LIST",argv[0]));
         }
