@@ -166,7 +166,7 @@ public enum Resize
     public boolean hasMapping(){
         return false;
     }
-    public Iterable<Resize> getMapping(){
+    public Iterable<vector.data.DataField<Resize>> getMapping(){
         throw new UnsupportedOperationException();
     }
     public boolean hasAlternative(){

@@ -279,7 +279,7 @@ cat<<EOF >>${tgt_enum}
     public boolean hasMapping(){
         return false;
     }
-    public Iterable<${classname_enum}> getMapping(){
+    public Iterable<vector.data.DataField<${classname_enum}>> getMapping(){
         throw new UnsupportedOperationException();
     }
     public boolean hasAlternative(){
@@ -341,7 +341,7 @@ import java.lang.reflect.Method;
  * @see ${classname_enum}
  */
 public class ${classname_svc}
-    extends services.Classes
+    extends AbstractService
 {
 
     public final static ${classname_svc} Instance = new ${classname_svc}();
@@ -364,7 +364,9 @@ public class ${classname_svc}
     /**
      * The operating context of any service is intended as other services.
      */
-    public interface Service {
+    public interface Service
+        extends AbstractService.Service
+    {
         /**
          * @param argv Sequence of name value pairs, for name a member of {@link ${classname_enum}}
          * 
@@ -374,8 +376,6 @@ public class ${classname_svc}
     }
 
 
-    private final lxl.List<Service> services = new lxl.ArrayList();
-
     /**
      * Instance constructor
      */
@@ -384,7 +384,7 @@ public class ${classname_svc}
 
         for (Class clas: this){
             try {
-                Service service = (Service)clas.newInstance();
+                ${classname_svc}.Service service = (${classname_svc}.Service)clas.newInstance();
 
                 this.services.add(service);
             }
@@ -461,18 +461,7 @@ public class ${classname_svc}
             }
         }
 
-        /*
-         * Services evaluate input as a set of effects
-         */
-        String[] re = null;
-
-        for (Service service: this.services){
-
-            String[] r0 = service.evaluate(argv);
-
-            re = Strings.Add(re,r0);
-        }
-        return re;
+        return super.evaluate(argv);
     }
 
 }

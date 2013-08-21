@@ -18,42 +18,139 @@
  */
 package vector.services;
 
+import vector.Component;
+import vector.Display;
+import vector.Document;
+import vector.Reference;
+import static vector.Reference.DisplayReference;
+
+import java.lang.Class;
+
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
+
 /**
- * Unbound implementation functions
+ * Unbound implementation functions assume normal input for one of the
+ * syntactic enums defined in this package.  Normal input requires the
+ * correct syntactic enum with the zero'th ordinal, and an ordered
+ * application of enum members and their arguments.
+ * 
+ * These functions are configured for use (binding) by including
+ * <code>"services-impl-X.Y.Z.jar"</code> in the class path.
  */
 public class DisplayService
     extends vector.DisplayService
 {
 
-    public static String[] Copy(Object... argv){
-        throw new UnsupportedOperationException();
-    }
-    public static String[] Edit(Object... argv){
-        throw new UnsupportedOperationException();
-    }
-    public static String[] Move(Object... argv){
-        throw new UnsupportedOperationException();
-    }
-    public static String[] Resize(Object... argv){
-        throw new UnsupportedOperationException();
-    }
-    public static String[] List(Object... argv){
-        throw new UnsupportedOperationException();
+    /**
+     * 
+     */
+    public static String[] Add(Object... argv){
+        if (null != argv){
+            final int len = argv.length;
+            if (5 == len){
+                /*
+                 * ADD S(Class|URI) T(URI)
+                 */
+                final Object sarg = argv[2];
+
+                final URI targetURI = (URI)argv[4];
+
+                if (!targetURI.isAbsolute()){
+
+                    final DisplayReference target = new DisplayReference(targetURI.getPath());
+
+                    if (sarg instanceof Class && Component.class.isAssignableFrom( (Class)sarg)){
+                        Class<Component> source = (Class<Component>)sarg;
+                        try {
+                            final Component component = source.newInstance();
+
+                            final Document doc = target.document();
+
+                            doc.add(component,target.reference);
+                        }
+                        catch (Exception exc){
+                            throw new IllegalArgumentException(String.format("Error in 'add' constructing instance of (%s)",source.getName()),exc);
+                        }
+                    }
+                    else if (sarg instanceof URI){
+
+                        final URI sourceURI = (URI)sarg;
+
+                        if (sourceURI.isAbsolute()){
+                            try {
+                                final URL source = sourceURI.toURL();
+
+                                final Document doc = target.document();
+
+                                doc.add(source,target.reference);
+
+                            }
+                            catch (MalformedURLException exc){
+                                throw new IllegalArgumentException(String.format("Error in 'add' constructing URL of (%s)",sourceURI),exc);
+                            }
+                        }
+                        else {
+                            try {
+                                final DisplayReference source = new DisplayReference(sourceURI.getPath());
+
+                                final Document doc = target.document();
+
+                                doc.add(source.reference,target.reference);
+
+                            }
+                            catch (Exception exc){
+                                throw new IllegalArgumentException(String.format("Error in 'add' constructing URL of (%s)",sourceURI),exc);
+                            }
+                        }
+                    }
+                    else 
+                        throw new IllegalArgumentException(String.format("Error in 'add', unrecognized arguments (%s)",sarg.getClass().getName()));
+                }
+                else 
+                    throw new IllegalArgumentException(String.format("Error in 'add', unrecognized target is absolute URI (%s)",targetURI));
+            }
+            else 
+                throw new IllegalArgumentException(String.format("Error in 'add', incorrect number of arguments (%d) require five",len));
+        }
+        return null;
     }
     public static String[] Cat(Object... argv){
-        throw new UnsupportedOperationException();
+
+        throw new UnsupportedOperationException("placeholder");
+    }
+    public static String[] Copy(Object... argv){
+
+        throw new UnsupportedOperationException("placeholder");
     }
     public static String[] Create(Object... argv){
-        throw new UnsupportedOperationException();
+
+        throw new UnsupportedOperationException("placeholder");
     }
-    public static String[] Show(Object... argv){
-        throw new UnsupportedOperationException();
+    public static String[] Edit(Object... argv){
+
+        throw new UnsupportedOperationException("placeholder");
     }
-    public static String[] Add(Object... argv){
-        throw new UnsupportedOperationException();
+    public static String[] List(Object... argv){
+
+        throw new UnsupportedOperationException("placeholder");
+    }
+    public static String[] Move(Object... argv){
+
+        throw new UnsupportedOperationException("placeholder");
     }
     public static String[] Remove(Object... argv){
-        throw new UnsupportedOperationException();
+
+        throw new UnsupportedOperationException("placeholder");
+    }
+    public static String[] Resize(Object... argv){
+
+        throw new UnsupportedOperationException("placeholder");
+    }
+    public static String[] Show(Object... argv){
+
+        throw new UnsupportedOperationException("placeholder");
     }
 
     protected DisplayService(){

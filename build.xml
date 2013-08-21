@@ -56,11 +56,11 @@
 
     <vector-state-require name="awt" property="vector.state"/>
 
+    <antcall target="data-update" inheritRefs="true"/>
+
     <antcall target="vector-update-awt" inheritRefs="true"/>
 
     <antcall target="awt-update" inheritRefs="true"/>
-
-    <antcall target="data-update" inheritRefs="true"/>
 
     <antcall target="services-update-awt" inheritRefs="true"/>
     <antcall target="services-impl-update-awt" inheritRefs="true"/>
@@ -76,11 +76,11 @@
 
     <vector-state-require name="awt" property="vector.state"/>
 
+    <antcall target="data-update" inheritRefs="true"/>
+
     <antcall target="vector-update-awt" inheritRefs="true"/>
 
     <antcall target="awt-update" inheritRefs="true"/>
-
-    <antcall target="data-update" inheritRefs="true"/>
 
     <antcall target="services-update-awt" inheritRefs="true"/>
     <antcall target="services-impl-update-awt" inheritRefs="true"/>
@@ -197,6 +197,7 @@ ant help (for portable pixel programming with vector)
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${existing.data.jar}"/>
       </classpath>
       <bootclasspath>
         <pathelement location="${prove.rt.jar}"/>
@@ -216,6 +217,7 @@ ant help (for portable pixel programming with vector)
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${target.vector.jar}"/>
+        <pathelement location="${target.data.jar}"/>
       </classpath>
       <bootclasspath>
         <pathelement location="${prove.rt.jar}"/>
@@ -227,6 +229,7 @@ ant help (for portable pixel programming with vector)
 
     <java outputproperty="prove.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${target.vector.jar}"/>
+      <arg value="${target.data.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
   </target>
@@ -282,6 +285,7 @@ ant help (for portable pixel programming with vector)
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${existing.data.jar}"/>
       </classpath>
     </javac>
   </target>
@@ -290,6 +294,7 @@ ant help (for portable pixel programming with vector)
 
     <java outputproperty="awt.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${target.vector.jar}"/>
+      <arg value="${target.data.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
   </target>
@@ -344,6 +349,7 @@ ant help (for portable pixel programming with vector)
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${target.vector.jar}"/>
+        <pathelement location="${target.data.jar}"/>
       </classpath>
       <bootclasspath>
         <pathelement location="${android.rt.jar}"/>
@@ -365,6 +371,7 @@ ant help (for portable pixel programming with vector)
 
     <java outputproperty="android.lib.path.manifest" classpath="${ant}" classname="LibPathManifest" failonerror="true">
       <arg value="${target.vector.jar}"/>
+      <arg value="${target.data.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
   </target>
@@ -426,7 +433,13 @@ ant help (for portable pixel programming with vector)
   <!-- 
     - SERVICES
     -->
-  <target name="services" depends="vector-state" description="Calls services jar for current state">
+  <target name="services" depends="vector-state" description="Build to  services">
+
+    <antcall target="data-update" inheritRefs="true"/>
+
+    <antcall target="vector-update-${vector.state}" inheritRefs="true"/>
+
+    <antcall target="${vector.state}-update" inheritRefs="true"/>
 
     <antcall target="services-update-${vector.state}" inheritRefs="true"/>
   </target>
@@ -508,7 +521,15 @@ ant help (for portable pixel programming with vector)
   <!-- 
     - SERVICES-IMPL
     -->
-  <target name="services-impl" depends="vector-state" description="Calls services-impl jar for current state">
+  <target name="services-impl" depends="vector-state" description="Build to services-impl">
+
+    <antcall target="data-update" inheritRefs="true"/>
+
+    <antcall target="vector-update-${vector.state}" inheritRefs="true"/>
+
+    <antcall target="${vector.state}-update" inheritRefs="true"/>
+
+    <antcall target="services-update-${vector.state}" inheritRefs="true"/>
 
     <antcall target="services-impl-update-${vector.state}" inheritRefs="true"/>
   </target>
@@ -631,6 +652,7 @@ ant help (for portable pixel programming with vector)
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${existing.data.jar}"/>
       </classpath>
     </javac>
   </target>
@@ -647,6 +669,7 @@ ant help (for portable pixel programming with vector)
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${target.vector.jar}"/>
+        <pathelement location="${target.data.jar}"/>
         <pathelement location="${target.prove.jar}"/>
       </classpath>
       <bootclasspath>
@@ -659,6 +682,7 @@ ant help (for portable pixel programming with vector)
 
     <java outputproperty="demo.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
+      <arg value="${target.data.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
@@ -704,6 +728,7 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${existing.data.jar}"/>
         <pathelement location="${existing.awt.jar}"/>
         <path refid="lib.path"/>
       </classpath>
@@ -721,6 +746,7 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${target.vector.jar}"/>
+        <pathelement location="${target.data.jar}"/>
         <pathelement location="${target.prove.jar}"/>
         <path refid="lib.path"/>
       </classpath>
@@ -734,6 +760,7 @@ ant help (for portable pixel programming with vector)
 
     <java outputproperty="geda.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
+      <arg value="${target.data.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
@@ -779,6 +806,7 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${existing.data.jar}"/>
         <pathelement location="${existing.awt.jar}"/>
         <path refid="lib.path"/>
       </classpath>
@@ -796,6 +824,7 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${target.vector.jar}"/>
+        <pathelement location="${target.data.jar}"/>
         <pathelement location="${target.prove.jar}"/>
         <path refid="lib.path"/>
       </classpath>
@@ -809,6 +838,7 @@ ant help (for portable pixel programming with vector)
 
     <java outputproperty="fonview.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
+      <arg value="${target.data.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
@@ -843,6 +873,7 @@ ant help (for portable pixel programming with vector)
 
       <path>
         <pathelement location="${target.awt.jar}"/>
+        <pathelement location="${target.data.jar}"/>
         <pathelement location="${target.vector.jar}"/>
         <pathelement location="${target.xmpp.jar}"/>
         <path refid="lib.path" />
@@ -889,6 +920,7 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${existing.data.jar}"/>
         <pathelement location="${existing.awt.jar}"/>
         <path refid="lib.path"/>
         <path refid="xmpp.lib.path"/>
@@ -907,6 +939,7 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${target.vector.jar}"/>
+        <pathelement location="${target.data.jar}"/>
         <pathelement location="${target.prove.jar}"/>
         <path refid="lib.path"/>
         <path refid="xmpp.lib.path"/>
@@ -928,6 +961,7 @@ ant help (for portable pixel programming with vector)
 
     <java outputproperty="xmpp.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
+      <arg value="${target.data.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
       <arg value="${toString:xmpp.lib.path}"/>
@@ -970,6 +1004,7 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${existing.vector.jar}"/>
+        <pathelement location="${existing.data.jar}"/>
         <pathelement location="${existing.awt.jar}"/>
         <path refid="lib.path"/>
       </classpath>
@@ -987,7 +1022,8 @@ ant help (for portable pixel programming with vector)
            source="${compiler.source}" target="${compiler.target}">
       <classpath>
         <pathelement location="${target.vector.jar}"/>
-        <pathelement location="${existing.prove.jar}"/>
+        <pathelement location="${target.data.jar}"/>
+        <pathelement location="${target.prove.jar}"/>
         <path refid="lib.path"/>
       </classpath>
       <bootclasspath>
@@ -1000,6 +1036,7 @@ ant help (for portable pixel programming with vector)
 
     <java outputproperty="llg.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
+      <arg value="${target.data.jar}"/>
       <arg value="${target.vector.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
@@ -1081,6 +1118,7 @@ ant help (for portable pixel programming with vector)
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${existing.awt.jar}"/>
+        <pathelement location="${existing.data.jar}"/>
       </classpath>
     </javac>
   </target>
@@ -1120,6 +1158,7 @@ ant help (for portable pixel programming with vector)
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${existing.android.jar}"/>
+        <pathelement location="${existing.data.jar}"/>
         <pathelement location="${android.rt.jar}"/>
       </classpath>
     </javac>
@@ -1156,6 +1195,7 @@ ant help (for portable pixel programming with vector)
       <classpath>
         <path refid="lib.path"/>
         <pathelement location="${existing.prove.jar}"/>
+        <pathelement location="${existing.data.jar}"/>
       </classpath>
       <bootclasspath>
         <pathelement location="${prove.rt.jar}"/>
@@ -1167,6 +1207,7 @@ ant help (for portable pixel programming with vector)
 
     <java outputproperty="vector.lib.path.manifest.awt" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.awt.jar}"/>
+      <arg value="${target.data.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
   </target>
@@ -1175,6 +1216,7 @@ ant help (for portable pixel programming with vector)
 
     <java outputproperty="vector.lib.path.manifest.android" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.android.jar}"/>
+      <arg value="${target.data.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
   </target>
@@ -1183,6 +1225,7 @@ ant help (for portable pixel programming with vector)
 
     <java outputproperty="vector.lib.path.manifest.prove" classpath="${ant}" classname="LibPathManifest" failonerror="true" fork="true">
       <arg value="${target.prove.jar}"/>
+      <arg value="${target.data.jar}"/>
       <arg value="${toString:lib.path}"/>
     </java>
   </target>

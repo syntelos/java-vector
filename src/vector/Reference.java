@@ -66,6 +66,52 @@ public class Reference
     implements Iterable<Reference.Element>
 {
     /**
+     * References with display index are separated from most scene
+     * graph references as special to the interaction API.  This
+     * choice closes the scene graph display reference (index) syntax
+     * to this special case.
+     */
+    public static class DisplayReference {
+
+        public final int displayIndex;
+
+        public final Reference reference;
+
+
+        public DisplayReference(String path){
+            super();
+            if (null == path || 1 > path.length())
+                throw new IllegalArgumentException(path);
+            
+            else if ('/' == path.charAt(0)){
+                this.displayIndex = 0;
+                this.reference = new Reference(path);
+            }
+            else {
+                int idx = path.indexOf('/');
+                if (-1 < idx){
+                    String index = path.substring(0,idx);
+                    this.displayIndex = Integer.decode(index);
+                    String docpath = path.substring(idx);
+                    this.reference = new Reference(docpath);
+                }
+                else {
+                    this.displayIndex = Integer.decode(path);
+                    this.reference = new Reference("/");
+                }
+            }
+        }
+
+
+        public Display display(){
+            return DisplayService.Active(this.displayIndex);
+        }
+        public Document document(){
+            return DisplayService.Document(this.displayIndex);
+        }
+    }
+
+    /**
      * 
      */
     public static abstract class Element 
@@ -371,7 +417,9 @@ public class Reference
     }
 
 
-
+    /**
+     * Dereference components and their properties.
+     */
     public <O extends Object> O dereference(Component c, Class<O> v){
 
         Object current = c;
@@ -380,7 +428,19 @@ public class Reference
             final int count = Element.Count(elements);
             for (int cc = 0; cc < count; cc++){
                 Element element = elements[cc];
+
+                 ////////////TODO///////////////////
+                 //                               //
+                 //   review and implement        //
+                 //                               //
+                 //   dereference(object,class)   //
+                 //     return component or       //
+                 //            property value     //
+                 //                               //
+                 ////////////TODO///////////////////
+
                 current = element.dereference(current);
+
                 if (null == current){
                     return null;
                 }
@@ -388,7 +448,12 @@ public class Reference
         }
 
         if (current instanceof Json)
+
             return (O)((Json)current).getValue(v);
+
+        else if (null != current && v.isAssignableFrom(current.getClass()))
+
+            return (O)current;
         else
             return null;
     }

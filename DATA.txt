@@ -6,6 +6,22 @@
    defining interaction APIs in the services package. (See
    ./SERVICES.txt).
 
+
+ Enum lanugage convention
+
+   The services and data packages propose a convention for two related
+   kinds of enums.  One kind of enum is the enumeration of columns in
+   a data table, and is described as a "data" enum.  Data enums
+   include choice sets for values and menus.  
+
+   The second kind of enum is the enumeration of an operator and its
+   arguments -- a syntactic enum.  The syntactic enums define
+   interaction APIs that are adaptable to any kind of interaction --
+   including command line and menu systems -- with a broad variety of
+   automation including a completely automated interaction (binding
+   and processing) subsystem.
+
+
  Enum lanugage convention
 
    The services and data packages propose a convention for two related
@@ -15,14 +31,6 @@
    is the enumeration of an operator and its arguments -- a syntactic
    enum.
 
- Enum lanugage convention
-
-   The services and data packages propose a convention for two related
-   kinds of enums.  One kind of enum is the enumeration of columns in
-   a data table, and is described as a "data" enum.  Data enums
-   include choice sets for values and menus.  The second kind of enum
-   is the enumeration of an operator and its arguments -- a syntactic
-   enum.
 
  Configuration
 
@@ -33,8 +41,10 @@
    which lists the data enum implementors of the vector.data.DataField
    interface.
 
+
  Programming
 
    The DataKind class is the primary context object for data service
    programming.
 
+   The DisplayService class provides interaction API functions.

@@ -1,11 +1,11 @@
 #
-copy s:URI t:URI
-edit t:URI n:String v:String
-move t:URI x:Float y:Float dx:Float dy:Float
-resize t:URI w:Float h:Float
-list t:URI
-cat s:URI
-create s:URI t:URI
-show s:Class
 add s:URI,Class t:URI
+cat s:URI
+copy s:URI t:URI
+create s:URI t:URI
+edit t:URI n:String v:String
+list t:URI
+move t:URI x:Float y:Float dx:Float dy:Float
 remove t:URI
+resize t:URI w:Float h:Float
+show s:Class

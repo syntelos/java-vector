@@ -93,11 +93,16 @@ public class DataDefaults<D extends DataField, S extends DataSubfield>
     }
     public final Object put(Object key, Object value){
 
-        DataIdentifier id = this.kind.identifier(key);
+        try {
+            DataIdentifier id = this.kind.identifier(key);
 
-        Object normalized = id.toObject(value);
+            Object normalized = id.toObject(value);
 
-        return super.put(id,normalized);
+            return super.put(id,normalized);
+        }
+        catch (RuntimeException exc){
+            throw new IllegalArgumentException(String.format("Error using key '%s' with '%s'",key,this.kind),exc);
+        }
     }
     public final <V> V get(DataIdentifier id){
 
@@ -119,5 +124,114 @@ public class DataDefaults<D extends DataField, S extends DataSubfield>
             return false;
         else
             return this.resource.equals(that.toString());
+    }
+
+
+    /**
+     * 
+     */
+    public static class Iterator
+        extends Object
+        implements java.lang.Iterable<DataDefaults>,
+                   java.util.Iterator<DataDefaults>
+    {
+        private final int length;
+        private final DataDefaults[] list;
+        private int index;
+
+        public Iterator(DataDefaults[] list){
+            super();
+            if (null == list){
+                this.list = null;
+                this.length = 0;
+            }
+            else {
+                this.list = list;
+                this.length = list.length;
+            }
+        }
+
+
+        public Iterator reset(){
+            this.index = 0;
+            return this;
+        }
+        public boolean hasNext(){
+            return (this.index < this.length);
+        }
+        public DataDefaults next(){
+            if (this.index < this.length)
+                return this.list[this.index++];
+            else
+                throw new java.util.NoSuchElementException(String.valueOf(this.index));
+        }
+        public void remove(){
+            throw new UnsupportedOperationException();
+        }
+        public java.util.Iterator<DataDefaults> iterator(){
+            return this.reset();
+        }
+    }
+
+
+
+    public final static int IndexOf(DataDefaults[] list, DataDefaults field){
+        if (null == field || null == list)
+            return -1;
+        else {
+            final int count = list.length;
+            for (int cc = 0; cc < count; cc++){
+                if (field == list[cc])
+                    return cc;
+            }
+            return -1;
+        }
+    }
+    public final static DataDefaults[] Copy(DataDefaults[] list){
+        if (null == list)
+            return null;
+        else {
+            final int len = list.length;
+            DataDefaults[] copier = new DataDefaults[len];
+            System.arraycopy(list,0,copier,0,len);
+            return copier;
+        }
+    }
+    public final static DataDefaults[] Add(DataDefaults[] list, DataDefaults item){
+        if (null == item)
+            return list;
+        else if (null == list)
+            return new DataDefaults[]{item};
+        else {
+            final int len = list.length;
+            DataDefaults[] copier = new DataDefaults[len+1];
+            System.arraycopy(list,0,copier,0,len);
+            copier[len] = item;
+            return copier;
+        }
+    }
+    public final static DataDefaults[] Add(DataDefaults[] list, DataDefaults[] sublist){
+        if (null == sublist)
+            return list;
+        else if (null == list)
+            return sublist;
+        else {
+            final int listl = list.length;
+            final int sublistl = sublist.length;
+            DataDefaults[] copier = new DataDefaults[listl+sublistl];
+            System.arraycopy(list,0,copier,0,listl);
+            System.arraycopy(sublist,0,copier,listl,sublistl);
+            return copier;
+        }
+    }
+    public final static DataDefaults[] List(java.lang.Iterable<DataDefaults> it){
+        return List(it.iterator());
+    }
+    public final static DataDefaults[] List(java.util.Iterator<DataDefaults> it){
+        DataDefaults[] list = null;
+        while (it.hasNext()){
+            list = Add(list,it.next());
+        }
+        return list;
     }
 }

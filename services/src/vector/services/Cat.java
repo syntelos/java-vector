@@ -158,7 +158,7 @@ public enum Cat
     public boolean hasMapping(){
         return false;
     }
-    public Iterable<Cat> getMapping(){
+    public Iterable<vector.data.DataField<Cat>> getMapping(){
         throw new UnsupportedOperationException();
     }
     public boolean hasAlternative(){

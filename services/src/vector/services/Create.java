@@ -162,7 +162,7 @@ public enum Create
     public boolean hasMapping(){
         return false;
     }
-    public Iterable<Create> getMapping(){
+    public Iterable<vector.data.DataField<Create>> getMapping(){
         throw new UnsupportedOperationException();
     }
     public boolean hasAlternative(){

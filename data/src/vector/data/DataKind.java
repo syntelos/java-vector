@@ -21,7 +21,12 @@ package vector.data;
 import java.lang.reflect.Method;
 
 /**
- * Data enum identifier with optional subfield.
+ * Instances of this class are constructed for a specific {@link
+ * DataService} programming context.  
+ * 
+ * The programming patterns created with the use of an instance of
+ * this class will provide the best runtime performance for direct
+ * programming with known enum types.
  */
 public class DataKind<D extends DataField, S extends DataSubfield>
     extends Object
@@ -67,6 +72,16 @@ public class DataKind<D extends DataField, S extends DataSubfield>
     }
 
 
+    /**
+     * @return New {@link DataDefaults}
+     */
+    public final DataDefaults defaults(){
+
+        return new DataDefaults(this);
+    }
+    /**
+     * @return Lazy field
+     */
     public final Method methodFieldFor(){
         Method fieldFor = this.fieldFor;
         if (null != fieldFor)
@@ -75,6 +90,9 @@ public class DataKind<D extends DataField, S extends DataSubfield>
             return (this.fieldFor = DataService.MethodField(this.field));
         }
     }
+    /**
+     * @return Lazy field
+     */
     public final Method methodSubfieldFor(){
         Method subfieldFor = this.subfieldFor;
         if (null != subfieldFor)
@@ -83,7 +101,17 @@ public class DataKind<D extends DataField, S extends DataSubfield>
             return (this.subfieldFor = DataService.MethodSubfield(this.subfield));
         }
     }
-    public final DataIdentifier identifier(Object id){
+    /**
+     * @param id Instance of {@link java.lang.String} or {@link DataIdentifier}
+     * 
+     * @return Null for null argument, identifier for string or
+     * object, otherwise throw illegal argument exception
+     * 
+     * @exception java.lang.IllegalArgumentException Unrecognized argument
+     */
+    public final DataIdentifier identifier(Object id)
+        throws java.lang.IllegalArgumentException
+    {
         if (null == id)
             return null;
         else if (id instanceof DataIdentifier)
@@ -92,23 +120,48 @@ public class DataKind<D extends DataField, S extends DataSubfield>
             String string = (String)id;
             int idx = string.indexOf('.');
             if (-1 < idx){
-                D field = this.fieldFor(string.substring(0,idx));
-                S subfield = this.subfieldFor(string.substring(idx+1));
-                return new DataIdentifier(field,subfield);
+                final String fieldName = string.substring(0,idx);
+                final String subfieldName = string.substring(idx+1);
+                final D field = this.fieldFor(fieldName);
+                final S subfield = this.subfieldFor(subfieldName);
+                try {
+                    return new DataIdentifier(field,subfield);
+                }
+                catch (RuntimeException exc){
+
+                    if (null == field)
+                        throw new IllegalArgumentException(String.format("Unable to find field '%s' (sub '%s') in '%s'",fieldName,subfieldName,this),exc);
+                    else
+                        throw new IllegalArgumentException(String.format("Error in field '%s' and subfield '%s' in '%s'",fieldName,subfieldName,this),exc);
+                }
             }
             else {
-                D field = DataService.FieldFor(this.field,string);
-                return new DataIdentifier(field);
+                final String fieldName = string;
+                final D field = this.fieldFor(fieldName);
+                try {
+                    return new DataIdentifier(field);
+                }
+                catch (RuntimeException exc){
+                    if (null == field)
+                        throw new IllegalArgumentException(String.format("Unable to find field '%s' in '%s'",fieldName,this),exc);
+                    else
+                        throw new IllegalArgumentException(String.format("Error in field '%s' in '%s'",fieldName,this),exc);
+                }
             }
         }
         else
             throw new IllegalArgumentException(id.getClass().getName());
     }
+    /**
+     * @param id Field name in this field class
+     * 
+     * @return Null for not found
+     */
     public final D fieldFor(String id){
         Method fieldFor = this.methodFieldFor();
         if (null != fieldFor){
             try {
-                return (D)fieldFor.invoke(null,string);
+                return (D)fieldFor.invoke(null,id);
             }
             catch (Exception debug){
                 debug.printStackTrace();
@@ -116,11 +169,16 @@ public class DataKind<D extends DataField, S extends DataSubfield>
         }
         return null;
     }
+    /**
+     * @param id Subfield name in the optional subfield class
+     * 
+     * @return Null for not found
+     */
     public final S subfieldFor(String id){
         Method subfieldFor = this.methodSubfieldFor();
         if (null != subfieldFor){
             try {
-                return (S)subfieldFor.invoke(null,string);
+                return (S)subfieldFor.invoke(null,id);
             }
             catch (Exception debug){
                 debug.printStackTrace();

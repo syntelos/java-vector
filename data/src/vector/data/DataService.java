@@ -47,6 +47,26 @@ public final class DataService
     }
 
 
+    public final static <D extends DataField> D Search(String string){
+        if (null != string){
+
+            return (D)Instance.search(string);
+        }
+        else
+            throw new IllegalArgumentException();
+    }
+    public final static DataKind SearchKind(String string){
+        if (null != string){
+
+            return Instance.kind(string);
+        }
+        else
+            throw new IllegalArgumentException();
+    }
+    public final static java.lang.Iterable<DataDefaults> ListDefaults(){
+
+        return Instance.defaults();
+    }
     public final static <D extends DataField> D FieldFor(Class<D> d, String string){
         if (null != d && null != string){
 
@@ -180,9 +200,65 @@ public final class DataService
     }
 
 
+    private final lxl.ArrayList<Method> search = new lxl.ArrayList();
+
+    private final lxl.ArrayList<DataKind> kind = new lxl.ArrayList();
 
 
     private DataService(){
         super(vector.data.DataField.class);
+
+        for (Class field: this){
+            try {
+                Method method = DataService.MethodField(field);
+                this.search.add(method);
+
+                System.err.printf("vector.data.DataField class: %s, method: %s%n",method.getDeclaringClass().getName(),method.getName());
+            }
+            catch (Exception debug){
+                debug.printStackTrace();
+            }
+            try {
+                DataKind kind = new DataKind(field);
+                this.kind.add(kind);
+            }
+            catch (Exception debug){
+                debug.printStackTrace();
+            }
+        }
+    }
+
+
+    public DataField search(String name){
+
+        for (Method field: this.search){
+            try {
+                return (DataField) field.invoke(null,name);
+            }
+            catch (Exception search){
+            }
+        }
+        return null;
+    }
+    public DataKind kind(String name){
+
+        for (DataKind kind: this.kind){
+
+            if (null != kind.fieldFor(name)){
+
+                return kind;
+            }
+        }
+        return null;
+    }
+    public java.lang.Iterable<DataDefaults> defaults(){
+
+        DataDefaults[] list = null;
+
+        for (DataKind kind: this.kind){
+
+            list = DataDefaults.Add(list,kind.defaults());
+        }
+        return new DataDefaults.Iterator(list);
     }
 }

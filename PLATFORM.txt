@@ -146,15 +146,17 @@ Portable pixel programming
       retrieve path data entered into the (native) API.  
 
 
-  Available platforms
+  Status
 
-    AWT
+    AWT: (beta)
+    android: (planned future)
+    prove: (try it)
+    html5+webgl: (possible future with gwtcc)
+    jogl: (planned future)
 
-  Planned future platforms
+  Author
 
-    Android, Html5 & WebGL
-
-  Possible future platforms
-
-    JOGL
+    John Pritchard, jdp@syntelos.org
+    Software Engineer, The DigiVac Company
+    Leonardo, NJ
 

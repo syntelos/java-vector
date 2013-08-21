@@ -25,6 +25,7 @@ import json.Reader;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.geom.Dimension2D;
 
@@ -42,28 +43,41 @@ import java.util.logging.Logger;
 public class Frame
     extends javax.swing.JFrame
 {
+    public final static String Title;
+    static {
+        String config = System.getProperty("platform.Frame.Title");
+        if (null == config)
+            Title = "Vector";
+        else
+            Title = config;
+    }
 
-    protected final static Dimension2D screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
+    protected final static int DefaultWidth = 640;
+    protected final static int DefaultX = (Frame.DefaultWidth>>1);
+    protected final static int DefaultHeight = 480;
+    protected final static int DefaultY = (Frame.DefaultHeight>>1);
 
-    protected final static int width = (int)(((float)screen.getWidth())/2.0f);
-    protected final static int height = (int)(((float)screen.getHeight())/2.0f);
+    protected final static Dimension2D Screen = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 
-    protected final static int x = (width/2);
-    protected final static int y = (height/2);
+    protected final static int Width = Math.max(Frame.DefaultWidth,(int)(((float)Frame.Screen.getWidth())/2.0f));
+    protected final static int Height = Math.max(Frame.DefaultHeight,(int)(((float)Frame.Screen.getHeight())/2.0f));
+
+    protected final static int X = Math.max(Frame.DefaultX,(Frame.Width/2));
+    protected final static int Y = Math.max(Frame.DefaultY,(Frame.Height/2));
 
 
     public final static Bounds Center(Bounds b){
 
         if (null != b){
 
-            final float sx = Frame.width;
-            final float sy = Frame.height;
+            final float sx = Frame.Width;
+            final float sy = Frame.Height;
 
             final float bx = (b.width/2);
             final float by = (b.height/2);
 
-            b.x = Math.max(0,(sx-bx));
-            b.y = Math.max(0,(sy-by));
+            b.x = Math.max(0f,(sx-bx));
+            b.y = Math.max(0f,(sy-by));
         }
         return b;
     }
@@ -74,20 +88,21 @@ public class Frame
 
 
     public Frame(){
-        this(null);
+        this(Frame.Title);
     }
+    /**
+     * This constructor is not portable
+     */
     public Frame(String title){
-        super((null == title)?("Vector"):(title));
+        super((null != title)?(title):(Frame.Title));
 
         this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        this.setSize(Frame.width,Frame.height);
+        this.setSize(Frame.Width,Frame.Height);
 
-        this.setLocation(Frame.x,Frame.y);
+        this.setLocation(Frame.X,Frame.Y);
 
-        this.add((this.display = this.createDisplay()), BorderLayout.CENTER);
-
-        this.display.setSize(width,height);
+        this.reinit( this.createDisplay());
 
         this.pack();
         this.show();
@@ -103,12 +118,48 @@ public class Frame
 
         return new Display();
     }
+    public void reinit(Display display){
+
+        final Dimension frame = this.getSize();
+        final Insets insets = this.getInsets();
+
+        final int width = frame.width-(insets.left+insets.right);
+        final int height = frame.height-(insets.top+insets.bottom);
+        final Dimension awt = new Dimension(width,height);
+
+
+        if (display != this.display){
+
+            this.destroy(this.display);
+
+            this.display = display;
+            if (null != display){
+
+                display.init();
+
+                this.add(display, BorderLayout.CENTER);
+
+                display.setSize(awt);
+            }
+        }
+        else {
+            display.init();
+
+            display.setSize(awt);
+        }
+    }
     public void init(){
 
-        Display display = this.display;
-        if (null != display){
+        this.reinit(this.display);
+    }
+    public void destroy(Display display){
 
-            display.init();
+        if (null != display && display == this.display){
+            this.display = null;
+
+            this.remove(display);
+
+            display.destroy();
         }
     }
     public void destroy(){
@@ -116,6 +167,9 @@ public class Frame
         Display display = this.display;
         if (null != display){
             this.display = null;
+
+            this.remove(display);
+
             display.destroy();
         }
         this.dispose();

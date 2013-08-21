@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  * @see Add
  */
 public class AddService
-    extends services.Classes
+    extends AbstractService
 {
 
     public final static AddService Instance = new AddService();
@@ -35,7 +35,9 @@ public class AddService
     /**
      * The operating context of any service is intended as other services.
      */
-    public interface Service {
+    public interface Service
+        extends AbstractService.Service
+    {
         /**
          * @param argv Sequence of name value pairs, for name a member of {@link Add}
          * 
@@ -45,8 +47,6 @@ public class AddService
     }
 
 
-    private final lxl.List<Service> services = new lxl.ArrayList();
-
     /**
      * Instance constructor
      */
@@ -55,7 +55,7 @@ public class AddService
 
         for (Class clas: this){
             try {
-                Service service = (Service)clas.newInstance();
+                AddService.Service service = (AddService.Service)clas.newInstance();
 
                 this.services.add(service);
             }
@@ -132,18 +132,7 @@ public class AddService
             }
         }
 
-        /*
-         * Services evaluate input as a set of effects
-         */
-        String[] re = null;
-
-        for (Service service: this.services){
-
-            String[] r0 = service.evaluate(argv);
-
-            re = Strings.Add(re,r0);
-        }
-        return re;
+        return super.evaluate(argv);
     }
 
 }

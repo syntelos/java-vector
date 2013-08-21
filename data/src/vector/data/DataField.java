@@ -93,7 +93,7 @@ public interface DataField<D extends Enum<D>>
      *
      * @exception java.lang.UnsupportedOperationException
      */
-    public Iterable<D> getMapping()
+    public <D extends DataField> Iterable<D> getMapping()
         throws java.lang.UnsupportedOperationException;
 
 

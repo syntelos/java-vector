@@ -945,11 +945,15 @@ public class Display
     }
     public Document getDocumentVector(){
 
-        return this.document;
+        Document doc = this.document;
+        if (null == doc)
+            return new Document(this.getFrame());
+        else
+            return this.document;
     }
     public boolean open(File file){
         try {
-            this.document = new Document(file);
+            this.document = new Document(this.getFrame(),file);
 
             FileInputStream fin = new FileInputStream(file);
             try {
@@ -974,7 +978,7 @@ public class Display
     }
     public boolean open(URL url){
         try {
-            this.document = new Document(url);
+            this.document = new Document(this.getFrame(),url);
 
             InputStream uin = url.openStream();
             try {

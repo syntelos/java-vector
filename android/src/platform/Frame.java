@@ -136,7 +136,7 @@ public class Frame
 
         Frame.Instance = this;
 
-        this.display = this.createDisplay();
+        this.reinit(this.createDisplay());
     }
 
 
@@ -148,6 +148,23 @@ public class Frame
 
         return new Display();
     }
+    public void reinit(Display display){
+
+        if (display != this.display){
+
+            this.destroy(this.display);
+
+            this.display = display;
+            if (null != display){
+
+                this.setContentView(display);
+
+                display.init();
+            }
+        }
+        else
+            display.init();
+    }
     public void init(){
 
         Resources resources = this.getResources();
@@ -156,23 +173,20 @@ public class Frame
 
             Frame.Init(resources.getDisplayMetrics());
 
-            Display display = this.display;
-            if (null != display){
+            this.reinit(this.display);
+        }
+    }
+    public void destroy(Display display){
 
-                this.setContentView(display);
+        if (null != display && display == this.display){
+            this.display = null;
 
-                display.init();
-            }
+            display.destroy();
         }
     }
     public void destroy(){
 
-        Display display = this.display;
-        if (null != display){
-            this.display = null;
-            display.destroy();
-        }
-
+        this.destroy(this.display);
     }
     /**
      * For subclasses not using Frame eval or Display open

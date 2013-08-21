@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
  * @see Cat
  */
 public class CatService
-    extends services.Classes
+    extends AbstractService
 {
 
     public final static CatService Instance = new CatService();
@@ -35,7 +35,9 @@ public class CatService
     /**
      * The operating context of any service is intended as other services.
      */
-    public interface Service {
+    public interface Service
+        extends AbstractService.Service
+    {
         /**
          * @param argv Sequence of name value pairs, for name a member of {@link Cat}
          * 
@@ -45,8 +47,6 @@ public class CatService
     }
 
 
-    private final lxl.List<Service> services = new lxl.ArrayList();
-
     /**
      * Instance constructor
      */
@@ -55,7 +55,7 @@ public class CatService
 
         for (Class clas: this){
             try {
-                Service service = (Service)clas.newInstance();
+                CatService.Service service = (CatService.Service)clas.newInstance();
 
                 this.services.add(service);
             }
@@ -132,18 +132,7 @@ public class CatService
             }
         }
 
-        /*
-         * Services evaluate input as a set of effects
-         */
-        String[] re = null;
-
-        for (Service service: this.services){
-
-            String[] r0 = service.evaluate(argv);
-
-            re = Strings.Add(re,r0);
-        }
-        return re;
+        return super.evaluate(argv);
     }
 
 }

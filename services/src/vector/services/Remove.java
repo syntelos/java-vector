@@ -158,7 +158,7 @@ public enum Remove
     public boolean hasMapping(){
         return false;
     }
-    public Iterable<Remove> getMapping(){
+    public Iterable<vector.data.DataField<Remove>> getMapping(){
         throw new UnsupportedOperationException();
     }
     public boolean hasAlternative(){

@@ -1,0 +1,24 @@
+
+
+  Frame.Instance on android
+
+    ~/src/vector$ egrep Frame.Instance $(./platform.sh )
+    android/src/platform/Frame.java:    protected static Frame Instance;
+    android/src/platform/Frame.java:        Frame.Instance = this;
+    android/src/platform/Display.java:        super(Frame.Instance);
+
+    Android uses Frame.Instance within an Activity Sandbox.  Within the
+    Activity Sandbox, there can only be one visual activity: one frame.
+
+
+  Status
+
+    For platform android (planned future).
+
+
+  Author
+
+    John Pritchard, jdp@syntelos.org
+    Software Engineer, The DigiVac Company
+    Leonardo, NJ
+

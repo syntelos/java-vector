@@ -162,7 +162,7 @@ public enum Copy
     public boolean hasMapping(){
         return false;
     }
-    public Iterable<Copy> getMapping(){
+    public Iterable<vector.data.DataField<Copy>> getMapping(){
         throw new UnsupportedOperationException();
     }
     public boolean hasAlternative(){

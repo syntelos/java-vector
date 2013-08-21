@@ -166,7 +166,7 @@ public enum Edit
     public boolean hasMapping(){
         return false;
     }
-    public Iterable<Edit> getMapping(){
+    public Iterable<vector.data.DataField<Edit>> getMapping(){
         throw new UnsupportedOperationException();
     }
     public boolean hasAlternative(){

@@ -58,4 +58,13 @@ public interface Document
     public InputStream open(String path)
         throws IOException;
 
+
+    public String[] add(Component source, Reference target);
+
+    public String[] add(Reference source, Reference target);
+
+    public String[] add(URL source, Reference target);
+
+    public String[] cat(Reference target);
+
 }

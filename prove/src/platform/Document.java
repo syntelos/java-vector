@@ -18,6 +18,9 @@
  */
 package platform;
 
+import vector.Component;
+import vector.Reference;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
@@ -30,7 +33,7 @@ import java.net.URL;
  * called, the document instance is replaced.
  */
 public class Document 
-    extends Object
+    extends services.Classes
     implements vector.Document
 {
 
@@ -42,59 +45,85 @@ public class Document
     }
 
 
+    public final Frame frame;
+
     private final URL root;
 
+
+    public Document(Frame frame){
+        super(platform.Display.class);
+        if (null != frame){
+            this.frame = frame;
+            this.root = null;
+        }
+        else
+            throw new IllegalArgumentException();
+    }
     public Document(URL root){
-        super();
+        this(null,root);
+    }
+    public Document(Frame frame, URL root){
+        super(platform.Display.class);
 
-        String url = root.toExternalForm();
+        this.frame = frame;
 
-        final int index = url.lastIndexOf('/');
+        if (null != root){
+            String url = root.toExternalForm();
 
-        final int test = url.indexOf(":/");
+            final int index = url.lastIndexOf('/');
 
-        if (-1 < test && (test+1) < index){
+            final int test = url.indexOf(":/");
 
-            url = url.substring(0,index);
-            try {
-                root = new URL(url);
-            }
-            catch (MalformedURLException exc){
-                System.err.printf("Error: %s%n",url);
-                exc.printStackTrace();
+            if (-1 < test && (test+1) < index){
+
+                url = url.substring(0,index);
+                try {
+                    root = new URL(url);
+                }
+                catch (MalformedURLException exc){
+                    System.err.printf("Error: %s%n",url);
+                    exc.printStackTrace();
+                }
             }
         }
         this.root = root;
-
-        System.out.printf("Document: %s%n",this.root);
     }
     public Document(File file)
         throws IOException
     {
-        super();
+        this(null,file);
+    }
+    public Document(Frame frame, File file)
+        throws IOException
+    {
+        super(platform.Display.class);
 
-        URL root = file.toURL();
+        this.frame = frame;
 
-        final String name = file.getName();
+        if (null != file){
+            URL root = file.toURL();
 
-        if (null != name && -1 < name.indexOf('.')){
+            final String name = file.getName();
 
-            String url = "file://"+file.getAbsolutePath();
+            if (null != name && -1 < name.indexOf('.')){
 
-            final int index = (url.length()-name.length()-1);
+                String url = "file://"+file.getAbsolutePath();
 
-            url = url.substring(0,index);
-            try {
-                root = new URL(url);
+                final int index = (url.length()-name.length()-1);
+
+                url = url.substring(0,index);
+                try {
+                    root = new URL(url);
+                }
+                catch (MalformedURLException exc){
+                    System.err.printf("Error: %s%n",url);
+                    exc.printStackTrace();
+                }
             }
-            catch (MalformedURLException exc){
-                System.err.printf("Error: %s%n",url);
-                exc.printStackTrace();
-            }
+            this.root = root;
         }
-        this.root = root;
-
-        System.out.printf("Document: %s%n",this.root);
+        else
+            this.root = null;
     }
 
 
@@ -109,14 +138,15 @@ public class Document
     public URL reference(String path)
         throws MalformedURLException
     {
-        if (null != path && 0 < path.length()){
+        final URL root = this.root;
+        if (null != root && null != path && 0 < path.length()){
 
             if ('/' == path.charAt(0))
-                return new URL(this.root.getProtocol(),this.root.getHost(),this.root.getPort(),path,null);
+                return new URL(root.getProtocol(),root.getHost(),root.getPort(),path,null);
             else {
-                path = this.root.getPath() + '/' + path;
+                path = root.getPath() + '/' + path;
 
-                return new URL(this.root.getProtocol(),this.root.getHost(),this.root.getPort(),path,null);
+                return new URL(root.getProtocol(),root.getHost(),root.getPort(),path,null);
             }
         }
         return null;
@@ -129,6 +159,27 @@ public class Document
             return u.openStream();
         else
             return null;
+    }
+
+    public String[] add(Component source, Reference target){
+        if (null != frame){
+        }
+        throw new UnsupportedOperationException("placeholder");
+    }
+    public String[] add(Reference source, Reference target){
+        if (null != frame){
+        }
+        throw new UnsupportedOperationException("placeholder");
+    }
+    public String[] add(URL source, Reference target){
+        if (null != frame){
+        }
+        throw new UnsupportedOperationException("placeholder");
+    }
+    public String[] cat(Reference target){
+        if (null != frame){
+        }
+        throw new UnsupportedOperationException("placeholder");
     }
 
 

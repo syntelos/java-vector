@@ -117,6 +117,7 @@ public class DisplayService
     }
 
 
+
     private final lxl.List<Display> active = new lxl.ArrayList();
 
 
@@ -133,7 +134,11 @@ public class DisplayService
 
         int idx = this.active.indexOf(display);
         if (-1 < idx){
-            this.active.remove(idx);
+            try {
+                this.active.remove(idx);
+            }
+            catch (RuntimeException ignore){
+            }
         }
     }
     public int activeIndexOf(Display display){

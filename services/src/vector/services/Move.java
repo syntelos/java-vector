@@ -174,7 +174,7 @@ public enum Move
     public boolean hasMapping(){
         return false;
     }
-    public Iterable<Move> getMapping(){
+    public Iterable<vector.data.DataField<Move>> getMapping(){
         throw new UnsupportedOperationException();
     }
     public boolean hasAlternative(){

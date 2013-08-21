@@ -158,7 +158,7 @@ public enum List
     public boolean hasMapping(){
         return false;
     }
-    public Iterable<List> getMapping(){
+    public Iterable<vector.data.DataField<List>> getMapping(){
         throw new UnsupportedOperationException();
     }
     public boolean hasAlternative(){
