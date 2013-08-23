@@ -102,16 +102,37 @@ public class DataKind<D extends DataField, S extends DataSubfield>
         }
     }
     /**
+     * Interaction API accepts a list of subfield possibilities for
+     * subfield (possibility) injection style programming.
+     * 
+     * <h3>Field default subfield value</h3>
+     * 
+     * The field default subfield value may be replaced by the first
+     * non - null subfield argument.
+     * 
+     * <h3>Ordered subfield expansion</h3>
+     * 
+     * The first non null value in this list is accepted as the
+     * subfield value.
+     *
+     *
      * @param id Instance of {@link java.lang.String} or {@link DataIdentifier}
      * 
      * @return Null for null argument, identifier for string or
      * object, otherwise throw illegal argument exception
      * 
      * @exception java.lang.IllegalArgumentException Unrecognized argument
+     * 
+     * @see DataService#IdentifierSearch
+     * @see DataIdentifier#DataIdentifier
      */
-    public final DataIdentifier identifier(Object id)
+    public final DataIdentifier identifier(Object... argv)
         throws java.lang.IllegalArgumentException
     {
+        final int argc = ((null != argv)?(argv.length):(0));
+
+        final Object id = ((0 < argc)?(argv[0]):(null));
+        
         if (null == id)
             return null;
         else if (id instanceof DataIdentifier)
@@ -137,9 +158,28 @@ public class DataKind<D extends DataField, S extends DataSubfield>
             }
             else {
                 final String fieldName = string;
-                final D field = this.fieldFor(fieldName);
+                final DataField field = this.fieldFor(fieldName);
+                /*
+                 * Check for default subfield value
+                 */
+                DataSubfield subfield = null;
+                if (null != field && field.hasSubfieldDefault()){
+                    subfield = field.getSubfieldDefault();
+                }
+                if (1 < argc){
+                    /*
+                     * Ordered subfield expansion
+                     */
+                    for (int cc = 1; cc < argc; cc++){
+                        if (argv[cc] instanceof DataSubfield){
+                            subfield = (DataSubfield)argv[1];
+                            break;
+                        }
+                    }
+                }
+
                 try {
-                    return new DataIdentifier(field);
+                    return new DataIdentifier(field,subfield);
                 }
                 catch (RuntimeException exc){
                     if (null == field)

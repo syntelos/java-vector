@@ -108,9 +108,15 @@ public enum DataMessageType
     public boolean hasSubfieldClass(){
         return false;
     }
-    public <S extends vector.data.DataSubfield> Class<S> getSubfieldClass()
+    public Class<DataSubfield> getSubfieldClass()
         throws UnsupportedOperationException
     {
+        throw new UnsupportedOperationException();
+    }
+    public boolean hasSubfieldDefault(){
+        return false;
+    }
+    public DataSubfield getSubfieldDefault(){
         throw new UnsupportedOperationException();
     }
     public boolean hasMapping(){

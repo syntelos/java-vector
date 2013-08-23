@@ -18,6 +18,7 @@
  */
 package vector.data;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 /**
@@ -51,6 +52,135 @@ public final class DataService
         if (null != string){
 
             return (D)Instance.search(string);
+        }
+        else
+            throw new IllegalArgumentException();
+    }
+    /**
+     * Interaction API accepts a list of subfield possibilities for
+     * subfield (possibility) injection style programming.
+     * 
+     * <h3>Field default subfield value</h3>
+     * 
+     * The field default subfield value may be replaced by the first
+     * non - null subfield argument.
+     * 
+     * <h3>Ordered subfield expansion</h3>
+     * 
+     * The first non null value in this list is accepted as the
+     * subfield value.
+     * 
+     * @param constructor Optional data identifier subclass
+     * constructor for {@link DataField} and {@link DataSubfield}
+     * arguments.
+     * 
+     * @param string Field name search for {@link DataKind}
+     * 
+     * @param list Subfield expansion argument
+     * 
+     * @return DataIdentifier or throw illegal argument exception
+     * 
+     * @exception java.lang.IllegalArgumentException
+     * 
+     * @see DataKind#identifier
+     * @see DataIdentifier#DataIdentifier
+     */
+    public final static <D extends DataIdentifier> D IdentifierSearch(Constructor<D> constructor, String string, DataSubfield... list)
+        throws java.lang.IllegalArgumentException
+    {
+        if (null != string){
+            int idx = string.indexOf('.');
+            if (-1 < idx){
+
+                final String fieldName = string.substring(0,idx);
+
+                final DataKind kind = Instance.kind(fieldName);
+
+                if (null == kind)
+                    throw new IllegalArgumentException(String.format("DataKind not found for field (%s)",fieldName));
+                else {
+
+                    final String subfieldName = string.substring(idx+1);
+
+                    final DataField field = kind.fieldFor(fieldName);
+                    final DataSubfield subfield = kind.subfieldFor(subfieldName);
+                    try {
+                        if (null == constructor){
+
+                            return (D)(new DataIdentifier(field,subfield));
+                        }
+                        else {
+                            try {
+                                return constructor.newInstance(field,subfield);
+                            }
+                            catch (Exception ctor){
+
+                                throw new IllegalArgumentException(String.format("Unable to construct identifier (%s) for (field: '%s', subfield '%s') in '%s'",constructor.getDeclaringClass().getName(),fieldName,subfieldName,kind),ctor);
+                            }
+                        }
+                    }
+                    catch (RuntimeException exc){
+
+                        if (null == field)
+                            throw new IllegalArgumentException(String.format("Unable to find field '%s' (sub '%s') in '%s'",fieldName,subfieldName,kind),exc);
+                        else
+                            throw new IllegalArgumentException(String.format("Error in field '%s' and subfield '%s' in '%s'",fieldName,subfieldName,kind),exc);
+                    }
+                }
+            }
+            else {
+                final String fieldName = string;
+                final DataKind kind = Instance.kind(fieldName);
+                if (null == kind)
+                    throw new IllegalArgumentException(String.format("DataKind not found for field (%s)",fieldName));
+                else {
+
+                    final DataField field = kind.fieldFor(fieldName);
+
+                    DataSubfield subfield;
+                    /*
+                     * Check for default subfield value
+                     */
+                    if (field.hasSubfieldDefault())
+                        subfield = field.getSubfieldDefault();
+                    else
+                        subfield = null;
+                    /*
+                     * Ordered subfield expansion
+                     */
+                    if (null != list && 0 < list.length){
+                        for (int cc = 0, count = list.length; cc < count; cc++){
+                            if (null != list[cc]){
+                                subfield = list[cc];
+                                break;
+                            }
+                        }
+                    }
+
+                    try {
+
+                        if (null == constructor){
+
+                            return (D)(new DataIdentifier(field,subfield));
+                        }
+                        else {
+                            try {
+                                return constructor.newInstance(field,subfield);
+                            }
+                            catch (Exception ctor){
+
+                                throw new IllegalArgumentException(String.format("Unable to construct identifier (%s) for (field: '%s') in '%s'",constructor.getDeclaringClass().getName(),fieldName,kind),ctor);
+                            }
+                        }
+                    }
+                    catch (RuntimeException exc){
+                        if (null == field)
+                            throw new IllegalArgumentException(String.format("Unable to find field '%s' in '%s'",fieldName,kind),exc);
+                        else
+                            throw new IllegalArgumentException(String.format("Error constructing identifier for field '%s' in '%s'",fieldName,kind),exc);
+                    }
+                }
+            }
         }
         else
             throw new IllegalArgumentException();

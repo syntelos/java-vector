@@ -64,7 +64,15 @@ public interface DataField<D extends Enum<D>>
      */
     public <S extends DataSubfield> Class<S> getSubfieldClass()
         throws java.lang.UnsupportedOperationException;
-
+    /**
+     * 
+     */
+    public boolean hasSubfieldDefault();
+    /**
+     * 
+     */
+    public <S extends DataSubfield> S getSubfieldDefault()
+        throws java.lang.UnsupportedOperationException;
     /**
      * Class operator: string to object.  This step may perform URL
      * Percent Decoding.

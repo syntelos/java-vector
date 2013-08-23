@@ -271,7 +271,15 @@ cat<<EOF >>${tgt_enum}
     public boolean hasSubfieldClass(){
         return false;
     }
-    public <S extends vector.data.DataSubfield> Class<S> getSubfieldClass()
+    public Class<vector.data.DataSubfield> getSubfieldClass()
+        throws UnsupportedOperationException
+    {
+        throw new UnsupportedOperationException();
+    }
+    public boolean hasSubfieldDefault(){
+        return false;
+    }
+    public vector.data.DataSubfield getSubfieldDefault()
         throws UnsupportedOperationException
     {
         throw new UnsupportedOperationException();
