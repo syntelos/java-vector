@@ -151,6 +151,27 @@ public interface DataField<D extends Enum<D>>
         }
 
 
+        /**
+         * @return A maps onto B
+         */
+        public final static boolean Mapsto(DataField a, DataField b){
+            if (a == b)
+                return true;
+            else if (a.hasMapping()){
+
+                final Iterable<DataField> it = a.getMapping();
+
+                for (DataField mapto : it){
+
+                    if (mapto == b){
+                        return true;
+                    }
+                }
+                return false;
+            }
+            else
+                return false;
+        }
         public final static int IndexOf(DataField[] list, DataField field){
             if (null == field || null == list)
                 return -1;

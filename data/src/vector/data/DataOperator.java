@@ -37,6 +37,12 @@ public interface DataOperator<D extends Enum<D>>
     extends DataField<D>
 {
     /**
+     * @param Optional identifier subfield may be null
+     * @return Whether this enum value pair is an operator
+     * @see DataField#isOperator()
+     */
+    public boolean isOperator(DataSubfield s);
+    /**
      * @return Is an enum class representing a command and its
      * arguments
      */
@@ -84,9 +90,13 @@ public interface DataOperator<D extends Enum<D>>
      */
     public Object toObject(Object value);
     /**
+     * Call services
      * 
+     * @param argv List of (name-value pair)*
+     * 
+     * @return One message per evaluator
      */
-    public String[] evaluate(Object... argv);
+    public DataMessage[] evaluate(Object... argv);
 
     public Class[] getPossibleValues();
 

@@ -24,6 +24,8 @@ import vector.Document;
 import vector.Reference;
 import static vector.Reference.DisplayReference;
 
+import vector.data.DataMessage;
+
 import java.lang.Class;
 
 import java.net.MalformedURLException;
@@ -46,7 +48,7 @@ public class DisplayService
     /**
      * 
      */
-    public static String[] Add(Object... argv){
+    public static DataMessage[] Add(Object... argv){
         if (null != argv){
             final int len = argv.length;
             if (5 == len){
@@ -68,7 +70,7 @@ public class DisplayService
 
                             final Document doc = target.document();
 
-                            doc.add(component,target.reference);
+                            return doc.add(component,target.reference);
                         }
                         catch (Exception exc){
                             throw new IllegalArgumentException(String.format("Error in 'add' constructing instance of (%s)",source.getName()),exc);
@@ -84,7 +86,7 @@ public class DisplayService
 
                                 final Document doc = target.document();
 
-                                doc.add(source,target.reference);
+                                return doc.add(source,target.reference);
 
                             }
                             catch (MalformedURLException exc){
@@ -97,7 +99,7 @@ public class DisplayService
 
                                 final Document doc = target.document();
 
-                                doc.add(source.reference,target.reference);
+                                return doc.add(source.reference,target.reference);
 
                             }
                             catch (Exception exc){
@@ -116,39 +118,39 @@ public class DisplayService
         }
         return null;
     }
-    public static String[] Cat(Object... argv){
+    public static DataMessage[] Cat(Object... argv){
 
         throw new UnsupportedOperationException("placeholder");
     }
-    public static String[] Copy(Object... argv){
+    public static DataMessage[] Copy(Object... argv){
 
         throw new UnsupportedOperationException("placeholder");
     }
-    public static String[] Create(Object... argv){
+    public static DataMessage[] Create(Object... argv){
 
         throw new UnsupportedOperationException("placeholder");
     }
-    public static String[] Edit(Object... argv){
+    public static DataMessage[] Edit(Object... argv){
 
         throw new UnsupportedOperationException("placeholder");
     }
-    public static String[] List(Object... argv){
+    public static DataMessage[] List(Object... argv){
 
         throw new UnsupportedOperationException("placeholder");
     }
-    public static String[] Move(Object... argv){
+    public static DataMessage[] Move(Object... argv){
 
         throw new UnsupportedOperationException("placeholder");
     }
-    public static String[] Remove(Object... argv){
+    public static DataMessage[] Remove(Object... argv){
 
         throw new UnsupportedOperationException("placeholder");
     }
-    public static String[] Resize(Object... argv){
+    public static DataMessage[] Resize(Object... argv){
 
         throw new UnsupportedOperationException("placeholder");
     }
-    public static String[] Show(Object... argv){
+    public static DataMessage[] Show(Object... argv){
 
         throw new UnsupportedOperationException("placeholder");
     }

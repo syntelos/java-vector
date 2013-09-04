@@ -1,8 +1,8 @@
 #!/bin/bash
 
-awt=awt/src/platform/Document.java
-prove=prove/src/platform/Document.java
-android=android/src/platform/Document.java
+wd=$(cd $(dirname $0 ); pwd)
+
+targets=$(egrep -v '(^awt$|^#)' ${wd}/platform.txt)
 
 function fupdate {
     src="$1"
@@ -37,15 +37,19 @@ EOF
     fi
 }
 
-if fupdate ${awt} ${prove} 
-then
-    if fupdate ${awt} ${android}
-    then
-        exit 0
-    else
-        exit 1
-    fi
-else
-    exit 1
-fi
 
+for file in $(egrep -v '^#' ${wd}/platform.sync.txt )
+do
+    awt=awt/${file}
+
+    for platform in ${targets}
+    do
+
+        if fupdate "${awt}" "${platform}/${file}"
+        then
+            continue;
+        else
+            exit 1
+        fi
+    done
+done

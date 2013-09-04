@@ -1,5 +1,7 @@
 package vector.services.impl;
 
+import vector.data.DataMessage;
+
 /**
  * Built-in display service function for {@link vector.Show Show}.
  * 
@@ -15,7 +17,7 @@ public class ShowImpl
     }
 
 
-    public String[] evaluate(Object... argv){
+    public DataMessage[] evaluate(Object... argv){
 
         if (null != argv && 0 < argv.length){
 

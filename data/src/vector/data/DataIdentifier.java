@@ -19,7 +19,8 @@
 package vector.data;
 
 /**
- * Data enum identifier with optional subfield.
+ * Light weight data enum identifier with optional subfield has no
+ * {@link DataKind kind} field.
  */
 public class DataIdentifier<D extends DataField, S extends DataSubfield>
     extends Object
@@ -31,7 +32,7 @@ public class DataIdentifier<D extends DataField, S extends DataSubfield>
 
     public final S subfield;
 
-    public final boolean subfieldDefault;
+    public final boolean subfieldDefault, operator;
 
     public final int hashCode;
 
@@ -90,8 +91,14 @@ public class DataIdentifier<D extends DataField, S extends DataSubfield>
                 }
             }
             this.subfield = (S)subfield;
-            this.subfieldDefault = (null != subfieldDefault && subfieldDefault == subfield);
-
+            this.subfieldDefault = (subfieldDefault == subfield);
+            /*
+             * Operator
+             */
+            if (this.field.isOperator())
+                this.operator = ((DataOperator)this.field).isOperator(this.subfield);
+            else
+                this.operator = false;
             /*
              * Identity
              */
@@ -124,16 +131,25 @@ public class DataIdentifier<D extends DataField, S extends DataSubfield>
     }
 
 
+    public final DataKind createKind(){
+
+        return new DataKind(this.field.getClass());
+    }
+    public final boolean isOperator(){
+
+        return this.operator;
+    }
+    public final boolean hasMapping(){
+
+        return this.field.hasMapping();
+    }
     public final boolean isField(D field){
 
-        return this.field.equals(field);
+        return (field == this.field);
     }
     public final boolean isSubfield(S subfield){
 
-        if (null != this.subfield)
-            return this.subfield.equals(subfield);
-        else
-            return false;
+        return (subfield == this.subfield);
     }
     public final boolean isFieldAssignableFrom(Class field){
 
@@ -170,6 +186,88 @@ public class DataIdentifier<D extends DataField, S extends DataSubfield>
         }
         return this.field.toString(value);
     }
+    /**
+     * Call with <code>(DataMessageTerm,DataMessage)</code> for data
+     * message conversion to syntactic expressions, or
+     * <code>(DataField,Object)+</code> for one or more syntactic
+     * pairs.
+     */
+    public final DataMessage[] evaluate(Object... argv)
+        throws java.lang.UnsupportedOperationException
+    {
+        if (this.operator){
+
+            final DataOperator fop = (DataOperator)this.field;
+
+            final int argc = argv.length;
+
+            if (0 < argc){
+
+                final Object arg0 = argv[0];
+
+                if (arg0 instanceof DataMessageTerm){
+                    final DataMessageTerm term = (DataMessageTerm)arg0;
+
+                    if (1 < argc){
+
+                        final Object arg1 = argv[1];
+
+                        if (arg1 instanceof DataMessage){
+
+                            final DataMessage message = (DataMessage)arg1;
+                            /*
+                             * Convert data binding to syntactic binding
+                             */
+                            final Object[] syntax = DataMessageType.ExpressionDataToSyntax(term,message);
+
+                            if (null != syntax)
+
+                                return fop.evaluate(syntax);
+                            else
+                                return null;
+                        }
+                        else {
+                            throw new IllegalArgumentException("Require argument");
+                        }
+                    }
+                    else {
+                        throw new IllegalArgumentException("Require argument");
+                    }
+                }
+                else if (arg0 instanceof DataField){
+                    /*
+                     * for ARGV in syntactic interface
+                     * 
+                     * 
+                     * In theory this could convert 
+                     * 
+                     *   {DataField<Data>,Value} ({String,String})+
+                     * 
+                     * to
+                     * 
+                     *   {DataField<Syntactic>,Value}+ 
+                     * 
+                     * but the use case doesn't exist (yet: a dynamic
+                     * binding alternative to DataMessage -- a data
+                     * binding service along with more general source
+                     * and sink services?  could happen.  comm matrix
+                     * user.)
+                     */
+                    return fop.evaluate(argv);
+                }
+                else if (null != arg0){
+                    throw new IllegalArgumentException(String.format("Unrecognized type of argument '%s'",arg0.getClass().getName()));
+                }
+                else
+                    throw new IllegalArgumentException("Require argument");
+            }
+            else
+                throw new IllegalArgumentException("Require argument");
+        }
+        else
+            throw new UnsupportedOperationException("Not operator");
+    }
+
     /*
      * string identity
      */
@@ -186,5 +284,26 @@ public class DataIdentifier<D extends DataField, S extends DataSubfield>
             return false;
         else
             return this.string.equals(that.toString());
+    }
+    public final boolean matches(DataIdentifier that){
+
+        if (null == that)
+            return false;
+
+        else if (this.equals(that))
+            return true;
+
+        else if (this.subfield == that.subfield && this.field.hasMapping()){
+
+            final Iterable<DataField> it = this.field.getMapping();
+
+            for (DataField field: it){
+
+                if (field == that.field){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

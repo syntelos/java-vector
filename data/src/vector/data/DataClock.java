@@ -16,12 +16,12 @@
  * along with this program.  If not, see
  * <http://www.gnu.org/licenses/>.
  */
-package platform;
+package vector.data;
 
 /**
  * A strongly monotonic series from the system clock.
  */
-public abstract class Clock
+public abstract class DataClock
     extends Object
 {
     private static volatile long ClockTime = 0L;

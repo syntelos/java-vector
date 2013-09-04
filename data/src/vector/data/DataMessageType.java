@@ -50,20 +50,34 @@ public enum DataMessageType
      */
     INFO,
     /**
-     * LAN message text
+     * LAN message text: the only thing known about the message is the
+     * source class
      */
     LAN,
     /**
-     * WAN message text
+     * WAN message text: the only thing known about the message is the
+     * source class
      */
     WAN;
 
     public boolean isOperator(){
         return false;
     }
-
+    /**
+     * Messages employ TMTC syntax for a data language
+     * @see #TMTC
+     * @see #LAN
+     * @see #WAN
+     */
     public boolean isTMTC(){
-        return (DataMessageType.TMTC == this || DataMessageType.LAN == this);
+        switch(this){
+        case TMTC:
+        case LAN:
+        case WAN:
+            return true;
+        default:
+            return false;
+        }
     }
 
     public boolean isTEXT(){ return DataMessageType.TEXT == this;}
@@ -74,7 +88,14 @@ public enum DataMessageType
     public boolean isWAN(){ return DataMessageType.WAN == this;}
 
     public boolean isNotTMTC(){
-        return (DataMessageType.TMTC != this && DataMessageType.LAN != this);
+        switch(this){
+        case TMTC:
+        case LAN:
+        case WAN:
+            return false;
+        default:
+            return true;
+        }
     }
 
     public boolean isNotTEXT(){ return DataMessageType.TEXT != this;}
@@ -149,5 +170,168 @@ public enum DataMessageType
     }
     public Constructor[] getPossibleCtors(){
         return null;
+    }
+
+    /**
+     * Kind {@link DataMessageType} applies to {@link DataMessage} for
+     * non TMTC messages.
+     */
+    public static class Kind
+        extends DataKind<DataMessageType,DataSubfield>
+    {
+        public final static Kind Instance = new Kind();
+
+        public Kind(){
+            super(DataMessageType.class);
+        }
+    }
+
+
+    /**
+     * Interaction API accepts messages in data term format with text
+     * elements, converting data enum to syntactic enum sequence.
+     * 
+     * The data term format is produced by top level message
+     * processing for telemetry data.  An operator (alternative) enum
+     * is expanded from the input data using the {@link DataOperator}
+     * interface.  This interface is implemented by both the data and
+     * operator syntax (data alternative) enums.
+     * 
+     * Convert data binding to syntactic binding while enumerating
+     * operator evaluation interface values.
+     */
+    public final static Object[] ExpressionDataToSyntax(DataMessageTerm term, DataMessage message){
+        if (null != term && null != message){
+            final int termx = message.indexOf(term);
+            if (-1 < termx){
+
+                DataOperator fop = (DataOperator)term.name.field;
+
+                if (fop.isSyntactic() || (!fop.hasAlternative())){
+                    /*
+                     * Simple extraction
+                     */
+                    final DataMessageTerm.Iterator expr_data = message.select(termx,message.size());
+
+                    Object[] expr_syntactic = null;
+
+                    DataField prev = null;
+
+                    for (DataMessageTerm p: expr_data){
+                        /*
+                         * Use type TEXT as transparent
+                         * (pass through) identifier
+                         */
+                        if (!p.name.isField(DataMessageType.TEXT)){
+                            prev = p.name.field;
+
+                            expr_syntactic = ObjectAdd(expr_syntactic,p.name);
+
+                            expr_syntactic = ObjectAdd(expr_syntactic,prev.toObject(p.value));
+                        }
+                        else if (null == prev)
+                            expr_syntactic = ObjectAdd(expr_syntactic,fop.toObject(p.value));
+                        else
+                            expr_syntactic = ObjectAdd(expr_syntactic,prev.toObject(p.value));
+
+                    }
+                    return expr_syntactic;
+                }
+                else {
+                    /*
+                     * Enum rebinding of names and values
+                     */
+                    DataOperator sop = fop.getAlternative();
+
+                    if (sop.isSyntactic()){
+
+                        final DataKind opkind = new DataKind(sop.getClass());
+                        /*
+                         * Convert input to operator syntax
+                         */
+                        final DataMessageTerm.Iterator expr_data = message.select(termx,message.size());
+
+                        Object[] expr_syntactic = null;
+                        /*
+                         * Perform preprocessing normalization check for syntactic order
+                         */
+                        DataField prev = null;
+
+                        for (DataMessageTerm p: expr_data){
+                            /*
+                             * Syntax order
+                             */
+                            if (DataMessageType.TEXT == p.name.field){
+
+                                try {
+                                    final DataIdentifier check = opkind.identifier(p.value);
+
+                                    final DataField checkField = check.field; 
+
+                                    if (null == prev || checkField.ordinal() > prev.ordinal()){
+
+                                        expr_syntactic = ObjectAdd(expr_syntactic,checkField);
+
+                                        prev = checkField;
+                                    }
+                                    else {
+                                        throw new IllegalArgumentException(String.format("Operator (%s:%d) is out of order, following (%s:%d)",checkField.name(),checkField.ordinal(),prev.name(),prev.ordinal()));
+                                    }
+                                }
+                                catch (RuntimeException exc){
+
+                                    if (null == prev)
+                                        expr_syntactic = ObjectAdd(expr_syntactic,sop.toObject(p.value));
+                                    else
+                                        expr_syntactic = ObjectAdd(expr_syntactic,prev.toObject(p.value));
+                                }
+                            }
+                            else {
+                                final DataIdentifier check = opkind.identifier(p.name);
+
+                                final DataField checkField = check.field; 
+
+                                if (null == prev || checkField.ordinal() > prev.ordinal()){
+
+                                    expr_syntactic = ObjectAdd(expr_syntactic,checkField);
+                                    expr_syntactic = ObjectAdd(expr_syntactic,checkField.toObject(p.value));
+
+                                    prev = checkField;
+                                }
+                                else {
+                                    throw new IllegalArgumentException(String.format("Operator (%s:%d) is out of order, following (%s:%d)",checkField.name(),checkField.ordinal(),prev.name(),prev.ordinal()));
+                                }
+                            }
+                        }
+                        return expr_syntactic;
+                    }
+                    else {
+                        throw new IllegalArgumentException("Operator alternative is not syntactic");
+                    }
+                }
+            }
+            else {
+                throw new IllegalArgumentException("Argument term not found in argument message");
+            }
+        }
+        else {
+            throw new IllegalArgumentException("Missing argument");
+        }
+    }
+    /**
+     * Terse object list concatenator excludes null values
+     */
+    public final static Object[] ObjectAdd(Object[] list, Object item){
+        if (null == item)
+            return list;
+        else if (null == list)
+            return new Object[]{item};
+        else {
+            final int len = list.length;
+            Object[] copier = new Object[len+1];
+            System.arraycopy(list,0,copier,0,len);
+            copier[len] = item;
+            return copier;
+        }
     }
 }

@@ -88,6 +88,11 @@ EOF
             cat<<EOF >${tgt_enum}
 package ${package_svc};
 
+import vector.data.DataField;
+import vector.data.DataMessage;
+import vector.data.DataOperator;
+import vector.data.DataSubfield;
+
 import java.lang.reflect.Constructor;
 import java.net.URI;
 EOF
@@ -110,7 +115,7 @@ EOF
  * @see ${classname_svc}
  */
 public enum ${classname_enum}
-    implements vector.data.DataOperator<${classname_enum}>
+    implements DataOperator<${classname_enum}>
 {
 EOF
         cc=0
@@ -220,8 +225,17 @@ cat<<EOF >>${tgt_enum}
         this.argument = (0 < possibleValues.length);
     }
 
+
+    /**
+     * 
+     */
     public boolean isOperator(){
+
         return true;
+    }
+    public boolean isOperator(DataSubfield sub){
+
+        return (null == sub);
     }
     public boolean isSyntactic(){
         return true;
@@ -315,7 +329,7 @@ cat<<EOF >>${tgt_enum}
     public Constructor[] getPossibleCtors(){
         return this.possibleCtors.clone();
     }
-    public String[] evaluate(Object... argv){
+    public DataMessage[] evaluate(Object... argv){
         return ${classname_svc}.Evaluate(argv);
     }
 }
@@ -339,8 +353,9 @@ EOF
         cat<<EOF >>${tgt_svc}
 import json.Strings;
 
-import java.lang.reflect.Method;
+import vector.data.DataMessage;
 
+import java.lang.reflect.Method;
 
 /**
  * Display operator service evaluates UI commands in the
@@ -362,9 +377,9 @@ public class ${classname_svc}
     /**
      * Service call
      * @param argv A sequence of name-value pairs as <code>({@link ${classname_enum}}, String<)*</code>.
-     * @return Services combined response text lines, may be null
+     * @return One message per service, may be null
      */
-    public final static String[] Evaluate(Object... argv){
+    public final static DataMessage[] Evaluate(Object... argv){
 
         return ${classname_svc}.Instance.evaluate(argv);
     }
@@ -380,7 +395,7 @@ public class ${classname_svc}
          * 
          * @return Response lines (may be null)
          */
-        public String[] evaluate(Object... argv);
+        public DataMessage[] evaluate(Object... argv);
     }
 
 
@@ -409,7 +424,7 @@ public class ${classname_svc}
      * {@link Copy} and in enum (ordinal) order
      * @return Response lines (may be null)
      */
-    public String[] evaluate(Object... argv){
+    public DataMessage[] evaluate(Object... argv){
 
         /*
          * Preprocessing normalization
@@ -489,6 +504,8 @@ EOF
         cat<<EOF > ${tgt_impl}
 package ${package_impl};
 
+import vector.data.DataMessage;
+
 /**
  * Built-in display service function for {@link vector.${cname} ${cname}}.
  * 
@@ -504,7 +521,7 @@ public class ${classname_impl}
     }
 
 
-    public String[] evaluate(Object... argv){
+    public DataMessage[] evaluate(Object... argv){
 
         if (null != argv && 0 < argv.length){
 

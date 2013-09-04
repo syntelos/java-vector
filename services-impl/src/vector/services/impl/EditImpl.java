@@ -1,5 +1,7 @@
 package vector.services.impl;
 
+import vector.data.DataMessage;
+
 /**
  * Built-in display service function for {@link vector.Edit Edit}.
  * 
@@ -15,7 +17,7 @@ public class EditImpl
     }
 
 
-    public String[] evaluate(Object... argv){
+    public DataMessage[] evaluate(Object... argv){
 
         if (null != argv && 0 < argv.length){
 

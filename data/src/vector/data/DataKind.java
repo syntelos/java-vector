@@ -72,34 +72,34 @@ public class DataKind<D extends DataField, S extends DataSubfield>
     }
 
 
+    public final boolean isFieldClass(Class field){
+
+        return this.field.equals(field);
+    }
+    public final boolean isSubfieldClass(Class subfield){
+
+        if (null != this.subfield)
+            return this.subfield.equals(subfield);
+        else
+            return false;
+    }
+    public final boolean isFieldAssignableFrom(Class field){
+
+        return this.field.isAssignableFrom(field);
+    }
+    public final boolean isSubfieldAssignableFrom(Class subfield){
+
+        if (null != this.subfield)
+            return this.subfield.isAssignableFrom(subfield);
+        else
+            return false;
+    }
     /**
      * @return New {@link DataDefaults}
      */
     public final DataDefaults defaults(){
 
         return new DataDefaults(this);
-    }
-    /**
-     * @return Lazy field
-     */
-    public final Method methodFieldFor(){
-        Method fieldFor = this.fieldFor;
-        if (null != fieldFor)
-            return fieldFor;
-        else {
-            return (this.fieldFor = DataService.MethodField(this.field));
-        }
-    }
-    /**
-     * @return Lazy field
-     */
-    public final Method methodSubfieldFor(){
-        Method subfieldFor = this.subfieldFor;
-        if (null != subfieldFor)
-            return subfieldFor;
-        else {
-            return (this.subfieldFor = DataService.MethodSubfield(this.subfield));
-        }
     }
     /**
      * Interaction API accepts a list of subfield possibilities for
@@ -115,13 +115,26 @@ public class DataKind<D extends DataField, S extends DataSubfield>
      * The first non null value in this list is accepted as the
      * subfield value.
      *
+     * <h3>Kind rebinding</h3>
+     * 
+     * Data fields and subfields will be rebound to this kind.  This
+     * method accepts enum member collisions by binding the name of an
+     * input object into this kind of field (and subfield) enum.
+     * 
+     * Kind rebinding is employed for the conversion of data enum
+     * members to operator syntax members.  In processing operator
+     * syntax, however, subfields are not employed.
      *
-     * @param id Instance of {@link java.lang.String} or {@link DataIdentifier}
+     *
+     * @param id An instance of {@link java.lang.String}, {@link
+     * DataIdentifier}, or {@link DataField} followed by one or more
+     * {@link DataSubfield} (members or names).
      * 
      * @return Null for null argument, identifier for string or
      * object, otherwise throw illegal argument exception
      * 
-     * @exception java.lang.IllegalArgumentException Unrecognized argument
+     * @exception java.lang.IllegalArgumentException Unrecognized
+     * argument not a member of accepted argument types
      * 
      * @see DataService#IdentifierSearch
      * @see DataIdentifier#DataIdentifier
@@ -135,11 +148,34 @@ public class DataKind<D extends DataField, S extends DataSubfield>
         
         if (null == id)
             return null;
-        else if (id instanceof DataIdentifier)
-            return (DataIdentifier)id;
-        else if (id instanceof String){
-            String string = (String)id;
-            int idx = string.indexOf('.');
+        else {
+
+            String string;
+            if (id instanceof String)
+                string = (String)id;
+            else if (id instanceof DataField){
+                /*
+                 * Check field class 
+                 * Rebind field collisions
+                 */
+                string = ((DataField)id).name();
+            }
+            else if (id instanceof DataIdentifier){
+                /*
+                 * Check field class 
+                 * Rebind field collisions
+                 */
+                final DataIdentifier di = (DataIdentifier)id;
+                if (di.field.getClass().equals(this.field))
+                    return di;
+                else
+                    string = di.string;
+            }
+            else {
+                throw new IllegalArgumentException(id.getClass().getName());
+            }
+
+            final int idx = string.indexOf('.');
             if (-1 < idx){
                 final String fieldName = string.substring(0,idx);
                 final String subfieldName = string.substring(idx+1);
@@ -159,21 +195,66 @@ public class DataKind<D extends DataField, S extends DataSubfield>
             else {
                 final String fieldName = string;
                 final DataField field = this.fieldFor(fieldName);
-                /*
-                 * Check for default subfield value
-                 */
+
                 DataSubfield subfield = null;
-                if (null != field && field.hasSubfieldDefault()){
-                    subfield = field.getSubfieldDefault();
-                }
-                if (1 < argc){
+                if (null != field){
                     /*
-                     * Ordered subfield expansion
+                     * Check for default subfield value
                      */
-                    for (int cc = 1; cc < argc; cc++){
-                        if (argv[cc] instanceof DataSubfield){
-                            subfield = (DataSubfield)argv[1];
-                            break;
+                    if (field.hasSubfieldDefault()){
+                        subfield = field.getSubfieldDefault();
+                    }
+                    if (1 < argc && null != this.subfield){
+                        /*
+                         * Ordered subfield expansion with (kind) rebinding
+                         */
+                        for (int cc = 1; cc < argc; cc++){
+
+                            final Object argcc = argv[cc];
+                            if (null != argcc){
+
+                                if (argcc instanceof DataSubfield){
+
+                                    DataSubfield argsf = (DataSubfield)argcc;
+                                    /*
+                                     * Check subfield class 
+                                     */
+                                    if (argsf.getClass().equals(this.subfield)){
+                                        subfield = argsf;
+                                        break;
+                                    }
+                                    else {
+                                        /*
+                                         * Rebind subfield collisions
+                                         */
+                                        argsf = this.subfieldFor(argsf.name());
+                                        if (null != argsf){
+                                            subfield = argsf;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else if (argcc instanceof String){
+                                    /*
+                                     * Bind subfield name
+                                     */
+                                    DataSubfield argsf = this.subfieldFor( (String)argcc);
+                                    if (null != argsf){
+                                        subfield = argsf;
+                                        break;
+                                    }
+                                }
+                                else {
+                                    /*
+                                     * Bind subfield name
+                                     */
+                                    DataSubfield argsf = this.subfieldFor( argcc.toString());
+                                    if (null != argsf){
+                                        subfield = argsf;
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -189,8 +270,6 @@ public class DataKind<D extends DataField, S extends DataSubfield>
                 }
             }
         }
-        else
-            throw new IllegalArgumentException(id.getClass().getName());
     }
     /**
      * @param id Field name in this field class
@@ -226,37 +305,43 @@ public class DataKind<D extends DataField, S extends DataSubfield>
         }
         return null;
     }
-    public final boolean isFieldClass(Class field){
-
-        return this.field.equals(field);
+    /**
+     * @return Lazy field
+     */
+    public final Method methodFieldFor(){
+        Method fieldFor = this.fieldFor;
+        if (null != fieldFor)
+            return fieldFor;
+        else {
+            return (this.fieldFor = DataService.MethodField(this.field));
+        }
     }
-    public final boolean isSubfieldClass(Class subfield){
-
-        if (null != this.subfield)
-            return this.subfield.equals(subfield);
-        else
-            return false;
+    /**
+     * @return Lazy field
+     */
+    public final Method methodSubfieldFor(){
+        Method subfieldFor = this.subfieldFor;
+        if (null != subfieldFor)
+            return subfieldFor;
+        else {
+            return (this.subfieldFor = DataService.MethodSubfield(this.subfield));
+        }
     }
-    public final boolean isFieldAssignableFrom(Class field){
-
-        return this.field.isAssignableFrom(field);
-    }
-    public final boolean isSubfieldAssignableFrom(Class subfield){
-
-        if (null != this.subfield)
-            return this.subfield.isAssignableFrom(subfield);
-        else
-            return false;
-    }
-    /*
-     * string identity
+    /**
+     * String identity
      */
     public final String toString(){
         return this.string;
     }
+    /**
+     * String identity
+     */
     public final int hashCode(){
         return this.string.hashCode();
     }
+    /**
+     * String identity
+     */
     public final boolean equals(Object that){
         if (this == that)
             return true;

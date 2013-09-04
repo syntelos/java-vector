@@ -24,28 +24,111 @@ package vector.data;
 public class DataMessageTerm
     extends Object
 {
+    /**
+     * Convenience for message type ERROR
+     */
+    public static class Error
+        extends DataMessageTerm
+    {
+        public Error(CharSequence string){
+            super(DataMessageType.Kind.Instance,DataMessageType.ERROR,string);
+        }
+        public Error(long time, CharSequence string){
+            super(time,DataMessageType.Kind.Instance,DataMessageType.ERROR,string);
+        }
+    }
+    /**
+     * Convenience for message type TEXT
+     */
+    public static class Text
+        extends DataMessageTerm
+    {
+        public Text(CharSequence string){
+            super(DataMessageType.Kind.Instance,DataMessageType.TEXT,string);
+        }
+        public Text(long time, CharSequence string){
+            super(time,DataMessageType.Kind.Instance,DataMessageType.TEXT,string);
+        }
+    }
+    /**
+     * Convenience for message type CODE
+     */
+    public static class Code
+        extends DataMessageTerm
+    {
+        public Code(CharSequence string){
+            super(DataMessageType.Kind.Instance,DataMessageType.CODE,string);
+        }
+        public Code(long time, CharSequence string){
+            super(time,DataMessageType.Kind.Instance,DataMessageType.CODE,string);
+        }
+    }
+    /**
+     * Convenience for message type INFO
+     */
+    public static class Info
+        extends DataMessageTerm
+    {
+        public Info(CharSequence string){
+            super(DataMessageType.Kind.Instance,DataMessageType.INFO,string);
+        }
+        public Info(long time, CharSequence string){
+            super(time,DataMessageType.Kind.Instance,DataMessageType.INFO,string);
+        }
+    }
+
+
+    public final long time;
+
     public final DataIdentifier name;
 
+    public final DataKind kind;
+
     public final Object value;
-
+    /**
+     * If null is value, then qualifier is '?' (0x3F), otherwise
+     * qualifier is '=' (0x3D).
+     */
     public final char qualifier;
-
+    /**
+     * If (null is not) value, then name, qualifier, value; otherwise
+     * name qualifier.
+     */
     public final String string;
 
 
     public DataMessageTerm(DataKind kind, Object name, Object value){
+        this(-1L,kind,name,value);
+    }
+    public DataMessageTerm(long time, DataIdentifier name, Object value){
+        this(time,name.createKind(),name.field,value);
+    }
+    public DataMessageTerm(long time, DataKind kind, Object name){
+        this(time,kind,name,null);
+    }
+    public DataMessageTerm(long time, DataKind kind, Object name, Object value){
         super();
+
+        if (-1L < time)
+            this.time = time;
+        else
+            this.time = DataClock.currentTimeMillis();
+
         if (null != kind && null != name){
+
+            this.kind = kind;
+
             this.name = kind.identifier(name);
-            this.value = value;
+
+            this.value = this.name.toObject(value);
 
             if (null == value)
                 this.qualifier = '?';
             else
                 this.qualifier = '=';
 
-            if (null == value)
-                this.string = (name.toString()+this.qualifier+value);
+            if (null == this.value)
+                this.string = (name.toString()+this.qualifier+this.value);
             else
                 this.string = (name.toString()+this.qualifier);
         }
@@ -55,9 +138,36 @@ public class DataMessageTerm
     }
 
 
+    /**
+     * @return Qualifier is '?': null value.
+     */
+    public final boolean isQuery(){
+
+        return ('?' == this.qualifier);
+    }
+    /**
+     * @return Qualifier is '=': has value.
+     */
+    public final boolean isAssignment(){
+
+        return ('=' == this.qualifier);
+    }
+    /**
+     * @see DataIdentifier#operator
+     */
+    public final boolean isOperator(){
+
+        return this.name.operator;
+    }
+    /**
+     * String identity
+     */
     public int hashCode(){
         return this.string.hashCode();
     }
+    /**
+     * String identity
+     */
     public boolean equals(Object that){
         if (this == that)
             return true;
@@ -66,6 +176,9 @@ public class DataMessageTerm
         else
             return this.string.equals(that.toString());
     }
+    /**
+     * String identity
+     */
     public String toString(){
         return this.string;
     }
@@ -82,6 +195,9 @@ public class DataMessageTerm
         private final DataMessageTerm[] list;
         private int index;
 
+        public Iterator(){
+            this(null);
+        }
         public Iterator(DataMessageTerm[] list){
             super();
             if (null == list){
@@ -92,6 +208,33 @@ public class DataMessageTerm
                 this.list = list;
                 this.length = list.length;
             }
+        }
+        public Iterator(DataMessageTerm[] source, int start, int end){
+            super();
+            if (null == source){
+                this.list = null;
+                this.length = 0;
+            }
+            else if (-1 < start && start < end){
+                final int len = source.length;
+                final int count = (end-start);
+                if (count >= len){
+                    this.list = source;
+                    this.length = source.length;
+                }
+                else if (0 == count){
+                    this.list = null;
+                    this.length = 0;
+                }
+                else {
+                    DataMessageTerm[] copier = new DataMessageTerm[count];
+                    System.arraycopy(source,start,copier,0,count);
+                    this.list = copier;
+                    this.length = count;
+                }
+            }
+            else
+                throw new IllegalArgumentException(String.format("Invalid start (%d) or end (%d)",start,end));
         }
 
 
@@ -125,6 +268,21 @@ public class DataMessageTerm
             for (int cc = 0; cc < count; cc++){
                 if (field == list[cc])
                     return cc;
+            }
+            return -1;
+        }
+    }
+    public final static int IndexOf(DataMessageTerm[] list, DataIdentifier id){
+        if (null == id || null == list)
+            return -1;
+        else {
+            final int count = list.length;
+            for (int cc = 0; cc < count; cc++){
+
+                if (id.matches(list[cc].name)){
+
+                    return cc;
+                }
             }
             return -1;
         }
@@ -176,4 +334,36 @@ public class DataMessageTerm
         }
         return list;
     }
+
+    public final static long Floor(DataMessageTerm[] list){
+        if (null == list)
+            return 0L;
+        else {
+            long last = Long.MAX_VALUE;
+            for (DataMessageTerm t: list){
+                if (0L < t.time)
+                    last = Math.min(last,t.time);
+            }
+            if (last < Long.MAX_VALUE)
+                return last;
+            else
+                return 0L;
+        }
+    }
+    public final static long Ceil(DataMessageTerm[] list){
+        if (null == list)
+            return 0L;
+        else {
+            long last = Long.MIN_VALUE;
+            for (DataMessageTerm t: list){
+                if (0L < t.time)
+                    last = Math.max(last,t.time);
+            }
+            if (last < Long.MAX_VALUE)
+                return last;
+            else
+                return 0L;
+        }
+    }
+
 }

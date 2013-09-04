@@ -18,7 +18,7 @@
  */
 package vector.services;
 
-import json.Strings;
+import vector.data.DataMessage;
 
 /**
  * 
@@ -31,7 +31,7 @@ public abstract class AbstractService
      */
     public interface Service {
 
-        public String[] evaluate(Object... argv);
+        public DataMessage[] evaluate(Object... argv);
     }
 
     protected final lxl.List<AbstractService.Service> services = new lxl.ArrayList();
@@ -43,22 +43,22 @@ public abstract class AbstractService
 
 
 
-    public String[] evaluate(Object... argv){
+    public DataMessage[] evaluate(Object... argv){
 
         /*
          * Services evaluate input as a set of effects
          */
-        String[] re = null;
+        DataMessage[] re = null;
 
         for (AbstractService.Service service: this.services){
             try {
-                String[] r0 = service.evaluate(argv);
+                DataMessage[] r0 = service.evaluate(argv);
 
-                re = Strings.Add(re,r0);
+                re = DataMessage.Add(re,r0);
             }
             catch (RuntimeException rex){
 
-                re = Strings.Add(re,"# "+rex.getMessage());
+                re = DataMessage.Add(re,new DataMessage.Error("# "+rex.getMessage()));
             }
         }
         return re;

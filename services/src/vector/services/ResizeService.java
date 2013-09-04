@@ -2,8 +2,9 @@ package vector.services;
 
 import json.Strings;
 
-import java.lang.reflect.Method;
+import vector.data.DataMessage;
 
+import java.lang.reflect.Method;
 
 /**
  * Display operator service evaluates UI commands in the
@@ -25,9 +26,9 @@ public class ResizeService
     /**
      * Service call
      * @param argv A sequence of name-value pairs as <code>({@link Resize}, String<)*</code>.
-     * @return Services combined response text lines, may be null
+     * @return One message per service, may be null
      */
-    public final static String[] Evaluate(Object... argv){
+    public final static DataMessage[] Evaluate(Object... argv){
 
         return ResizeService.Instance.evaluate(argv);
     }
@@ -43,7 +44,7 @@ public class ResizeService
          * 
          * @return Response lines (may be null)
          */
-        public String[] evaluate(Object... argv);
+        public DataMessage[] evaluate(Object... argv);
     }
 
 
@@ -72,7 +73,7 @@ public class ResizeService
      * {@link Copy} and in enum (ordinal) order
      * @return Response lines (may be null)
      */
-    public String[] evaluate(Object... argv){
+    public DataMessage[] evaluate(Object... argv){
 
         /*
          * Preprocessing normalization

@@ -18,6 +18,8 @@
  */
 package vector;
 
+import vector.data.DataMessage;
+
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -59,12 +61,12 @@ public interface Document
         throws IOException;
 
 
-    public String[] add(Component source, Reference target);
+    public DataMessage[] add(Component source, Reference target);
 
-    public String[] add(Reference source, Reference target);
+    public DataMessage[] add(Reference source, Reference target);
 
-    public String[] add(URL source, Reference target);
+    public DataMessage[] add(URL source, Reference target);
 
-    public String[] cat(Reference target);
+    public DataMessage[] cat(Reference target);
 
 }

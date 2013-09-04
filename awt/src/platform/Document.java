@@ -21,6 +21,8 @@ package platform;
 import vector.Component;
 import vector.Reference;
 
+import vector.data.DataMessage;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
@@ -161,23 +163,23 @@ public class Document
             return null;
     }
 
-    public String[] add(Component source, Reference target){
-        if (null != frame){
+    public DataMessage[] add(Component source, Reference target){
+        if (null != this.frame){
         }
         throw new UnsupportedOperationException("placeholder");
     }
-    public String[] add(Reference source, Reference target){
-        if (null != frame){
+    public DataMessage[] add(Reference source, Reference target){
+        if (null != this.frame){
         }
         throw new UnsupportedOperationException("placeholder");
     }
-    public String[] add(URL source, Reference target){
-        if (null != frame){
+    public DataMessage[] add(URL source, Reference target){
+        if (null != this.frame){
         }
         throw new UnsupportedOperationException("placeholder");
     }
-    public String[] cat(Reference target){
-        if (null != frame){
+    public DataMessage[] cat(Reference target){
+        if (null != this.frame){
         }
         throw new UnsupportedOperationException("placeholder");
     }

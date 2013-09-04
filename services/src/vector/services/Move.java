@@ -1,5 +1,10 @@
 package vector.services;
 
+import vector.data.DataField;
+import vector.data.DataMessage;
+import vector.data.DataOperator;
+import vector.data.DataSubfield;
+
 import java.lang.reflect.Constructor;
 import java.net.URI;
 
@@ -15,7 +20,7 @@ import java.net.URI;
  * @see MoveService
  */
 public enum Move
-    implements vector.data.DataOperator<Move>
+    implements DataOperator<Move>
 {
     /**
      * 
@@ -115,8 +120,17 @@ public enum Move
         this.argument = (0 < possibleValues.length);
     }
 
+
+    /**
+     * 
+     */
     public boolean isOperator(){
+
         return true;
+    }
+    public boolean isOperator(DataSubfield sub){
+
+        return (null == sub);
     }
     public boolean isSyntactic(){
         return true;
@@ -210,7 +224,7 @@ public enum Move
     public Constructor[] getPossibleCtors(){
         return this.possibleCtors.clone();
     }
-    public String[] evaluate(Object... argv){
+    public DataMessage[] evaluate(Object... argv){
         return MoveService.Evaluate(argv);
     }
 }

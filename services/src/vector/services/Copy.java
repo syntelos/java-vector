@@ -1,5 +1,10 @@
 package vector.services;
 
+import vector.data.DataField;
+import vector.data.DataMessage;
+import vector.data.DataOperator;
+import vector.data.DataSubfield;
+
 import java.lang.reflect.Constructor;
 import java.net.URI;
 
@@ -15,7 +20,7 @@ import java.net.URI;
  * @see CopyService
  */
 public enum Copy
-    implements vector.data.DataOperator<Copy>
+    implements DataOperator<Copy>
 {
     /**
      * 
@@ -103,8 +108,17 @@ public enum Copy
         this.argument = (0 < possibleValues.length);
     }
 
+
+    /**
+     * 
+     */
     public boolean isOperator(){
+
         return true;
+    }
+    public boolean isOperator(DataSubfield sub){
+
+        return (null == sub);
     }
     public boolean isSyntactic(){
         return true;
@@ -198,7 +212,7 @@ public enum Copy
     public Constructor[] getPossibleCtors(){
         return this.possibleCtors.clone();
     }
-    public String[] evaluate(Object... argv){
+    public DataMessage[] evaluate(Object... argv){
         return CopyService.Evaluate(argv);
     }
 }
