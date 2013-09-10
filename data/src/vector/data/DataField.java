@@ -79,6 +79,14 @@ public interface DataField<D extends Enum<D>>
      */
     public Object toObject(String value);
     /**
+     * If the subfield method {@link DataSubfield#isDataPrimary()
+     * isDataPrimary} returns true, then the subfield {@link
+     * DataSubfield#toObject(java.lang.String) toObject} call is
+     * returned.  Otherwise the implementor performs known (supported)
+     * type conversions.
+     */
+    public Object toObject(DataSubfield subfield, String value);
+    /**
      * Normalize value
      * 
      * @return Object for object sanity check.  If string try decode,
@@ -86,10 +94,26 @@ public interface DataField<D extends Enum<D>>
      */
     public Object toObject(Object value);
     /**
+     * If the subfield method {@link DataSubfield#isDataPrimary()
+     * isDataPrimary} returns true, then the subfield {@link
+     * DataSubfield#toObject(java.lang.Object) toObject} call is
+     * returned.  Otherwise the implementor performs known (supported)
+     * type conversions.
+     */
+    public Object toObject(DataSubfield subfield, Object value);
+    /**
      * Class operator: object to string.  This step does not include
      * URL Percent Encoding.
      */
     public String toString(Object value);
+    /**
+     * If the subfield method {@link DataSubfield#isDataPrimary()
+     * isDataPrimary} returns true, then the subfield {@link
+     * DataSubfield#toString(java.lang.Object) toString} call is
+     * returned.  Otherwise the implementor performs known (supported)
+     * type conversions.
+     */
+    public String toString(DataSubfield subfield, Object value);
     /**
      * This enum value represents a list of enum values.  For example,
      * "A" maps to "A1", "A2", etc.

@@ -28,7 +28,9 @@ public enum DataMessageType
     implements DataField<DataMessageType>
 {
     /**
-     * Syntactic enum, object array enum <code>(name, value)+</code>
+     * Syntactic enum
+     *
+     * API arguments are object array enum <code>(name, value)+</code>
      * pairs
      */
     TMTC,
@@ -114,6 +116,14 @@ public enum DataMessageType
         }
         return uin;
     }
+    public Object toObject(DataSubfield ignored, String uin){
+
+        return this.toObject(uin);
+    }
+    public Object toObject(DataSubfield ignored, Object uin){
+
+        return this.toObject(uin);
+    }
     public Object toObject(Object uin){
         if (uin instanceof Class)
             return (Class)uin;
@@ -121,6 +131,10 @@ public enum DataMessageType
             return this.toObject( (String)uin);
         else
             return uin;
+    }
+    public String toString(DataSubfield ignored, Object data){
+
+        return this.toString(data);
     }
     public String toString(Object data){
 

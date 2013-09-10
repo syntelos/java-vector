@@ -27,6 +27,12 @@ public interface DataSubfield<E extends Enum<E>> {
      */
     public boolean isDataSecondary();
     /**
+     * This method is called from {@link
+     * DataField#toObject(vector.data.DataSubfield,java.lang.String)
+     * DataField toObject} to perform known (supported) type
+     * conversions DataField when {@link DataSubfield#isDataPrimary()
+     * isDataPrimary} returns true.
+     * 
      * @param value String (is / may be) Percent Encoded
      * @return Object for string 
      */
@@ -34,11 +40,23 @@ public interface DataSubfield<E extends Enum<E>> {
     /**
      * Normalize value
      * 
+     * This method is called from {@link
+     * DataField#toObject(vector.data.DataSubfield,java.lang.Object)
+     * DataField toObject} to perform known (supported) type
+     * conversions DataField when {@link DataSubfield#isDataPrimary()
+     * isDataPrimary} returns true.
+     *
      * @return Object for object sanity check.  If string try decode,
      * otherwise return.
      */
     public Object toObject(Object value);
     /**
+     * This method is called from {@link
+     * DataField#toString(vector.data.DataSubfield,java.lang.Object)
+     * DataField toString} to perform known (supported) type
+     * conversions when {@link DataSubfield#isDataPrimary()
+     * isDataPrimary} returns true
+     * 
      * @return String for object, not Percent Encoded
      */
     public String toString(Object value);
