@@ -125,6 +125,14 @@ public enum Show
     public boolean hasArgument(){
         return this.argument;
     }
+    public Object toObject(DataSubfield subfield, Object uin){
+
+        return this.toObject( uin);
+    }
+    public Object toObject(DataSubfield subfield, String uin){
+
+        return this.toObject( (Object)uin);
+    }
     public Object toObject(String uin){
 
         return this.toObject( (Object)uin);
@@ -156,6 +164,10 @@ public enum Show
             }
         }
         return uin;
+    }
+    public String toString(DataSubfield subfield, Object data){
+
+        return data.toString();
     }
     public String toString(Object data){
 
