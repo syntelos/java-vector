@@ -1,0 +1,5 @@
+One favorite feature of the **vector** package is the fully programmable [Border](http://code.google.com/p/java-vector/source/browse/src/vector/Border.java), with its [Stroke](http://code.google.com/p/java-vector/source/browse/src/vector/Stroke.java) and [Color](http://code.google.com/p/java-vector/source/browse/src/vector/Color.java) bindings.
+
+The border is an interactive component that benefits from a component's use of its parent's graphics context, which was first described in [Coordinate Spaces](ProgrammingCoordinateSpaces.md).  The operators of a border are able to layout a border from the border parent component.  As a result, any container can be given a border.  The position of the border instance object within a container's list of children determines the drawing z-order of the border itself.
+
+Some non-container components extend the [Border Component](http://code.google.com/p/java-vector/source/browse/src/vector/BorderComponent.java) as special, "single" parents.  For example, the [Text](http://code.google.com/p/java-vector/source/browse/src/vector/Text.java) class.

@@ -1,0 +1,3 @@
+As discussed in [Scaling](ProgrammingScaling.md), a component class design must choose a layout strategy from one of either top-down or bottom-up.  Only one of these two strategies may be employed for a particular state of user properties (explicit state).
+
+The top-down strategy relates the component instance dimensions and scaling to the component's parent, and the bottom-up strategy relates the component instance dimensions and scaling to the component's content.  Following this principle, including [coherence](ProgrammingCoherentState.md) and [indempotence](ProgrammingOperators.md), permits a scene graph to employ any mixture of layout strategies according to the implementation and application of its members.
